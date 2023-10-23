@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
   public statuss = '';
   public supplier = '';
   public supplierName = '';
-  public shopUrl = 'https://www.kapruka.com/srilanka_online_shopping.jsp?';
+  public shopUrl = 'https://www.kapruka.com/partner/';
 
   @Input()
   public latest = [];
