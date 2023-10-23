@@ -254,7 +254,7 @@ export class DashboardComponent implements OnInit {
 
   manageShopUrl(data) {
     if (data.data != null) {
-      this.shopUrl = 'https://www.kapruka.com/srilanka_online_shopping.jsp?partner=' + data.data;
+      this.shopUrl = 'https://www.kapruka.com/partner/' + data.data;
     }
   }
 
