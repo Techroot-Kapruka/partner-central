@@ -1,0 +1,179 @@
+<!-- Container-fluid starts-->
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card tab2-card">
+        <div class="card-body tab2-card">
+          <div class="row" style="float: right;">
+            <div class="form-group">
+              <button type="button" (click)="backToLIst()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                      data-placement="top" title="Back to Shipment List"><i class="fa fa-arrow-circle-left"
+                                                                            aria-hidden="true"></i> Back
+              </button>
+            </div>
+          </div>
+          <ngb-tabset class="tab-coupon">
+            <ngb-tab title="Request Your Category">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show" id="account" role="tabpanel"
+                     aria-labelledby="account-tab">
+                  <form class="needs-validation user-add">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <!--<div class="digital-add needs-validation">-->
+                        <div class="form-group">
+                          <button type="button" class="btn btn-outline-info" data-toggle="modal"
+                                  data-original-title="test"
+                                  data-target="#exampleModal" (click)="open(content)">Request Your Category
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-5">
+                        <div class="form-group col-md-12">
+                          <div class="row" style="border: 1px solid black; position: relative;padding-top: 30px;margin-top: 2%">
+                            <div style="position: absolute;background: #fff;padding: 0px 15px ;left: 15px;top: -15px"><strong>Category</strong></div>
+                            <div class="form-group col-md-12"
+                                 *ngFor="let partnerSpecificCategoryArrs of partnerSpecificCategoryArr">
+                              <span style="height: 30px; padding-top: 8.8px; background-color: #000080 !important;"
+                                    class="badge badge-secondary">{{partnerSpecificCategoryArrs['cat_parth']}}</span><br>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-2"></div>
+                      <div class="col-md-5">
+                        <div class="form-group col-md-12">
+                          <div class="row" style="border: 1px solid black; position: relative;padding-top: 30px;margin-top: 2%">
+                            <div style="position: absolute;background: #fff;padding: 0px 15px ;left: 15px;top: -15px"><strong>Pending Category</strong></div>
+                            <div class="form-group col-md-12"
+                                 *ngFor="let nonApprovalCategoryArrs of nonApprovalCategoryArr; let i=index"
+                                 [attr.data-index]="i">
+                              <span style="height: 30px; padding-top: 8.8px; background-color: green !important;"
+                                    class="badge badge-secondary">{{nonApprovalCategoryArrs['category_path']}}
+                                <i class="fa fa-window-close"
+                                   style="color: red;float: right; top: 0%;position: absolute !important;margin-left:1%;width: 4%"
+                                   (click)="removePartnerCategoryPending(i)" data-toggle="tooltip" data-placement="top" title="Remove Your Category"></i>
+                              </span><br>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->
+
+<!--=====================-->
+<ng-template #content let-modal ng-style="{'width':200px}">
+
+  <div class="modal-header">
+    <h5 class="modal-title f-w-00" id="exampleModalLabel">Choose Your Category</h5>
+    <button type="button" class="close" aria-label="Close"
+            (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form class="needs-validation">
+      <div class="form">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-md-12" style="margin-left: 16%;">
+              <div class="form-group row">
+                <select class="custom-select col-xl-8 col-md-7" id="category_main" (change)="changeMainCategory()">
+                  <option value="">-- Select Category --</option>
+                  <option *ngFor="let mainCategoryArrs of mainCategoryArr"
+                          value="{{mainCategoryArrs['code']}}">{{mainCategoryArrs['name']}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-12" style="margin-left: 16%; display: none;" id="sub_cat_dev">
+              <div class="form-group row">
+                <select class="custom-select col-xl-8 col-md-7" id="category_sub" (change)="changeSubCategory()">
+                  <option value="">-- Select Sub Category --</option>
+                  <option *ngFor="let subCategoryArrs of subCategoryArr"
+                          value="{{subCategoryArrs['code']}}">{{subCategoryArrs['name']}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-12" style="margin-left: 16%; display: none;" id="sub_sub_cat_dev">
+              <div class="form-group row">
+                <select class="custom-select col-xl-8 col-md-7" id="Category_sub_sub">
+                  <option value="">-- Select Sub Sub Category --</option>
+                  <option *ngFor="let subSubCategoryArrs of subSubCategoryArr"
+                          value="{{subSubCategoryArrs['code']}}">{{subSubCategoryArrs['name']}}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-12" style="margin-left: 16%;">
+              <div class="form-group row">
+                <div class="pull-left">
+                  <button type="button" id="subSave" (click)="addCategoryBredCrums()" class="btn btn-info">Add
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <nav aria-label="breadcrumb"
+                   *ngFor="let allCategoryBreadcrumbArrs of allCategoryBreadcrumbArr; let i = index"
+                   [attr.data-index]="i" style="margin-left: 5%; !important;">
+                <i (click)="removeCategoryBreadcrum(i)" class="fa fa-close"
+                   style="color: red;float: right"></i>
+                <ol class="breadcrumb">
+                  <li *ngIf="allCategoryBreadcrumbArrs['cat_name_bool']" class="breadcrumb-item"><a
+                    href="#">{{
+                    allCategoryBreadcrumbArrs['cat_name']}}</a></li>
+
+                  <li *ngIf="allCategoryBreadcrumbArrs['sub_cat_name_bool']" class="breadcrumb-item"><a
+                    href="#">{{
+                    allCategoryBreadcrumbArrs['sub_cat_name']}}</a></li>
+
+                  <li *ngIf="allCategoryBreadcrumbArrs['cat_sub_sub_name_bool']" class="breadcrumb-item"><a
+                    href="#">{{
+                    allCategoryBreadcrumbArrs['cat_sub_sub_name']}}</a></li>
+                </ol>
+              </nav>
+            </div>
+
+            <div class="col-md-12" style="margin-top: 5%; margin-left: 54%;">
+              <div class="form-group row">
+                <div class="pull-left">
+                  <button type="button" (click)="MakeYourCategoryRequest(modal)" class="btn btn-primary">Make Your
+                    Request
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-danger" type="button" data-dismiss="modal"
+            (click)="modal.dismiss('Cross click')">Close
+    </button>
+  </div>
+</ng-template>
+
+
+
+
+

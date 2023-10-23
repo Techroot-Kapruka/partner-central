@@ -1,0 +1,430 @@
+<!-- Container-fluid starts-->
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card tab2-card">
+        <div class="card-body tab2-card">
+          <div class="row" style="float: right;">
+            <div class="form-group">
+              <button type="button" (click)="backToLIst()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                      data-placement="top" title="Back to Shipment List"><i class="fa fa-arrow-circle-left"
+                                                                            aria-hidden="true"></i> Back
+              </button>
+            </div>
+          </div>
+          <ngb-tabset class="tab-coupon">
+            <ngb-tab title="Account">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show" id="account" role="tabpanel"
+                     aria-labelledby="account-tab">
+                  <form class="needs-validation user-add" [formGroup]="partnerEdit" (submit)="approvePartner()"
+                        novalida>
+                    <h4>Account Details</h4>
+                    <div class="form-group row">
+                      <label for="contactPersonName" class="col-xl-3 col-md-4">Contact Person Name</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="contactPersonName"
+                             id="contactPersonName"
+                             type="text" required="" disabled>
+
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="contactNo" class="col-xl-3 col-md-4"> Contact No</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="contactNo"
+                             id="contactNo"
+                             type="text" required="" disabled>
+                    </div>
+
+<!--                    <div class="form-group row">-->
+<!--                      <label for="nic" class="col-xl-3 col-md-4"> Nic</label>-->
+<!--                      <input class="form-control col-xl-8 col-md-7" formControlName="nic"-->
+<!--                             id="nic"-->
+<!--                             type="text" required="" disabled>-->
+<!--                    </div>-->
+
+<!--                    <div class="form-group row">-->
+<!--                      <label for="companyName" class="col-xl-3 col-md-4">Company Name</label>-->
+<!--                      <input class="form-control col-xl-8 col-md-7" id="companyName"-->
+<!--                             type="text" required="" formControlName="companyName" disabled>-->
+<!--                    </div>-->
+                    <div class="form-group row">
+                      <label for="userName" class="col-xl-3 col-md-4">User Name</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="userName"
+                             id="userName"
+                             type="text" required="" disabled>
+                    </div>
+                    <div class="form-group row">
+                      <label for="emailUser" class="col-xl-3 col-md-4"> Email</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="emailUser"
+                             id="emailUser"
+                             type="text" required="" disabled>
+                    </div>
+                    <div class="form-group row">
+                      <label for="password" class="col-xl-3 col-md-4">Password</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="password"
+                             id="password"
+                             type="password" required="" disabled>
+                    </div>
+                    <div class="form-group row">
+                      <label for="comfPassword" class="col-xl-3 col-md-4">Confirm Password</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="comfPassword" id="comfPassword"
+                             type="password" required="" disabled>
+                    </div>
+                    <div class="form-group row">
+                      <label for="role" class="col-xl-3 col-md-4">User Role</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="role"
+                             id="role"
+                             type="text" required="" disabled>
+
+
+                    </div>
+
+                    <!--===========================================================================================-->
+                    <br><br>
+                    <div class="form-group row border border-1">
+                      <label for="role" class="col-xl-3 col-md-4">Profile Image</label>
+                      <div class="add-product">
+                        <div class="row">
+                          <div class="col-xl-9 xl-50 col-sm-6 col-9">
+                            <img style="width: 287px; border-radius: 10%; border: 10px solid transparent;" src="assets/images/Partner/{{imageName}}" id="mainImage" src=""
+                                 alt=""
+                                 class="img-fluid image_zoom_1">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--===========================================================================================-->
+                    <br>
+                    <hr>
+                    <br>
+                    <div id="disss">
+                      <div class="row">
+                        <div class="col-6">
+
+                          <div class="form-group row">
+                            <label for="businessName" class="col-xl-3 col-md-3">Business Name</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="businessName"
+                                   id="businessName"
+                                   type="text" required="" disabled>
+                          </div>
+                          <div class="form-group row" *ngIf="isCompany">
+                            <label for="businessRegisterNo" class="col-xl-3 col-md-3">Business Register No</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="businessRegisterNo"
+                                   id="businessRegisterNo"
+                                   type="text" required="" disabled>
+                          </div>
+                          <div class="form-group row">
+                            <label for="ownerName" class="col-xl-3 col-md-3">Owner Name</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="ownerName"
+                                   id="ownerName"
+                                   type="text" required="" disabled>
+                          </div>
+                          <div class="form-group row">
+                            <label for="email" class="col-xl-3 col-md-3">Business Email</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="email"
+                                   id="email"
+                                   type="text" required="" disabled>
+                          </div>
+
+
+                          <div class="form-group row" *ngIf="isCompany">
+                            <label for="role" class="col-xl-3 col-md-4">BR Image</label>
+                            <div class="add-product" style="justify-content: center">
+                              <div class="row" style="justify-content: center">
+                                <div class="col-xl-9 xl-50 col-sm-6 col-9">
+                                  <div class="image-wrapper" >
+                                  <img style="width: 287px; border-radius: 15%;" src="assets/images/Partner/BR/{{imageNameBR}}" id="mainImage" src=""
+                                       alt="" class="img-fluid image_zoom_1" >
+                                  <img class="scale-up-icon" id="scale-up-icon-1" src="assets/images/dashboard/icons8-open-in-browser-100.png" (click)="openBRImageInNewTab()">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="form-group row" *ngIf="isindividual">
+                            <label for="role" class="col-xl-3 col-md-4">NIC</label>
+                            <div class="add-product" style="justify-content: center">
+                              <div class="row" style="justify-content: center">
+                                <div class="col-xl-9 xl-50 col-sm-6 col-9">
+                                  <div class="image-wrapper" >
+                                    <img style="width: 287px; border-radius: 15%; cursor: pointer;" src="assets/images/Partner/NIC/{{imageNic}}" id="nicImage"
+                                         alt="" class="img-fluid image_zoom_1" (click)="openNicImageInNewTab()">
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="socialURL" class="col-xl-3 col-md-3">Social URL</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="socialURL"
+                                   id="socialURL"
+                                   type="url" required="" >
+                          </div>
+                          <!--<div class="form-group row">-->
+                          <!--<label for="mobile" class="col-xl-3 col-md-3">Mobile</label>-->
+                          <!--<input class="form-control col-xl-8 col-md-7" formControlName="mobile"-->
+                          <!--id="mobile"-->
+                          <!--type="text" required="" disabled>-->
+                          <!--</div>-->
+                        </div>
+                        <div class="col-6">
+                          <div class="form-group row">
+                            <label for="businessAddress" class="col-xl-3 col-md-3">Business Address</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="businessAddress"
+                                   id="businessAddress"
+                                   type="text" required="" disabled>
+                          </div>
+
+                          <form  [formGroup]="bankData">
+                            <div class="form-group row">
+                              <label for="bankAccount" class="col-xl-3 col-md-3">Bank Account</label>
+                              <input class="form-control col-xl-8 col-md-7" formControlName="bankAccount"
+                                     id="bankAccount"
+                                     type="text" required="" disabled>
+                            </div>
+
+                            <div class="form-group row">
+                              <label for="bankName" class="col-xl-3 col-md-3">Bank Name</label>
+                              <input class="form-control col-xl-8 col-md-7" formControlName="bankName"
+                                     id="bankName"
+                                     type="text" required="" disabled>
+                            </div>
+                          </form>
+
+                          <!--<div class="form-group row">-->
+                          <!--<label for="creditCardSave" class="col-xl-3 col-md-3">Credit Card No</label>-->
+                          <!--<input class="form-control col-xl-8 col-md-7" formControlName="creditCardSave"-->
+                          <!--id="creditCardSave"-->
+                          <!--type="text" required="" disabled>-->
+                          <!--</div>-->
+                          <div class="form-group row">
+                            <label for="mobile" class="col-xl-3 col-md-3">Mobile</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="mobile"
+                                   id="mobile"
+                                   type="text" required="" disabled>
+                          </div>
+                          <div class="form-group row">
+                            <label for="PartnerType" class="col-xl-3 col-md-3">Partner Type</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="PartnerType"
+                                   id="PartnerType"
+                                   type="text" required="" disabled>
+                          </div>
+                          <div class="form-group row">
+                            <label for="role" class="col-xl-3 col-md-4">Bank Statement Image</label>
+                            <div class="add-product" style="justify-content: center">
+                              <div class="row" style="justify-content: center">
+<!--                                <div class="col-xl-9 xl-50 col-sm-6 col-9">-->
+<!--                                  <img style="width: 287px;" src="assets/images/Partner/Statement/{{imageNameBankStatement}}" id="bankStatementImage" src=""-->
+<!--                                       alt=""-->
+<!--                                       class="img-fluid image_zoom_1">-->
+<!--                                </div>-->
+                                <div class="col-xl-9 xl-50 col-sm-6 col-9">
+                                <div class="image-wrapper">
+                                  <img style="width: 287px; border-radius: 10%;" src="assets/images/Partner/Statement/{{imageNameBankStatement}}" id="bankStatementImage"
+                                       alt="" class="img-fluid" >
+                                  <img class="scale-up-icon" id="scale-up-icon-2" src="assets/images/dashboard/icons8-open-in-browser-100.png" (click)="openBSImageInNewTab()">
+                                </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+                        </div>
+                      </div>
+                      <br>
+                      <hr>
+                      <br>
+
+
+                      <style>
+                        .labelAppendSub {
+                          background: #000080;
+                          text-align: center;
+                          margin-top: 1px;
+                          color: #fff;
+                          padding: 1px 20px 1px 10px;
+                          border-radius: 3px;
+                          border: 1px solid #000080;
+
+                        }
+
+                        .labelBoxappend {
+                          padding-left: 24%;
+                        }
+
+                        .mainDev {
+                          position: relative;
+                          vertical-align: top;
+                          margin: 5px 5px 0 0;
+
+                        }
+
+                        .clouseI {
+                          position: absolute;
+                          right: 5px;
+                          top: -1px;
+                          color: #fff;
+
+                        }
+                      </style>
+                      <div class="row">
+
+<!--                        <div class="col-6">-->
+<!--                          <div class="form-group row">-->
+<!--                            <label for="productPrefix" class="col-xl-3 col-md-3">Prefix</label>-->
+<!--                            <input style="margin-bottom: -12px;" class="form-control col-xl-8 col-md-7"-->
+<!--                                   name="productPrefix"-->
+<!--                                   id="productPrefix"-->
+<!--                                   type="text" required="">-->
+
+<!--                          </div>-->
+<!--                          <div class="labelBoxappend">-->
+<!--                            <div class="mainDev" *ngFor="let productPrefixArrayss of productPrefixArray">-->
+<!--                              <label class="labelAppendSub">{{productPrefixArrayss['productPrefix']}}</label>-->
+<!--                              &lt;!&ndash;<input type="text" value="{{productPrefixArrayss['productPrefix']}">&ndash;&gt;-->
+<!--                              <div class="clouseI"><i-->
+<!--                                class="fa fa-close"></i></div>-->
+<!--                            </div>-->
+<!--                          </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-6">-->
+<!--                          <div class="form-group row">-->
+<!--                            <button type="button" class="btn btn-primary">Add Prefix-->
+<!--                            </button>-->
+<!--                          </div>-->
+<!--                        </div>-->
+                      </div>
+                      <label id="lbl_Prefix" class="col-xl-3 col-md-3"></label>
+                      <div class="row">
+                        <div class="form-group col-md-12">
+                          <label for="category_ids" style="font-weight: bold">Category</label><br><br>
+                          <label for="category_ids" style="font-size: smaller">Requested Categories</label><br><br>
+                          <div class="row" >
+                            <div class="form-group col-md-12"
+                                 *ngFor="let partnerSpecificCategoryArrs of partnerSpecificCategoryArr">
+                              <span style="height: 30px; padding-top: 8.8px; background-color: #000080 !important;"
+                                    class="badge badge-secondary">{{partnerSpecificCategoryArrs['cat_parth']}}</span><br>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+<!--                    <div class="row" *ngIf="catShow" >-->
+<!--                      <div class="form-group col-md-3">-->
+<!--                        <label for="category_ids">Category</label>-->
+<!--                        <p></p>-->
+<!--                        <select class="form-control" id="category_ids" (change)="allSubCategory()" name="cat">-->
+<!--                          <option value="">&#45;&#45; Select Category &#45;&#45;</option>-->
+<!--                          <option *ngFor="let mainCategoryArrays of mainCategoryArray"-->
+<!--                                  value="{{mainCategoryArrays['code']}}">-->
+<!--                            {{mainCategoryArrays['name']}}-->
+<!--                          </option>-->
+
+<!--                        </select>-->
+<!--                      </div>-->
+
+<!--                      <div class="form-group col-md-3" style="display: none" (change)="allSubSubCategory()"-->
+<!--                           id="subCategory">-->
+<!--                        <label>Sub Category</label>-->
+<!--                        <p></p>-->
+<!--                        <select class="form-control" name="cat2" id="cat_sub_id">-->
+<!--                          <option value="">&#45;&#45; Select Sub Category &#45;&#45;</option>-->
+<!--                          <option *ngFor="let subCategoryArrays of subCategoryArray"-->
+<!--                                  value="{{subCategoryArrays['code']}}">-->
+<!--                            {{subCategoryArrays['name']}}-->
+<!--                          </option>-->
+<!--                        </select>-->
+<!--                      </div>-->
+
+<!--                      <div class="form-group col-md-3" style="display: none" id="subsubCategory">-->
+<!--                        <label>Sub Sub Category</label>-->
+<!--                        <p></p>-->
+<!--                        <select class="form-control" name="cat3" id="cat_sub_sub_id">-->
+<!--                          <option value="">&#45;&#45; Select Sub Category &#45;&#45;</option>-->
+<!--                          <option *ngFor="let subSubCategoryArrays of subSubCategoryArray"-->
+<!--                                  value="{{subSubCategoryArrays['code']}}">-->
+<!--                            {{subSubCategoryArrays['name']}}-->
+<!--                          </option>-->
+
+<!--                        </select>-->
+<!--                      </div>-->
+
+<!--                      <div class="form-group col-md-3">-->
+<!--                        <br>-->
+<!--                        <p></p>-->
+<!--                        <button type="button" (click)="addCategory()" class="btn btn-primary">Add Category</button>-->
+<!--                      </div>-->
+<!--                    </div>-->
+
+
+                    <div class="col-md-6">
+                      <nav aria-label="breadcrumb"
+                           *ngFor="let allCategoryBreadcrumbArrs of allCategoryBreadcrumbArr; let i = index"
+                           [attr.data-index]="i"><i
+                        (click)="removeCategoryBreadcrum(i)" class="fa fa-close" style="color: red;float: right"></i>
+                        <ol class="breadcrumb">
+                          <li *ngIf="allCategoryBreadcrumbArrs['cat_name_bool']" class="breadcrumb-item"><a
+                            href="#">{{
+                            allCategoryBreadcrumbArrs['cat_name']}}</a></li>
+
+                          <li *ngIf="allCategoryBreadcrumbArrs['sub_cat_name_bool']" class="breadcrumb-item"><a
+                            href="#">{{
+                            allCategoryBreadcrumbArrs['sub_cat_name']}}</a></li>
+
+                          <li *ngIf="allCategoryBreadcrumbArrs['cat_sub_sub_name_bool']" class="breadcrumb-item"><a
+                            href="#">{{
+                            allCategoryBreadcrumbArrs['cat_sub_sub_name']}}</a></li>
+
+                        </ol>
+                      </nav>
+                    </div>
+
+                    <!--<div class="row" style="display: none">-->
+                    <!--<div class="col-6" ngModelGroup="productPrefix">-->
+                    <!--<div class="form-group row">-->
+                    <!--<label for="productCategory" class="col-xl-3 col-md-3"><span>*</span>Category</label>-->
+                    <!--<input style="margin-bottom: -12px;" class="form-control col-xl-8 col-md-7" name="productCategory"-->
+                    <!--id="productCategory"-->
+                    <!--type="text" required="">-->
+
+                    <!--</div>-->
+                    <!--<div class="labelBoxappend">-->
+                    <!--<div class="mainDev" *ngFor="let productCategoryArraysss of proCat2">-->
+                    <!--<label class="labelAppendSub">{{productCategoryArraysss['category']}}</label>-->
+                    <!--&lt;!&ndash;<input type="text" value="{{productPrefixArrayss['productPrefix']}">&ndash;&gt;-->
+                    <!--<div (click)="removeCategory(productCategoryArraysss['category'])" class="clouseI"><i class="fa fa-close"></i></div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div class="col-6">-->
+                    <!--<div class="form-group row">-->
+                    <!--<button type="button" (click)="addCategory(userForm)" class="btn btn-primary">Add Category-->
+                    <!--</button>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<label id="lbl_Prefixx" class="col-xl-3 col-md-3"></label>-->
+
+                </div>
+
+                    <div class="pull-right" id="approveBtnOne"  *ngIf="value!==1">
+                      <button type="submit" [disabled]="approveButtonClicked"   class="btn btn-primary">APPROVE PARTNER</button>
+                    </div>
+                  </form>
+
+                    <div class="pull-right" id="decline" style="padding-right: 10px; padding-left: 10px;" *ngIf="value!==1" >
+                      <button type="button" class="btn btn-danger" style="padding-right: 10px" (click)="goToDeclinedMessageForm()">DECLINE PARTNER</button>
+                    </div>
+        </div>
+        </ng-template>
+        </ngb-tab>
+        </ngb-tabset>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<!-- Container-fluid Ends-->

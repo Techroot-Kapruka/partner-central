@@ -1,0 +1,52 @@
+<div>
+  <div class="card">
+    <div class="card-header">
+      <strong><h4>Image</h4></strong>
+    </div>
+    <div class="card-body">
+      <div class="card-info">
+        <div class="col-6">
+          <label class="col-form-label">Product Code</label>
+          <input class="form-control" id="productCode_" type="text" required="" disabled>
+        </div>
+        <div class="col-6">
+          <label class="col-form-label">Vendor Code</label>
+          <input class="form-control" id="vendorId_" type="text" required="" disabled>
+        </div>
+        <div class="col-6">
+          <label class="col-form-label">Product Name</label>
+          <input class="form-control" id="productName_" type="text" required="" disabled>
+        </div>
+        <div class="col-6">
+          <label class="col-form-label">Vendor Name</label>
+          <input class="form-control" id="vendorName_" type="text" required="" disabled>
+        </div>
+      </div>
+      <br>
+      <br>
+      <hr>
+      <div class="tab-pane fade active show" role="tabpanel" aria-labelledby="account-tab">
+        <div class="card-body">
+          <div class="digital-add needs-validation">
+            <div class="col-xl-10">
+              <div class="add-product">
+                <div class="row">
+                  <div class="col-xl-3 col-sm-3 col-3" *ngFor="let imageData of imageData">
+                    <img id="mainImages" src="{{imagePathURI+imageData}}" alt="" class="img-fluid image_zoom_1">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="col-12 button">
+        <button class="btn btn-danger" type="button" (click)="rejectProductsImages()"  style="margin-left: 15px;">Reject</button>
+        <button class="btn btn-success" type="button" (click)="approvedProductsImages()" style="margin-left: 15px;">Approve</button>
+      </div>
+
+    </div>
+  </div>
+
+</div>

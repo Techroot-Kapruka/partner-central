@@ -1,0 +1,786 @@
+<form [formGroup]="imageCliant">
+  <div class="container-fluid">
+    <div class="row product-adding">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="row" style="float: right;">
+              <div class="form-group">
+                <button type="button" (click)="backToLIst()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                        data-placement="top" title="Back to Shipment List"><i class="fa fa-arrow-circle-left"
+                                                                              aria-hidden="true"></i> Back
+                </button>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-sm-6">
+                <div class="card-header">
+                  <h5><strong>Product Category</strong></h5>
+                </div>
+                <!--<div class="digital-add needs-validation">-->
+                <!--                  <div class="form-group">-->
+                <!--                    <button disabled type="button" class="btn btn-primary" data-toggle="modal" data-original-title="test"-->
+                <!--                            data-target="#exampleModal" (click)="open(content)">Select Your Category-->
+                <!--                    </button>-->
+                <!--                  </div>-->
+                <!--</div>-->
+              </div>
+            </div>
+
+
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a id="breadcrum"></a></li>
+                <input class="form-control" hidden id="category_code" type="text" required="">
+              </ol>
+            </nav>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-6" style="display:{{isDisplay}}">
+        <div class="card">
+          <div class="card-header">
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card" style="margin:50px 0">
+                    <!-- Default panel contents -->
+                    <!--<div class="card-header">Checkbox to Round Switch</div>-->
+
+                    <ul class="list-group list-group-flush">
+
+                      <li class="list-group-item">
+                        Adding Product Groups
+                        <form [formGroup]="checkBoxCon" (change)="addingProductGroups()">
+                          <label class="switch">
+                            <input disabled type="checkbox" formControlName="productGroup" id="g01-01"
+                                   class="success">
+                            <span class="slider round"></span>
+                          </label>
+                        </form>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--=================================================-->
+
+            <h5><strong>Basic Info</strong></h5>
+          </div>
+          <div class="card-body">
+            <div class="digital-add needs-validation">
+              <div class="form-group">
+                <label for="txt_title" class="col-form-label pt-0"> Title</label>
+                <input disabled class="form-control" id="txt_title" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="txt_brand" class="col-form-label">Brand</label>
+                <input disabled class="form-control" id="txt_brand" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="txt_manufacture" class="col-form-label">Manufacture</label>
+                <input disabled class="form-control" id="txt_manufacture" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="txt_manufacture" class="col-form-label">Manufacture</label>
+                <input disabled class="form-control" id="xxxxx" type="text" required="">
+              </div>
+
+              <form [formGroup]="maintainStock" (change)="maintainStockChange()">
+                <div class="form-group">
+                  <div class="form-check">
+                    <input disabled class="form-check-input" formControlName="maintainStockController" type="checkbox"
+                           value=""
+                           id="flexCheckChecked" checked>
+                    <label class="form-check-label" for="flexCheckChecked">
+                      Maintain Stock
+                    </label>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h5><strong>Offer</strong></h5>
+          </div>
+          <div class="card-body">
+            <div class="digital-add needs-validation">
+              <div class="form-group">
+                <label for="txt_seller_sku" class="col-form-label pt-0">Seller SKU</label>
+                <input class="form-control" disabled id="txt_seller_sku" type="text" required="">
+              </div>
+              <div class="form-group" id="groupPrice">
+                <label for="txt_price" class="col-form-label pt-0">Price</label>
+                <input class="form-control" disabled id="txt_price" type="text" required="">
+              </div>
+              <div class="form-group">
+                <label for="txt_quantity" class="col-form-label pt-0">Quantity</label>
+                <input class="form-control" id="txt_quantity" disabled type="text" required="">
+              </div>
+              <div class="form-group">
+                <label class="col-form-label"> Condition</label>
+                <input class="form-control" id="txt_condition" disabled type="text" required="">
+
+              </div>
+              <div class="form-group" id="treePriceCol">
+                <div class="row">
+                  <div class="col-4">
+                    <label for="txt_amount" class="col-form-label">Amount</label>
+                    <input class="form-control" disabled id="txt_amount" (keyup)="calculatePriceForAmount()" type="text"
+                           required="">
+                  </div>
+                  <div class="col-4">
+                    <label for="txt_price_rate" class="col-form-label"> Price Rate</label>
+                    <input class="form-control" disabled (keyup)="calculatePriceForPriceRate()" id="txt_price_rate"
+                           type="text"
+                           required="">
+                  </div>
+                  <div class="col-4">
+                    <label for="txt_selling_price" class="col-form-label">Selling Price</label>
+                    <input class="form-control" id="txt_selling_price" type="text" required="" disabled>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h5><strong>Description</strong></h5>
+          </div>
+          <div class="card-body">
+            <div class="digital-add needs-validation">
+
+              <div class="form-group">
+                <!--                <label class="col-form-label">Description</label>-->
+                <div id="txt_description" disabled></div>
+              </div>
+              <div class="form-group">
+                <label class="col-form-label"> Available</label>
+                <select disabled class="custom-select" id="availability" required="">
+                  <option value="">--Select--</option>
+                  <option value="Yes">Yes</option>
+                  <option value="No">No</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="digital-add needs-validation">
+              <!--              <div class="form-group">-->
+              <!--                <label for="ond" class="col-form-label">Consignment</label>-->
+              <!--                  <input class="form-control" type="radio" id="ond" name="proType" value="consignment">-->
+              <!--                <label for="cons" class="col-form-label">On Demand</label>-->
+              <!--                  <input class="form-control" type="radio" id="cons" name="proType" value="on-demand">-->
+              <!--              </div>-->
+
+
+              <div class="form-group">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="ond" name="supply" value="consignment"
+                         (change)="onRadioChange($event)" [defaultChecked]="true">
+                  <label class="form-check-label" for="ond">Consignment</label>
+                </div>
+                <br>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" id="cons" name="supply" (change)="onRadioChange($event)"
+                         value="on-demand">
+                  <label class="form-check-label" for="cons">On Demand</label>
+                </div>
+                <!--                <input type="radio" name="radioOptions" value="option1" (change)="onRadioChange($event)" [defaultChecked]="true"> Option 1-->
+                <!--                <input type="radio" name="radioOptions" value="option2" (change)="onRadioChange($event)"> Option 2-->
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h5><strong>Keyword</strong></h5>
+          </div>
+          <div class="card-body">
+            <div class="digital-add needs-validation">
+              <div class="form-group mb-0">
+                <div class="form-group">
+                  <label for="txt_keyword" class="col-form-label pt-0"> Add Keyword</label>
+                  <div class="row">
+                    <div class="col-6">
+                      <input disabled class="form-control" id="txt_keyword" type="text" required="">
+                      <div class="form-group row" style="margin-left: -1.9%;">
+                        <div class="labelBoxappend">
+                          <div id="btnSS" class="mainDev" *ngFor="let keyWordArrays of keyWordArray">
+                            <label class="labelAppendSub" style="background: #000080">{{keyWordArrays['key']}}</label>
+                            <!--<input type="text" value="{{productPrefixArrayss['productPrefix']}">-->
+                            <div *ngIf="false" class="clouseI" id="removeKey"
+                                 (click)="removeKeyWord(keyWordArrays['key'])"><i
+                              class="fa fa-close"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="form-group row">
+                        <button disabled type="button" (click)="addKeyWord()" id="keyAdd" class="btn btn-primary">Add
+                          Key
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <ng-template #content let-modal>
+                    <div class="modal-header">
+                      <h5 class="modal-title f-w-600" id="exampleModalLabel">Choose Product</h5>
+                      <button disabled type="button" class="close" aria-label="Close"
+                              (click)="modal.dismiss('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form class="needs-validation">
+                        <div class="form">
+                          <div class="form-group">
+                            <label for="mySearch" class="mb-1">Search your Category :</label>
+
+                            <input disabled class="form-control" type="text" id="mySearch" (keyup)="getCategory()"
+                                   placeholder="Enter text"/>
+
+                            <ul id="myMenu" style="cursor: pointer">
+                              <li *ngFor="let catParths of catParth"
+                                  (click)="changeEvent(catParths['parth'],catParths['code'])"
+                                  (click)="modal.dismiss('Cross click')"><strong>&#x025FC; </strong>
+                                {{catParths['parth']}}
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button disabled class="btn btn-secondary" type="button" data-dismiss="modal"
+                              (click)="modal.dismiss('Cross click')">Close
+                      </button>
+                    </div>
+                  </ng-template>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-6" style="display:{{isDisplay}}">
+        <div class="card">
+          <div class="card-header">
+            <h5><strong>Variations</strong></h5>
+          </div>
+          <div class="card-body">
+            <div class="digital-add needs-validation">
+              <div class="form-group" id="variationTheme">
+                <label class="col-form-label">Variation Theme</label>
+                <select disabled class="custom-select" required="" (change)="getResultDemo()" id="themeVar">
+                  <option value="0">--Select--</option>
+                  <option value="none">None</option>
+                  <option value="color">Color Name</option>
+                  <option value="size">Size Name</option>
+                  <option value="weight">Weight</option>
+                  <option value="storage">Storage</option>
+                  <option value="capacity">Capacity</option>
+                  <!--<option value="color-size-name">Color - Size Name</option>-->
+                </select>
+              </div>
+            </div>
+            <div id="isNone">
+              <div *ngIf="isColor">
+                <label class="col-form-label">Select Color</label>
+                <div class="row">
+                  <div class="col-3">
+                    <input disabled class="form-control" type="color" id="colorInput" name="profilesecondarycolor"
+                           list="profilecolorslist">
+                    <datalist id="profilecolorslist">
+                      <option value="#FFFFFF" style="color: black"> //white
+                      <option value="#FF0000"> //red
+                      <option value="#0000FF"> //blue
+                      <option value="#FFFF00"> //yellow
+                      <option value="#00FF00"> //green
+                      <option value="#808080"> //gray
+                      <option value="#800080"> //purple
+                      <option value="#FFA500"> //orange
+                      <option value="#800000"> //maroon
+                      <option value="#000000"> //black
+                    </datalist>
+                  </div>
+                  <div class="col-3" style="display: none">
+                    <input disabled class="form-control" id="setColorInput" type="text" required="">
+                  </div>
+                  <div class="col-6">
+                    <div class="labelBoxappend">
+                      <div class="mainDev" *ngFor="let colorArrayys of colorArray">
+                        <label class="labelAppendSub"
+                               style="background: {{colorArrayys['colorV']}};">{{colorArrayys['colors']}}</label>
+                        <!--<input type="text" value="{{productPrefixArrayss['productPrefix']}">-->
+                        <div class="clouseI" (click)="removeColor(colorArrayys['colorV'])"><i class="fa fa-close"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button disabled (click)="getColorValue()" type="button" style="margin-top:1%"
+                        class="btn btn-primary btn-sm">Add
+                  Color
+                </button>
+              </div>
+              <!--==========================================================-->
+
+              <div *ngIf="isWeight">
+                <label class="col-form-label">Select Weight</label>
+                <div class="row">
+                  <div class="col-5">
+
+                    <select disabled class="custom-select" required="" id="select_weight">
+                      <option value="">--Select--</option>
+                      <option value="Mg">Mg</option>
+                      <option value="G">G</option>
+                      <option value="Kg">Kg</option>
+                      <option value="T">T</option>
+                    </select>
+                  </div>
+                  <div class="col-7">
+                    <div class="labelBoxappend" *ngIf="weightBool">
+                      <div class="mainDev">
+                        <label class="labelAppendSub" style="background: #000080">{{weightValue}}</label>
+                        <!--<input type="text" value="{{productPrefixArrayss['productPrefix']}">-->
+                        <div class="clouseI" (click)="removeWeight()"><i class="fa fa-close"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button (click)="addWeight()" style="margin-top: 1%" type="button" class="btn btn-primary btn-sm">
+                  Add Weight
+                </button>
+              </div>
+
+              <!--==========================================================-->
+
+              <div *ngIf="isStorage">
+                <label class="col-form-label">Enter Storage</label>
+                <div class="row">
+                  <div class="col-5">
+
+                    <div class="form-group">
+                      <!--<label for="proGAmount" class="col-form-label">Amount</label>-->
+                      <input disabled class="form-control"
+                             id="txt_storage" type="text" required="">
+                    </div>
+
+                  </div>
+                  <div class="col-7">
+                    <div class="labelBoxappend" *ngIf="weightBool">
+                      <div class="mainDev">
+                        <label class="labelAppendSub" style="background: #000080">{{storageValue}}</label>
+                        <!--<input type="text" value="{{productPrefixArrayss['productPrefix']}">-->
+                        <div class="clouseI" (click)="removeStorage()"><i class="fa fa-close"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button disabled (click)="addStorage()" style="margin-top: 1%" type="button"
+                        class="btn btn-primary btn-sm">
+                  Add Storage
+                </button>
+              </div>
+              <!--==========================================================-->
+
+
+              <div *ngIf="isCapacity">
+                <label class="col-form-label">Enter Capacity</label>
+                <div class="row">
+                  <div class="col-5">
+
+                    <div class="form-group">
+                      <!--<label for="proGAmount" class="col-form-label">Amount</label>-->
+                      <input disabled class="form-control"
+                             id="txt_capacity" type="text" required="">
+                    </div>
+
+                  </div>
+                  <div class="col-7">
+                    <div class="labelBoxappend" *ngIf="weightBool">
+                      <div class="mainDev">
+                        <label class="labelAppendSub" style="background: #000080">{{capacityValue}}</label>
+                        <!--<input type="text" value="{{productPrefixArrayss['productPrefix']}">-->
+                        <div class="clouseI" (click)="removeCapacity()"><i class="fa fa-close"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button disabled (click)="addCapacity()" style="margin-top: 1%" type="button"
+                        class="btn btn-primary btn-sm">
+                  Add Capacity
+                </button>
+              </div>
+
+              <!--==========================================================-->
+
+
+              <!--================================-->
+              <div *ngIf="colorsAndSize">
+
+                <div class="row">
+                  <div class="col-5">
+                    <label class="col-form-label">Select Color</label>
+                    <input disabled class="form-control" type="color" id="colorInputss" name="profilesecondarycolor"
+                           list="profilecolorslist3">
+                    <datalist id="profilecolorslist3">
+                      <option value="#FFFFFF" style="color: black"> //white
+                      <option value="#FF0000"> //red
+                      <option value="#0000FF"> //blue
+                      <option value="#FFFF00"> //yellow
+                      <option value="#00FF00"> //green
+                      <option value="#808080"> //gray
+                      <option value="#800080"> //purple
+                      <option value="#FFA500"> //orange
+                      <option value="#800000"> //maroon
+                      <option value="#000000"> //black
+                    </datalist>
+                  </div>
+                  <div class="col-6">
+                    <label class="col-form-label">Select Size</label>
+                    <select disabled class="custom-select" required="" id="sizeIN">
+                      <option value="">--Select--</option>
+                      <option value="1">XS</option>
+                      <option value="2">S</option>
+                      <option value="3">M</option>
+                      <option value="4">L</option>
+                      <option value="5">XL</option>
+                      <option value="6">XXL</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="colorsAndSize">
+                <div class="row">
+                  <div class="col-10">
+                    <div class="labelBoxappend">
+                      <div class="mainDev" *ngFor="let sizeAndColorArrays of sizeAndColorArray">
+                        <label class="labelAppendSub"
+                               style="background: {{sizeAndColorArrays['colorNS']}};">{{sizeAndColorArrays['sizeSZ']}}</label>
+                        <!--<input type="text" value="{{productPrefixArrayss['productPrefix']}">-->
+                        <div class="clouseI"
+                             (click)="removeSizeAndColor(sizeAndColorArrays['sizeSZ'],sizeAndColorArrays['colorVal'])">
+                          <i
+                            class="fa fa-close"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button disabled (click)="addSizeAndColor()" style="margin-top: 1%" type="button"
+                        class="btn btn-primary btn-sm">
+                  Add
+                  Size and Color
+                </button>
+              </div>
+              <!--=========================================-->
+              <div *ngIf="isSize">
+                <label class="col-form-label">Select Size</label>
+                <div class="row">
+                  <div class="col-5">
+
+                    <select disabled class="custom-select" required="" id="size">
+                      <option value="">--Select--</option>
+                      <option value="1">XS</option>
+                      <option value="2">S</option>
+                      <option value="3">M</option>
+                      <option value="4">L</option>
+                      <option value="5">XL</option>
+                      <option value="6">XXL</option>
+                    </select>
+                  </div>
+                  <div class="col-7">
+                    <div class="labelBoxappend">
+                      <div class="mainDev" *ngFor="let sizeArrays of sizeArray">
+                        <label class="labelAppendSub" style="background: #000080">{{sizeArrays['sizeS']}}</label>
+                        <!--<input type="text" value="{{productPrefixArrayss['productPrefix']}">-->
+                        <div class="clouseI" (click)="removeSize(sizeArrays['sizeS'])"><i class="fa fa-close"></i></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button disabled (click)="getSizeBySelect()" style="margin-top: 1%" type="button"
+                        class="btn btn-primary btn-sm">
+                  Add Size
+                </button>
+              </div>
+              <br>
+              <form [formGroup]="productGroupCon" id="formProductGroup">
+                <div class="row">
+
+                  <div class="col-sm-6" id="CostPriceGroup" style="display: none">
+                    <div class="form-group">
+                      <label for="proGCostPrice" class="col-form-label">Seller Income</label>
+                      <input disabled class="form-control" formControlName="proGCostPrice" id="proGCostPrice"
+                             type="text"
+                             required="">
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6" id="amountGroup" style="display: none">
+                    <div class="form-group">
+                      <label for="proGAmount" class="col-form-label">Amount</label>
+                      <input disabled class="form-control" formControlName="proGAmount"
+                             (keyup)="calculatePriceForAmount2()"
+                             id="proGAmount" type="text" required="">
+                    </div>
+                  </div>
+                  <div class="col-sm-6" id="rateGroup" style="display: none">
+                    <div class="form-group">
+                      <label for="proGRate" class="col-form-label">Rate</label>
+                      <input disabled class="form-control" formControlName="proGRate"
+                             (keyup)="calculatePriceForPriceRate2()"
+                             id="proGRate" type="text" required="">
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6" id="sellingPrice" style="display: none">
+                    <div class="form-group">
+                      <label for="proGSellingPrice" class="col-form-label">Listing Price</label>
+                      <input class="form-control" formControlName="proGSellingPrice" id="proGSellingPrice" disabled
+                             type="text"
+                             required="">
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6" id="quantity2">
+                    <div class="form-group">
+                      <label for="qty" class="col-form-label">Quantity</label>
+                      <input disabled class="form-control" formControlName="qty" id="qty" type="text"
+                             required="">
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6" id="buttonGroup">
+                    <div class="form-group">
+                      <button disabled id="btnOne" type="button" (click)="addToTbaleProductNone()"
+                              style="margin-top: 18%;"
+                              class="btn btn-success">Add to Table
+                      </button>
+                      <button disabled id="btnTwo" type="button" (click)="addToTbaleProductGroup()"
+                              style="margin-top: 18%; display: none"
+                              class="btn btn-success">Add to Table
+                      </button>
+                    </div>
+                  </div>
+                  <div style="display: none" class="col-sm-12" id="TbaleTT">
+                    <div class="form-group">
+                      <table class="table table-striped">
+                        <thead>
+                        <tr>
+                          <th scope="col">Theme</th>
+                          <th scope="col">Value</th>
+                          <th scope="col">Seller Income</th>
+                          <th scope="col">Listing Price</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let productGroupTabels of productGroupTabel"
+                            (click)="editGroupRow(productGroupTabel)">
+                          <th>{{productGroupTabels['theme']}}</th>
+                          <td>{{productGroupTabels['value']}}</td>
+                          <td>{{productGroupTabels['cost']}}</td>
+                          <td>{{productGroupTabels['selling']}}</td>
+                          <td>
+                            <button disabled style="font-size: 10px;" type="button" class="btn btn-success"
+                                    (click)="editRow(productGroupTabels)"><i class="fa fa-pencil-square"
+                                                                             aria-hidden="true"></i>
+                            </button>
+                            <button disabled type="button" style="font-size: 10px; margin-left: 2%;"
+                                    (click)="deleteRow(productGroupTabels)"
+                                    class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="col-sm-12" id="TbaleTT2">
+                    <div class="form-group">
+                      <table class="table table-striped">
+                        <thead>
+                        <tr>
+                          <th scope="col">Theme</th>
+                          <th scope="col">Value</th>
+                          <th scope="col">Qty</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let nonGroupArrayss of nonGroupArray">
+                          <th>{{nonGroupArrayss['theme']}}</th>
+                          <td>{{nonGroupArrayss['value']}}</td>
+                          <td>{{nonGroupArrayss['qty']}}</td>
+                          <td>
+                            <button disabled style="font-size: 10px;" type="button" class="btn btn-success"
+                                    (click)="editRow(nonGroupArrayss)"><i class="fa fa-pencil-square"
+                                                                          aria-hidden="true"></i>
+                            </button>
+                            <button disabled type="button" style="font-size: 10px; margin-left: 2%;"
+                                    (click)="deleteRow(nonGroupArrayss)"
+                                    class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i>
+                            </button>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h5><strong>Images</strong></h5>
+          </div>
+          <div class="card-body">
+            <div class="digital-add needs-validation">
+              <div class="col-xl-10">
+                <div class="add-product">
+                  <div class="row">
+                    <div class="col-xl-9 xl-50 col-sm-6 col-9">
+                      <img id="mainImage" src="{{imagePathURI+imageOne}}" alt="" class="img-fluid image_zoom_1">
+                    </div>
+                    <div class="col-xl-3 xl-50 col-sm-6 col-3">
+                      <ul class="file-upload-product">
+                        <!--=========================-->
+                        <li>
+                          <div class="box-input-file">
+                            <!--<input disabled class="upload" id="image01" type="file"-->
+                            <!--(change)="changeValue($event, 1)">-->
+                            <img class="imgUpload" id="imageOneO" alt="" src="{{imagePathURI+imageOne}}"
+                                 (click)="popupApproveImage(1)">
+                          </div>
+                        </li>
+
+                        <li>
+                          <div class="box-input-file">
+                            <!--<input disabled class="upload" type="file" formControlName="imageOne2"-->
+                            <!--(change)="changeValue2($event)">-->
+                            <img class="imgUpload" id="imageTwoO" alt="" src="{{imagePathURI+imageOne2}}"
+                                 (click)="popupApproveImage(2)">
+                          </div>
+                        </li>
+
+                        <li>
+                          <div class="box-input-file">
+                            <!--<input disabled class="upload" type="file" formControlName="imageOne3"-->
+                            <!--(change)="changeValue3($event)">-->
+                            <img class="imgUpload" id="imageTreeE" alt="" src="{{imagePathURI+imageOne3}}"
+                                 (click)="popupApproveImage(3)">
+                          </div>
+                        </li>
+
+                        <li>
+                          <div class="box-input-file">
+                            <!--<input disabled class="upload" type="file" formControlName="imageOne4"-->
+                            <!--(change)="changeValue4($event)">-->
+                            <img class="imgUpload" id="imageFourR" alt="" src="{{imagePathURI+imageOne4}}"
+                                 (click)="popupApproveImage(4)">
+                          </div>
+                        </li>
+
+
+                        <li>
+                          <div class="box-input-file">
+                            <!--<input disabled class="upload" type="file" formControlName="imageOne5"-->
+                            <!--(change)="changeValue5($event)">-->
+                            <img class="imgUpload" id="imageFiveE" alt="" src="{{imagePathURI+imageOne5}}"
+                                 (click)="popupApproveImage(5)">
+                          </div>
+                        </li>
+                        <!--=============================-->
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #imagePopup let-modal>
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title">Image Preview</h4>
+              <button type="button" class="close" (click)="closePopup()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <img [src]="imageUrl" alt="Image" class="img-fluid">
+            </div>
+          </div>
+        </ng-template>
+
+        <div class="card">
+          <div class="card-header">
+            <h5><strong>Attributes</strong></h5>
+          </div>
+          <div class="card-body">
+            <table class="table table-striped table-bordered table-hover" style="font-size: 13px;">
+              <tr>
+                <th>Attribute</th>
+                <th>Value</th>
+              </tr>
+              <tbody>
+              <tr *ngFor="let key of getAttributeKeys()">
+                <td>{{ key }}</td>
+                <td>{{ attributrHashMap[key] }}</td>
+              </tr>
+              </tbody>
+            </table>
+            <button style="text-align: center" class="btn btn-outline-primary" (click)="loadMore()">Load More</button>
+          </div>
+        </div>
+
+
+        <br>
+
+        <!--        <br>-->
+        <div class="container">
+          <hr>
+          <br>
+          <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-3"></div>
+            <div class="col-md-5">
+              <button type="submit" id="saveId" [disabled]="approveButtonClicked" (click)="approveProduct()" class="btn btn-lg btn-primary"
+                      style="margin-bottom: 14%;">APPROVE PRODUCTS
+              </button>
+
+              <button type="button" class="btn btn-lg btn-danger" style="margin-bottom: 14%;"
+                      (click)="goToDeclinedMessageFormForProduct()">DECLINE PRODUCTS
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+

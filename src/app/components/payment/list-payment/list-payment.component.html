@@ -1,0 +1,61 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-header">
+      <h5>Payment Details</h5>
+    </div>
+    <!--<div class="card-body">-->
+    <!--&lt;!&ndash;<div class="btn-popup pull-right">&ndash;&gt;-->
+    <!--&lt;!&ndash;<a class="btn btn-secondary" [routerLink]="'/users/create-user'">Create User</a>&ndash;&gt;-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+    <!--<div *ngIf="isAdmin" class="btn-popup pull-right">-->
+    <!--<select (change)="selectPartner()" id="select_od" class="form-control">-->
+    <!--<option selected>&#45;&#45; Select Vendor &#45;&#45;</option>-->
+    <!--<option *ngFor="let partners of partner" value="{{partners['name']}}">{{partners['name']}}</option>-->
+
+    <!--</select>-->
+    <!--<div id="batchDelete" class="category-table custom-datatable transcation-datatable user-image">-->
+    <!--<div class="table-responsive">-->
+    <!--<ngx-datatable class="bootstrap" [rows]="list_pages" [columnMode]="'force'" [headerHeight]="50"-->
+    <!--[footerHeight]="50" [rowHeight]="'auto'" [limit]="list_pages2" [selected]="selected"-->
+    <!--[selectionType]="false" [selectAllRowsOnPage]="false" (select)='onSelect($event)'>-->
+
+    <!--<ngx-datatable-column name="Invoice No" [width]="30"></ngx-datatable-column>-->
+    <!--<ngx-datatable-column name="Posting Date" [width]="30"></ngx-datatable-column>-->
+    <!--<ngx-datatable-column name="Total Amount" [width]="30"></ngx-datatable-column>-->
+    <!--<ngx-datatable-column name="Current Status" [width]="30"></ngx-datatable-column>-->
+    <!--<ngx-datatable-column name="Supplier Code" [width]="30"></ngx-datatable-column>-->
+    <!--<ngx-datatable-column name="Supplier Name" [width]="30"></ngx-datatable-column>-->
+    <!--</ngx-datatable>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <div class="card-body">
+      <div class="custom-datatable">
+        <div *ngIf="isAdmin" class="btn-popup pull-right">
+          <select (change)="selectPartner()" id="select_od" class="form-control">
+            <option selected>-- Select Vendor --</option>
+            <option *ngFor="let partners of partner" value="{{partners['value']}}">{{partners['name']}}</option>
+
+          </select>
+        </div>
+
+        <div class="clearfix"></div>
+        <ngx-datatable class="bootstrap expandable" [rows]="list_pages" [columnMode]="'force'" [headerHeight]="50"
+                       [footerHeight]="50" [rowHeight]="'auto'" [limit]="list_pages2" [selected]="selected"
+                       [selectionType]="false" [selectAllRowsOnPage]="false" (select)='onSelect($event)'>
+
+          <ngx-datatable-column name="Invoice No" [width]="30"></ngx-datatable-column>
+          <ngx-datatable-column name="Posting Date" [width]="30"></ngx-datatable-column>
+          <ngx-datatable-column name="Total Amount" [width]="30"></ngx-datatable-column>
+          <ngx-datatable-column name="Current Status" [width]="30"></ngx-datatable-column>
+          <ngx-datatable-column name="Supplier Code" [width]="30"></ngx-datatable-column>
+          <ngx-datatable-column name="Supplier Name" [width]="30"></ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->

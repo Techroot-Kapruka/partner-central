@@ -1,0 +1,15 @@
+.card-info{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+  flex-direction: row;
+  align-content: flex-end;
+}
+.details{
+  display: flex;
+}
+.button{
+display: flex;
+  justify-content: right;
+}

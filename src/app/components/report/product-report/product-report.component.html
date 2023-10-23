@@ -1,0 +1,103 @@
+<style>
+  #select_od {
+    width: 350px !important;
+  }
+
+  .suggestion-box {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    border: 1px solid #ccc;
+    max-height: 150px;
+    overflow-y: auto;
+    width: 370px;
+    background-color: white;
+    margin-left: 15px;
+    z-index: 1000; /* Adjust as needed */
+  }
+</style>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-md-9">
+              <h5 style="padding-left: 15px">Product Details </h5>
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-success float-right" (click)="exportToExcel()">Export to Excel</button>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4" style="margin-top: 10px">
+              <select [(ngModel)]="selectedOption" (change)="getSelectedPartnerProduct()" id="select_vendor" class="form-control">
+                <option selected>-- Select Vendor --</option>
+                <option *ngFor="let partnerArrays of partnerArray"
+                        value="{{partnerArrays['businessName']}}">{{partnerArrays['businessName']}}</option>
+              </select>
+            </div>
+            <!--div class="col-md-4" style="margin-top: 10px">
+              <select (change)="selectProduct()" id="select_proc" class="form-control">
+                <option selected>-- Select Product --</option>
+                <option *ngFor="let productc of productDetailsArr2;"
+                        value="{{ productc.product_code }}">{{ productc.product_code }}</option>
+              </select>
+            </div-->
+            <div class="col-md-4" style="margin-top: 10px">
+              <input class="form-control" #searchInput type="text" [(ngModel)]="searchText" placeholder="Search By Product" (input)="showSuggestionBox()" (click)="selectAllText()">
+              <ul class="suggestion-box" *ngIf="showDropdown" #listElement>
+                <a href="javascript:void(0);"><li *ngFor="let item of filterData()" (click)="selectItem(item)">{{ item.product_code }}</li></a>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="card-body" id="product-excel">
+          <!--<div class="btn-popup">-->
+          <!--<select class="form-control" id="select_od">-->
+          <!--<option value="">&#45;&#45; Select Category &#45;&#45;</option>-->
+          <!--<option *ngFor="let productCategory of productCategoryArray"-->
+          <!--ngValue="{{productCategory['code']}}">-->
+          <!--{{productCategory['name']}}-->
+          <!--</option>-->
+          <!--</select>-->
+          <!--</div>-->
+          <div class="row">
+            <div class="col-md-9">
+              <div class="row table-responsive"
+                   style="margin-top: 1%;max-height:50vh; overflow-y: auto; width: 135%;">
+                <table class="table table-sm table-bordered">
+                  <thead class="table-primary">
+                  <tr>
+                    <th>Product Code</th>
+                    <th>Category Code</th>
+                    <th>Title</th>
+                    <th>Brand</th>
+                    <th>Manufacture</th>
+                    <th>Vendor</th>
+                    <th>In Stock Amount</th>
+                    <th>Selling Price</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr *ngFor="let productDetail of productDetailsArr; let i = index">
+                    <td>{{ productDetail.product_code }}</td>
+                    <td>{{ productDetail.category_code }}</td>
+                    <td>{{ productDetail.title }}</td>
+                    <td>{{ productDetail.brand }}</td>
+                    <td>{{ productDetail.manufacture }}</td>
+                    <td>{{ productDetail.vendor }}</td>
+                    <td>{{ productDetail.in_stock }}</td>
+                    <td>{{ productDetail.seling_price }}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+//<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.thankyou-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #ffffff;
+
+}
+
+.thankyou-message {
+  text-align: center;
+  padding: 20px;
+}
+
+.thankyou-heading {
+  font-size: 3rem;
+  color: #000;
+  margin-bottom: 10px;
+  font-family: Lobster;
+}
+
+.thankyou-text {
+  font-size: 1.5rem;
+  color: #000;
+}
+.rest-text{
+  font-size: 1rem;
+  color: #000;
+  width: normal;
+}
+.thankyou-image  {
+  width: 15rem;
+  height: auto;
+}
+.cancel-btn{
+  height: 3rem;
+  width: 10rem;
+  margin-top: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #fe4fb7;
+  border: none;
+  border-radius: 8px;
+}
+

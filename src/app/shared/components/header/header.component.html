@@ -1,0 +1,69 @@
+<div class="page-main-header" [class.open]="open">
+  <div class="main-header-right row">
+    <div class="main-header-left d-lg-none">
+      <div class="logo-wrapper"><a [routerLink]="'/dashboard/default'">
+        <img class="blur-up lazyloaded" src="assets/images/dashboard/site_logo.png" alt=""></a></div>
+    </div>
+    <div class="mobile-sidebar">
+      <div class="media-body text-right switch-sm">
+        <label class="switch">
+          <a>
+            <app-feather-icons id="sidebar-toggle" [icon]="'align-left'" (click)="collapseSidebar()">
+            </app-feather-icons>
+          </a>
+        </label>
+      </div>
+    </div>
+   <div class="welcomeheaderText">
+     <span>Hello {{userName}}</span>
+     <span><img height="25px" src="../../../../assets/images/1h.png"> </span>
+   </div>
+    <div class="nav-right col">
+      <ul class="nav-menus" [ngClass]="{'open' : openNav}">
+
+        <li>
+          <a href="javascript:void(0)" class="text-dark" toggleFullscreen>
+            <app-feather-icons [icon]="'maximize-2'"></app-feather-icons>
+          </a>
+        </li>
+        <li class="onhover-dropdown"  >
+          <div class="media align-items-center" ><img
+            class="align-self-center pull-right img-50 rounded-circle" (click)="navigateFunction()"
+            src="../../../../assets/images/Partner/{{imageName}}" alt="header-user" style="margin-top: 15px" >
+            <!--src="assets/images/Partner/{{imageName}}" alt="header-user">-->
+            <span class="fulldet" (click)="navigateFunction()">
+              <span >{{userName}}</span><br>
+              <span>{{userRoleType}}</span>
+            </span>
+            <span class="iconholder" (click)="navigateToNotification()">
+
+              <img
+                class="align-self-center pull-right img-50 rounded-circle"
+                src="../../../../assets/images/ico/notification-icon.png">
+            </span>
+            <div class="dotted-animation"><span class="animate-circle"></span><span
+              class="main-circle"></span></div>
+          </div>
+<!--          <ul class="profile-dropdown onhover-show-div p-20 profile-dropdown-hover">-->
+<!--            <li><a (click)="navigateFunction()">-->
+<!--              <app-feather-icons [icon]="'user'"></app-feather-icons>-->
+<!--              Edit Profile-->
+<!--            </a></li>-->
+
+<!--&lt;!&ndash;            <li *ngIf="userBool"><a (click)="navigateEditCategoryView()">&ndash;&gt;-->
+<!--&lt;!&ndash;              <app-feather-icons [icon]="'grid'"></app-feather-icons>&ndash;&gt;-->
+<!--&lt;!&ndash;              Edit Category&ndash;&gt;-->
+<!--&lt;!&ndash;            </a></li>&ndash;&gt;-->
+<!--            <li><a (click)="logOut()" [routerLink]="'/auth/login'">-->
+<!--              <app-feather-icons [icon]="'log-out'"></app-feather-icons>-->
+<!--              Logout-->
+<!--            </a></li>-->
+<!--          </ul>-->
+        </li>
+      </ul>
+      <div class="d-lg-none mobile-toggle pull-right" (click)="openMobileNav()">
+        <app-feather-icons [icon]="'more-horizontal'"></app-feather-icons>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,574 @@
+<div class="container-fluid">
+  <!--<div class="authentication-box">-->
+  <!--<div class="container">-->
+  <div class="row">
+    <div class="">
+      <div class="card tab2-card" style="padding-bottom: 5px">
+        <div class="card-body tab2-card"
+             style="padding-top: 0px; padding-left: 15px;padding-right: 15px;margin-top: 20px">
+          <!--<ngb-tabset class="tab-coupon">-->
+          <!--  <ngb-tab >-->
+          <!--    <ng-template ngbTabContent>-->
+          <div class="tab-pane fade active show" id="account" role="tabpanel"
+               aria-labelledby="account-tab">
+            <form class="needs-validation user-add" [formGroup]="userGroup" (submit)="savePartner()">
+              <!--                    <div class="row">-->
+              <!--                      <div class="col-6">-->
+              <!--                        <div class="form-group row">-->
+              <!--                          <label for="contactPersonName" class="col-xl-4 col-md-4">Full Name<span-->
+              <!--                            style="color:red">*</span></label>-->
+
+              <!--                          <input class="form-control col-xl-8 col-md-8" formControlName="contactPersonName"-->
+              <!--                                 id="contactPersonName"-->
+              <!--                                 type="text" required=""-->
+              <!--                                 [readOnly]="true">-->
+              <!--                          <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"-->
+              <!--                                 id="LBLcontactPersonName">** Invalid-->
+              <!--                            person name</label>-->
+
+              <!--                        </div>-->
+              <!--                        <div class="form-group row">-->
+              <!--                          <label for="contactNo" class="col-xl-4 col-md-4"> Contact No <span style="color:red">*</span></label>-->
+              <!--                          <input class="form-control col-xl-8 col-md-8" formControlName="contactNo"-->
+              <!--                                 id="contactNo"-->
+              <!--                                 type="text" required=""-->
+              <!--                                 [readOnly]="false">-->
+              <!--                          <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"-->
+              <!--                                 id="contactNoBL">** Invalid moblie-->
+              <!--                            Number</label>-->
+              <!--                        </div>-->
+              <!--                        &lt;!&ndash;                        <div class="form-group row">&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          <label for="nic" class="col-xl-3 col-md-4"> Nic <span style="color:red">*</span></label>&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          <input class="form-control col-xl-8 col-md-7" formControlName="nic"&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                                 id="nic"&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                                 type="text" required="">&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          <label style="margin-left: 25%; color: red; display: none" id="nicLBL">Invalid nic&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                            Number</label>&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                        </div>&ndash;&gt;-->
+
+
+              <!--                        <div class="form-group row">-->
+              <!--                          <label for="userName" class="col-xl-4 col-md-4">User Name <span-->
+              <!--                            style="color:red">*</span></label>-->
+              <!--                          <input class="form-control col-xl-8 col-md-8" formControlName="userName"-->
+              <!--                                 id="userName"-->
+              <!--                                 type="text" required=""-->
+              <!--                                 [readOnly]="true">-->
+              <!--                        </div>-->
+              <!--                      </div>-->
+              <!--                      <div class="col-6">-->
+              <!--                        <div class="form-group row">-->
+              <!--                          <label for="email" class="col-xl-4 col-md-4"> Email <span style="color:red">*</span></label>-->
+              <!--                          <input class="form-control col-xl-8 col-md-8" formControlName="email"-->
+              <!--                                 id="email"-->
+              <!--                                 type="text" required=""-->
+              <!--                                 [readOnly]="true">-->
+              <!--                          <label style="margin-left: 43%; color: red; display: none ; animation: blink 2s infinite;"-->
+              <!--                                 id="emailLBL">** Invalid Email</label>-->
+              <!--                        </div>-->
+              <!--                        <div class="form-group row" style="display: none">-->
+              <!--                          <label for="password" class="col-xl-4 col-md-4">Password <span-->
+              <!--                            style="color:red">*</span></label>-->
+              <!--                          <input class="form-control col-xl-8 col-md-8" formControlName="password"-->
+              <!--                                 id="password"-->
+              <!--                                 type="{{type}}" required="">-->
+              <!--                          <span style="margin-top: 0%" toggle="#password-field" class="{{eyeIcon}}"-->
+              <!--                                (click)="toggle()"></span>-->
+              <!--                        </div>-->
+              <!--                        &lt;!&ndash;                        <div class="form-group row">&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          <label for="Confpassword" class="col-xl-3 col-md-4">Confirm Password <span&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                            style="color:red">*</span></label>&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          <input class="form-control col-xl-8 col-md-7" formControlName="Confpassword" id="Confpassword"&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                                 type="{{type2}}" required="">&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          <span style="margin-top: 0%" toggle="#password-field" class="{{eyeIcon}}"&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                                (click)="toggle2()"></span>&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                        </div>&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                        <div class="form-group row">&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          <label for="validationCustom5" class="col-xl-3 col-md-4">User Role <span&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                            style="color:red">*</span></label>&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          &lt;!&ndash;<input class="form-control col-xl-8 col-md-7" id="validationCustom5"&ndash;&gt;&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          &lt;!&ndash;type="password" required="" >&ndash;&gt;&ndash;&gt;-->
+
+              <!--                        &lt;!&ndash;                          <select class="form-control col-xl-8 col-md-7"&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                                  aria-label="Default select example" formControlName="roleName" id="validationCustom5">&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                            &lt;!&ndash;<option selected value=""> &#45;&#45; Select &#45;&#45; </option>&ndash;&gt;&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                            &lt;!&ndash;<option value="User">User</option>&ndash;&gt;&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                            <option value="Partner" selected>Partner</option>&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                          </select>&ndash;&gt;-->
+              <!--                        &lt;!&ndash;                        </div>&ndash;&gt;-->
+              <!--                        <div class="form-group row">-->
+              <!--                          <label class="col-xl-4 col-md-4">Profile Image</label>-->
+              <!--                          <form [formGroup]="imageCliant">-->
+              <!--                            <div class="add-product">-->
+              <!--                              <div class="row">-->
+              <!--                                <div class="col-xl-3 xl-50 col-sm-6 col-3">-->
+              <!--                                  <ul class="file-upload-product">-->
+
+              <!--                                    <li>-->
+              <!--                                      <div class="box-input-file"-->
+              <!--                                           style="width: 100px;     margin-top: 50px; background-color: transparent">-->
+              <!--                                        <input class="upload" id="image01" style="width: 100px;" type="file"-->
+              <!--                                               formControlName="imageOne"-->
+              <!--                                               (change)="changeValue($event, 1)">-->
+              <!--                                        <img class="imgUpload" id="imageOneO" style="width: 160px;marging-left :20%"-->
+              <!--                                             alt=""-->
+              <!--                                             src=" assets/images/upload.png">-->
+              <!--                                      </div>-->
+              <!--                                    </li>-->
+
+              <!--                                  </ul>-->
+              <!--                                </div>-->
+              <!--                              </div>-->
+              <!--                            </div>-->
+              <!--                          </form>-->
+              <!--                        </div>-->
+              <!--                      </div>-->
+              <!--                    </div>-->
+              <!--==================================================================================-->
+              <!--==================================================================================-->
+              <!-- =============================================================-->
+              <div id="disss">
+                <div class="commonDiv">
+                  <div style="padding:0; border:0;" class="card-header">
+                    <h5> Create Partner <span><span class="mainCount">01</span>Step</span></h5>
+                  </div>
+                  <label id="lbl_Prefix" class="col-md-3"></label>
+                  <div class="">
+                    <div class="form-group " style="margin-left: 7.5px; margin-right: 7.5px">
+                      <label for="category_ids">Category <span style="color:red">*</span></label>
+                      <p></p>
+                      <select class="form-control" id="category_ids" name="cat" (change)="addCategory()">
+                        <option value="0"> Select Category</option>
+                        <option *ngFor="let productCategor of productCategoryArray"
+                                value="{{productCategor['code']}}">
+                          {{productCategor['name']}}
+                        </option>
+                      </select>
+                      <label
+                        style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                        id="CategoryLBL">** Required a Category.</label>
+                    </div>
+                    <div class="form-group ">
+                      <p></p>
+                      <!--                        <button type="button" (click)="addCategory()" class="btn btn-primary" id="addCategoryBtn"-->
+                      <!--                                required>Add Category-->
+                      <!--                        </button>-->
+                    </div>
+                  </div>
+                  <div class="row" style="display: none">
+                    <div class="">
+                      <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                          <li class="breadcrumb-item"><a href="#" id="breadcrum"></a></li>
+                          <input class="form-control" hidden id="category_code" type="text" required="">
+                        </ol>
+                      </nav>
+                    </div>
+                  </div>
+                  <div class="col-3">
+                    <nav aria-label="breadcrumb"
+                         *ngFor="let allCategoryBreadcrumbArrs of allCategoryBreadcrumbArr; let i = index"
+                         [attr.data-index]="i" style="position: relative">
+                      <i (click)="removeCategoryBreadcrum(i)" class="fa fa-close"
+                         style="color: red;float: right; position: absolute; top: 5px; right: 5px"></i>
+                      <ol class="breadcrumb">
+                        <li *ngIf="allCategoryBreadcrumbArrs['cat_name_bool']" class="breadcrumb-item"><a
+                          href="#">{{
+                          allCategoryBreadcrumbArrs['cat_name']}}</a></li>
+                      </ol>
+                    </nav>
+                  </div>
+                  <div class="clearfix"></div>
+                  <div class="form-group blockz">
+                    <label for="PartnerType" class="">Partner Type <span
+                      style="color:red">*</span></label>
+                    <select (change)="eventHandle()" class="form-control "
+                            aria-label="Default select example" formControlName="PartnerType"
+                            id="PartnerType">
+                      <option selected value=""> Select</option>
+                      <option value="company">Company Seller</option>
+                      <option value="individual">Individual Seller</option>
+                    </select>
+                    <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                           id="LBLPartnerType">** Empty Partner Type</label>
+                  </div>
+
+                  <div class="form-group blockz">
+                    <label for="businessName" class="">Business Name <span
+                      style="color:red">*</span></label>
+                    <input class="form-control " formControlName="businessName"
+                           [(ngModel)]='businessName' id="businessName"
+                           type="text" required="" (keyup)="validateBuisnessbusinessNameLBLRemove(); onBusinessNameChange()">
+                    <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                           id="LBLbusinessName">** Empty Business Name</label>
+                    <div *ngIf="showInput"  class="border border-2 p-1">
+                      <small>
+                        Shop URL: https://www.kapruka.com/srilanka_online_shopping.jsp?partner={{sanitizedBusinessName}}
+                      </small>
+                      <!--<input style="width: 100%;" disabled type="text" [value]="'Shop URL: https://www.kapruka.com/srilanka_online_shopping.jsp?partner=' + sanitizedBusinessName" >-->
+                  </div>
+
+
+                  </div>
+
+                  <div class="form-group blockz">
+                    <label for="businessContactNo" class="">Business Contact No <span
+                      style="color:red">*</span></label>
+                    <input class="form-control " formControlName="businessContactNo"
+                           id="businessContactNo"
+                           type="text" required="" (keyup)="validateBuisnessContactNoLBLRemove()">
+                    <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                           id="businessContactNoLBL">** Invalid moblie Number</label>
+                  </div>
+                  <div class="form-group blockz">
+                    <label for="emailPartner" class="">Business Email <span
+                      style="color:red">*</span></label>
+                    <input class="form-control " formControlName="emailPartner"
+                           id="emailPartner"
+                           type="text" required="" (keyup)="validateLBLRemove()">
+                    <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                           id="emailPartnerLBL">** Invalid Email</label>
+                  </div>
+                  <div class="form-group blockz">
+                    <label for="ownerName" class="">Owner Name <span style="color:red">*</span></label>
+                    <input class="form-control " formControlName="ownerName"
+                           id="ownerName" type="text" required="" (keyup)="validateownerNameLBLRemove()">
+                    <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                           id="LBLownerName">** Empty Owner Name</label>
+                  </div>
+                  <div class="form-group blockz">
+                    <label for="socialURL" class="">Social URL &nbsp;&nbsp;&nbsp;<i
+                      class="fa fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="Tooltip on top"
+                      style="color: dodgerblue;cursor: pointer"></i></label>
+                    <input class="form-control " formControlName="socialURL"
+                           id="socialURL"
+                           type="text" required="">
+                  </div>
+                  <div class="form-group blockz">
+                    <label for="businessAddress" class="">Business Address</label>
+                    <textarea rows="2" class="form-control " formControlName="businessAddress"
+                              id="businessAddress"
+                              type="text" required=""></textarea>
+                  </div>
+
+
+                  <!----------------------------------------------------------->
+                  <div class="form-group blockz" *ngIf="isIndividual">
+                    <label for="nic" class="">Upload NIC<span
+                      style="color:red">*</span></label>
+                    <input class="form-control " formControlName="nic"
+                           id="nic"
+                           type="file" name="filename" #fileInput (change)="onFileSelected($event)">
+                    <label
+                      style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                      id="nicLBL">** Required NIC file</label>
+                  </div>
+
+                  <div *ngIf="isCompany">
+                    <div class="form-group blockz">
+                      <label for="businessRegisterNo" class="col-xl-6 col-md-6">Business Register No <span
+                        id="spanBRimageNo"
+                        style="color:red">*</span></label>
+                      <input class="form-control" formControlName="businessRegisterNo"
+                             id="businessRegisterNo" type="text" (keyup)="validateBRegNo()">
+                      <label
+                        style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                        id="businessRegisterNoLBL">** Required a Business Register No.</label>
+                    </div>
+                    <form [formGroup]="businessRegisterImage">
+                      <div class="form-group blockz">
+                        <label for="businessRegisterImage" class="col-xl-6 col-md-6">Business Register Doc
+                          <span id="spanBRimage">*</span></label>
+                        <input (change)="changeValue2($event)" type="file"
+                               class="form-control" formControlName="businessRegisterImage"
+                               id="businessRegisterImage" name="filename">
+                        <label
+                          style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                          id="businessRegisterBL">** Required Business Register file</label>
+                      </div>
+                    </form>
+                  </div>
+                <!----------------------------------------------------------->
+
+                  <div class="clearfix"></div>
+                  <div class="col-12">
+                  </div>
+                  <div class="col-6">
+                    <!--                          <div class="form-group row">-->
+                    <!--                            <label for="validationCustom6" class="col-xl-5 col-md-5">Company Name <span-->
+                    <!--                              style="color:red">*</span></label>-->
+                    <!--                            <input class="form-control col-xl-7 col-md-7" id="validationCustom6"-->
+                    <!--                                   type="text" required="" formControlName="companyName">-->
+                    <!--                            <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;" id="LBLcompanyName">** Empty Company Name</label>-->
+                    <!--                          </div>-->
+                  </div>
+                  <div class="col-6">
+                    <!--                          <div class="form-group row">-->
+                    <!--                            <label for="bankStatement" class="col-xl-5 col-md-5">Bank Statement <span-->
+                    <!--                              style="color:red">*</span></label>-->
+                    <!--                            <input type="file" class="form-control col-xl-7 col-md-7" id="bankStatement" name="filename">-->
+                    <!--                            &lt;!&ndash;                            <input type="submit">&ndash;&gt;-->
+                    <!--                          </div>-->
+                  </div>
+                </div>
+                <!--############### bank details ##################################-->
+                <div [ngClass]="{'gray-bg commonDiv  commonDiv2': isGray ,'black-bg commonDiv commonDiv2': !isGray }"
+                     style="padding-top: 0 !important">
+                  <details>
+                    <!--                        <div  style="padding:0; border:0;" class="card-header">-->
+                    <summary>
+                      <h5 style="text-decoration: underline"> Payment Details (Optional)
+                        <div class="trianglev"></div>
+                        <span><span class="mainCount">02</span>Step</span></h5>
+                    </summary>
+                    <!--                        </div>-->
+                    <div class="row">
+                      <div style="margin-top: 5px; padding-right: 3px; padding-left: 15px; font-size: 10px;>
+">
+                        <label class="switch">
+                          <input type="checkbox" formControlName="uploadFiles" id="g01-01"
+                                 (click)="ToggleBankdetails()"
+                                 class="success">
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                      <div class="col-md-5" style="text-align:left; margin-left: 0px; padding-left: 0px;">
+                        <span style="color: slategray">Select for filling bank details</span>
+                      </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                      <div class="col-6">
+                        <div class="form-group row">
+                          <label for="bankName" class="col-xl-5 col-md-5">Bank Name <span
+                            style="color:red">*</span></label>
+                          <input class="form-control col-xl-7 col-md-7"
+                                 id="bankName" formControlName="bankName" (keyup)="validateBankName()"
+                                 type="text" disabled>
+                          <label
+                            style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                            id="bankNameLBL">** Required a Bank Name.</label>
+                        </div>
+                        <div class="form-group row">
+                          <label for="branchCode" class="col-xl-5 col-md-5">Branch Code <span
+                            style="color:red">*</span></label>
+                          <input class="form-control col-xl-7 col-md-7"
+                                 id="branchCode" formControlName="branchCode" (keyup)="validateBranchCode()"
+                                 type="text" disabled>
+                          <label
+                            style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                            id="branchCodeLBL">** Required a Branch Code.</label>
+                        </div>
+                        <div class="form-group row">
+                          <label for="branchName" class="col-xl-5 col-md-5">Branch Name <span
+                            style="color:red">*</span></label>
+                          <input class="form-control col-xl-7 col-md-7"
+                                 id="branchName" formControlName="branchName" (keyup)="validateBranchName()"
+                                 type="text" disabled>
+                          <label
+                            style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                            id="branchNameLBL">** Required a Branch Name.</label>
+                        </div>
+                        <div class="form-group row">
+                          <label for="bankAccount" class="col-xl-5 col-md-5">Bank Account <span
+                            style="color:red">*</span></label>
+                          <input class="form-control col-xl-7 col-md-7" formControlName="bankAccount"
+                                 id="bankAccount" (keyup)="validateBankAccount()"
+                                 type="text" disabled>
+                          <label
+                            style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                            id="bankAccountLBL">** Required a Bank Account.</label>
+                        </div>
+                      </div>
+                      <div class="col-6">
+                        <!--<div class="form-group row">-->
+                          <!--<label for="businessRegisterNo" class="col-xl-6 col-md-6">Business Register No <span-->
+                            <!--id="spanBRimageNo"-->
+                            <!--style="color:red">*</span></label>-->
+                          <!--<input class="form-control col-xl-6 col-md-6" formControlName="businessRegisterNo"-->
+                                 <!--id="businessRegisterNo" type="text" (keyup)="validateBRegNo()" disabled>-->
+                          <!--<label-->
+                            <!--style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"-->
+                            <!--id="businessRegisterNoLBL">** Required a Business Register No.</label>-->
+                        <!--</div>-->
+                        <form [formGroup]="bankStatement">
+                          <div class="form-group row">
+                            <label for="bankStatement" class="col-xl-6 col-md-6">Passbook front page/specimen
+                              cheque/ Bank Statement <span
+                                style="color:red">*</span></label>
+                            <input (change)="changeValue3($event)" type="file"
+                                   class="form-control col-xl-6 col-md-6" id="bankStatement"
+                                   formControlName="bankStatement" name="filename" disabled>
+                            <!--<input type="submit">-->
+                            <label
+                              style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                              id="bankStatementLBL">** Required a Bank Statement.</label>
+                          </div>
+                        </form>
+                        <!--<form [formGroup]="businessRegisterImage">-->
+                          <!--<div class="form-group row">-->
+                            <!--<label for="businessRegisterImage" class="col-xl-6 col-md-6">Business Register Doc-->
+                              <!--<span id="spanBRimage">*</span></label>-->
+                            <!--<input (change)="changeValue2($event)" type="file"-->
+                                   <!--class="form-control col-xl-6 col-md-6" formControlName="businessRegisterImage"-->
+                                   <!--id="businessRegisterImage" name="filename" disabled>-->
+                            <!--&lt;!&ndash;                            <input type="submit">&ndash;&gt;-->
+                            <!--<label-->
+                              <!--style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"-->
+                              <!--id="businessRegisterBL">** Required Business Register file</label>-->
+                          <!--</div>-->
+                        <!--</form>-->
+                      </div>
+                    </div>
+                  </details>
+                </div>
+                <!-- #########################################################################-->
+                <!--=========================hr row=================================================                  -->
+                <div class="commonDiv" style="padding-bottom: 20px;">
+                  <div class="form-group">
+                    <details>
+                      <summary class="col-xl-12 col-md-12" style="color: #0080ff;"> Click to Expand/Collapse Terms
+                        And Conditions
+                      </summary>
+                      <div class="pull-right" style="margin-right: 20px">
+                        <img src="assets/images/Partner/DownloadIcon.png" width="100px" data-toggle="tooltip"
+                             data-placement="bottom" title="Download Terms and Conditions"
+                             style="color: dodgerblue;cursor: pointer" (click)="exportPDF();"/>
+                      </div>
+                      <br>
+                      <div id="pdfTable" #pdftable="" class="col-xl-12 col-md-12">
+                        <br>
+                        <span><h4 class="col-xl-12 col-md-12" style="margin: 0px">Terms and Conditions - Partner Central by Kapruka Holdings PLC</h4></span>
+                        <br>
+                        <div style="justify-content: center;" class="col-xl-12 col-md-12">
+                          <ol
+                            style="justify-content: right; text-align: justify; width: 100%;">
+                            <li style="margin-bottom: 20px"><h6>Acceptance of Terms</h6>
+                              By accessing or using Partner Central, you agree to comply with and be bound by these
+                              Terms and Conditions. If you do not agree with any part of these terms, you should not
+                              use Partner Central.
+                            </li>
+                            <li style="margin-bottom: 20px"><h6>Partner Central</h6>
+                              Partner Central is a platform provided by Kapruka Holdings PLC that allows partners to
+                              access and manage their accounts, products, and services offered through Kapruka
+                              Holdings PLC.
+                            </li>
+                            <li style="margin-bottom: 20px"><h6>Partner Account</h6>
+                              To use Partner Central, you must create a partner account. You are responsible for
+                              maintaining the confidentiality of your account credentials and ensuring that the
+                              information provided during registration is accurate and up to date. You agree to
+                              notify
+                              Kapruka Holdings PLC immediately of any unauthorized use of your account.
+                            </li>
+                            <li style="margin-bottom: 20px"><h6>Partner Responsibilities</h6>
+                              As a partner using Partner Central, you agree to:
+                              <ul>
+                                <li>
+                                  a. Comply with all applicable laws and regulations.
+                                </li>
+                                <li>
+                                  b. Provide accurate and complete information related to your products and
+                                  services.
+                                </li>
+                                <li>
+                                  c. Maintain the quality and integrity of your products and services.
+                                </li>
+                                <li>
+                                  d. Ensure that your content and activities on Partner Central do not violate the
+                                  rights of any third party or infringe upon any intellectual property rights.
+                                </li>
+                                <li>
+                                  e. Adhere to any additional guidelines or policies provided by Kapruka Holdings
+                                  PLC.
+                                </li>
+                              </ul>
+                            </li>
+                            <li style="margin-bottom: 20px"><h6>Partner Content</h6>
+                              You retain ownership of any content you upload, submit, or display on Partner Central.
+                              By submitting content, you grant Kapruka Holdings PLC a non-exclusive, worldwide,
+                              royalty-free license to use, reproduce, modify, distribute, and display the content
+                              for
+                              the purpose of providing Partner Central's services.
+                            </li>
+                            <li style="margin-bottom: 20px"><h6>Intellectual Property Rights</h6>
+                              All intellectual property rights related to Partner Central, including but not limited
+                              to trademarks, logos, and software, are the property of Kapruka Holdings PLC or its
+                              licensors. You may not use, reproduce, or modify any of these materials without prior
+                              written consent from Kapruka Holdings PLC.
+                            </li>
+                            <li style="margin-bottom: 20px"><h6>Limitation of Liability</h6>
+                              Kapruka Holdings PLC shall not be liable for any indirect, incidental, consequential,
+                              or
+                              punitive damages arising out of or in connection with the use of Partner Central,
+                              including but not limited to loss of profits, data, or business opportunities.
+                            </li>
+                            <li style="margin-bottom: 20px"><h6>Termination</h6>
+                              Kapruka Holdings PLC reserves the right to suspend or terminate your access to Partner
+                              Central at any time, without prior notice, if you violate these Terms and Conditions
+                              or
+                              engage in any activity that may harm the platform or its users.
+                            </li>
+                            <li style="margin-bottom: 20px"><h6>Modifications</h6>
+                              Kapruka Holdings PLC may modify or update these Terms and Conditions at any time. The
+                              most current version will be posted on Partner Central, and your continued use of the
+                              platform after any changes constitute your acceptance of the modified terms.
+                            </li>
+                            <li style="margin-bottom: 20px"><h6>Governing Law and Jurisdiction</h6>
+                              These Terms and Conditions shall be governed by and construed in accordance with the
+                              laws of Sri Lanka. Any disputes arising out of or relating to these terms shall be
+                              subject to the exclusive jurisdiction of the courts of Sri Lanka.
+                            </li>
+                          </ol>
+                          <br>
+                          <ul
+                            style="list-style-type: none; justify-content: right; text-align: justify; width: 100%;">
+                            <li>By using Partner Central, you acknowledge that you have read, understood, and
+                              agreed
+                              to
+                              these Terms and Conditions
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </details>
+                    <!--                        <div class="col-6">-->
+                    <!--                          <div class="form-group row">-->
+                    <!--                            <label for="productCategory" class="col-xl-3 col-md-3"><span>*</span>Category</label>-->
+                    <!--                            <input style="margin-bottom: -12px;" class="form-control col-xl-8 col-md-7"-->
+                    <!--                                   name="productCategory"-->
+                    <!--                                   id="productCategory"-->
+                    <!--                                   type="text" required="">-->
+                    <!--                          </div>-->
+                    <!--                        </div>-->
+                    <!--                      <div class="col-6">-->
+                    <!--                        <div class="form-group row">-->
+                    <!--                          &lt;!&ndash;<button type="button" (click)="addCategory(userForm)" class="btn btn-primary">Add Category&ndash;&gt;-->
+                    <!--                          &lt;!&ndash;</button>&ndash;&gt;-->
+                    <!--                        </div>-->
+                    <!--                      </div>-->
+                  </div>
+                </div>
+                <div class="row" style="display: flex; justify-content: right; text-align: center">
+                  <div class="col-6"
+                       style="display: flex; flex-direction: row; justify-content: right; margin-top: 10px; margin-right: 5%;    align-items: flex-start;">
+                    <div style="margin-right: 3%;"><h6 style="color: #00a8ff;"> I agree all terms and
+                      conditions </h6></div>
+                    <div><input style="line-height: 1.2" type="checkbox" class="checkbox" (change)="isAgree()"></div>
+                  </div>
+                  <div class="pull-right" style="padding-right: 15px">
+                    <button type="submit" class="btn btn-primary" style="height: 50px;">Save</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <!--              </ng-template>-->
+          <!--            </ngb-tab>-->
+          <!--          </ngb-tabset>-->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--</div>-->
+  <!--</div>-->
+</div>

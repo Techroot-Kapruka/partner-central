@@ -1,0 +1,154 @@
+
+  <div class="container-fluid">
+    <div class="row product-adding">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="digital-add needs-validation" style="display: grid;">
+
+              <div class="row" style="margin-top:2%;margin-bottom: 0%;justify-content: space-evenly;">
+
+                <div class="col-sm-4 " >
+                  <div class="form-group item-description">
+                    <label for="txtShipmentId" class="col-form-label item-data">Code</label>
+                    <input class="form-control" disabled id="txtShipmentId" value="{{code}}"
+                           type="text" required="">
+                  </div>
+                </div>
+
+                <div class="col-sm-4">
+                  <div class="form-group item-description">
+                    <label for="txtVendorId" class="col-form-label item-data">Name</label>
+                    <input class="form-control" disabled id="txtVendorId" value="{{name}}"
+                           type="text" required="">
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="margin-top:2%;margin-bottom: 0%;justify-content: space-evenly;">
+                <div class="col-sm-4">
+                  <div class="form-group item-description item-description">
+                    <label for="txtVendorName" class="col-form-label item-data">Price</label>
+                    <input class="form-control" disabled id="txtVendorName" value="{{price}}"
+                           type="text" required="">
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group item-description">
+                    <label for="txtVendorName" class="col-form-label item-data">Quantity</label>
+                    <input class="form-control" disabled id="txtQuantity" value="{{quantity}}"
+                           type="text" required="">
+                  </div>
+                </div>
+              </div>
+
+<!--              <table class="table table-striped table-hover table-sm">-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                  <th scope="col">Code</th>-->
+<!--                  <th scope="col">Name</th>-->
+<!--                  <th scope="col">Price</th>-->
+<!--                  <th scope="col">Quantity</th>-->
+<!--                  &lt;!&ndash;                  <th scope="col">Selling Price</th>&ndash;&gt;-->
+<!--                  <th scope="col">Amount</th>-->
+<!--                  <th scope="col">Action</th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                &lt;!&ndash;<tr *ngFor="let tableDatas of tableData ">&ndash;&gt;-->
+<!--                <tr *ngFor="let tableDatas of tableData; let i = index" [attr.data-index]="i">-->
+<!--                  <td>{{tableDatas['product_code']}}</td>-->
+<!--                  <td>{{tableDatas['product_name']}}</td>-->
+<!--                  <td>{{tableDatas['cost_price']}}</td>-->
+<!--                  <td>{{tableDatas['quantity']}}</td>-->
+<!--                  &lt;!&ndash;                  <td>{{tableDatas['selling_price']}}</td>&ndash;&gt;-->
+<!--                  <td>{{tableDatas['amount']}}</td>-->
+<!--                  <td><button class="btn btn-success" style="margin-right: 5px" (click)="viewerSelected_ReceivedShipment()">Button</button>-->
+<!--                    &lt;!&ndash;                    <button class="btn btn-danger">declined</button></td>&ndash;&gt;-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--              </table>-->
+
+
+              <div>
+
+                <div class="row" style="margin-top: 2%;">
+                  <div class="col-7 " style="display: grid; justify-content: right; text-align: left; margin-bottom: 15px;">
+              <div class="row">
+                <div class="col-md-6 ">
+                  <div class="form-group">
+                    <label for="txtAllQuantity" class="col-form-label" style="text-align: left">All Quantity</label>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6" style="text-align: right">
+                  <div class="form-group">
+                    <input class="form-control" formControlName="txtAllQuantity" disabled id="txtAllQuantity"
+                           type="text" required="" style="width: auto;" value="{{quantity}}">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 ">
+                  <div class="form-group">
+                    <label for="txtRejectedQty" class="col-form-label" style="text-align: left">Rejected Quantity</label>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6" style="text-align: right">
+                  <div class="form-group">
+                    <input class="form-control" formControlName="txtGrossAmount"  id="txtRejectedQty"
+                           type="number" required="" style="width: auto;" value="{{rejectedQuantity}}" (input)="getNetQuantity()">
+                    <label id="ValidateLBL" for="txtRejectedQty" style="color: red; font-size: xx-small; width: 110%; display: none; padding-top: 3px;" >** please Enter number between 0-{{quantity}} **</label>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 ">
+                  <div class="form-group">
+                    <label for="txtNetQuantity" class="col-form-label" style="text-align: left">Net Quantity</label>
+                  </div>
+                </div>
+
+                <div class="col-md-6 col-sm-6" style="text-align: right">
+                  <div class="form-group">
+                    <input class="form-control" formControlName="txtGrossAmount" disabled id="txtNetQuantity" value="{{netQuantity}}"
+                           type="text" required="" style="width: auto;" >
+                  </div>
+                </div>
+              </div>
+              </div>
+
+<!--              <div class="row" style="float: right">-->
+<!--                <div class="col-sm-10">-->
+<!--                  <div class="form-group">-->
+<!--                    &lt;!&ndash;                    <button style="float: right;" type="submit" class="btn btn-lg btn-primary">Shipment Received&ndash;&gt;-->
+<!--                    &lt;!&ndash;                    </button>&ndash;&gt;-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </div>-->
+
+                  <div class="col-md-4 col-sm-12" style="align-content: center; justify-content: center; text-align: center; display: grid;">
+
+                      <button type="button" class="btn btn-success btn-lg " (click)="receivedShipment()" >Submit</button>
+
+                    </div>
+                </div>
+
+              </div>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<!--</form>-->
+
+

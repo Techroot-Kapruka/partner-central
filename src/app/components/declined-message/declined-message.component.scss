@@ -1,0 +1,47 @@
+body {
+  display: flex;
+  background: rgb(116, 238, 237);
+  background: linear-gradient(90deg, rgb(185, 206, 241) 0%, rgb(11, 97, 234) 100%);
+  align-items: center;
+  height: 100vh;
+  align-content: center;
+  flex-direction: column;
+  justify-content: center;
+  //overflow: hidden;
+}
+
+.card {
+  max-width: 35%;
+  max-height: 80%;
+  box-shadow: 0 0 30px #002dff;
+  float: none;
+  border: 1px solid #000;
+  overflow: hidden;
+  justify-content: center;
+  text-align: center;
+}
+
+.card .btn {
+  padding: 20px 50px;
+  letter-spacing: .3px;
+  overflow: hidden;
+}
+
+.card img {
+  margin: 50px auto;
+  max-width: 400px;
+
+}
+
+.card .card-body {
+  padding-top: 0;
+  overflow: hidden;
+}
+
+.card h5 {
+  font-size: 30px;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  color: #000;
+  font-weight: bold;
+}

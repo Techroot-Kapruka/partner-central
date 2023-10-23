@@ -1,0 +1,693 @@
+.modal-body{
+  position: relative;
+  flex: 1 1 auto;
+  padding: 1rem;
+  max-height: 190px;
+  overflow-x: auto;
+}
+#mySearch {
+  width: 100%;
+  font-size: 18px;
+  padding: 11px;
+  border: 1px solid #ddd;
+}
+
+#myMenu {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+#myMenu li {
+  padding: 12px;
+  text-decoration: none;
+  color: black;
+}
+
+#myMenu li:hover {
+  background-color: #eee;
+}
+
+.labelAppendSub {
+  text-align: center;
+  margin-top: 1px;
+  color: #fff;
+  padding: 1px 20px 1px 10px;
+  border-radius: 3px;
+  border: 1px solid #000080;
+
+}
+#attrId .col-md-6{
+  padding: 7.5px;
+}
+
+.labelBoxappend {
+  padding-left: -1%;
+}
+
+.mainDev {
+  position: relative;
+  vertical-align: top;
+  margin: 0px 5px 0 0;
+
+}
+
+
+.clouseI-1{
+  display: block;
+  position: absolute;
+  justify-content: left;
+  right: 100px;
+  top: 1px;
+  color: #f80000;
+
+}
+
+.clouseI {
+  display: block;
+  position: absolute;
+  justify-content: left;
+  right: 5px;
+  top: 1px;
+  color: #f80000;
+
+}
+.imageDiv{
+  display: flex;
+  border-color: #2a3142;
+  position: relative;
+  color: #5166ab;
+  height: 100px;
+  background: white;
+  width: 100px;
+  border-radius: 5px;
+  border: dashed;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+.list{
+  margin: 0px;
+}
+.imageDiv{
+  display: flex;
+  justify-content: space-around;
+}
+/*=================================================*/
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  width: 60px;
+  height: 34px;
+  float: right;
+}
+.btnblue{
+font-size: 12px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.53);
+  color: #3e69d9;
+  line-height: 1.2;
+}
+
+.bgsize, .bgsize2, .mainDev {
+  width: auto !important;
+  float: left;
+}
+.divs{
+  margin-left: 15px;
+  display: block !important;
+  width: 60px !important;
+  float: left !important;
+  position: relative;
+}
+.labelBoxappend{
+  margin-top: 45px;
+}
+.mainDev{
+  margin-left: 15px;
+}
+.divs .clouseI-1{
+  right: 3px !important;
+  left: auto !important;
+  color: #d27878 !important;
+  font-size: 10px;
+}
+.clouseI{
+position: absolute;
+left: 0;
+right: 0;
+margin: 0 auto;
+top: 19%;
+       transform: translateY(-50%);
+width: 20px;
+}
+.clouseI .fa-close{
+  font-size: 8px;
+  position: absolute;
+  right: 0px;
+  top: 3px;
+  padding: 0px;
+  background: #fff;
+  border-radius: 50px;
+  width: 14px;
+  height: 14px;
+  line-height: 12px;
+  text-align: center;
+  left: 0;
+  margin: 0 auto;
+  color: #d27878;
+  border: 1px solid #fff;
+
+}
+.labelAppendSub{
+  height: 32px!important;
+  width: 96px !important;
+  box-shadow: 0 0 3px #828282;
+  border: 0 !important;
+}
+.card-header{
+  z-index: 0 !important;
+}
+.options{
+  background: #fff !important;
+  z-index: 999;
+}
+/* Hide default HTML checkbox */
+.switch input {
+  display: none;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input.default:checked + .slider {
+  background-color: #444;
+}
+
+input.primary:checked + .slider {
+  background-color: #2196F3;
+}
+
+input.success:checked + .slider {
+  background-color: #8bc34a;
+}
+
+input.info:checked + .slider {
+  background-color: #3de0f5;
+}
+
+input.warning:checked + .slider {
+  background-color: #FFC107;
+}
+
+input.danger:checked + .slider {
+  background-color: #f44336;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+.labelForVariations{
+  padding-bottom: 0px;
+  padding-top: 10px;
+  padding-left: 0px !important;
+  margin-right: 0px !important;
+}
+.lables{
+  padding-bottom: 3px;
+  padding-left: 0px !important;
+  margin-right: 0px !important;
+}
+#btnForCategory::before {
+  text-align: left !important;
+  background-color: white !important;
+  color: #1b252a !important;
+  width: 100% !important;
+  /* Add your styles for ::before */
+}
+
+#btnForCategory::after  {
+  text-align: left !important;
+  background-color: white !important;
+  color: #1b252a !important;
+  width: 100% !important;
+  /* Add your styles for ::after */
+}
+#btnForCategory #clothesType{
+  text-align: left;
+  background-color: white !important;
+  color: rgba(0, 0, 0, 0.66) !important;
+  border-color: #c3c3c3 !important;
+  width: 100% !important;
+  text-transform: lowercase;
+}
+.card-body{
+  display: flex;
+  justify-content: space-evenly;
+  align-content: space-around;
+  flex-direction: column;
+}
+.span{
+  font-size: small;
+  color: #6d7e87;
+  position: relative;
+  padding-left:35px ;
+  padding-top: 15px;
+}
+.scrollable-div {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  /* display: block; */
+  flex-direction: column;
+  justify-content: left;
+}
+.div-cat{
+  border: rgba(192, 191, 191, 0.53);
+  border-width: 1px;
+  border-radius: 5px;
+  border-style: solid;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  margin-right: 10px;
+}
+.div-title{
+  text-align: center;
+  border: rgba(192, 191, 191, 0.89);
+  border-width: 1px;
+  border-radius: 5px;
+  border-style: solid;
+  margin: 10px 10px 10px 10px;
+}
+.li{
+  padding-left: 20px;
+  color: #6d7e87;
+}
+.form-input{
+  margin-top: 15px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  align-items: center;
+  justify-content: left;
+}
+.input{
+  width: 300px;
+}
+.input-sku{
+  width: 40%;
+}
+.attributeRow{
+  display: flex;
+  flex-direction: row;
+}
+#attributeRow{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0px !important;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.attributes-lable{
+  color: #6d7e87;
+
+}
+.clothestypebtn{
+  border: #ff0000;
+  border-width: 1px;
+  border-radius: 5px;
+}
+.size{
+  color: #072980;
+  background-color: #ebf1ef;
+  border: #1b252a;
+  border-style: solid !important;
+  border-width: 2px !important;
+}
+.dispaly-area{
+  color: #2a3142;
+  background-color: #fcfcfc;
+  border: #1b252a;
+  border-width: 1px;
+  border-color: #adb4b2;
+  border-radius: 5px;
+  border-style: solid;
+}
+.tiles{
+  border-radius: 5px;
+  border-color: #d5d5d5;
+  border-style: solid;
+  border-width: 1px;
+}
+.tiles :hover{
+  cursor: pointer;
+  background-color: rgb(192, 192, 192);
+  color: rgba(0, 0, 0, 0.66);
+}
+
+atributes-box{
+  border-style: solid;
+  border: #6f6f6f;
+  border-width: 1px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+}
+.disabled-div {
+  pointer-events: none; /* Disable mouse events */
+  opacity: 0.5;
+  display: none;/* Apply a visual hint that the div is disabled */
+}
+.card-body{
+  display: flex;
+  justify-content: space-evenly;
+  align-content: space-around;
+  flex-direction: column;
+  border: 0 !important;
+}
+.div-cat{
+  border: 0 !important;
+}
+.div-cat:last-child{
+  display: none;
+}
+.div-cat .div-title{
+  border: 0;
+  color: white;
+  padding: 7.5px;
+  margin: 0;
+}
+
+input::placeholder {
+ font-size: 13px;
+}
+
+.div-cat .div-title:first-child{
+  background: #007f0c !important;
+  color: #fff;
+  margin-bottom: 5px;
+}
+.tiles{
+  border: 0;
+  margin-bottom: 5px;
+}
+.card-body .div-cat li::before{
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 4px 0 4px 6px;
+  border-color: transparent transparent transparent #c7c7c7;
+
+}
+.card-body .div-cat li{
+  margin: 0;
+  position: relative;
+  padding: 7.5px  15px;
+  border-radius: 5px;
+  border:1px solid #cacaca;
+  //color: #fff;
+}
+//.card-body .div-cat:nth-of-type(1) li{
+//  background: #1b252a;
+//}
+//.card-body .div-cat:nth-of-type(2) li{
+//  background:red;
+//}
+//.card-body .div-cat:nth-of-type(3)li{
+//  background: green;
+//}
+.span{
+  font-size: small;
+  color: #000;
+  position: relative;
+  padding-left:35px ;
+  padding-top: 15px;
+}
+.scrollable-div {
+  height: 100%;
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  /* display: block; */
+  flex-direction: column;
+  justify-content: left;
+}
+.div-cat{
+  border: rgba(192, 191, 191, 0.53);
+  border-width: 1px;
+  border-radius: 5px;
+  border-style: solid;
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  margin-right: 10px;
+}
+.div-title{
+  text-align: center;
+  border: rgba(192, 191, 191, 0.89);
+  border-width: 1px;
+  border-radius: 5px;
+  border-style: solid;
+  margin: 10px 10px 10px 10px;
+}
+.li{
+  padding-left: 20px;
+  color: #6d7e87;
+}
+
+
+
+
+
+
+/************* Help ************/
+/* Product Images  */
+.hproductImage {
+  cursor: pointer;
+}
+
+.hproductImage-hint {
+  position: absolute;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 13px;
+  z-index: 1000;
+  margin-left: 5px;
+}
+
+/* Product Information  */
+.hprBrand {
+  cursor: pointer;
+}
+
+.hproBrand-hint {
+  position: absolute;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 13px;
+  z-index: 1000;
+  margin-left: 150px;
+}
+.hproSku {
+  cursor: pointer;
+}
+.SCPInfo {
+  cursor: pointer;
+}
+
+.hproSku-hint {
+  position: absolute;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 13px;
+  z-index: 1000;
+  margin-left: 5px;
+}
+.SCPInfo {
+  cursor: pointer;
+}
+
+.SCPInfo-hint {
+  position: absolute;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 13px;
+  z-index: 1000;
+  margin-left: 25%
+}
+/* Product Description  */
+.hproDesc {
+  cursor: pointer;
+}
+
+.hproDesc-hint {
+  position: absolute;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 13px;
+  z-index: 1000;
+  margin-left: 5px;
+}
+
+/* Product Variation  */
+.hproVari {
+  cursor: pointer;
+}
+
+.hproVari-hint {
+  position: absolute;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 13px;
+  z-index: 1000;
+  margin-left: 5px;
+}
+
+/* Product Brand  */
+.hproVari {
+  cursor: pointer;
+}
+
+.hproVari-hint {
+  position: absolute;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 5px;
+  border-radius: 4px;
+  font-size: 13px;
+  z-index: 1000;
+  margin-left: 5px;
+}
+.tr-new th {
+  font-size: 14px;
+  border-bottom: 5px solid #dee2e6;
+}
+
+#Seller_SKU{
+  width: 50%;
+}
+#price{
+  width: 30%;
+}
+#initialMargin{
+  width: 15%;
+}
+#sellerPrice{
+  width: 30%;
+}
+@media only screen and (max-width: 767px) {
+  .brandev{
+    padding: 0 !important;
+  }
+  .blockVari{
+    padding-left: 15px !important;
+  }
+  .div-cat{
+    width: 60%;
+  }
+  .form-control, .col-md-1, .col-md-2, .col-md-3, .col-md-4,
+  .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12{
+    width: 100% !important;
+  }
+  .span{
+    padding-left: 0 !important;
+  }
+  .form-input{
+    display: block !important;
+  }
+  .card.card-body{
+    padding: 0;
+  }
+  //.span{
+  //  width: 100%;
+  //  display: block;
+  //  padding: 0 !important;
+  //  margin-bottom: 10px ;
+  //}
+  .col{
+    padding: 0;
+  }
+  ul.file-upload-product{
+      width: 100%;
+    display: block !important;
+    text-align: center;
+  }
+
+
+
+  .file-upload-product > div{
+    display: inline-block !important;
+    vertical-align: top;
+    width: calc(33.333% - 10px);
+    margin: 5px;
+  }
+  .imageDiv{
+    width: 100% !important;
+  }
+
+  table tbody td p{
+   position: absolute;
+  }
+
+}

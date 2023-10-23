@@ -1,0 +1,497 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card tab2-card">
+        <div class="card-body tab2-card">
+          <div class="row" style="float: right;">
+            <div class="form-group">
+              <button type="button" (click)="backToLIst()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                      data-placement="top" title="Back to Shipment List"><i class="fa fa-arrow-circle-left"
+                                                                            aria-hidden="true"></i> Back
+              </button>
+            </div>
+          </div>
+          <ngb-tabset class="tab-coupon">
+            <ngb-tab title="Account">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show" id="account" role="tabpanel"
+                     aria-labelledby="account-tab">
+                  <form class="needs-validation user-add" [formGroup]="partnerEdit" (submit)="updatePartner()"
+                        novalida>
+                    <h4>Account Details</h4>
+                    <div class="form-group row">
+                      <label for="contactPersonName" class="col-xl-3 col-md-4">Contact Person Name</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="contactPersonName"
+                             id="contactPersonName"
+                             type="text" required="">
+                    </div>
+                    <div class="form-group row">
+                      <label for="contactNo" class="col-xl-3 col-md-4"> Contact No</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="contactNo"
+                             id="contactNo"
+                             type="text" required="">
+                      <input hidden class="form-control col-xl-8 col-md-7" formControlName="userUId"
+                             id="userUId"
+                             type="text" required="">
+                    </div>
+                    <div class="form-group row">
+                      <label for="nic" class="col-xl-3 col-md-4"> Nic</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="nic"
+                             id="nic"
+                             type="text" required="">
+                    </div>
+                    <div class="form-group row">
+                      <label for="companyName" class="col-xl-3 col-md-4">Company Name</label>
+                      <input class="form-control col-xl-8 col-md-7" id="companyName"
+                             type="text" required="" formControlName="companyName">
+                    </div>
+                    <div class="form-group row">
+                      <label for="emailUser" class="col-xl-3 col-md-4"> Email</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="emailUser"
+                             id="emailUser"
+                             type="text" required="">
+                    </div>
+                    <div class="form-group row">
+                      <label for="userName" class="col-xl-3 col-md-4">User Name</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="userName"
+                             id="userName"
+                             type="text" required="">
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="password" class="col-xl-3 col-md-4">Password</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="password"
+                             id="password"
+                             type="{{type}}" required="">
+                      <span style="margin-top: 0%" toggle="#password-field" class="{{eyeIcon}}"
+                            (click)="toggle()"></span>
+                    </div>
+                    <div class="form-group row">
+                      <label for="comfPassword" class="col-xl-3 col-md-4">Confirm Password</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="comfPassword" id="comfPassword"
+                             type="{{type2}}" required="">
+                      <span style="margin-top: 0%" toggle="#password-field" class="{{eyeIcon2}}"
+                            (click)="toggle2()"></span>
+                    </div>
+                    <div class="form-group row">
+                      <label for="role" class="col-xl-3 col-md-4">User Role</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="role"
+                             id="role"
+                             type="text" required="" disabled>
+                    </div>
+                    <!--===========================================================================================-->
+                    <br><br>
+                    <div class="form-group row">
+                      <label for="image01" class="col-xl-3 col-md-4">Profile Image</label>
+                      <form [formGroup]="imageCliant">
+                        <div class="add-product">
+                          <div class="row">
+                            <div class="col-xl-3 xl-50 col-sm-6 col-3">
+                              <ul class="file-upload-product">
+                                <li>
+                                  <div class="box-input-file" style="width: 100px;     margin-top: 50px;">
+                                    <input class="upload" id="image01" style="width: 100px;" type="file"
+                                           formControlName="imageOne"
+                                           (change)="changeValue($event, 1)">
+                                    <img class="imgUpload" id="imageOneO" style="width: 100px;" alt=""
+                                         src="assets\images\Partner\{{imageName}}">
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <!--===========================================================================================-->
+                    <br>
+                    <hr>
+                    <br>
+                    <div id="disss" style="display: none" *ngIf="isVendorOtherDetails">
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="form-group row">
+                            <label for="partner_u_id" class="col-xl-3 col-md-3">Partner Code</label>
+                            <input class="form-control col-xl-8 col-md-7" disabled formControlName="partner_u_id"
+                                   id="partner_u_id"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="businessName" class="col-xl-3 col-md-3">Business Name</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="businessName"
+                                   id="businessName"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="businessRegisterNo" class="col-xl-3 col-md-3">Business Register No</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="businessRegisterNo"
+                                   id="businessRegisterNo"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="ownerName" class="col-xl-3 col-md-3">Owner Name</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="ownerName"
+                                   id="ownerName"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="email" class="col-xl-3 col-md-3">Business Email</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="email"
+                                   id="email"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="supplierGroupss" class="col-xl-3 col-md-3">Supplier Group</label>
+
+                            <input class="form-control col-xl-8 col-md-7" disabled formControlName="supplierGroupss"
+                                   id="supplierGroupss"
+                                   type="text" required="">
+
+                            <input hidden class="form-control col-xl-8 col-md-7" formControlName="status"
+                                   id="status"
+                                   type="text" required="">
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-group row">
+                            <label for="businessAddress" class="col-xl-3 col-md-3">Business Address</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="businessAddress"
+                                   id="businessAddress"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="bankAccount" class="col-xl-3 col-md-3">Bank Account</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="bankAccount"
+                                   id="bankAccount"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="bankName" class="col-xl-3 col-md-3">Bank Name</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="bankName"
+                                   id="bankName"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="mobile" class="col-xl-3 col-md-3">Mobile</label>
+                            <input class="form-control col-xl-8 col-md-7" formControlName="mobile"
+                                   id="mobile"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="PartnerType" class="col-xl-3 col-md-3">Partner Type</label>
+                            <select class="form-control col-xl-8 col-md-7"
+                                    aria-label="Default select example" formControlName="PartnerType"
+                                    id="PartnerType">
+                              <option selected value="0"> -- Select --</option>
+                              <option value="company">Company</option>
+                              <option value="individual">Individual</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <br>
+                      <hr>
+                      <br>
+                      <style>
+                        .labelAppendSub {
+                          background: #000080;
+                          text-align: center;
+                          margin-top: 1px;
+                          color: #fff;
+                          padding: 1px 20px 1px 10px;
+                          border-radius: 3px;
+                          border: 1px solid #000080;
+                        }
+
+                        .labelBoxappend {
+                          padding-left: 24%;
+                        }
+
+                        .mainDev {
+                          position: relative;
+                          display: inline-block;
+                          vertical-align: top;
+                          margin: 5px 5px 0 0;
+                        }
+
+                        .clouseI {
+                          position: absolute;
+                          right: 5px;
+                          top: -1px;
+                          color: #fff;
+                        }
+                      </style>
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="form-group row">
+                            <label for="productPrefix" class="col-xl-3 col-md-3">Prefix</label>
+                            <input style="margin-bottom: -12px;" class="form-control col-xl-8 col-md-7"
+                                   name="productPrefix"
+                                   id="productPrefix"
+                                   type="text" required="">
+                          </div>
+                          <div class="labelBoxappend">
+                            <div class="mainDev" *ngFor="let productPrefixArrayss of productPrefixArray">
+                              <label class="labelAppendSub">{{productPrefixArrayss['productPrefix']}}</label>
+                              <!--<input type="text" value="{{productPrefixArrayss['productPrefix']}">-->
+                              <div class="clouseI" (click)="removePrefix(productPrefixArrayss['productPrefix'])"><i
+                                class="fa fa-close"></i></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-group row">
+                            <button type="button" (click)="addPrefixs()" class="btn btn-primary">Add Prefix
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <label id="lbl_Prefix" class="col-xl-3 col-md-3"></label>
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="form-group col-md-12">
+                            <label>Category</label><br><br>
+                            <div class="row">
+                              <div class="form-group col-md-12"
+                                   *ngFor="let partnerSpecificCategoryArrs of partnerSpecificCategoryArr">
+                              <span style="height: 30px; padding-top: 8.8px; background-color: #000080 !important;"
+                                    class="badge badge-secondary">{{partnerSpecificCategoryArrs['cat_parth']}}</span><br>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-6" id="pending_category_dev" *ngIf="catDev">
+                          <div class="form-group col-md-12">
+                            <label>Pending Category</label><br><br>
+                            <div class="row">
+                              <div class="form-group col-md-12"
+                                   *ngFor="let nonApprovalCategoryArrs of nonApprovalCategoryArr">
+                              <span style="height: 30px; padding-top: 8.8px; background-color: green !important;"
+                                    class="badge badge-secondary">{{nonApprovalCategoryArrs['category_path']}}</span><br>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!--<div class="row">-->
+                      <!--<div class="col-md-12">-->
+                      <!--&lt;!&ndash;<div class="digital-add needs-validation">&ndash;&gt;-->
+                      <!--<div class="form-group">-->
+                      <!--<button type="button" class="btn btn-outline-info" data-toggle="modal"-->
+                      <!--data-original-title="test"-->
+                      <!--data-target="#exampleModal" (click)="open(content)">Request New Category-->
+                      <!--</button>-->
+                      <!--</div>-->
+                      <!--</div>-->
+                      <!--</div>-->
+                    </div>
+                    <div class="pull-right" id="apprueBtnOne">
+                      <button type="submit" class="btn btn-primary">UPDATE</button>
+                    </div>
+                  </form>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Bank Details" *ngIf="isVendor">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show" id="account" role="tabpanel"
+                     aria-labelledby="account-tab">
+                  <form class="needs-validation user-add" [formGroup]="partnerBankDetailsEdit"
+                        (submit)="updateBankDetails()"
+                        novalida>
+                    <h4>Bank Details</h4>
+                    <div class="form-group row">
+                      <label for="holderName" class="col-xl-3 col-md-4"> Account Holder Name</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="holderName" id="holderName"
+                             type="text" required="" (keyup)="validateHolder()">
+                      <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                             id="lblHoderName">** Required Account Holder Name</label>
+                    </div>
+                    <div class="form-group row">
+                      <label for="bankName" class="col-xl-3 col-md-4">Bank Name</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="bankName" id="bankName" type="text"
+                             required="" (keyup)="validateBank()">
+                      <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                             id="lblBankName">** Required Bank Name</label>
+                    </div>
+                    <div class="form-group row">
+                      <label for="branchCode" class="col-xl-3 col-md-4"> Branch Code</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="branchCode" id="branchCode"
+                             type="text" required="" (keyup)="validateBranchCode()">
+                      <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                             id="lblbranchCode">** Required Branch Name</label>
+                    </div>
+                    <div class="form-group row">
+                      <label for="branchName" class="col-xl-3 col-md-4"> Branch Name</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="branchName" id="branchName"
+                             type="text" required="" (keyup)="validateBranch()">
+                      <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                             id="lblBranchName">** Required Branch Name</label>
+                    </div>
+                    <div class="form-group row">
+                      <label for="accountNo" class="col-xl-3 col-md-4">Account No</label>
+                      <input class="form-control col-xl-8 col-md-7" id="accountNo" type="text" required=""
+                             formControlName="accountNo" (keyup)="validateAccNo()">
+                      <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                             id="lblAccountNo">** Required Account No</label>
+                    </div>
+                    <form [formGroup]="bankStatement">
+                      <div class="form-group row">
+                        <label for="bankStatement" class="col-xl-3 col-md-4">Bank Statement</label>
+                        <input class="form-control col-xl-8 col-md-7" (change)="onFileSelected($event)" accept="image/*"
+                               formControlName="bankStatement" id="bankStatement" type="file" required=""
+                               (click)="validateStatement()">
+                        <div class="col-xl-3 xl-50 col-sm-6 col-3">
+                          <img class="imgUpload" id="statementImage"
+                               style="width: 100px; margin-left: 300px; margin-top: 20px" alt=""
+                               src="assets\images\Partner\Statement\{{statementImage}}" *ngIf="isBankStAvailable">
+                        </div>
+                        <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                               id="lblBankStatement">** Required Bank Statement</label>
+                      </div>
+                    </form>
+                    <br>
+                    <hr>
+                    <br>
+                    <div class="pull-right" id="updateBankDetails" style="margin-right: 80px">
+                      <button type="submit" class="btn btn-primary">UPDATE</button>
+                    </div>
+                  </form>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Business Details" *ngIf="isVendor">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show" id="account" role="tabpanel"
+                     aria-labelledby="account-tab">
+                  <form class="needs-validation user-add" [formGroup]="partnerBusinessDetailsEdit"
+                        (submit)="updateBusinessDetails()"
+                        novalida>
+                    <h4>Business Details</h4>
+                    <div class="form-group row">
+                      <label for="BPartnerType" class="col-xl-3 col-md-4"> Partner Type</label>
+                      <select class="form-control col-xl-8 col-md-7" aria-label="Default select example"
+                              formControlName="BPartnerType" id="BPartnerType" disabled>
+                        <option selected value=""> Select</option>
+                        <option value="company">Company Seller</option>
+                        <option value="individual">Individual Seller</option>
+                      </select>
+                      <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                             id="LBLPartnerType">** Empty Partner Type</label>
+                    </div>
+                    <div class="form-group row">
+                      <label for="partnerBusinessName" class="col-xl-3 col-md-4">Business Name</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="partnerBusinessName"
+                             id="partnerBusinessName"
+                             type="text" required="" disabled="disabled">
+                      <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                             id="LBLbusinessName">** Empty Business Name</label>
+                    </div>
+                    <div class="form-group row">
+                      <label for="businessownerName" class="col-xl-3 col-md-4">Owner Name</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="businessownerName"
+                             id="businessownerName" type="text" required="" disabled="disabled">
+                      <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                             id="LBLownerName">** Empty Owner Name</label>
+                    </div>
+                    <div class="form-group row">
+                      <label for="businessContactNo" class="col-xl-3 col-md-4">Business Contact No</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="businessContactNo"
+                             id="businessContactNo" type="text" required="">
+                      <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                             id="businessContactNoLBL">** Invalid mobile Number</label>
+                    </div>
+                    <div class="form-group row">
+                      <label for="emailPartner" class="col-xl-3 col-md-4">Business Email</label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="emailPartner" id="emailPartner"
+                             type="text" required="">
+                      <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                             id="emailPartnerLBL">** Invalid Email</label>
+                    </div>
+                    <div class="form-group row">
+                      <label for="businessPartnerAddress" class="col-xl-3 col-md-4">Business Address</label>
+                      <textarea rows="2" class="form-control col-xl-8 col-md-7" formControlName="businessPartnerAddress"
+                                id="businessPartnerAddress"
+                                type="text" required=""></textarea>
+                      <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                             id="businessAddressLBL">** Empty Address</label>
+                    </div>
+                    <div class="form-group row">
+                      <label for="socialURL" class="col-xl-3 col-md-4">Social URL &nbsp;&nbsp;&nbsp;<i
+                        class="fa fa-info-circle" data-toggle="tooltip" data-placement="bottom" title="Tooltip on top"
+                        style="color: dodgerblue;cursor: pointer"></i></label>
+                      <input class="form-control col-xl-8 col-md-7" formControlName="socialURL"
+                             id="socialURL"
+                             type="text" required="">
+
+                    </div>
+                    <div style="display:{{businessRegisterImgDiv}}">
+                      <div class="form-group row" >
+                        <label for="PbusinessRegisterNo" class="col-xl-3 col-md-4">Business Register No</label>
+                        <input class="form-control col-xl-8 col-md-7" formControlName="PbusinessRegisterNo"
+                               id="PbusinessRegisterNo" type="text" required="" (keyup)="validateBRegNo()">
+                        <label
+                          style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                          id="businessRegisterNoLBL">** Required a Business Register No.</label>
+                      </div>
+                    </div>
+                    <form [formGroup]="businessRegisterImage">
+                      <div style="display:{{businessRegisterImgDiv}}">
+                        <div class="form-group row" >
+                          <label for="businessRegisterImage" class="col-xl-3 col-md-4">Business Register Doc</label>
+                          <input class="form-control col-xl-8 col-md-7" (change)="onRegDocSelected($event)" accept="image/*"
+                                 formControlName="businessRegisterImage" id="businessRegisterImage" type="file"
+                                 required=""
+                                 (click)="validateBusinessRegImg()">
+                          <div class="col-xl-3 xl-50 col-sm-6 col-3">
+                            <img class="imgUpload" id="registerDoc"
+                                 style="width: 100px; margin-left: 300px; margin-top: 20px" alt=""
+                                 src="assets\images\Partner\BR\{{registerDoc}}" *ngIf="isRegDocAvailable">
+                          </div>
+                          <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                                 id="lblbusinessRegisterImage">** Required Business Register file</label>
+                        </div>
+                      </div>
+                      <div style="display:{{nicDiv}}">
+                        <form class="form-group row" [formGroup]="nicImgFrormGroup">
+                          <label for="nicImage" class="col-xl-3 col-md-4" >Register NIC</label>
+                          <input class="form-control col-xl-8 col-md-7" (change)="nicImgFileSelected($event)" accept="image/*"
+                                 formControlName="nicImgControl" id="nicImage" type="file"
+                                 required="">
+
+                          <div class="col-xl-3 xl-50 col-sm-6 col-3">
+                            <img class="imgUpload" id="nicImg"
+                                 style="width: 100px; margin-left: 300px; margin-top: 20px" alt=""
+                                 src="assets\images\Partner\NIC\{{nicImg}}" *ngIf="individual">
+                          </div>
+                          <label style="margin-left: 43%; color: red; display: none; animation: blink 2s infinite;"
+                                 id="lblNicImage">** Required NIC image</label>
+                        </form>
+                      </div>
+
+                    </form>
+                    <br>
+                    <hr>
+                    <br>
+                    <div class="pull-right" id="updateBusinessDetails" style="margin-right: 80px">
+                      <button type="submit" class="btn btn-primary">UPDATE</button>
+                    </div>
+                  </form>
+                </div>
+              </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->
+<!--=====================-->
+
+
+
+
+
+

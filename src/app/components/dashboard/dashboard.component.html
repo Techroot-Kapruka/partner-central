@@ -1,0 +1,541 @@
+<!-- Container-fluid starts-->
+<style>
+  .page-header {
+    display: none !important;
+  }
+</style>
+
+<button (click)="redirectToShop()" class="absoluteButton" *ngIf="isLoginUser">View My Shop <img
+  src="../../../../assets/images/ico/shop1.png" width="25px"></button>
+<div class="container-fluid test">
+  <div class="row">
+    <div class="paddingfix" style="padding-left: 15px; padding-right: 15px; display: block; width: 100%;">
+      <div class="blockAB">
+        <div *ngIf="isAdmin" class="col-md-4 blockS" routerLink="/users/list-user">
+          <div class="card o-hidden widget-cards">
+            <div class="card-body" style="background-color: #fff; color: #000">
+              <div class="media static-top-widget row">
+                <div class="icons-widgets col-4">
+                  <div class="align-self-center text-center">
+                    <!--                <app-feather-icons [icon]="'users'" class="font-warning"></app-feather-icons>-->
+                    <img src="../../../../assets/images/ico/group10.png" width="80px">
+                  </div>
+                </div>
+                <div class="media-body col-8" style="cursor: pointer;"><span class="m-0">Partners</span>
+                  <h3 class="mb-0"> <span class="counter" [CountTo]="mathsCount" [from]="0"
+                                          [duration]="3">{{mathsCount}}</span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 blockS" *ngIf="isLoginPartner">
+          <div class="card o-hidden  widget-cards">
+            <div class="card-body" style="background-color: #fff; color: #000">
+              <div class="media static-top-widget row">
+                <div class="icons-widgets col-4">
+                  <div class="align-self-center text-center">
+                    <!--                <app-feather-icons [icon]="'box'" class="font-secondary"></app-feather-icons>-->
+                    <img src="../../../../assets/images/ico/02.png" width="80px">
+                  </div>
+                </div>
+                <div class="media-body col-8" *ngIf="isLoginPartner" routerLink="/users/list-user"
+                     style="cursor: pointer;"><span class="m-0">Approval pending partners</span>
+                  <h3 class="mb-0"> <span class="counter" [CountTo]="approvalUserCount" [from]="0"
+                                          [duration]="2">{{approvalUserCount}}</span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 blockS" *ngIf="isLoginUser">
+          <div class="card o-hidden  widget-cards">
+            <div class="card-body" style="background-color: #fff; color: #000">
+              <div class="media static-top-widget row">
+                <div class="icons-widgets col-3">
+                  <div class="align-self-center text-center">
+                    <!--                <app-feather-icons [icon]="'message-square'" class="font-primary"></app-feather-icons>-->
+                    <img src="../../../../assets/images/ico/04.png" width="80px">
+                  </div>
+                </div>
+                <div class="media-body col-9" *ngIf="isLoginUser" routerLink="/products/digital/digital-product-list"
+                     style="cursor: pointer;"><span class="m-0">Pending Approval Product</span>
+                  <h3 class="mb-0"> <span class="counter" [CountTo]="qaApprovalCount" [from]="0"
+                                          [duration]="2">{{qaApprovalCount}}</span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 blockS" *ngIf="isPendingShipmentShow">
+          <div class="card o-hidden widget-cards">
+            <div class="card-body" style="background-color: #fff; color: #000">
+              <div class="media static-top-widget row">
+                <div class="icons-widgets col-4">
+                  <div class="align-self-center text-center">
+                    <!--                <app-feather-icons [icon]="'message-square'" class="font-primary"></app-feather-icons>-->
+                    <img src="../../../../assets/images/ico/03.png" width="80px">
+                  </div>
+                </div>
+                <div class="media-body col-8" routerLink="/shipment/receive-shipment" style="cursor: pointer;">
+                  <span class="m-0">Received Shipments</span>
+                  <h3 class="mb-0"> <span class="counter" [CountTo]="receivedShipment" [from]="0"
+                                          [duration]="2">{{receivedShipment}}</span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 blockS" *ngIf="isApprovalPendingShow">
+          <div class="card o-hidden widget-cards">
+            <div class="card-body" style="background-color: #fff; color: #000">
+              <div class="media static-top-widget row">
+                <div class="icons-widgets col-3">
+                  <div class="align-self-center text-center">
+                    <!--                <app-feather-icons [icon]="'message-square'" class="font-primary"></app-feather-icons>-->
+                    <img src="../../../../assets/images/ico/04.png" width="80px">
+                  </div>
+                </div>
+                <div class="media-body col-8" routerLink="/digital/digital-product-list" style="cursor: pointer;">
+                  <span class="m-0">Approval Pending product</span>
+                  <h3 class="mb-0"> <span class="counter" [CountTo]="mathCountForApprovalPendingProduct" [from]="0"
+                                          [duration]="2">{{mathCountForApprovalPendingProduct}}</span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 blockS" *ngIf="isOrderShow">
+          <div class="card o-hidden widget-cards">
+            <div class="card-body" style="background-color: #fff; color: #000">
+              <div class="media static-top-widget row">
+                <div class="icons-widgets col-4">
+                  <div class="align-self-center text-center">
+                    <img src="../../../../assets/images/ico/05.png" width="80px">
+                  </div>
+                </div>
+                <div class="media-body col-8" routerLink="/digital/digital-product-list" style="cursor: pointer;">
+                  <span class="m-0">Products</span>
+                  <h3 class="mb-0"> <span class="counter" [CountTo]="specialGift" [from]="0"
+                                          [duration]="2">{{specialGift}}</span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 blockS" *ngIf="isLoginUser"></div>
+        <!--Analytics Products View Start-->
+        <div class="col-md-4 blockS" *ngIf="isLoginUser">
+          <div class="card o-hidden  widget-cards">
+            <div class="card-body" style="background-color: #fff; color: #000">
+              <div class="media static-top-widget row">
+                <div class="icons-widgets col-3">
+                  <div class="align-self-center text-center">
+                    <!--                <app-feather-icons [icon]="'message-square'" class="font-primary"></app-feather-icons>-->
+                    <img src="../../../../assets/images/ico/group10.png" width="80px">
+                  </div>
+                </div>
+                <div class="media-body col-9" *ngIf="isLoginUser"
+                     style="cursor: pointer;"><span class="m-0">Total Product Views</span>
+                  <h3 class="mb-0"> <span class="counter" [CountTo]="analyticsProductViewTotal" [from]="0"
+                                          [duration]="2">{{analyticsProductViewTotal}}</span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 blockS" *ngIf="isLoginUser">
+          <div class="card o-hidden  widget-cards">
+            <div class="card-body" style="background-color: #fff; color: #000">
+              <div class="media static-top-widget row">
+                <div class="icons-widgets col-3">
+                  <div class="align-self-center text-center">
+                    <!--                <app-feather-icons [icon]="'message-square'" class="font-primary"></app-feather-icons>-->
+                    <img src="../../../../assets/images/ico/06.png" width="80px">
+                  </div>
+                </div>
+                <div class="media-body col-9" *ngIf="isLoginUser"
+                     style="cursor: pointer;"><span class="m-0">Total Product Add to Cart</span>
+                  <h3 class="mb-0"> <span class="counter" [CountTo]="analyticsProductCartTotal" [from]="0"
+                                          [duration]="2">{{analyticsProductCartTotal}}</span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 blockS" *ngIf="isLoginUser">
+          <div class="card o-hidden  widget-cards">
+            <div class="card-body" style="background-color: #fff; color: #000">
+              <div class="media static-top-widget row">
+                <div class="icons-widgets col-3">
+                  <div class="align-self-center text-center">
+                    <!--                <app-feather-icons [icon]="'message-square'" class="font-primary"></app-feather-icons>-->
+                    <img src="../../../../assets/images/ico/04.png" width="80px">
+                  </div>
+                </div>
+                <div class="media-body col-9" *ngIf="isLoginUser"
+                     style="cursor: pointer;"><span class="m-0">Total Product Orders</span>
+                  <h3 class="mb-0"> <span class="counter" [CountTo]="analyticsProductOrderTotal" [from]="0"
+                                          [duration]="2">{{analyticsProductOrderTotal}}</span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--Analytics Products View End---->
+        <div class="col-md-4 blockS" *ngIf="isPendingShipmentShow">
+          <div class="card o-hidden widget-cards">
+            <div class="card-body" style="background-color: #fff; color: #000">
+              <div class="media static-top-widget row">
+                <div class="icons-widgets col-4">
+                  <div class="align-self-center text-center">
+                    <img src="../../../../assets/images/ico/06.png" width="80px">
+                  </div>
+                </div>
+                <div class="media-body col-8" routerLink="/shipment/receive-shipment" style="cursor: pointer;">
+                  <span class="m-0">Pending Shipment</span>
+                  <h3 class="mb-0"> <span class="counter" [CountTo]="pendingShipmentCount" [from]="0"
+                                          [duration]="2">{{pendingShipmentCount}}</span>
+                  </h3>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-12 xl-100">
+      <div class="newAddition">
+        <h2>Sales Details</h2>
+        <div class="wrapB">
+          <div class="bg1 bgC" routerLink="/orders/list-orders" style="cursor:pointer;">
+            <div class="imgWrapD">
+              <img src="../../../../assets/images/ico/ico1.png" width="60px">
+             </div>
+            <div class="textWrapD">Latest Order
+              <form style=" font-size: 10px; padding: 0" class="mt-2" *ngFor="let latests of latest">
+                <div class="form-group row latest mt-2">
+                  <label class="col-sm-6">Order ID</label>
+                  <label class="col-sm-6" type="text">{{latests['pnref']}}</label>
+                </div>
+                <div class="form-group row latest" >
+                  <label class="col-sm-6">Order Date</label>
+                  <label class="col-sm-6" type="text">{{latests['orderDate']}}</label>
+                </div>
+                <div class="form-group row latest" >
+                  <label class="col-sm-6">Delivery Date</label>
+                  <label class="col-sm-6" type="text">{{latests['deliveryDate']}}</label>
+                </div>
+                <div class="form-group row latest" >
+                  <label class="col-sm-6">Status</label>
+                  <label class="col-sm-6" type="text">{{latests['status']}}</label>
+                </div>
+                <br>
+                <div class="form-group row latest latest-sync" >
+                  <label class="col">Last Sync {{latests['lastUpdated']}}</label>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="bg2 bgC" routerLink="/products/digital/digital-product-list" style="cursor:pointer;">
+            <div class="imgWrapD">
+              <img src="../../../../assets/images/ico/ico2.png" width="60px">
+            </div>
+            <div class="textWrapD">
+              Latest Product
+              <form style="font-size: 10px; padding: 0" class="mt-2" *ngFor="let product of latestProduct">
+                <div class="form-group row latest mt-2">
+                  <label class="col-sm-5">Item Code</label>
+                  <label class="col-sm-7" type="text">{{product['productCode']}}</label>
+                </div>
+                <div class="form-group row latest" >
+                  <label class="col-sm-5">Item Group</label>
+                  <label class="col-sm-7" type="text" style="word-break:break-word;">{{product['item_group']}}</label>
+                </div>
+                <div class="form-group row latest" >
+                  <label class="col-sm-5">Create Date</label>
+                  <label class="col-sm-7" type="text">{{product['createDate']}}</label>
+                </div>
+                <div class="form-group row latest" >
+                  <label class="col-sm-5">Status</label>
+                  <label class="col-sm-7" type="text">{{productStatus}}</label>
+                </div>
+                <br>
+                <div class="form-group row latest latest-sync" >
+                  <label class="col">Last Sync {{product['lastSync']}}</label>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="bg3 bgC" style="display: none">
+            <div class="imgWrapD">
+              <img src="../../../../assets/images/ico/ico3.png" width="60px">
+            </div>
+            <div class="textWrapD">
+              Latest Invoice
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-12 blockAblock" *ngIf="isAdmin" >
+      <div class="row relativeChart">
+        <div class="col-md-6 relativeA" *ngIf="isColumnChart" style="display: grid;">
+          <style>
+            .relativeChart {
+              position: relative;
+              min-height: 600px;
+            }
+
+            .relativeA {
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              left: 0;
+            }
+
+            .relativeChart ngx {
+              transform: scale(50%) !important;
+            }
+
+            .relativeB {
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              right: 0;
+            }
+
+            .blockAblock {
+              box-shadow: 0 0 20px #ebebeb;
+              background: #fff;
+              margin: 15px;
+              border-radius: 15px;
+              max-width: calc(100% - 30px);
+              width: calc(100% - 30px);
+            }
+
+            @media only screen and (max-width: 1300px) {
+              .relativeChart {
+                width: 1200px;
+              }
+
+              .blockAblock {
+                overflow-x: scroll;
+              }
+            }
+
+            @media only screen and (max-width: 800px) {
+              .relativeB {
+                transform: scale(90%);
+                min-height: 400px;
+                width: 631px;
+                top: 110px;
+              }
+            }
+          </style>
+          <!-- Start Column Chart -->
+          <ngx-charts-bar-vertical
+            [view]="view"
+            [scheme]="colorScheme"
+            [results]="chartData"
+            [xAxis]="showXAxis"
+            [yAxis]="showYAxis"
+            [gradient]="gradient"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxisLabel]="xAxisLabel"
+            [yAxisLabel]="yAxisLabel"
+            style="transform: scale(80%)">
+          </ngx-charts-bar-vertical>
+          <!-- End Column Chart -->
+        </div>
+        <div class="col-md-4 " *ngIf="isPieChart" style="display: grid; margin-left: 100px;">
+          <!-- Start Pie Chart -->
+          <ngx-charts-pie-chart [results]="single"
+                                [view]="[300, 300]"
+                                [scheme]="colorScheme1">
+          </ngx-charts-pie-chart>
+          <!-- End Pie Chart -->
+        </div>
+
+        <div class="col-md-6" *ngIf="isDuoghnutChart" style="display: grid; position: relative; left: -120px; display: none">
+          <!-- Start Doughnut Chart -->
+          <div style="">
+            <canvas baseChart
+                    [data]="doughnutChartData"
+                    [labels]="doughnutChartLabels"
+                    [chartType]="doughnutChartType"
+                    style="transform: scale(80%);position: absolute;right: 0; "
+                    [colors]="doughnutChartColors">
+            </canvas>
+          </div>
+          <!-- End Doughnut Chart -->
+        </div>
+      </div>
+    </div>
+    <!--    <div class="col-xl-12 xl-100" *ngIf="qaTables">-->
+    <!--      <div class="card">-->
+    <!--        <div class="card-header">-->
+    <!--          <h5>Latest Orders</h5>-->
+    <!--        </div>-->
+    <!--        <div class="card-body">-->
+    <!--          <div class="user-status table-responsive latest-order-table">-->
+    <!--            <table class="table table-bordernone">-->
+    <!--              <thead>-->
+    <!--              <tr>-->
+    <!--                <th scope="col">Order ID</th>-->
+    <!--                <th scope="col">Order Date</th>-->
+    <!--                <th scope="col">Product</th>-->
+    <!--                <th scope="col">Delivery Date</th>-->
+    <!--                <th scope="col">Order Ref</th>-->
+    <!--                <th scope="col">Country</th>-->
+    <!--              </tr>-->
+    <!--              </thead>-->
+    <!--              <tbody>-->
+
+    <!--              <tr *ngFor="let latests of latest" (click)="navigateOrders(latests)" style="cursor: pointer;">-->
+    <!--                <td>{{latests['orderId']}}</td>-->
+    <!--                <td class="digits">{{latests['orderDate']}}</td>-->
+    <!--                <td class="font-default">{{latests['email']}}</td>-->
+    <!--                <td class="font-default">{{latests['deliveryDate']}}</td>-->
+    <!--                <td class="digits">{{latests['pnref']}}</td>-->
+    <!--                <td class="digits">{{latests['country']}}</td>-->
+    <!--              </tr>-->
+
+    <!--              </tbody>-->
+    <!--            </table>-->
+    <!--            <button routerLink="/orders/list-orders" class="btn btn-primary">View All Orders</button>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+
+    <!--    <div class="col-xl-12 xl-100" *ngIf="qaTables">-->
+    <!--      <div class="card">-->
+    <!--        <div class="card-header">-->
+    <!--          <h5>Latest Products</h5>-->
+    <!--        </div>-->
+    <!--        <div class="card-body">-->
+    <!--          <div class="user-status table-responsive latest-product-table">-->
+    <!--            <table class="table table-bordernone">-->
+    <!--              <thead>-->
+    <!--              <tr>-->
+    <!--                <th scope="col">Product Code</th>-->
+    <!--                <th scope="col">Category</th>-->
+    <!--                <th scope="col">Title</th>-->
+    <!--                <th scope="col">Brand</th>-->
+    <!--                <th scope="col">Create Date</th>-->
+    <!--                <th *ngIf="isAdmin" scope="col">Vendor</th>-->
+    <!--              </tr>-->
+    <!--              </thead>-->
+    <!--              <tbody>-->
+
+    <!--              <tr *ngFor="let latestProducts of latestProduct" (click)="navigateProduct()" style="cursor: pointer;">-->
+    <!--                <td>{{latestProducts['productCode']}}</td>-->
+    <!--                <td class="digits">{{latestProducts['category']}}</td>-->
+    <!--                <td class="font-default">{{latestProducts['title']}}</td>-->
+    <!--                <td class="font-default">{{latestProducts['brand']}}</td>-->
+    <!--                <td class="digits">{{latestProducts['createDate']}}</td>-->
+    <!--                <td *ngIf="isAdmin" class="digits">{{latestProducts['vendor']}}</td>-->
+    <!--              </tr>-->
+
+    <!--              </tbody>-->
+    <!--            </table>-->
+    <!--            <button routerLink="/products/digital/digital-product-list" class="btn btn-primary">View All Products-->
+    <!--            </button>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+
+
+    <!--    <div class="col-xl-12 xl-100" *ngIf="qaApprovalProductTable">-->
+    <!--      <div class="card">-->
+    <!--        <div class="card-header">-->
+    <!--          <h5>Pending Approval Products</h5>-->
+    <!--        </div>-->
+    <!--        <div class="card-body">-->
+    <!--          <div class="user-status table-responsive latest-product-table">-->
+    <!--            <table class="table table-bordernone">-->
+    <!--              <thead>-->
+    <!--              <tr>-->
+    <!--                <th scope="col">Product Code</th>-->
+    <!--                <th scope="col">Category</th>-->
+    <!--                <th scope="col">Title</th>-->
+    <!--                <th scope="col">Brand</th>-->
+    <!--                <th scope="col">Create Date</th>-->
+    <!--                &lt;!&ndash;                <th *ngIf="isAdmin" scope="col">Vendor</th>&ndash;&gt;-->
+    <!--              </tr>-->
+    <!--              </thead>-->
+    <!--              <tbody>-->
+
+    <!--              <tr *ngFor="let qaApprovedLatestProductss of qaApprovedLatestProducts" (click)="navigateProduct()"-->
+    <!--                  style="cursor: pointer;">-->
+    <!--                <td>{{qaApprovedLatestProductss['productCode']}}</td>-->
+    <!--                <td class="digits">{{qaApprovedLatestProductss['category']}}</td>-->
+    <!--                <td class="font-default">{{qaApprovedLatestProductss['title']}}</td>-->
+    <!--                <td class="font-default">{{qaApprovedLatestProductss['brand']}}</td>-->
+    <!--                <td class="digits">{{qaApprovedLatestProductss['createDate']}}</td>-->
+    <!--                &lt;!&ndash;<td *ngIf="isAdmin" class="digits">{{qaApprovedLatestProductss['vendor']}}</td>&ndash;&gt;-->
+    <!--              </tr>-->
+
+    <!--              </tbody>-->
+    <!--            </table>-->
+    <!--            <button routerLink="/products/digital/digital-product-list" class="btn btn-primary">View All Products-->
+    <!--            </button>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+
+
+    <!--    <div class="col-xl-12 xl-100" *ngIf="qaTables">-->
+    <!--      <div class="card">-->
+    <!--        <div class="card-header">-->
+    <!--          <h5>Latest Invoice</h5>-->
+    <!--        </div>-->
+    <!--        <div class="card-body">-->
+    <!--          <div class="user-status table-responsive latest-product-table">-->
+    <!--            <table class="table table-bordernone">-->
+    <!--              <thead>-->
+    <!--              <tr>-->
+    <!--                <th scope="col">Invoice No</th>-->
+    <!--                <th scope="col">Posting Date</th>-->
+    <!--                <th scope="col">Total Amount</th>-->
+    <!--                <th scope="col">Status</th>-->
+    <!--                <th scope="col">Supplier Code</th>-->
+    <!--                <th scope="col">Supplier Name</th>-->
+    <!--              </tr>-->
+    <!--              </thead>-->
+    <!--              <tbody>-->
+
+    <!--              <tr>-->
+    <!--              <tr *ngFor="let invoiceArrys of invoiceArry" (click)="navigateInvoice()" style="cursor: pointer;">-->
+    <!--                <td>{{invoiceArrys['invoiceNo']}}</td>-->
+    <!--                <td class="digits">{{invoiceArrys['postingDate']}}</td>-->
+    <!--                <td class="font-default">{{invoiceArrys['totalAmount']}}</td>-->
+    <!--                <td class="font-default">{{invoiceArrys['currentStatus']}}</td>-->
+    <!--                <td class="digits">{{invoiceArrys['supplierCode']}}</td>-->
+    <!--                <td class="digits">{{invoiceArrys['supplierName']}}</td>-->
+    <!--              </tr>-->
+
+    <!--              </tbody>-->
+    <!--            </table>-->
+    <!--            <button routerLink="/payment/list-payment" class="btn btn-primary">View All Invoices-->
+    <!--            </button>-->
+    <!--          </div>-->
+    <!--        </div>-->
+    <!--      </div>-->
+    <!--    </div>-->
+    <!--  </div>-->
+    <!--</div>-->
+    <!-- Container-fluid Ends-->

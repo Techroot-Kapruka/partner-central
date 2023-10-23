@@ -1,0 +1,131 @@
+
+body {
+
+}
+
+.main-div {
+  font-size: 0;
+  max-width: 900px;
+  margin: 45px auto;
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  border-radius: 8px;
+  background-color: #2C2B76;
+  position: relative;
+}
+
+.both {
+  display: inline-block;
+  vertical-align: top;
+  width: 50%;
+  font-size: 20px;
+  text-align: center;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+h2 {
+  text-align: center;
+  font-family: sans-serif;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+
+}
+
+input {
+  font-size: 16px;
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  opacity: 0.6;
+  filter: alpha(opacity=40);
+
+
+}
+
+button {
+  margin-top: 15px;
+  margin-right: 10px;
+  width: 45%;
+  padding: 10px;
+  background-color: #2C2B76;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+form {
+  padding-bottom: 30px;
+}
+
+.overlay-container {
+  position: absolute;
+
+  right: 0;
+  width: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.main-div .both:first-child {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+
+}
+
+.hello {
+  margin-bottom: 10px !important;
+  margin-top: 0 !important;
+  font-family: sans-serif;
+}
+#countryCode , #contactNumber{
+  width: calc(100% - 70px);
+  display: block;
+  float:left;
+  margin: 2.5px;
+}
+#countryCode{
+  width: 60px;
+}
+@media only screen and (max-width: 600px) {
+  .main-div .both:nth-of-type(2) {
+    display: none;
+  }
+
+  .main-div {
+    max-width: 100%;
+
+  }
+
+  .main-div .both {
+    width: 100%;
+
+  }
+
+  .main-div {
+    box-shadow: none;
+    border: 0;
+    background-color: #fff;
+
+  }
+
+
+}

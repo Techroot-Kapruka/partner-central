@@ -1,0 +1,271 @@
+<div class="row">
+  <div class="col">
+    <h3 style="margin-left: 3%; margin-bottom: 2%; color: black;"> {{title_name}} </h3>
+  </div>
+  <div class="col">
+    <button type="button" (click)="backToLIst()" class="btn btn-sm btn-primary pull-right" data-toggle="tooltip"
+            data-placement="top" title="Back to Shipment List"><i class="fa fa-arrow-circle-left"
+                                                                  aria-hidden="true"></i> Back
+    </button>
+  </div>
+
+
+</div>
+
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="card col-12">
+
+
+      <ngb-tabset class="tab-coupon">
+        <!--      basic info tab-->
+        <ngb-tab title="Basic Info">
+          <ng-template ngbTabContent>
+            <div class="tab-pane fade active show" role="tabpanel" aria-labelledby="account-tab">
+              <div class="card-body">
+                <form [formGroup]="baseInfo" (ngSubmit)="saveFieldBaseInfo()">
+                  <div class="digital-add needs-validation">
+                    <div class="form-group">
+                      <label for="txt_title" class="col-form-label pt-0"> Title</label>
+                      <input class="form-control" formControlName="Title" id="txt_title" type="text" required="">
+                    </div>
+                    <div class="form-group">
+                      <label for="txt_brand" class="col-form-label">Brand</label>
+                      <input class="form-control" formControlName="Brand" id="txt_brand" type="text" required="">
+                    </div>
+                    <div class="form-group">
+                      <label for="txt_manufacture" class="col-form-label">Manufacture</label>
+                      <input class="form-control" formControlName="Manufacture" id="txt_manufacture" type="text"
+                             required="">
+                    </div>
+                    <div class="form-group">
+                      <button class="btn btn-primary pull-right" type="submit" style="margin-bottom: 30px;">Save
+                      </button>
+                    </div>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+
+        <!--        Description Tab-->
+        <ngb-tab title="Description">
+          <ng-template ngbTabContent>
+            <div class="tab-pane fade active show" role="tabpanel" aria-labelledby="account-tab">
+              <div class="card-body">
+                <form [formGroup]="description" (ngSubmit)="saveFieldDescription()">
+                  <div class="digital-add needs-validation">
+
+                    <div class="form-group">
+                      <label class="col-form-label">Description</label>
+<!--                      <textarea formControlName="txt_description" id="txt_description" rows="4" cols="12"></textarea>-->
+                      <ng-container *ngTemplateOutlet="myComponentTemplate"
+                      ></ng-container>
+                      <textarea hidden class="form-control" formControlName="txt_description" id="txt_description"
+                                (keydown)="onKeyPress($event)" (change)="checkChars()"
+                                required>{{descriptionContent}}</textarea>
+                    </div>
+                    <!--                    <div class="form-group">-->
+                    <!--                      <label class="col-form-label"> Special Notes</label>-->
+
+                    <!--                      <textarea formControlName="special_notes" id="special_notes" rows="2" cols="12"></textarea>-->
+
+                    <!--                    </div>-->
+                    <div class="form-group">
+                      <label class="col-form-label"> Available</label>
+                      <select class="custom-select" formControlName="availability" id="availability" required="">
+                        <option value="">--Select--</option>
+                        <option value="YES">Yes</option>
+                        <option value="NO">No</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <button class="btn btn-primary pull-right" type="submit" style="margin-bottom: 30px;">Save
+                      </button>
+                    </div>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </ng-template>
+        </ngb-tab>
+
+        <!-- Variation Tab-->
+        <ngb-tab title="Variations">
+          <ng-template ngbTabContent>
+            <div style="margin: 20px;">
+              <table class="table table-striped"
+                     style="border: #a4a2a2; border-width: 1px; border-radius: 5px; border-style: solid">
+                <thead>
+                <tr>
+                  <th scope="col">id</th>
+                  <th scope="col">Color</th>
+                  <th scope="col">Size</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let tableData of productGroupTabel let i = index" [attr.data-index]="i">
+                  <td>{{i+1}}</td>
+                  <td>
+                    <div style="margin:5px; padding: 10px; background:{{tableData['color']}};"></div>
+                  </td>
+                  <td>{{tableData['size']}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+
+
+          </ng-template>
+        </ngb-tab>
+
+        <!--        Offer Tab-->
+        <ngb-tab title="Offer">
+          <ng-template ngbTabContent>
+            <div class="tab-pane fade active show" role="tabpanel" aria-labelledby="account-tab">
+              <div class="card-body">
+                <form [formGroup]="offer" (ngSubmit)="saveOfferFields()">
+                  <div class="digital-add needs-validation">
+                    <div class="form-group">
+                      <label for="txt_seller_sku" class="col-form-label pt-0">Seller SKU</label>
+                      <input class="form-control" formControlName="txt_seller_sku" id="txt_seller_sku" type="text"
+                             required="">
+                    </div>
+                    <div class="form-group">
+                      <label class="col-form-label"> Condition</label>
+                      <select class="custom-select" style="color: #000000" formControlName="condition" id="condition">
+                        <option value="">--Select--</option>
+                        <option value="Brand New">Brand New</option>
+                        <option value="Used - Good">Used - Good</option>
+                        <option value="Used - Like New">Used - Like New</option>
+                        <option value="not damage">not damage</option>
+                      </select>
+                    </div>
+                    <div class="form-group" id="treePriceCol">
+                      <div class="row">
+                        <div class="row">
+                          <div style="display: none;" class="col" id="condition2">
+                            <h4 style="color: red;font-size: small;margin-top: 2%;margin-bottom: 2%">*
+                              Condition</h4>
+                            <p style="color: black;font-size: medium">Final selling price should be equal or greater
+                              than LKR
+                              {{amountBefor}}.</p>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </ng-template>
+
+        </ngb-tab>
+
+        <!--        Images Tab-->
+        <ngb-tab title="Images">
+          <ng-template ngbTabContent>
+            <div class="tab-pane fade active show" role="tabpanel" aria-labelledby="account-tab">
+              <div class="card-body">
+                <div class="digital-add needs-validation">
+                  <div class="col-xl-10">
+                    <div class="add-product justify-content-center">
+                      <div class="row">
+                        <form [formGroup]="imageCliant">
+                          <ul class="file-upload-product">
+                            <!--=========================-->
+                            <li>
+                              <div class="box-input-file">
+                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png">
+                                <input class="upload" id="image01" type="file" formControlName="fileSource"
+                                       (change)="changeValue($event, 1)" (click)="loadimg(1)">
+                                <img class="imgUpload" id="imageOneO" alt="" src="{{imagePathURI+imageOne}}">
+                              </div>
+                            </li>
+
+                            <li>
+                              <div class="box-input-file" *ngIf="imageOne2">
+                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png">
+                                <input class="upload" type="file" formControlName="fileSource2"
+                                       (change)="changeValue2($event)" (click)="loadimg(2)">
+                                <img class="imgUpload" id="imageTwoO" alt="" src="{{imagePathURI+imageOne2}}">
+                              </div>
+                            </li>
+
+                            <li>
+                              <div class="box-input-file" *ngIf="imageOne3">
+                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png">
+                                <input class="upload" type="file" formControlName="fileSource3"
+                                       (change)="changeValue3($event)" (click)="loadimg(3)">
+                                <img class="imgUpload" id="imageTreeE" alt="" src="{{imagePathURI+imageOne3}}">
+
+                              </div>
+                            </li>
+
+                            <li>
+                              <div class="box-input-file" *ngIf="imageOne4">
+                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png">
+                                <input class="upload" type="file" formControlName="fileSource4"
+                                       (change)="changeValue4($event)" (click)="loadimg(4)">
+                                <img class="imgUpload" id="imageFourR" alt="" src="{{imagePathURI+imageOne4}}">
+
+                              </div>
+                            </li>
+
+
+                            <li>
+                              <div class="box-input-file" *ngIf="imageOne5">
+                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png">
+                                <input class="upload" type="file" formControlName="fileSource5"
+                                       (change)="changeValue5($event)" (click)="loadimg(5)">
+                                <img class="imgUpload" id="imageFiveE" alt="" src="{{imagePathURI+imageOne5}}">
+
+                              </div>
+                            </li>
+                            <!--=============================-->
+                          </ul>
+                        </form>
+                        <!--</div>-->
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-xl-9 xl-50 col-sm-6 col-9">
+                        <img id="mainImage" src="{{imagePathURI+selectedimg}}" alt="" class="img-fluid image_zoom_1">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <button class="btn btn-primary pull-right" type="button" (click)="saveEditedImage()"
+                        style="margin-bottom: 30px;">Save
+                </button>
+              </div>
+            </div>
+
+          </ng-template>
+        </ngb-tab>
+
+      </ngb-tabset>
+
+    </div>
+
+  </div>
+</div>
+
+<ng-template #myComponentTemplate>
+  <angular-editor [(ngModel)]="descriptionContent" (ngModelChange)="checkChars()" [config]="editorConfig"
+                  required></angular-editor>
+</ng-template>
+
+
+
+
+

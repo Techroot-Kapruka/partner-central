@@ -1,0 +1,44 @@
+<div class="container-fluid" style="margin:1%">
+
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-body">
+          <div class="">
+            <img class="blur-up lazyloaded" src="assets/images/dashboard/site_logo.png" alt>
+          </div>
+          <div class="container">
+            <h4>Please Enter The One Time Password </h4>
+            <p>Sent To : <span style="color: #5DADE2">{{userEmail}}</span></p>
+            <header>
+              <i class="fa fa-key"></i>
+            </header>
+            <h4>Enter OTP Code</h4>
+            <form>
+              <div class="input-field">
+                <input type="number" class="no-spinners" pattern="[0-9]{6}" required id="txt_1" maxlength="1" onpaste="return false" oncopy="return false" oninput="this.value = this.value.slice(0, 1)" (keyup)="onDigitInput($event)" >
+                <input type="number" class="no-spinners" pattern="[0-9]{6}" required id="txt_2" maxlength="1" onpaste="return false" oncopy="return false" oninput="this.value = this.value.slice(0, 1)" (keyup)="onDigitInput($event)" />
+                <input type="number" class="no-spinners" pattern="[0-9]{6}" required id="txt_3" maxlength="1" onpaste="return false" oncopy="return false" oninput="this.value = this.value.slice(0, 1)" (keyup)="onDigitInput($event)" />
+                <input type="number" class="no-spinners" pattern="[0-9]{6}" required id="txt_4" maxlength="1" onpaste="return false" oncopy="return false" oninput="this.value = this.value.slice(0, 1)" (keyup)="onDigitInput($event)" />
+              </div>
+              <button *ngIf="showVerifyButton" id="sendVerfy" type="button" (click)="checkIsVerify()">Verify OTP</button>
+              <div class="countdown-timer">
+                <p *ngIf="!showResendButton">
+                  Time Remaining:
+                  <strong>{{ remainingMinutes }} Minute : {{ remainingSeconds }} Seconds</strong>
+                </p>
+              </div>
+              <button id="sendOtp" type="button" class="btn btn-danger" *ngIf="showResendButton" (click)="checkIsResendOtp()">Resend OTP</button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+    <div class="col-md-2"></div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->

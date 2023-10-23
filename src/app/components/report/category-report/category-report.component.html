@@ -1,0 +1,118 @@
+<style>
+  #select_od {
+    width: 350px !important;
+  }
+</style>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>
+            Category Details
+            <button class="btn btn-success float-right" (click)="exportToExcel()">
+              Export to Excel
+            </button>
+          </h5>
+        </div>
+        <div class="card-body">
+          <!--<div class="btn-popup">-->
+          <!--<select class="form-control" id="select_od">-->
+          <!--<option value="">&#45;&#45; Select Category &#45;&#45;</option>-->
+          <!--<option *ngFor="let productCategory of productCategoryArray"-->
+          <!--ngValue="{{productCategory['code']}}">-->
+          <!--{{productCategory['name']}}-->
+          <!--</option>-->
+          <!--</select>-->
+          <!--</div>-->
+
+          <div class="row">
+            <div class="col-md-9">
+              <div class="row mb-3">
+                <div class="col-md-4">
+                  <input type="text" class="form-control" placeholder="Search By Category..." (input)="filterItems($event.target.value)">
+                </div>
+              </div>
+              <div class="row table-responsive" style="margin-top: 1%; max-height: 50vh; overflow-y: auto">
+                <table class="table table-sm table-bordered" id="excel-table">
+                  <thead class="table-primary">
+                  <tr>
+                    <th>Category</th>
+                    <th>Price Rate</th>
+                    <th>Code</th>
+                  </tr>
+                  </thead>
+                  <!-- category-report.component.html -->
+                  <tbody>
+                  <ng-container *ngFor="let category of (filteredCategories.length > 0 ? filteredCategories : mainCategoryArray); let i = index">
+                    <tr class="catHead">
+                      <td class="headCat">
+                        <span style="color:black; font-weight: bolder;font-size: 14px;">{{ category.category_name }}</span>
+                        <span *ngIf="category.subcategories && category.subcategories.length > 0" class="arrow" style="color: black; font-size: 10px; margin-left: 5px;" (click)="toggleExpansion(category)" [ngClass]="{'expanded': category.expanded, 'collapsed': !category.expanded}"> ▼</span>
+                      </td>
+                      <td class="headCat">
+                        <span style="color:black">{{ category.category_price_rate }}</span>
+                      </td>
+                      <td class="headCat">
+                        <span style="color:black;">{{ category.category_code }}</span>
+                      </td>
+                    </tr>
+                    <!-- Subcategories -->
+                    <ng-container *ngFor="let subCategory of category.subcategories">
+                      <tr *ngIf="category.expanded">
+                        <td class="headCat" colspan="2">
+                          <span style="color:black; margin-left: 40px;font-weight: 600">{{ subCategory.sub_category_name }}</span>
+                          <span class="arrow" *ngIf="subCategory.subsubcategories && subCategory.subsubcategories.length > 0" [ngClass]="{'expanded': subCategory.expanded, 'collapsed': !subCategory.expanded}" style="color: black; font-size: 10px;margin-left: 5px;" (click)="toggleExpansion(subCategory)"> ▼</span>
+                        </td>
+                        <td class="headCat">
+                          <span style="color:black">{{ subCategory.sub_category_code }}</span>
+                        </td>
+                      </tr>
+                      <!-- Sub-subcategories -->
+                      <ng-container *ngFor="let subSubCategory of subCategory.subsubcategories">
+                        <tr *ngIf="category.expanded && subCategory.expanded">
+                          <td class="headCat" colspan="2">
+                            <span style="color:black; margin-left: 80px; font-weight: 600">{{ subSubCategory.sub_sub_category_name }}</span>
+                          </td>
+                          <td class="headCat">
+                            <span style="color:black">{{ subSubCategory.sub_sub_category_code }}</span>
+                          </td>
+                        </tr>
+                      </ng-container>
+                    </ng-container>
+                    <!-- End of subcategories loop -->
+                  </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!--<div class="col-md-3">-->
+              <!--<br>-->
+              <!--<div class="form-group form-inline mb-2">-->
+                <!--<button type="submit" class="btn" style="background-color: green"></button>-->
+                <!--<div class="form-group ml-2">-->
+                  <!--<span>Category</span>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="form-group form-inline mb-2">-->
+                <!--<button type="submit" class="btn" style="background-color: red"></button>-->
+                <!--<div class="form-group ml-2">-->
+                  <!--<span>Sub Category</span>-->
+                <!--</div>-->
+              <!--</div>-->
+              <!--<div class="form-group form-inline mb-2">-->
+                <!--<button type="submit" class="btn" style="background-color: blue"></button>-->
+                <!--<div class="form-group ml-2">-->
+                  <!--<span>Sub Sub Category</span>-->
+                <!--</div>-->
+              <!--</div>-->
+            <!--</div>-->
+          </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,13 @@
+.image-wrapper {
+  position: relative;
+  display: inline-block; /* or block, depending on your layout */
+}
+.scale-up-icon {
+   position: absolute;
+   bottom: 10px; /* adjust the position to your preference */
+   right: 10px; /* adjust the position to your preference */
+   width: 30px; /* adjust the size to your preference */
+   height: 30px; /* adjust the size to your preference *//* replace with the URL of your scale-up icon */
+   background-size: cover;
+   cursor: pointer; /* add cursor pointer to indicate it's clickable */
+ }

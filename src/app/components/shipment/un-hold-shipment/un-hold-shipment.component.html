@@ -1,0 +1,346 @@
+<style>
+  ul li:hover {
+    background: #000080 !important;
+    color: #fff !important;
+  }
+
+  #mySearch {
+    width: 100%;
+    font-size: 18px;
+    padding: 11px;
+    border: 1px solid #ddd;
+  }
+
+  #myMenu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #myMenu li {
+    padding: 12px;
+    text-decoration: none;
+    color: black;
+    display: block
+  }
+
+  #myMenu li:hover {
+    background-color: #eee;
+  }
+
+  .labelAppendSub {
+    text-align: center;
+    margin-top: 1px;
+    color: #fff;
+    padding: 1px 20px 1px 10px;
+    border-radius: 3px;
+    border: 1px solid #000080;
+
+  }
+
+  .labelBoxappend {
+    padding-left: -1%;
+  }
+
+  .mainDev {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin: 5px 5px 0 0;
+
+  }
+
+  .clouseI {
+    position: absolute;
+    right: 5px;
+    top: -1px;
+    color: #fff;
+
+  }
+
+  /*=================================================*/
+
+  /* The switch - the box around the slider */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    float: right;
+  }
+
+  /* Hide default HTML checkbox */
+  .switch input {
+    display: none;
+  }
+
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input.default:checked + .slider {
+    background-color: #444;
+  }
+
+  input.primary:checked + .slider {
+    background-color: #2196F3;
+  }
+
+  input.success:checked + .slider {
+    background-color: #8bc34a;
+  }
+
+  input.info:checked + .slider {
+    background-color: #3de0f5;
+  }
+
+  input.warning:checked + .slider {
+    background-color: #FFC107;
+  }
+
+  input.danger:checked + .slider {
+    background-color: #f44336;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  /*=================================================*/
+
+</style>
+<form [formGroup]="shipmentForm" (ngSubmit)="hitShipment()">
+  <div class="container-fluid">
+    <div class="row product-adding">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="input-group col-md-8" style="margin-left: 14%;">
+              <input type="text" class="form-control" id="txtSearchBox" formControlName="txtSearchBox"
+                     placeholder="Search your product here"
+                     aria-label="Recipient's username" aria-describedby="basic-addon2">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" (click)="searchProduct()">Search</button>
+              </div>
+            </div>
+            <ul style="margin-left: 16%; background-color: #e8f0fe;width: 63%; box-shadow:0 0 3px #979797">
+              <li
+                style="padding: 10px 15px; background:#eee; color: #000080; background:#fff;"
+                *ngFor="let searchProductArrays of searchProductArray" (click)="selectedProduct(searchProductArrays)">
+                <div style="cursor: pointer;"> {{searchProductArrays['name']}}</div>
+              </li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-md-12" style="display: none" id="txt_aria">
+        <div class="card">
+          <div class="card-header">
+            <div class="row">
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="txt_title" class="col-form-label"> Product Code</label>
+                  <input class="form-control" formControlName="txtProductCode" id="txt_title" type="text" required="">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="txtProductName" class="col-form-label">Product Name</label>
+                  <input class="form-control" formControlName="txtProductName" id="txtProductName" type="text"
+                         required="">
+
+                  <input class="form-control" style="display: none;" formControlName="txtId" id="txtId" type="text"
+                         required="">
+                </div>
+              </div>
+
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="txtCostPrice" class="col-form-label"> Cost Price</label>
+                  <input class="form-control" (keyup)="calculateCost()" formControlName="txtCostPrice" id="txtCostPrice" type="text"
+                         required="">
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="txtSellingPrice" class="col-form-label">Selling Price</label>
+                  <input class="form-control" formControlName="txtSellingPrice" id="txtSellingPrice" type="text"
+                         required="">
+                </div>
+              </div>
+
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="txtQuantity" class="col-form-label">Quantity</label>
+                  <input class="form-control" formControlName="txtQuantity" (keyup)="calculateAmount()" id="txtQuantity" type="text" required="">
+                </div>
+              </div>
+
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="txtAmount" class="col-form-label">Amount</label>
+                  <input class="form-control" formControlName="txtAmount" disabled id="txtAmount" type="text"
+                         required="">
+                </div>
+              </div>
+
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="txtChangingAmount" class="col-form-label">Changing Amount</label>
+                  <input class="form-control" formControlName="txtChangingAmount" (keyup)="changingAmountCalculation()"
+                         id="txtChangingAmount" type="text"
+                         required="">
+                </div>
+              </div>
+
+
+              <div class="col-sm-4">
+                <div class="form-group">
+                  <label for="txtChangingRate" class="col-form-label">Changing Rate</label>
+                  <input class="form-control" (keyup)="changeingRateCalculate()" formControlName="txtChangingRate"
+                         id="txtChangingRate" type="text"
+                         required="">
+                </div>
+              </div>
+
+              <div class="form-group" style="width: 100%; padding-right:15px; ">
+                <button style="float: right; margin-bottom: 3%;" id="addToTbleBtn" type="button" (click)="addToTable()"
+                        class="btn btn-lg btn-primary">Add
+                  Table
+                </button>
+
+                <button style="float: right; margin-bottom: 3%; display: none;" id="eidtBtn" type="button"
+                        (click)="editRowUpdate()"
+                        class="btn btn-lg btn-primary">Edit
+                  Table
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="digital-add needs-validation">
+              <table class="table table-striped table-hover table-sm">
+                <thead>
+                <tr>
+                  <th scope="col">Code</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Cost Price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Selling Price</th>
+                  <th scope="col">Amount</th>
+                  <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--<tr *ngFor="let tableDatas of tableData ">-->
+                <tr *ngFor="let tableDatas of tableData; let i = index" [attr.data-index]="i">
+                  <td>{{tableDatas['product_code']}}</td>
+                  <td>{{tableDatas['product_name']}}</td>
+                  <td>{{tableDatas['cost_price']}}</td>
+                  <td>{{tableDatas['quantity']}}</td>
+                  <td>{{tableDatas['selling_price']}}</td>
+                  <td>{{tableDatas['amount']}}</td>
+                  <td>
+                    <button style="font-size: 8px;" type="button" class="btn btn-danger" (click)="deleteTableRow(i)">
+                      delete
+                    </button>
+                    <button style="font-size: 8px;margin-left: 4%;" type="button" (click)="editTableRow(i)"
+                            class="btn btn-success">Edit
+                    </button>
+                  </td>
+                </tr>
+
+                </tbody>
+              </table>
+
+              <div class="row" style="margin-top: 4%;">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="txtAllQuantity" class="col-form-label">All Quantity</label>
+                  </div>
+                </div>
+
+                <div class="col-sm-2">
+                  <div class="form-group">
+                    <input class="form-control" formControlName="txtAllQuantity" disabled id="txtAllQuantity"
+                           type="text" required="">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="txtGrossAmount" class="col-form-label">Gross Amount</label>
+                  </div>
+                </div>
+
+                <div class="col-sm-2">
+                  <div class="form-group">
+                    <input class="form-control" formControlName="txtGrossAmount" disabled id="txtGrossAmount"
+                           type="text" required="">
+                  </div>
+                </div>
+              </div>
+              <div class="row" style="float: right">
+                <div class="col-sm-10">
+                  <div class="form-group">
+                    <button style="float: right;" type="submit" class="btn btn-lg btn-primary">Shipment Make</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+

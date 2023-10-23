@@ -1,0 +1,43 @@
+
+<div class="card">
+  <div class="card-header">
+
+    <div class="row">
+      <h5>Notifications</h5>
+    </div>
+    <br>
+    <form [formGroup]="notificationFilter" (ngSubmit)="searchMessage()">
+      <div class="row search-box" >
+        <div class="col col-4">
+          <input type="date" [formControl]="searchBox" class="form-control" formControlName="searchBox" alt="Search using date" (click)="clearValues()">
+        </div>
+        <div class="col col-4">
+          <button class="pull-right btn btn-info" type="submit">filter</button>
+        </div>
+      </div>
+    </form>
+
+
+  </div>
+  <div class="card-body">
+    <table class="table">
+      <thead>
+      <tr>
+        <th></th>
+        <th>No</th>
+        <th>Title</th>
+        <th>Message</th>
+        <th>Date & Time</th>
+      </tr></thead>
+      <tbody>
+      <tr *ngFor="let msgData of filteredMessageObjArray; let i = index" [attr.data-index]="i">
+        <td><input class="form-check-input" type="checkbox"></td>
+        <td>{{i+1}}</td>
+        <td>{{msgData['subject']}}</td>
+        <td (click)="displayMsgBody(i)">{{limitWords(msgData['message'])}}</td>
+        <td>{{msgData['create_date_time']}}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

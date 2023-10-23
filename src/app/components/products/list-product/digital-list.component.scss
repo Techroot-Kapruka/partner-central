@@ -1,0 +1,26 @@
+
+.btn-outline-success:hover {
+  color: black;
+  background-color: yellow;
+  border-color: yellow;
+}
+
+.btn-outline-warning:hover {
+  color: white;
+  background-color: yellow;
+  border-color: yellow;
+}
+
+.print-only {
+  display: none;
+}
+
+.productData{
+  font-size: 14px;
+}
+
+@media print {
+  .no-print {
+    display: none;
+  }
+}

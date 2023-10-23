@@ -1,0 +1,24 @@
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {environment} from '../../../environments/environment.prod';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PaymentService {
+
+  SERVER = '';
+
+  constructor(private httpClient: HttpClient) {
+    this.SERVER = environment.baseURL;
+  }
+
+  callPaymentEndpoint(resArr: any) {
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'payment/purchaseInvoices_byBusinessName', resArr, { headers });
+  }
+  getPaymentByBussiness(resArr: any) {
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'payment/purchaseInvoices_byBusinessName', resArr, { headers });
+  }
+}

@@ -1,0 +1,256 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card tab2-card">
+        <div class="card-body tab2-card">
+          <ngb-tabset class="tab-coupon">
+
+            <ngb-tab title="Partner List">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show" id="account" role="tabpanel" aria-labelledby="account-tab">
+                  <div class="custom-datatable">
+                    <div class="clearfix"></div>
+                    <div class="col-md-6">
+                      <input autofocus type="text" class="form-control" placeholder="Search By Business Name..."
+                             (input)="FilterUsersByBusinessName($event.target.value)"  style="width: 60%"/>
+                    </div>
+                    <ng-template #defaultView>
+                      <ngx-datatable class="bootstrap expandable" [rows]="approveUsersArr" [columnMode]="'force'"
+                                     [headerHeight]="50"
+                                     [footerHeight]="50" [rowHeight]="'auto'" [limit]="list_pages2" [selected]="selected"
+                                     [selectionType]="false" [selectAllRowsOnPage]="false" (select)='onSelect($event)'>
+
+                        <ngx-datatable-column name="Partner Id" [width]="10"></ngx-datatable-column>
+                        <ngx-datatable-column name="Business Name" [width]="80"></ngx-datatable-column>
+                        <!--<ngx-datatable-column name="Owner Name" [width]="100"></ngx-datatable-column>-->
+                        <ngx-datatable-column name="Email" [width]="80"></ngx-datatable-column>
+                        <ngx-datatable-column name="Mobile" [width]="20"></ngx-datatable-column>
+                        <ngx-datatable-column name="Disable" [width]="60">
+                          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                       let-row="row">
+                            <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
+                            <button type="button" (click)='disableUsers(rowIndex)'
+                                    style="width: 75%;height: auto;font-size: 10px;"
+                                    class="btn btn-outline-danger"
+                            >Disable
+                            </button>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Action" prop="name" [width]="10">
+                          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                       let-row="row">
+                            <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
+                            <button type="button" (click)='ApproveUsersTwo(rowIndex)'
+                                    style="width: 75%;height: auto;font-size: 10px;"
+                                    class="btn btn-outline-success"
+                            >View
+                            </button>
+                          </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column name="Login" prop="name" [width]="10">
+                          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                       let-row="row">
+                            <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
+                            <button type="button" (click)='loginAsPartner(rowIndex)'
+                                    style="width: 75%;height: auto;font-size: 10px;"
+                                    class="btn btn-primary">Go <i class="fa fa-sign-in" aria-hidden="true"></i>
+                              <!--<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>-->
+                            </button>
+                          </ng-template>
+                        </ngx-datatable-column>
+
+                        <!--<ngx-datatable-column name="contactNo" [width]="60"></ngx-datatable-column>-->
+                        <!--<ngx-datatable-column name="Vendor" [width]="30"></ngx-datatable-column>-->
+                      </ngx-datatable>
+                    </ng-template>
+
+
+                    <div *ngIf="filteredUsers.length>0; else defaultView">
+                      <ngx-datatable class="bootstrap expandable" [rows]="filteredUsers" [columnMode]="'force'"
+                                     [headerHeight]="50"
+                                     [footerHeight]="50" [rowHeight]="'auto'" [limit]="list_pages2" [selected]="selected"
+                                     [selectionType]="false" [selectAllRowsOnPage]="false" (select)='onSelect($event)'>
+                        <ngx-datatable-column name="Partner Id" [width]="10"></ngx-datatable-column>
+                        <ngx-datatable-column name="Business Name" [width]="80"></ngx-datatable-column>
+                        <!--<ngx-datatable-column name="Owner Name" [width]="100"></ngx-datatable-column>-->
+                        <ngx-datatable-column name="Email" [width]="80"></ngx-datatable-column>
+                        <ngx-datatable-column name="Mobile" [width]="20"></ngx-datatable-column>
+                        <ngx-datatable-column name="Disable" [width]="60">
+                          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                       let-row="row">
+                            <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
+                            <button type="button" (click)='disableUsers(rowIndex)'
+                                    style="width: 75%;height: auto;font-size: 10px;"
+                                    class="btn btn-outline-danger"
+                            >Disable
+                            </button>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <ngx-datatable-column name="Action" prop="name" [width]="10">
+                          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                       let-row="row">
+                            <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
+                            <button type="button" (click)='ApproveUsersTwo(rowIndex)'
+                                    style="width: 75%;height: auto;font-size: 10px;"
+                                    class="btn btn-outline-success"
+                            >View
+                            </button>
+                          </ng-template>
+                        </ngx-datatable-column>
+
+                        <ngx-datatable-column name="Login" prop="name" [width]="10">
+                          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                       let-row="row">
+                            <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
+                            <button type="button" (click)='loginAsPartner(rowIndex)'
+                                    style="width: 75%;height: auto;font-size: 10px;"
+                                    class="btn btn-primary">Go <i class="fa fa-sign-in" aria-hidden="true"></i>
+                              <!--<i class="fa fa-arrow-circle-right" aria-hidden="true"></i>-->
+                            </button>
+                          </ng-template>
+                        </ngx-datatable-column>
+
+                      </ngx-datatable>
+                    </div>
+
+                  </div>
+                </div>
+              </ng-template>
+
+            </ngb-tab>
+            <ngb-tab title="Pending Approval Partner List" *ngIf="isAdmin">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show" id="account1" role="tabpanel" aria-labelledby="account-tab">
+                  <div class="custom-datatable">
+                    <div class="clearfix"></div>
+                    <ngx-datatable class="bootstrap expandable" [rows]="nonApproveUsersArr" [columnMode]="'force'"
+                                   [headerHeight]="50"
+                                   [footerHeight]="50" [rowHeight]="'auto'" [limit]="list_pages2" [selected]="selected"
+                                   [selectionType]="false" [selectAllRowsOnPage]="false">
+
+                      <ngx-datatable-column name="Partner Id" [width]="10"></ngx-datatable-column>
+                      <ngx-datatable-column name="Business Name" [width]="30"></ngx-datatable-column>
+                      <!--<ngx-datatable-column name="Owner Name" [width]="30"></ngx-datatable-column>-->
+                      <ngx-datatable-column name="Email" [width]="30"></ngx-datatable-column>
+                      <ngx-datatable-column name="Mobile" [width]="20"></ngx-datatable-column>
+                      <!--<ngx-datatable-column name="Register No" [width]="30"></ngx-datatable-column>-->
+                      <!--<ngx-datatable-column name="Approved"></ngx-datatable-column>-->
+                      <ngx-datatable-column name="Action" prop="name" [width]="10">
+                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                     let-row="row">
+                          <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
+                          <button type="button" (click)='ApproveUsers(rowIndex)'
+                                  style="width: 96px;height: 28px;font-size: 10px;"
+                                  class="btn btn-outline-success"
+                          >REVIEW
+                          </button>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+            <ngb-tab title="Request Category List (Vendor)" *ngIf="isAdmin">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show" id="account1" role="tabpanel" aria-labelledby="account-tab">
+                  <div class="custom-datatable">
+                    <div class="clearfix"></div>
+                    <ngx-datatable class="bootstrap expandable" [rows]="pendingPartnerCategoriesArr" [columnMode]="'force'"
+                                   [headerHeight]="50"
+                                   [footerHeight]="50" [rowHeight]="'auto'" [limit]="list_pages2" [selected]="selected"
+                                   [selectionType]="false" [selectAllRowsOnPage]="false">
+
+                      <ngx-datatable-column name="Partner Code" [width]="10"></ngx-datatable-column>
+                      <ngx-datatable-column name="Partner Name" [width]="30"></ngx-datatable-column>
+                      <ngx-datatable-column name="Category" [width]="50"></ngx-datatable-column>
+                      <ngx-datatable-column name="Action" prop="name" [width]="10">
+                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                     let-row="row">
+                          <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
+                          <button type="button" (click)='ApproveCategory(rowIndex)'
+                                  style="width: 96px;height: 28px;font-size: 10px;"
+                                  class="btn btn-outline-success"
+                          >Approve
+                          </button>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+            <ngb-tab title="Request Category List (Manager)" *ngIf="isAdmin">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show" id="account1" role="tabpanel" aria-labelledby="account-tab">
+                  <div class="custom-datatable">
+                    <div class="clearfix"></div>
+                    <ngx-datatable class="bootstrap expandable" [rows]="pendingManagerCategoriesArr" [columnMode]="'force'"
+                                   [headerHeight]="50"
+                                   [footerHeight]="50" [rowHeight]="'auto'" [limit]="list_pages2" [selected]="selected"
+                                   [selectionType]="false" [selectAllRowsOnPage]="false">
+
+                      <ngx-datatable-column name="User Code" [width]="10"></ngx-datatable-column>
+                      <ngx-datatable-column name="User Name" [width]="30"></ngx-datatable-column>
+                      <ngx-datatable-column name="Category" [width]="50"></ngx-datatable-column>
+                      <ngx-datatable-column name="Action" prop="name" [width]="10">
+                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                     let-row="row">
+                          <button type="button" (click)='ApproveManagerCategory(rowIndex)'
+                                  style="width: 96px;height: 28px;font-size: 10px;"
+                                  class="btn btn-outline-success"
+                          >Approve
+                          </button>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+            <ngb-tab title="User List" *ngIf="isAdmin">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show" id="account" role="tabpanel" aria-labelledby="account-tab">
+                  <div class="custom-datatable">
+                    <div class="clearfix"></div>
+                    <ngx-datatable class="bootstrap expandable" [rows]="allUserListWithoutPartnersArr" [columnMode]="'force'"
+                                   [headerHeight]="50"
+                                   [footerHeight]="50" [rowHeight]="'auto'" [limit]="list_pages2" [selected]="selected"
+                                   [selectionType]="false" [selectAllRowsOnPage]="false" (select)='onSelect($event)'>
+
+                      <ngx-datatable-column name="User Id" [width]="10"></ngx-datatable-column>
+                      <ngx-datatable-column name="User Name" [width]="80"></ngx-datatable-column>
+                      <!--<ngx-datatable-column name="Owner Name" [width]="100"></ngx-datatable-column>-->
+                      <ngx-datatable-column name="Email" [width]="80"></ngx-datatable-column>
+                      <ngx-datatable-column name="Mobile" [width]="20"></ngx-datatable-column>
+                      <ngx-datatable-column name="Role" [width]="20"></ngx-datatable-column>
+                      <!--<ngx-datatable-column name="Business RegisterNo" [width]="60"></ngx-datatable-column>-->
+                      <ngx-datatable-column name="Action" prop="name" [width]="10">
+                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                     let-row="row">
+                          <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
+                          <button type="button" (click)='disableUserRole(rowIndex)'
+                                  style="width: 75%;height: auto;font-size: 10px;"
+                                  class="btn btn-outline-success"
+                          >Disable
+                          </button>
+                        </ng-template>
+                      </ngx-datatable-column>
+                    </ngx-datatable>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+          </ngb-tabset>
+          <!--<div class="pull-right">-->
+          <!--<button type="button" (click)="saveCategory()" class="btn btn-primary">Save</button>-->
+          <!--</div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

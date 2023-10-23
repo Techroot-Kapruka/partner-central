@@ -1,0 +1,26 @@
+<body>
+<div class="card" style="border-radius: 7%;">
+    <img src='assets/images/dashboard/icons8-dustbin-68.png'/>
+
+    <div class="card-body">
+        <div class="container">
+            <h6 class="card-title" style="font-family: 'Lucida Sans'">Submit The Reason For Declining {{ msgHeaderName }} ....!</h6>
+            <!--      <h6 style="margin-bottom: 20px">dj adf ds dfsf fsd fdsfs fdsfds.</h6>-->
+            <form [formGroup]="declinedMsgBox" (submit)="declinedPartnerorProduct()">
+                <div class="row" style="justify-content: center; padding-top: 10px; ">
+          <textarea formControlName="decilinedMessage" id="decilinedMessage" style="width: 80%" type="text" (keyup)="validateHolder()">
+        </textarea>
+                </div>
+                <label style="justify-content: center; color: red; display: none; animation: blink 2s infinite;"
+                       id="declinedMessageLBL">** please enter the reason **</label>
+                <div class="row" style="justify-content: center; padding-top: 10px;">
+                    <button type="submit" class="btn" style="background-color: #5a0ff1"><strong style="color: white">Submit</strong>
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+</body>
+

@@ -1,0 +1,103 @@
+<style>
+  #select_od {
+    width: 350px !important;
+  }
+</style>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <!--<div class="custom-datatable">-->
+          <!--          <div *ngIf="isAdmin" class="btn-popup pull-right">-->
+          <!--            <select (change)="selectPartner()" id="select_od" class="form-control">-->
+          <!--              <option selected>&#45;&#45; Select Vendor &#45;&#45;</option>-->
+          <!--              <option *ngFor="let partners of partner" value="{{partners['partner_u_id']}}">{{partners['name']}}-->
+          <!--              </option>-->
+
+          <!--            </select>-->
+          <!--          </div>-->
+
+
+          <div class="btn-popup pull-right">
+            <div class="row">
+              <div class="col-md-3">
+                <select style="height: 35px; text-align: center" class="form-select" [(ngModel)]="filterStatus" (change)="applyFilters()">
+                  <option value="" disabled selected hidden>Status</option>
+                  <option value="Draft">Draft</option>
+                  <option value="On Hold">On Hold</option>
+                  <option value="To Receive and Bill">To Receive and Bill</option>
+                  <option value="To Bill">To Bill</option>
+                  <option value="To Receive">To Receive</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Cancelled">Cancelled</option>
+                  <option value="Closed">Closed</option>
+                  <option value="Delivered">Delivered</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <input class="form-control" type="text" [(ngModel)]="filterVendorName" (input)="applyFilters()"
+                       placeholder="Filter by Vendor Name">
+              </div>
+              <div class="col-md-3">
+                <input class="form-control" type="text" [(ngModel)]="filterPurchaseOrderNo" (input)="applyFilters()"
+                       placeholder="Filter by PO No">
+              </div>
+              <div class="col-md-3">
+                <input class="form-control" type="date" [(ngModel)]="filterDate" (input)="applyFilters()"
+                       placeholder="Filter by Date">
+              </div>
+            </div>
+          </div>
+
+          <table class="table table-striped table-hover table-sm" style="cursor: pointer; font-size: 13px">
+            <thead style="font-size: 15px">
+            <tr>
+              <th scope="col">PO Number</th>
+              <th *ngIf="isAdmin" scope="col">Vendor Code</th>
+              <th scope="col">Vendor Name</th>
+              <th scope="col">Total Amount</th>
+              <th scope="col">Date</th>
+              <th scope="col">Status</th>
+              <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr *ngFor="let pos of filteredPoList; let i = index">
+              <td>
+                {{pos.purchase_order_no}}
+              </td>
+              <td *ngIf="isAdmin">
+                {{pos.vendor_code}}
+              </td>
+              <td>
+                {{pos.vendor_name}}
+              </td>
+              <td>
+                {{pos.total}}
+              </td>
+              <td>
+                {{pos.transaction_date}}
+              </td>
+              <td>
+                {{pos.status}}
+              </td>
+              <td>
+                <button class="btn btn-outline-success" style="height: 25px; font-size: 0.5rem;font-weight: 700">
+                  View
+                </button>
+              </td>
+            </tr>
+
+            </tbody>
+          </table>
+
+          <!--          <ngb-pagination [collectionSize]="totalPages" [(page)]="page" [maxSize]="10"-->
+          <!--                          [boundaryLinks]="true" (pageChange)="getSelectedRow(page)"></ngb-pagination>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

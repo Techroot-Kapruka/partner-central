@@ -1,0 +1,508 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card tab2-card">
+        <div class="card-body tab2-card">
+          <ngb-tabset class="tab-coupon">
+            <ngb-tab title="Category">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show col-md-8" id="account" role="tabpanel"
+                     aria-labelledby="account-tab">
+                  <form [formGroup]="accountForm" (ngSubmit)="callingFunction()" class="needs-validation user-add"
+                        novalida>
+                    <h4>Category Details</h4>
+                    <div class="form-group row">
+                      <label for="txt_cat_name" class="col-xl-3 col-md-4">Name</label>
+                      <input formControlName="code" hidden class="form-control col-xl-8 col-md-7" id="txt_cat_code"
+                             type="text" required="">
+                      <input formControlName="categoryName" class="form-control col-xl-8 col-md-7" id="txt_cat_name"
+                             type="text" required>
+                    </div>
+                    <div class="form-group row">
+                      <label for="txt_cat_description" class="col-xl-3 col-md-4"> Description</label>
+                      <input formControlName="description" class="form-control col-xl-8 col-md-7"
+                             id="txt_cat_description"
+                             type="text" required="">
+                    </div>
+                    <div class="form-group row">
+                      <label for="txt_price_rate" class="col-xl-3 col-md-4"> Price Rate</label>
+                      <input formControlName="price_rate" class="form-control col-xl-4 col-md-7"
+                             id="txt_price_rate"
+                             type="text" required="">
+
+                      <label for="txt_price_rate" class="col-xl-3 col-md-4" style="font-weight: bold; position: relative;margin-left: -10%;"> %</label>
+
+                    </div>
+                    <div class="form-group row" style="float: right; margin-right: 6%">
+                      <div class="pull-right" style="margin-right: 13px;">
+                        <button type="submit" style="display: none" id="update" class="btn btn-success">Update</button>
+                      </div>
+                      <div class="pull-left">
+                        <button type="submit" id="save" class="btn btn-primary">Save</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="clearfix"></div>
+                <!--=======================================First template For Editing Category =======================================================-->
+                <div class="custom-datatable">
+                  <div class="clearfix"></div>
+                  <ngx-datatable class="bootstrap expandable" [rows]="proMainCat" [columnMode]="'force'"
+                                 [headerHeight]="50"
+                                 [footerHeight]="50" [rowHeight]="'auto'" [limit]="list_pages2" [selected]="selected"
+                                 [selectionType]="false" [selectAllRowsOnPage]="false">
+                    <ngx-datatable-column name="Name" [width]="30"></ngx-datatable-column>
+                    <ngx-datatable-column name="Description" [width]="30"></ngx-datatable-column>
+                    <ngx-datatable-column name="Price Rate" [width]="30"></ngx-datatable-column>
+                    <ngx-datatable-column name="Action" prop="name" [width]="30">
+                      <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                   let-row="row">
+                        <button type="button" (click)='EditCategory(rowIndex)'
+                                style="width: 96px;height: 28px;font-size: 10px;" class="btn btn-outline-success">
+                          Edit
+                        </button>
+                      </ng-template>
+                    </ngx-datatable-column>
+                  </ngx-datatable>
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+            <!--=========================================Sub Category Creating template=====================================================-->
+            <ngb-tab title="Sub Category">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show col-md-12" id="account1" role="tabpanel"
+                     aria-labelledby="account-tab">
+                  <form [formGroup]="categoryForm" (ngSubmit)="saveSubcategory()" class="needs-validation user-add"
+                        novalida>
+                    <h4>Sub Category Details</h4>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-xl-4 col-md-4">Category</label>
+                          <select class="custom-select col-xl-8 col-md-7" id="select01" formControlName="catCode">
+                            <option value="">-- Select Category --</option>
+                            <option *ngFor="let productCategor of productCategoryArray"
+                                    ngValue="{{productCategor['code']}}">
+                              {{productCategor['name']}}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <!-- =======editable Input for update button=========== -->
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label for="validationCustom123" style="display: none" id="oldCatDev"
+                                 class="col-xl-4 col-md-4">Old Category</label>
+                          <input class="form-control col-xl-8 col-md-7" style="display: none" disabled
+                                 formControlName="mainCatName"
+                                 id="oldCatName"
+                                 type="text" required="">
+                        </div>
+                      </div>
+                    </div>
+                    <!--=================== editable Input for Update End===========-->
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label for="validationCustom123" class="col-xl-4 col-md-4">Name</label>
+                          <input class="form-control col-xl-8 col-md-7" formControlName="subCategoryName"
+                                 id="validationCustom123"
+                                 type="text" required="">
+                        </div>
+                      </div>
+                      <div class="col-md-6"></div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label for="validationCustom2443" class="col-xl-4 col-md-4">Description</label>
+                          <input class="form-control col-xl-8 col-md-7" formControlName="subDescription"
+                                 id="validationCustom2443"
+                                 type="text" required="">
+                        </div>
+                      </div>
+                      <div class="col-md-6"></div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label for="txt_sub_price_rate" class="col-xl-4 col-md-4">Price Rate</label>
+                          <input class="form-control col-xl-7 col-md-7" formControlName="subPricerate"
+                                 id="txt_sub_price_rate"
+                                 type="text" required="">
+                          <label for="txt_sub_price_rate" class="col-xl-1 col-md-1"
+                                 style="font-weight: bold; position: relative;margin-left: -5%;"> %</label>
+                        </div>
+                      </div>
+                      <div class="col-md-6"></div>
+                      <div class="col-md-6">
+                        <div class="form-group row" style="float: right;margin-right: 6%">
+                          <div class="pull-left">
+                            <button type="submit" id="subSave" class="btn btn-primary">Save</button>
+                          </div>
+                        </div>
+                        <input hidden formControlName="subCatCode"
+                               id="subCatCode"
+                               type="text" required="">
+                        <input hidden formControlName="mainCatCode"
+                               id="mainCatCode"
+                               type="text" required="">
+                        <div class="form-group row" style="float: right;margin-right: 6%">
+                          <div class="pull-left">
+                            <button type="submit" style="display: none" id="subEdit" class="btn btn-success">Update
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <!--++++++++++++++++Data Table for sub Category+++++++++-->
+                <div class="custom-datatable">
+                  <div class="clearfix"></div>
+                  <ngx-datatable class="bootstrap expandable" [rows]="subcategoryArray" [columnMode]="'force'"
+                                 [headerHeight]="50"
+                                 [footerHeight]="50" [rowHeight]="'auto'" [limit]="list_pages2" [selected]="selected"
+                                 [selectionType]="false" [selectAllRowsOnPage]="false">
+
+                    <!--<ngx-datatable-column name="Code" [width]="10"></ngx-datatable-column>-->
+                    <ngx-datatable-column name="Name" [width]="10"></ngx-datatable-column>
+                    <ngx-datatable-column name="Description" [width]="10"></ngx-datatable-column>
+                    <ngx-datatable-column name="Category" [width]="10"></ngx-datatable-column>
+                    <!--<ngx-datatable-column name="catCode" [width]="10"></ngx-datatable-column>-->
+                    <ngx-datatable-column name="Price Rate" [width]="30"></ngx-datatable-column>
+                    <ngx-datatable-column name="Action" prop="name" [width]="10">
+                      <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                   let-row="row">
+                        <button type="button" (click)='editSubCategory(rowIndex)'
+                                style="width: 96px;height: 28px;font-size: 10px;"
+                                class="btn btn-outline-success"
+                        >Edit
+                        </button>
+                      </ng-template>
+                    </ngx-datatable-column>
+                  </ngx-datatable>
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+
+            <!--++++++++++++++++++++++form Sub-Sub Category Details++++++++++++++++++++-->
+            <ngb-tab title="Sub-Sub Category">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show col-md-12" id="account1" role="tabpanel"
+                     aria-labelledby="account-tab">
+                  <form [formGroup]="subSubCategory" class="needs-validation user-add" (ngSubmit)="saveSubSubcategory()"
+                        novalida>
+                    <h4>Sub-Sub Category Details</h4>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-xl-4 col-md-4">Category</label>
+                          <select class="custom-select col-xl-8 col-md-7" id="category_ids"
+                                  formControlName="mainCategoryMain" (change)="getSubcategory()">
+                            <option value="">-- Select Category --</option>
+                            <option *ngFor="let productCategor of productCategoryArray"
+                                    value="{{productCategor['code']}}">
+                              {{productCategor['name']}}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label style="display: none" id="lblMainCat" class="col-xl-4 col-md-4">Old Category</label>
+                          <input disabled
+                                 style="display: none"
+                                 class="form-control col-xl-8 col-md-7"
+                                 formControlName="mainCategorytxt"
+                                 id="txt_mainCat"
+                                 type="text" required="">
+                          <input hidden
+                                 class="form-control col-xl-8 col-md-7"
+                                 formControlName="mainCategoryCode"
+                                 id="txt_mainCatCode"
+                                 type="text"
+                                 required="">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-xl-4 col-md-4">Sub Category</label>
+                          <select class="custom-select col-xl-8 col-md-7" formControlName="subCategorynameCt">
+                            <option value="">-- Select Sub Category --</option>
+                            <option *ngFor="let productSubCategory of productSubCategoryArray"
+                                    value="{{productSubCategory['code']}}">{{productSubCategory['name']}}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label for="validationCustom1"
+                                 style="display: none"
+                                 disabled=""
+                                 id="lblOldSubCat"
+                                 class="col-xl-4 col-md-4">Old Sub Category</label>
+                          <input formControlName="subCategoryName"
+                                 disabled
+                                 style="display: none"
+                                 class="form-control col-xl-8 col-md-7"
+                                 id="subCategoryName"
+                                 type="text" required="">
+                          <input formControlName="subCategoryCode"
+                                 hidden
+                                 class="form-control col-xl-8 col-md-7"
+                                 id="subCategoryCode"
+                                 type="text" required="">
+                          <input formControlName="subSubCategoryCode"
+                                 hidden
+                                 class="form-control col-xl-8 col-md-7"
+                                 id="subSubCategoryCode"
+                                 type="text"
+                                 required="">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label for="validationCustom1" class="col-xl-4 col-md-4">Name</label>
+                          <input formControlName="subSubCategoryName" class="form-control col-xl-8 col-md-7"
+                                 id="validationCustom1"
+                                 type="text" required="">
+                        </div>
+                      </div>
+                      <div class="col-md-6"></div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label for="validationCustom2" class="col-xl-4 col-md-4">Description</label>
+                          <input formControlName="subSubCategoryDescription"
+                                 class="form-control col-xl-8 col-md-7"
+                                 id="validationCustom2"
+                                 type="text"
+                                 required="">
+                        </div>
+                      </div>
+                      <div class="col-md-6"></div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label for="txt_subs_price_rate" class="col-xl-4 col-md-4">Price Rate</label>
+                          <input class="form-control col-xl-7 col-md-7" formControlName="subsubPricerate"
+                                 id="txt_subs_price_rate"
+                                 type="text" required="">
+                          <label for="txt_subs_price_rate" class="col-xl-1 col-md-1"
+                                 style="font-weight: bold; position: relative;margin-left: -5%;"> %</label>
+                        </div>
+                      </div>
+                      <div class="col-md-6"></div>
+                      <div class="col-md-6">
+                        <div class="form-group row" id="subSubSave" style="float: right;margin-right: 6%">
+                          <div class="pull-left">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                          </div>
+                        </div>
+                        <div class="form-group row" id="subSubEdit"
+                             style="display: none; float: right;margin-right: 6%">
+                          <div class="pull-left">
+                            <button type="submit" class="btn btn-success">Update</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="custom-datatable">
+                  <div class="clearfix"></div>
+                  <ngx-datatable class="bootstrap expandable" [rows]="subsubCatAarray" [columnMode]="'force'"
+                                 [headerHeight]="50"
+                                 [footerHeight]="50" [rowHeight]="'auto'" [limit]="list_pages2" [selected]="selected"
+                                 [selectionType]="false" [selectAllRowsOnPage]="false">
+
+                    <!--<ngx-datatable-column name="Code" [width]="10"></ngx-datatable-column>-->
+                    <ngx-datatable-column name="Name"></ngx-datatable-column>
+                    <!--<ngx-datatable-column name="subCatName" [width]="10"></ngx-datatable-column>-->
+                    <ngx-datatable-column name="Description"></ngx-datatable-column>
+                    <ngx-datatable-column name="Sub Category"></ngx-datatable-column>
+                    <ngx-datatable-column name="Price Rate" [width]="30"></ngx-datatable-column>
+                    <ngx-datatable-column name="Action" prop="name">
+                      <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                   let-row="row">
+                        <button type="button" (click)='editSubSubCategory(rowIndex)'
+                                style="width: 96px;height: 28px;font-size: 10px;"
+                                class="btn btn-outline-success"
+                        >Edit
+                        </button>
+                      </ng-template>
+                    </ngx-datatable-column>
+                  </ngx-datatable>
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+
+            <ngb-tab title="Sub-Sub-Sub Category">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show col-md-12" id="account1" role="tabpanel"
+                     aria-labelledby="account-tab">
+                  <form [formGroup]="subSubSubCategory" class="needs-validation user-add"
+                        (ngSubmit)="saveSubSubSubcategory()">
+                    <h4>Sub-Sub-Sub Category Details</h4>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-xl-4 col-md-4">Category</label>
+                          <select class="custom-select col-xl-8 col-md-7" id="category_id_sub_sub"
+                                  formControlName="catCode3" (change)="getSubcategoryForSubSubSub()">
+                            <option value="">-- Select Category --</option>
+                            <option *ngFor="let productCategor of productCategoryArray"
+                                    value="{{productCategor['code']}}">
+                              {{productCategor['name']}}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label style="display: none" id="lblMainCatInSub3" class="col-xl-4 col-md-4">Old
+                            Category</label>
+                          <input disabled style="display: none" class="form-control col-xl-8 col-md-7"
+                                 formControlName="mainCategoryForSubSubSub"
+                                 id="txt_mainCatInSub3"
+                                 type="text" required="">
+                          <input hidden class="form-control col-xl-8 col-md-7"
+                                 formControlName="mainCategoryCodeForSubSubSub"
+                                 id="txt_mainCatCodeInSub3"
+                                 type="text" required="">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-xl-4 col-md-4">Sub Category</label>
+                          <select class="custom-select col-xl-8 col-md-7" id="subCategoryIdInSubSubSub"
+                                  formControlName="SubCatCode3" (change)="getSubSubcategory()">
+                            <option value="">-- Select Sub Category --</option>
+                            <option *ngFor="let productSubCategory of productSubCategoryArray"
+                                    value="{{productSubCategory['code']}}">{{productSubCategory['name']}}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label style="display: none" id="lblOldSubCatInSub3" class="col-xl-4 col-md-4">Old sub
+                            Category</label>
+                          <input disabled style="display: none" class="form-control col-xl-8 col-md-7"
+                                 formControlName="oldSubCategoryNameForSubSubSub"
+                                 id="oldSubCategoryNameInSub3"
+                                 type="text" required="">
+                          <input hidden class="form-control col-xl-8 col-md-7"
+                                 formControlName="oldSubCategorycodeForSubSubSub"
+                                 id="oldSubCategorycodeForSubSubSub"
+                                 type="text" required="">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label class="col-xl-4 col-md-4">Sub Sub Category</label>
+                          <select class="custom-select col-xl-8 col-md-7" formControlName="subSubCatCode3">
+                            <option value="">-- Select Sub Sub Category --</option>
+                            <option *ngFor="let productSubSubCategory of productSubSubCategoryArray"
+                                    value="{{productSubSubCategory['code']}}">{{productSubSubCategory['name']}}
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label style="display: none" id="lblSubCatForSubSubSub" class="col-xl-4 col-md-4">Old Sub Sub
+                            Category</label>
+                          <input disabled style="display: none" class="form-control col-xl-8 col-md-7"
+                                 formControlName="oldSubSubCategoryNameForSubSubSub"
+                                 id="oldSubSubCategoryNameForSubSubSub"
+                                 type="text" required="">
+                          <input hidden class="form-control col-xl-8 col-md-7"
+                                 formControlName="oldSubSubCategorycodeForSubSubSub"
+                                 id="oldSubSubCategorycodeForSubSubSub"
+                                 type="text" required="">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label for="validationCustom1" class="col-xl-4 col-md-4">Name</label>
+                          <input formControlName="subSubSubCategoryName" class="form-control col-xl-8 col-md-7"
+                                 id="validationCustom3"
+                                 type="text" required="">
+                        </div>
+                      </div>
+                      <div class="col-md-6"></div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label for="validationCustom2" class="col-xl-4 col-md-4">Description</label>
+                          <input formControlName="subSubSubCategoryDescription" class="form-control col-xl-8 col-md-7"
+                                 id="validationCustom3"
+                                 type="text" required="">
+                        </div>
+                      </div>
+                      <div class="col-md-6"></div>
+                      <div class="col-md-6">
+                        <div class="form-group row">
+                          <label for="txt_subsub_price_rate" class="col-xl-4 col-md-4">Price Rate</label>
+                          <input class="form-control col-xl-7 col-md-8" formControlName="subsubsubPricerate"
+                                 id="txt_subsub_price_rate"
+                                 type="text" required="">
+                          <label for="txt_subsub_price_rate" class="col-xl-1 col-md-0"
+                                 style="font-weight: bold; position: relative;margin-left: -5%;"> %</label>
+                        </div>
+                      </div>
+                      <div class="col-md-6"></div>
+                      <div class="col-md-6">
+                        <div class="form-group row" id="subSubSubSave" style="float: right;margin-right: 6%">
+                          <div class="pull-right">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                          </div>
+                        </div>
+                        <div class="form-group row" id="subSubSubEdit"
+                             style="display: none; float: right;margin-right: 6%">
+                          <div class="pull-right">
+                            <button type="submit" class="btn btn-success">Update</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="custom-datatable">
+                  <div class="clearfix"></div>
+                  <ngx-datatable class="bootstrap expandable" [rows]="subSubSubCategoryArray" [columnMode]="'force'"
+                                 [headerHeight]="50"
+                                 [footerHeight]="50" [rowHeight]="'auto'" [limit]="list_pages2" [selected]="selected"
+                                 [selectionType]="false" [selectAllRowsOnPage]="false">
+
+                    <!--<ngx-datatable-column name="Code" [width]="10"></ngx-datatable-column>-->
+                    <ngx-datatable-column name="Name"></ngx-datatable-column>
+                    <!--<ngx-datatable-column name="subCatName" [width]="10"></ngx-datatable-column>-->
+                    <ngx-datatable-column name="Description"></ngx-datatable-column>
+                    <ngx-datatable-column name="category"></ngx-datatable-column>
+                    <ngx-datatable-column name="Price Rate" [width]="30"></ngx-datatable-column>
+                    <ngx-datatable-column name="Action" prop="name">
+                      <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                   let-row="row">
+                        <button type="button" (click)='editSubSubSubCategory(rowIndex)'
+                                style="width: 96px;height: 28px;font-size: 10px;"
+                                class="btn btn-outline-success"
+                        >Edit
+                        </button>
+                      </ng-template>
+                    </ngx-datatable-column>
+                  </ngx-datatable>
+                </div>
+              </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
+          <!--<div class="pull-right">-->
+          <!--<button type="button" (click)="saveCategory()" class="btn btn-primary">Save</button>-->
+          <!--</div>-->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->

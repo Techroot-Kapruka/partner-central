@@ -1,0 +1,140 @@
+<!--NEW VERSION 1.0V-->
+<div class="top">
+  <img src="assets/images/loginPage/Logo.png" alt="Logo" style="max-width: 150px;">
+  <div class="top">
+    <div class="contact-info" style="color:#051923">
+      <p style="font-weight: bold;">Telephone: +94117551111</p>
+      <p style="font-weight: bold;">Email: colombo.office@kapruka.com </p>
+    </div>
+  </div>
+</div>
+<div class="blockCont">
+  <span class="desktopImgBlock"><img src="assets/images/loginPage/Logo.png" style="max-width: 120px" alt="Logo"></span>
+  <div class="middle-content">
+    <!--    <p style="">-->
+    <!--      Welcome to <br> Kapruka <br> Partner Central-->
+    <!--    </p>-->
+    <p class="mHide" style="font-size: 22px; font-weight: bold; color: #dedede; ">
+      Grow your business with the leading <br>
+      e-commerce platform in Sri Lanka.
+    </p>
+  </div>
+  <a class="floatingButtons" (click)="scrollToSection()">
+    Learn More
+    <div class="arrow arrow-first"></div>
+    <div class="arrow arrow-second"></div>
+  </a>
+  <div class="login-form">
+    <div class="blockB">
+      <h3 style="font-size: 16px;">
+        <span>Welcome to Kapruka Partner Central</span>
+      </h3>
+      <p style="color: #878585 !important; font-weight: bold;">
+        Create your account and start selling to millions of Sri Lankan online customers today with Kapruka.
+      </p>
+      <form>
+        <input type="text" id="username" placeholder="Email" name="username" [(ngModel)]="login.userName" required>
+        <!--<input type="password" id="password_" name="password" required>-->
+        <input name="password" type="password" placeholder="Password" id="password" (keyup.enter)="onSubmit2()"
+               [(ngModel)]="login.password" class="form-control" (click)="toggle()">
+        <!--<span style="margin-left: 79%;position: absolute;" toggle="#password-field" class="{{eyeIcon}}" ></span>-->
+        <br>
+        <!--<div class="remember-me">-->
+        <!--<label>-->
+        <!--<input type="checkbox" name="remember"> Remember me-->
+        <!--</label>-->
+        <!--</div>-->
+        <button type="submit" class="btn" (click)="onSubmit()">Log in</button>
+        <div class="forgot-password"
+             style="text-align: center; margin-top: 15px; font-family:sans-serif; font-size: 14px; font-weight: bold">
+          <a routerLink="/forgot-password">Forgotten Password?</a>
+        </div>
+        <hr>
+        <button class="btn1" type="submit" routerLink="/guest-user">Create new account</button>
+      </form>
+      <br>
+      <!--    <p style="font-size: 14px; color: #767574; text-align: center; margin-bottom: 0; font-weight: bold">Or continue with</p>-->
+      <!--    <br>-->
+      <!--    <div class="social-media" style="margin-top: 0">-->
+      <!--      &lt;!&ndash; Your social media icons and links go here &ndash;&gt;-->
+      <!--      <a href="#"><img src="assets/images/loginPage/Facebook_Logo.png" alt="Facebook"></a>-->
+      <!--      <a href="#"><img src="assets/images/loginPage/twitter.png" alt="Twitter"></a>-->
+      <!--      <a href="#"><img src="assets/images/loginPage/google.png" alt="Google"></a>-->
+      <!--    </div>-->
+    </div>
+  </div>
+</div>
+<section class="features" #sectionToScroll>
+  <div class="cards-containers">
+    <div class="topic">
+      <h2>Why SELL ON KAPRUKA ?</h2>
+    </div>
+    <div class="card">
+      <img src="assets/images/loginPage/Reach Millions of Customers.png" alt="Image">
+      <h3>Reach Millions of Customers</h3>
+      <p>Kapruka Partner Central offers access to a wide customer base in Sri Lanka, enabling easy expansion of market
+        reach to millions of active shoppers </p>
+    </div>
+    <div class="card">
+      <img src="assets/images/loginPage/marketing.png" alt="Image">
+      <h3>Deliver within 24 Hrs</h3>
+      <p>Accelerate sales with our exclusive 24-Hour Delivery - quick, convenient,
+        and customer-focused shopping experience! </p>
+    </div>
+    <div class="card">
+      <img src="assets/images/loginPage/streamlined_order_management.png" alt="Image">
+      <h3>Streamlined Order Management</h3>
+      <p>The partner central platform offers a user-friendly order management system, enhancing the entire
+        purchase-to-delivery process. It enables efficient order tracking, processing, and customization, leading to
+        saved time and business growth for partners while ensuring order control.</p>
+    </div>
+    <div class="card">
+      <img src="assets/images/loginPage/Reliable Logistics Support.png" alt="Image">
+      <h3>Reliable Logistics Support</h3>
+      <p>Kapruka Partner Central provides a reliable logistics system, ensuring timely product delivery across Sri
+        Lanka, allowing businesses to focus on growth. </p>
+    </div>
+    <div class="card">
+      <img src="assets/images/loginPage/Data-driven Insights.png" alt="Image">
+      <h3>Free registration</h3>
+      <p>Join our platform at no cost making it easier to get started on your journey with us! </p>
+    </div>
+    <div class="card">
+      <img src="assets/images/loginPage/Dedicated Support.png" alt="Image">
+      <h3>Dedicated Support</h3>
+      <p>The Kapruka team provides comprehensive support, from onboarding to technical assistance, along with training
+        resources and a dedicated account manager for partner success. </p>
+    </div>
+  </div>
+</section>
+<div class="footer">
+  <div class="square">
+    <div class="footer_p">
+      <div class="quote">
+        <img src="assets/images/loginPage/q.png">
+      </div>
+      <p>
+        Kapruka Partner Central provides you with the tools and resources you need to reach a wider audience, increase
+        your sales, and manage your business effectively. Whether you are a small retailer, a local brand, or a large
+        enterprise, we have the solutions to help you thrive in the digital marketplace.
+      </p>
+    </div>
+  </div>
+  <div class="footer_image">
+    <img src="assets/images/loginPage/14.jpg">
+  </div>
+</div>
+<div class="footerBottom">
+  <div class="blcokoneF">
+    <span>Tel:</span>
+    <a href="tel:+94117551111">+94117551111</a>
+  </div>
+  <div class="blcokoneF">
+    <span>Email:</span> <a href="mailto:+94117551111">partnercentral@kapruka.com</a>
+  </div>
+</div>
+
+
+
+
+

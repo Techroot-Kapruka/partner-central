@@ -1,0 +1,311 @@
+<style>
+  #mySearch {
+    width: 100%;
+    font-size: 18px;
+    padding: 11px;
+    border: 1px solid #ddd;
+  }
+
+  #myMenu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+
+
+
+
+
+  #myMenu li {
+    padding: 12px;
+    text-decoration: none;
+    color: black;
+    display: block
+  }
+
+  #myMenu li:hover {
+    background-color: #eee;
+  }
+
+  .labelAppendSub {
+    text-align: center;
+    margin-top: 1px;
+    color: #fff;
+    padding: 1px 20px 1px 10px;
+    border-radius: 3px;
+    border: 1px solid #000080;
+
+  }
+
+  .labelBoxappend {
+    padding-left: -1%;
+  }
+
+  .mainDev {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin: 5px 5px 0 0;
+
+  }
+
+  .clouseI {
+    position: absolute;
+    right: 5px;
+    top: -1px;
+    color: #fff;
+
+  }
+
+  /*=================================================*/
+
+  /* The switch - the box around the slider */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    float: right;
+  }
+
+  /* Hide default HTML checkbox */
+  .switch input {
+    display: none;
+  }
+
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input.default:checked + .slider {
+    background-color: #444;
+  }
+
+  input.primary:checked + .slider {
+    background-color: #2196F3;
+  }
+
+  input.success:checked + .slider {
+    background-color: #8bc34a;
+  }
+
+  input.info:checked + .slider {
+    background-color: #3de0f5;
+  }
+
+  input.warning:checked + .slider {
+    background-color: #FFC107;
+  }
+
+  input.danger:checked + .slider {
+    background-color: #f44336;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  /*=================================================*/
+
+</style>
+<form>
+  <div class="container-fluid">
+    <div class="row product-adding">
+      <div class="col-xl-12">
+        <div class="card">
+          <div class="card-header">
+
+            <div class="row" style="float: right;">
+              <div class="form-group">
+                <button type="button" (click)="backToLIst()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                        data-placement="top" title="Back to Shipment List"><i class="fa fa-arrow-circle-left"
+                                                                              aria-hidden="true"></i> Back
+                </button>
+              </div>
+            </div>
+            <br><br>
+
+            <div class="container" id="bedcrumss">
+              <div class="row">
+                <div class="col-md-12">
+                  <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="#" id="breadcrum"></a></li>
+                      <input class="form-control" hidden id="category_code" type="text" required="">
+                    </ol>
+                  </nav>
+                </div>
+              </div>
+            </div>
+
+            <!--=================================================-->
+
+            <!--<h5><strong>Basic Info</strong></h5>-->
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="card-body">
+                <div class="digital-add needs-validation">
+                  <div class="form-group">
+                    <label for="txt_proCode" class="col-form-label pt-0">Product Code</label>
+                    <input class="form-control" disabled id="txt_proCode" type="text" required="">
+                  </div>
+                  <div class="form-group">
+                    <label for="txt_availability" class="col-form-label">Availability</label>
+                    <input class="form-control" disabled id="txt_availability" type="text" required="">
+                  </div>
+
+                  <div class="form-group">
+                    <label class="col-form-label">Description</label>
+                    <textarea id="txt_description" style="pointer-events: none;" rows="4" cols="12"></textarea>
+                  </div>
+
+
+                  <!--<div class="form-group">-->
+                  <!--<label for="txt_deliveryFree" class="col-form-label pt-0">Delivery Type</label>-->
+                  <!--<input class="form-control" disabled id="txt_deliveryFree" type="text" required="">-->
+                  <!--</div>-->
+<!--                  <div class="form-group">-->
+<!--                    <label for="txt_specialNotice" class="col-form-label">Special Note</label>-->
+<!--                    <input class="form-control" disabled id="txt_specialNotice" type="text" required="">-->
+<!--                  </div>-->
+
+                  <div class="form-group" style="display: {{cakeCagtegories}}">
+                    <label for="txt_cake_cagtegories" class="col-form-label">Cake
+                      Cagtegories</label>
+                    <input class="form-control" disabled id="txt_cake_cagtegories" type="text" required="">
+                  </div>
+
+
+                  <div class="form-group" style="display: {{cakeCakeGroup}}">
+                    <label for="txt_cake_cake_group" class="col-form-label">Cake Cake
+                      Group</label>
+                    <input class="form-control" disabled id="txt_cake_cake_group" type="text" required="">
+                  </div>
+
+
+                  <div class="form-group" style="display: {{cakeType}}">
+                    <label for="txt_specialNotice" class="col-form-label">Cake Type</label>
+                    <input class="form-control" disabled id="txt_cake_type" type="text" required="">
+                  </div>
+
+
+                  <div class="form-group" style="display: {{cakeWeight}}">
+                    <label for="txt_cake_weight" class="col-form-label">Cake Weight</label>
+                    <input class="form-control" disabled id="txt_cake_weight" type="text" required="">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="card-body">
+                <div class="digital-add needs-validation">
+                  <div class="form-group">
+                    <label for="txt_proName" class="col-form-label pt-0"> Product Names</label>
+                    <input class="form-control" disabled id="txt_proName" type="text" required="">
+                  </div>
+                  <div class="form-group">
+                    <label for="txt_brand" class="col-form-label">Brand</label>
+                    <input class="form-control" disabled id="txt_brand" type="text" required="">
+                  </div>
+                  <br>
+
+                  <div class="add-product">
+                    <div class="row">
+                      <div class="col-xl-9 xl-50 col-sm-6 col-9">
+                        <img style="width: 287px;" id="mainImage" src="{{imageUrl}}" alt=""
+                             class="img-fluid image_zoom_1">
+                      </div>
+                      <!--<div class="col-xl-3 xl-50 col-sm-6 col-3" style="margin-left: -101px;">-->
+                      <!--<ul class="file-upload-product">-->
+                      <!--&lt;!&ndash;=========================&ndash;&gt;-->
+                      <!--<li>-->
+                      <!--<div class="box-input-file">-->
+                      <!--<input class="upload" id="image01" type="file">-->
+                      <!--<img class="imgUpload" id="imageOneO" alt="" src="assets/images/user.png">-->
+                      <!--</div>-->
+                      <!--</li>-->
+
+                      <!--<li>-->
+                      <!--<div class="box-input-file">-->
+                      <!--<input class="upload" type="file">-->
+                      <!--<img class="imgUpload" id="imageTwoO" alt="" src="assets/images/user.png">-->
+                      <!--</div>-->
+                      <!--</li>-->
+
+                      <!--<li>-->
+                      <!--<div class="box-input-file">-->
+                      <!--<input class="upload" type="file">-->
+                      <!--<img class="imgUpload" id="imageTreeE" alt="" src="assets/images/user.png">-->
+                      <!--</div>-->
+                      <!--</li>-->
+
+                      <!--<li>-->
+                      <!--<div class="box-input-file">-->
+                      <!--<input class="upload" type="file">-->
+                      <!--<img class="imgUpload" id="imageFourR" alt="" src="assets/images/user.png">-->
+                      <!--</div>-->
+                      <!--</li>-->
+
+
+                      <!--<li>-->
+                      <!--<div class="box-input-file">-->
+                      <!--<input class="upload" type="file">-->
+                      <!--<img class="imgUpload" id="imageFiveE" alt="" src="assets/images/user.png">-->
+                      <!--</div>-->
+                      <!--</li>-->
+                      <!--&lt;!&ndash;=============================&ndash;&gt;-->
+                      <!--</ul>-->
+                      <!--</div>-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+
+

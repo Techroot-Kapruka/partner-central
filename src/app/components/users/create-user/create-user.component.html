@@ -1,0 +1,393 @@
+<!-- Container-fluid starts-->
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card tab2-card">
+        <div class="card-header">
+          <h5> Add User</h5>
+        </div>
+
+
+        <div class="card-body tab2-card">
+          <ngb-tabset class="tab-coupon">
+            <ngb-tab title="Account">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show" id="account" role="tabpanel"
+                     aria-labelledby="account-tab">
+                  <form class="needs-validation user-add" #userForm="ngForm" (submit)="addUser(userForm)" novalida>
+                    <h4>Account Details</h4>
+                    <div class="form-group row">
+                      <label for="validationCustom0" class="col-xl-3 col-md-4">Contact Person Name <span
+                        style="color:red">*</span> </label>
+
+                      <input class="form-control col-xl-8 col-md-7" [required]="" name="contactPersonName"
+                             [(ngModel)]="user.contactPersonName" id="validationCustom0"
+                             type="text" required="">
+
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="validationCustom1" class="col-xl-3 col-md-4"> Contact No <span
+                        style="color:red">*</span></label>
+                      <input class="form-control col-xl-8 col-md-7" name="contactNo" [(ngModel)]="user.contactNo"
+                             id="validationCustom1"
+                             type="text" required="">
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="validationCustom9" class="col-xl-3 col-md-4"> Nic <span
+                        style="color:red">*</span></label>
+                      <input class="form-control col-xl-8 col-md-7" name="nic" [(ngModel)]="user.nic"
+                             id="validationCustom9"
+                             type="text" required="">
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="validationCustom6" class="col-xl-3 col-md-4">Company Name <span
+                        style="color:red">*</span></label>
+                      <input class="form-control col-xl-8 col-md-7" id="validationCustom6"
+                             type="text" required="" name="companyName" [(ngModel)]="user.companyName">
+                    </div>
+                    <div class="form-group row">
+                      <label for="validationCustom3" class="col-xl-3 col-md-4"> Email <span style="color:red">*</span></label>
+                      <input class="form-control col-xl-8 col-md-7" name="email" [(ngModel)]="user.email"
+                             id="validationCustom3" type="email" required="" >
+                    </div>
+
+                    <div class="form-group row">
+                      <label for="validationCustom2" class="col-xl-3 col-md-4">User Name <span style="color:red">*</span></label>
+                      <input class="form-control col-xl-8 col-md-7" name="userName" [(ngModel)]="user.userName"
+                             id="validationCustom2" type="text" required="" [disabled]="updateUserNameFromEmail()" [readonly]="true">
+                    </div>
+
+                    <!--                    <div class="form-group row">-->
+<!--                      <label for="validationCustom3" class="col-xl-3 col-md-4"> Email <span-->
+<!--                        style="color:red">*</span></label>-->
+<!--                      <input class="form-control col-xl-8 col-md-7" name="email" [(ngModel)]="user.email"-->
+<!--                             id="validationCustom3"-->
+<!--                             type="text" required="">-->
+<!--                    </div>-->
+                    <div class="form-group row">
+                      <label for="validationCustom4" class="col-xl-3 col-md-4">Password <span style="color:red">*</span></label>
+                      <input class="form-control col-xl-8 col-md-7" name="password" [(ngModel)]="user.password"
+                             id="validationCustom4"
+                             type="{{type}}" required="">
+                      <span style="margin-top: 0%;" toggle="#password-field" class="{{eyeIcon}}" (click)="toggle()"></span>
+                    </div>
+                    <div class="form-group row">
+                      <label for="validationCustom146" class="col-xl-3 col-md-4">Confirm Password <span
+                        style="color:red">*</span></label>
+                      <input class="form-control col-xl-8 col-md-7" name="password" id="validationCustom146"
+                             type="{{type2}}" required="">
+                      <span style="margin-top: 0%;" toggle="#password-field" class="{{eyeIcon2}}" (click)="toggle2()"></span>
+                    </div>
+                    <div class="form-group row" ngModelGroup="role">
+                      <label for="validationCustom5" class="col-xl-3 col-md-4">User Role <span
+                        style="color:red">*</span></label>
+                      <!--<input class="form-control col-xl-8 col-md-7" id="validationCustom5"-->
+                      <!--type="password" required="" >-->
+
+                      <select (change)="change_newe()" [(ngModel)]="user.role" class="form-control col-xl-8 col-md-7"
+                              aria-label="Default select example" name="role" id="validationCustom5">
+                        <option selected value=""> -- Select --</option>
+                        <option value="Admin">Admin</option>
+                        <option value="User">User</option>
+                        <option value="Partner">Partner</option>
+                        <option value="Quality Assurance">Quality Assurance</option>
+                        <option value="Category Manager">Category Manager</option>
+                        <option value="Stores Manager">Stores Manager</option>
+                        <option value="Purchasing Manager">Purchasing Manager</option>
+                        <option value="Purchasing User">Purchasing User</option>
+                        <option value="Finance User">Finance User</option>
+                      </select>
+                    </div>
+
+
+                    <br>
+                    <hr>
+
+                    <div class="form-group row" ngModelGroup="role">
+                      <label style="display: none" id="image_display" for="validationCustom5" class="col-xl-3 col-md-4">Profile
+                        Image</label>
+                      <form [formGroup]="imageCliant">
+                        <div class="add-product">
+                          <div class="row">
+                            <div class="col-xl-3 xl-50 col-sm-6 col-3">
+                              <ul class="file-upload-product" id="image_display2" style="display: none">
+
+                                <li>
+                                  <div class="box-input-file" style="width: 100px;     margin-top: 50px;">
+                                    <input class="upload" id="image01" style="width: 100px;" type="file"
+                                           formControlName="imageOne"
+                                           (change)="changeValue($event, 1)">
+                                    <img class="imgUpload" id="imageOneO" style="width: 100px;" alt=""
+                                         src=" assets/images/user.png">
+                                  </div>
+                                </li>
+
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+
+                    <br>
+                    <div id="disss" ngModelGroup="partnerUser" style="display: none">
+                      <div class="row">
+                        <div class="col-6">
+                          <div class="form-group row">
+                            <label for="partner_u_id" class="col-xl-3 col-md-3">Partner Code <span
+                              style="color:red">*</span></label>
+                            <input class="form-control col-xl-8 col-md-7" name="partner_u_id"
+                                   [(ngModel)]="partner.partner_u_id" id="partner_u_id"
+                                   type="text" required="">
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="businessName" class="col-xl-3 col-md-3">Business Name <span
+                              style="color:red">*</span></label>
+                            <input class="form-control col-xl-8 col-md-7" name="businessName"
+                                   [(ngModel)]="partner.businessName" id="businessName"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="businessRegisterNo" class="col-xl-3 col-md-3">Business Register No </label>
+                            <input class="form-control col-xl-8 col-md-7" name="businessRegisterNo"
+                                   [(ngModel)]="partner.businessRegisterNo" id="businessRegisterNo"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="ownerName" class="col-xl-3 col-md-3">Owner Name </label>
+                            <input class="form-control col-xl-8 col-md-7" name="ownerName"
+                                   [(ngModel)]="partner.ownerName" id="ownerName"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="email" class="col-xl-3 col-md-3">Business Email</label>
+                            <input class="form-control col-xl-8 col-md-7" name="email"
+                                   [(ngModel)]="partner.emailbuss" id="email"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="supplier_group" class="col-xl-3 col-md-3">Supplier Group <span
+                              style="color:red">*</span></label>
+
+                            <select class="form-control col-xl-8 col-md-7"
+                                    aria-label="Default select example"
+                                    name="supplier_group" id="supplier_group">
+                              <option selected value=""> -- Select --</option>
+
+                              <option value="small" *ngFor="let partnerGroupArrs of partnerGroupArr"
+                                      value="{{partnerGroupArrs['groupName']}}">{{partnerGroupArrs['groupName']}}
+                              </option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-group row">
+                            <label for="businessAddress" class="col-xl-3 col-md-3">Business Address</label>
+                            <input class="form-control col-xl-8 col-md-7" name="businessAddress"
+                                   [(ngModel)]="partner.businessAddress" id="businessAddress"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="bankAccount" class="col-xl-3 col-md-3">Bank Account</label>
+                            <input class="form-control col-xl-8 col-md-7" name="bankAccount"
+                                   [(ngModel)]="partner.bankAccount" id="bankAccount"
+                                   type="text" required="">
+                          </div>
+
+                          <div class="form-group row">
+                            <label for="bankName" class="col-xl-3 col-md-3">Bank Name</label>
+                            <input class="form-control col-xl-8 col-md-7" name="bankName"
+                                   [(ngModel)]="partner.bankName" id="bankName"
+                                   type="text" required="">
+                          </div>
+                          <!--<div class="form-group row">-->
+                          <!--<label for="creditCardSave" class="col-xl-3 col-md-3">Credit Card No</label>-->
+                          <!--<input class="form-control col-xl-8 col-md-7" name="creditCardSave"-->
+                          <!--[(ngModel)]="partner.creditCardSave" id="creditCardSave"-->
+                          <!--type="text" required="">-->
+                          <!--</div>-->
+                          <div class="form-group row">
+                            <label for="mobile" class="col-xl-3 col-md-3">Mobile</label>
+                            <input class="form-control col-xl-8 col-md-7" name="mobile"
+                                   [(ngModel)]="partner.mobile" id="mobile"
+                                   type="text" required="">
+                          </div>
+                          <div class="form-group row">
+                            <label for="PartnerType" class="col-xl-3 col-md-3">Partner Type <span
+                              style="color:red">*</span></label>
+
+                            <select class="form-control col-xl-8 col-md-7"
+                                    aria-label="Default select example" [(ngModel)]="partner.PartnerType"
+                                    name="PartnerType" id="PartnerType">
+                              <option selected value=""> -- Select --</option>
+                              <option value="company">Company</option>
+                              <option value="individual">Individual</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <br>
+                      <hr>
+                      <br>
+                      <style>
+                        .labelAppendSub {
+                          background: #000080;
+                          text-align: center;
+                          margin-top: 1px;
+                          color: #fff;
+                          padding: 1px 20px 1px 10px;
+                          border-radius: 3px;
+                          border: 1px solid #000080;
+
+                        }
+
+                        .labelBoxappend {
+                          padding-left: 24%;
+                        }
+
+                        .mainDev {
+                          position: relative;
+                          display: inline-block;
+                          vertical-align: top;
+                          margin: 5px 5px 0 0;
+
+                        }
+
+                        .clouseI {
+                          position: absolute;
+                          right: 5px;
+                          top: -1px;
+                          color: #fff;
+
+                        }
+                      </style>
+
+                      <div class="row">
+                        <div class="col-6" ngModelGroup="productPrefix">
+                          <div class="form-group row">
+                            <label for="productPrefix" class="col-xl-3 col-md-3">Prefix <span style="color:red">*</span></label>
+                            <input style="margin-bottom: -12px;" class="form-control col-xl-8 col-md-7"
+                                   name="productPrefix"
+                                   [(ngModel)]="partner.productPrefix" id="productPrefix"
+                                   type="text" required="">
+
+                          </div>
+                          <div class="labelBoxappend">
+                            <div class="mainDev" *ngFor="let productPrefixArrayss of productPrefixArray">
+                              <label class="labelAppendSub">{{productPrefixArrayss['productPrefix']}}</label>
+                              <!--<input type="text" value="{{productPrefixArrayss['productPrefix']}">-->
+                              <div (click)="removePrefix(productPrefixArrayss['productPrefix'])" class="clouseI"><i
+                                class="fa fa-close"></i></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-6">
+                          <div class="form-group row">
+                            <button type="button" (click)="addPrefixs(userForm)" class="btn btn-primary">Add Prefix
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      <br>
+                    </div>
+                    <div id="categoryPane" style="display: none">
+                      <div class="row">
+                        <div class="form-group col-md-3" ngModelGroup="role">
+                          <label for="category_ids">Category <span style="color:red">*</span></label>
+                          <p></p>
+                          <select class="form-control" id="category_ids" (change)="showSubcategory()" name="cat">
+                            <option value="0">-- Select Category --</option>
+                            <option *ngFor="let productCategor of productCategoryArray"
+                                    value="{{productCategor['code']}}">
+                              {{productCategor['name']}}
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="form-group col-md-3" style="display: none" id="subCategory"
+                             (change)="showSubSubCat()">
+                          <label>Sub Category</label>
+                          <p></p>
+                          <select class="form-control" name="cat2" id="cat_sub_id">
+                            <option value="0">-- Select Sub Category --</option>
+                            <option *ngFor="let productSubCategory of productSubCategoryArray"
+                                    value="{{productSubCategory['code']}}">{{productSubCategory['name']}}
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="form-group col-md-3" style="display: none" id="subsubCategory"
+                             (change)="showSubSubCat2()">
+                          <label>Sub Sub Category</label>
+                          <p></p>
+                          <select class="form-control" name="cat3" id="cat_sub_sub_id">
+                            <option value="">-- Select Sub Category --</option>
+                            <option *ngFor="let productSubSubCategoryArray of subsubcategoryArray"
+                                    value="{{ productSubSubCategoryArray['code']}}">{{
+                              productSubSubCategoryArray['name']}}
+                            </option>
+                          </select>
+                        </div>
+
+                        <div class="form-group col-md-3">
+                          <br>
+                          <p></p>
+                          <button type="button" (click)="addCategory()" class="btn btn-primary">Add Category</button>
+                        </div>
+                      </div>
+                      <div class="row" style="display: none">
+                        <div class="col-md-3">
+                          <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                              <li class="breadcrumb-item"><a href="#" id="breadcrum"></a></li>
+                              <input class="form-control" hidden id="category_code" type="text" required="">
+                            </ol>
+                          </nav>
+                        </div>
+                      </div>
+                    </div>
+
+
+                    <div class="col-md-3">
+                      <nav aria-label="breadcrumb"
+                           *ngFor="let allCategoryBreadcrumbArrs of allCategoryBreadcrumbArr; let i = index"
+                           [attr.data-index]="i">
+                        <i (click)="removeCategoryBreadcrum(i)" class="fa fa-close"
+                           style="color: red;float: right"></i>
+                        <ol class="breadcrumb">
+                          <li *ngIf="allCategoryBreadcrumbArrs['cat_name_bool']" class="breadcrumb-item"><a
+                            href="#">{{
+                            allCategoryBreadcrumbArrs['cat_name']}}</a></li>
+
+                          <li *ngIf="allCategoryBreadcrumbArrs['sub_cat_name_bool']" class="breadcrumb-item"><a
+                            href="#">{{
+                            allCategoryBreadcrumbArrs['sub_cat_name']}}</a></li>
+
+                          <li *ngIf="allCategoryBreadcrumbArrs['cat_sub_sub_name_bool']" class="breadcrumb-item"><a
+                            href="#">{{
+                            allCategoryBreadcrumbArrs['cat_sub_sub_name']}}</a></li>
+
+                        </ol>
+
+                      </nav>
+
+                    </div>
+                    <div class="pull-right">
+                      <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                  </form>
+                </div>
+              </ng-template>
+            </ngb-tab>
+          </ngb-tabset>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->

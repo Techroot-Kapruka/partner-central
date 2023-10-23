@@ -1,0 +1,35 @@
+.card-info{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: stretch;
+  flex-direction: row;
+  align-content: flex-end;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* Adjust this value as needed */
+}
+
+.radio-label input[type="radio"] {
+  margin-right: 10px; /* Adjust this value as needed */
+}
+
+.details{
+  display: flex;
+}
+.button{
+  display: flex;
+  justify-content: right;
+}
+.imageAreas{
+  display: flex;
+  align-content: space-around;
+  flex-direction: row;
+}
+
+#mainImages{
+  border: 2px solid #707B7C;
+}

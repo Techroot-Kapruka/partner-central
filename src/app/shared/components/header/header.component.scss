@@ -1,0 +1,26 @@
+.welcomeheaderText{
+  font-size: 24px;
+  margin-left: 20px;
+  margin-top: 10px;
+  font-weight: bold;
+  span:nth-of-type(1){
+    margin-right: 10px;
+  }
+}
+.fulldet{
+  margin: 0 10px;
+  text-align: left;
+  margin-top: 10px;
+  span:last-child{
+    color: #757575;
+    font-size: 12px;
+  }
+}
+.iconholder img{
+  width: 40px !important;
+}
+@media only screen and (max-width: 600px) {
+  .welcomeheaderText {
+    display: none;
+  }
+}

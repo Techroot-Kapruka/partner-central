@@ -1,0 +1,222 @@
+.blockS {
+  padding: 0;
+  float: left;
+}
+
+.blockAB {
+  width: 100%;
+  margin-bottom: 20px;
+  background: #fff;
+  border-radius: 30px;
+  float: left;
+  box-shadow: 0 0 20px #ebebeb;
+
+}
+.absoluteButton{
+  position: absolute;
+  top: 27px;
+  right: 100px;
+  padding: 7px 15px;
+  border-radius: 8px;
+  background: rgb(154,91,128);
+  background: linear-gradient(90deg, rgba(154,91,128,1) -83%, rgba(183,4,4,1) 0%, rgba(219,69,0,1) 100%);
+  color: #fff;
+  font-size: 14px;
+  font-weight:600;
+  margin-left: 10px;
+  padding-right: 45px;
+}
+.absoluteButton img{
+  position: absolute;
+  right: 15px;
+  top: 5px;
+}
+.blockS .card.widget-cards{
+  border: 0;
+  margin: 0;
+  border-radius: 30px !important;
+}
+
+.blockS .widget-cards {
+  border-radius: 0 !important;
+  display: block;
+  height: auto;
+}
+
+.blockS .card-body {
+  position: relative;
+}
+
+.blockS .media-body h3 {
+  color: #000 !important;
+}
+.textWrapD label{
+  padding-left: 0;
+}
+.textWrapD form{
+  border: 0 !important;
+  padding-top: 10px;
+  position: relative;
+ padding-top: 15px !important;
+}
+.textWrapD form::after{
+  position: absolute;
+  height: 2px;
+  content: "";
+  width: 80px;
+  left: 0;
+  top: 0;
+  background: #000000;
+}
+.textWrapD form .form-group label:first-child{
+    color:#000;
+  font-weight: 600;
+  font-size: 12px;
+  padding-left: 10px;
+  position: relative;
+}
+.textWrapD form .form-group label:first-child::after{
+  content: "";
+  height: 5px;
+  width: 5px;
+  position: absolute;
+  left: 0;
+  border-radius: 50px;
+  background: #2c2b76;
+  top: 6px;
+}
+.textWrapD form .form-group label:last-child{
+  font-size: 12px;
+  font-weight: 400;
+  color: #000;
+  font-weight: 800;
+}
+.blockS .card-body::before {
+  content: "";
+  height: 60px;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  position: absolute;
+  width: 1px;
+  background: #eee;
+}
+
+.blockAB .blockS:last-child .card-body::before {
+  display: none;
+}
+
+.blockS .media {
+  display: block;
+}
+
+.blockS .media-body {
+  max-width: 100%;
+  display: inline-block;
+  vertical-align: top;
+  width: calc(100% - 120px);
+}
+
+.static-top-widget .icons-widgets .text-center, .blockAB .icons-widgets {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  vertical-align: top;
+
+}
+
+.wrapB {
+  font-size: 0;
+}
+
+.bgC {
+  width: calc(33.333% - 30px);
+  margin: 15px;
+  font-size: 14px;
+  display: inline-block;
+  border-radius: 8px;
+  padding: 15px 20px;
+  vertical-align: top;
+  font-weight: 800;
+  min-height: 375px;
+  text-transform: uppercase;
+  font-family: Nunito;
+  font-size: 18px;
+}
+
+.bgC .textWrapD {
+  margin: 20px 0 10px;
+}
+
+.bg1 {
+  background: #FFE2E5;
+}
+
+.bg2 {
+  background: #FFF4DE;
+}
+
+.bg3 {
+  background: #DCFCE7;
+}
+
+.newAddition {
+  padding: 30px;
+  background: #fff;
+  border-radius: 15px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 0 20px #ebebeb;
+}
+
+.newAddition h2 {
+  font-weight: 800;
+  text-transform: uppercase;
+  margin-left: 20px;
+  font-family: Nunito;
+  font-size: 22px;
+}
+
+.blockS {
+  min-height: 142px;
+}
+
+@media only screen and (max-width: 767px) {
+  .blockAB {
+    background: transparent;
+    box-shadow: none;
+  }
+  .blockS {
+    min-height: 0;
+  }
+  .blockS .card.widget-cards {
+    margin-bottom: 15px;
+  }
+  .blockS .card-body::before {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .bgC {
+    width: calc(100% - 30px);
+  }
+}
+
+.latest{
+  font-size: 9px;
+  margin-left:1% ;
+  margin-bottom: 2%;
+}
+
+.latest-sync label{
+  font-size: 10px!important;
+  color: #808B96!important;
+  text-align: right;
+  text-transform: capitalize;
+  bottom: 0;
+  right: 0;
+}
+.latest-sync label::after{display: none}
+

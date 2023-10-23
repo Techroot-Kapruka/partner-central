@@ -1,0 +1,746 @@
+<form [formGroup]="imageCliant">
+  <div class="container-fluid">
+    <div class="row product-adding">
+      <div class="col-md-12">
+        <!--        ++++++++++++++++++++ Product Images Card ++++++++++++++++++-->
+        <div class="card">
+          <div class="card-header" style="margin-bottom: 0px; padding-bottom: 0px;">
+            <h5><strong>
+              Product Images
+              <span class="hproductImage" style="margin-left: 5px" (click)="toggleHint()">
+                <img style="text-align: right" src="assets/images/Help.png" height="20px" weight="20px"
+                     title="Upload Image Help">
+              </span>
+              <span class="hproductImage-hint" [hidden]="!showHint">
+                * Acceptable File Formats: JPEG, PNG and BMP<br>
+                * Resolution Guidelines: Minimum Resolution: 600 x 600 Pixels,  Maximum Resolution: 2000 x 2000 Pixels<br>
+                <!-- * Maximum File Size: [size] -->
+              </span>
+            </strong></h5>
+          </div>
+          <div>
+            <span class="span">Upload Images 3 to 5</span><span class="span"
+                                                                style="color: red; padding-left: 5px">*</span>
+          </div>
+
+          <div class="card-body" style="padding-top: 10px;">
+            <div class="digital-add needs-validation"
+                 style="width: 100%; justify-content: center; display: flex;">
+              <div class="col-12">
+                <div class="add-product">
+                  <div class="row">
+                    <div class="col-xl-12 xl-50 col-sm-12 col-12">
+                      <ul class="file-upload-product"
+                          style="display: flex; flex-direction: row; justify-content: space-around; flex-wrap: wrap;">
+                        <!--=========================-->
+                        <div
+                          style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                          <div class="imageDiv">
+                            <li class="list">
+                              <div class="box-input-file"
+                                   style="position: relative; color: #00c292">
+                                <input class="upload" id="image01" type="file"
+                                       formControlName="imageOne"
+                                       style="justify-items: center;"
+                                       (change)="changeValue($event, 1)" required>
+                                <img class="imgUpload" id="imageOneO"
+                                     alt="Click To Add Image"
+                                     style="justify-items: center; align-items: center; justify-self: center;"
+                                     src="assets/images/dashboard/icons8-plus.gif">
+                              </div>
+                            </li>
+                          </div>
+                          <span> Image 1(main)</span>
+                        </div>
+                        <div
+                          style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                          <div class="imageDiv">
+                            <li class="list">
+                              <div class="box-input-file"
+                                   style="position: relative; color: #00c292">
+                                <input class="upload" type="file"
+                                       formControlName="imageOne2"
+                                       (change)="changeValue2($event)">
+                                <img class="imgUpload" id="imageTwoO" alt=""
+                                     src="assets/images/dashboard/icons8-plus.gif"
+                                     size="100px">
+                              </div>
+                            </li>
+                          </div>
+                          <span> Image 2</span>
+                        </div>
+
+                        <div
+                          style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                          <div class="imageDiv">
+                            <li class="list">
+                              <div class="box-input-file"
+                                   style="position: relative; color: #00c292">
+                                <input class="upload" type="file"
+                                       formControlName="imageOne3"
+                                       (change)="changeValue3($event)">
+                                <img class="imgUpload" id="imageTreeE" alt=""
+                                     src="assets/images/dashboard/icons8-plus.gif"
+                                     size="100px">
+                              </div>
+                            </li>
+                          </div>
+                          <span> Image 3</span>
+                        </div>
+                        <div
+                          style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                          <div class="imageDiv">
+                            <li class="list">
+                              <div class="box-input-file"
+                                   style="position: relative; color: #00c292">
+                                <input class="upload" type="file"
+                                       formControlName="imageOne4"
+                                       (change)="changeValue4($event)">
+                                <img class="imgUpload" id="imageFourR" alt=""
+                                     src="assets/images/dashboard/icons8-plus.gif"
+                                     size="100px">
+                              </div>
+                            </li>
+                          </div>
+                          <span> Image 4</span>
+                        </div>
+                        <div
+                          style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                          <div class="imageDiv">
+                            <li class="list">
+                              <div class="box-input-file"
+                                   style="position: relative; color: #00c292">
+                                <input class="upload" type="file"
+                                       formControlName="imageOne5"
+                                       (change)="changeValue5($event)">
+                                <img class="imgUpload" id="imageFiveE" alt=""
+                                     src="assets/images/dashboard/icons8-plus.gif"
+                                     size="100px">
+                              </div>
+                            </li>
+                          </div>
+                          <span> Image 5</span>
+                        </div>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--        ++++++++++++++++++++ Product Information Card ++++++++++++++++++-->
+        <div class="card">
+          <div class="card-header" style="margin-bottom: 0px; padding-bottom: 0px;">
+            <h5><strong>Product Information</strong></h5>
+          </div>
+
+          <div class="card-body" style="padding-top: 10px;">
+            <div class="form-input row">
+              <span class="SCPInfo-hint" [hidden]="!showHintSCP">
+                 <span style="font-weight: bold;">Please choose the most appropriate Category and its respective Sub Category for your product from the provided list. <br>
+                          If your product falls under a Sub Sub Category, you may also select that for a more specific classification. <br>
+                          If not, please proceed to selecting the Sub Category accordingly. </span>
+
+              </span>
+              <div class="col-md-4">
+                                <span class="span"
+                                      style="padding: 15px; padding-left: 35px; color: #000; font-weight: 400">Select Category Path :</span>
+                <span class="SCPInfo" style="margin-left: 5px" (click)="toggleHintSCP()">
+                <img style="text-align: right" src="assets/images/Help.png" height="20px" weight="20px"
+                     title="Upload Image Help">
+              </span>
+
+              </div>
+              <div hidden class="col-md-8">
+                <input class="form-control input" id="categoryPathInput"
+                       value="{{categoryPath}}" required (click)="isCollapsed = !isCollapsed"
+                       [attr.aria-expanded]="!isCollapsed">
+              </div>
+            </div>
+
+            <div class="col" style="width: 100%; padding-top: 15px;">
+              <div id="collapseExamplee">
+                <div class="card card-body"
+                     style="padding: 15px 10px 15px 10px; margin: 0px; display: -webkit-box; flex-direction: row; justify-content: space-evenly; height: 250px; align-items: stretch; overflow-x: auto;">
+
+                  <div class="div-cat">
+                    <div class="div-title">Category</div>
+                    <ul class="scrollable-div">
+                      <div *ngFor="let category of categoryArray; let i = index"
+                           [attr.data-index]="i" class="tiles">
+                        <li class="li" id="{{i}}"
+                            (click)="getSub_category(category['code'] , category['path'] , i ,category['pricemargin']); getAttribytes(category['code']);"
+                            value="">{{category['path']}}
+                        </li>
+                      </div>
+
+                    </ul>
+                  </div>
+                  <div class="div-cat">
+                    <div class="div-title">Sub Category</div>
+                    <ul class="scrollable-div">
+                      <div *ngFor="let subCategory of SubCategoryArray; let i = index"
+                           [attr.data-index]="i"
+                           class="tiles">
+                        <li class="li" id="sub{{i}}"
+                            (click)="getSub_sub_category(subCategory['code'],subCategory['name'],i,subCategory['pricemargin']) ; getAttribytes(subCategory['code']);"
+                            value="">{{subCategory['name']}}
+                        </li>
+                      </div>
+
+                    </ul>
+                  </div>
+                  <div class="div-cat">
+                    <div class="div-title">Sub Sub Category</div>
+                    <ul class="scrollable-div">
+                      <div *ngFor="let subsubCategory of subSubCategoryArray; let i = index"
+                           [attr.data-index]="i"
+                           class="tiles ">
+                        <li class="li" id="subSub{{i}}"
+                            (click)="getsub_sub_sub_category(subsubCategory['code'],subsubCategory['name'],i,subsubCategory['pricemargin']); getAttribytes(subsubCategory['code']);"
+                            value="">{{subsubCategory['name']}}
+                        </li>
+                      </div>
+
+                    </ul>
+                  </div>
+                  <div class="div-cat">
+                    <div class="div-title">Sub Sub sub Category</div>
+                    <ul class="scrollable-div">
+                      <div *ngFor="let subSubSubCategory of subSubSubCategoryArray; let i = index"
+                           [attr.data-index]="i"
+                           class="tiles">
+                        <li class="li" id="subSubSub{{i}}"
+                            (click)="finalArrayCreater(subSubSubCategory['name'],i,subSubSubCategory['pricemargin'])"
+                            value="">{{subSubSubCategory['name']}}
+                        </li>
+                      </div>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-input row">
+              <div class="col-md-4">
+                <span class="span">Product Name :</span><span class="span"
+                                                              style="color: red; padding: 15px; padding-left: 5px">*</span>
+              </div>
+              <div class="col-md-8">
+                <input class="form-control input" type="text" id="product_name" required>
+              </div>
+
+            </div>
+
+
+            <div class="form-input row">
+              <div class="col-md-4">
+                <span class="span" style="padding: 15px; padding-left: 35px;">Seller SKU :</span><span
+                class="span"
+                style="color: red; padding: 15px; padding-left: 5px">*</span>
+                <!--                        popup area star-->
+
+                <span class="hproSku" style="margin-left: 5px" (click)="toggleHintsku()">
+                  <img style="text-align: right" src="assets/images/Help.png" height="20px" weight="20px"
+                       title="Upload Image Help">
+                </span>
+                <!--                <span class="hproBrand-hint" [hidden]="!showHintBrand">-->
+
+                <!--                        end-->
+              </div>
+              <div class="col-md-8">
+                <span class="hproSku-hint" [hidden]="!showHintSku">
+                 <span style="font-weight: bold;">Seller Stock Keeping Unit (SKU) - Utilize your unique item code, barcode,
+                   or model number for effective stock tracking and identification.
+                 </span>
+                </span>
+                <input class="form-control" id="Seller_SKU" type="text" required (keyup)="updateSku()">
+              </div>
+
+            </div>
+            <div class="form-input row">
+              <div class="col-md-4">
+                <span class="span" id="listningPrice"
+                      style="padding: 15px; padding-left: 35px;">Selling price:</span><span class="span"
+                                                                                            style="color: red; padding: 15px; padding-left: 5px">*</span>
+              </div>
+              <div class="col-md-4">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">LKR</span>
+                  </div>
+                  <input class="form-control" id="price" type="text" required
+                         (change)="setSellingPrice()">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-input row">
+              <div class="col-md-4">
+                <span class="span"
+                      style="display:flex; padding-top:0px; align-items: center; padding-left: 35px;">Margin</span>
+              </div>
+              <div class="col-md-8">
+                <input (change)=updateInputValue() class="form-control" id="initialMargin" step="0.50"
+                       type="number" required>
+              </div>
+            </div>
+
+            <div class="form-input row">
+              <div class="col-md-4" hidden>
+                <span class="span" style="padding: 15px; padding-left: 35px;">price margin:</span><span
+                class="span"
+                style="color: red; padding: 15px; padding-left: 5px">*</span>
+              </div>
+              <div class="col-md-8" hidden>
+                <input class="form-control input" id="priceMargin" type="text" required
+                       disabled>
+              </div>
+
+              <div class="col-md-4">
+                <span class="span" style="padding: 15px; padding-left: 35px;">Seller Income:</span><span
+                class="span"
+                style="color: red; padding: 15px; padding-left: 5px">*</span>
+              </div>
+              <div class="col-md-4">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text">LKR</span>
+                  </div>
+                  <input class="form-control" id="sellerPrice" type="text" required
+                         disabled>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <!--<nav aria-label="breadcrumb">-->
+          <!--<ol class="breadcrumb">-->
+          <!--<li class="breadcrumb-item"><a href="#" id="breadcrum"></a></li>-->
+          <!--<input class="form-control" hidden id="category_code" type="text" required="">-->
+          <!--</ol>-->
+          <!--</nav>-->
+        </div>
+        <!--        ++++++++++++++++++++ Product Description Card ++++++++++++++++++-->
+        <div class="card">
+          <div class="card-header" style="margin-bottom: 0px; padding-bottom: 0px;">
+            <h5><strong>
+              Product Description
+              <span class="hproDesc" style="margin-left: 5px" (click)="toggleHintPD()">
+                <img style="text-align: right" src="assets/images/Help.png" height="20px" weight="20px"
+                     title="Upload Image Help">
+              </span>
+              <span class="hproDesc-hint" [hidden]="!showHintPD">
+                <span>A brief yet informative overview describing the key features, specifications,
+                  and benefits of your product to entice potential buyers</span>
+              </span>
+            </strong></h5>
+          </div>
+          <div class="card-body" style="padding-top: 10px;">
+            <div class="form-input row">
+              <div class="col-md-4">
+                                <span class="span"
+                                      style="padding: 15px; padding-left: 35px;">Add Product Description :</span><span
+                class="span" style="color: red; padding: 15px; padding-left: 5px">*</span>
+              </div>
+
+              <div class="col-md-8">
+                <ng-container *ngTemplateOutlet="myComponentTemplate"
+                ></ng-container>
+                <textarea hidden class="form-control" id="product_description"
+                          (keydown)="onKeyPress($event)" (change)="checkChars()"
+                          required>{{descriptionContent}}</textarea>
+                <span class="span p-0" *ngIf="showmsg"
+                      [style.color]="'red'">Please provide more than 200 characters</span>
+                <span class="span p-0" *ngIf="showmsg1" [style.color]="'red'">Maximum characters 6000 exceeded</span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+        <!--        attribute card-->
+
+        <div class="card">
+          <div class="card-header" style="margin-bottom: 0px; padding-bottom: 0px;">
+
+            <h5><strong>
+              Product Attribute
+              <span class="hproDesc" style="margin-left: 5px" (click)="toggleHintPD()">
+                <img style="text-align: right" src="assets/images/Help.png" height="20px" weight="20px"
+                     title="Upload Image Help">
+              </span>
+              <span class="hproDesc-hint" [hidden]="!showHintPD">
+                <span>Product Attribute Information</span>
+              </span>
+            </strong></h5>
+          </div>
+
+          <div class="card-body" id="attrId" style="padding-top: 10px;">
+            <div class="form-input row" style="display: none">
+              <div class="col-md-6">
+                                <span class="span"
+                                      style="padding: 15px; padding-left: 35px;">Product Attributes : </span><span
+                class="span" style="color: red; padding: 15px; padding-left: 5px">*</span>
+              </div>
+              <div hidden class="col-md-6">
+                <input class="form-control input" style="cursor: pointer;" type="text"
+                       (click)="isAttributesCollapsed = !isAttributesCollapsed; getAttribytes(categoryCode);"
+                       [attr.aria-expanded]="!isAttributesCollapsed">
+              </div>
+            </div>
+
+            <div style="width: 100%; padding-top: 15px;">
+              <!--              <div id="collapseExample">-->
+              <div class="card card-body brandev"
+                   style="padding: 15px 10px 15px 10px; margin: 0px; display: -webkit-box; flex-direction: row; justify-content: space-evenly; height: auto; align-items: stretch;">
+                <div id="attributeRow">
+                  <span class="hproBrand-hint" [hidden]="!showHintBrand"></span>
+
+                  <!--                  <div class="col-md-6" *ngFor="let entry of hashMap | keyvalue; let i = index">-->
+                  <!--                    <div *ngIf="i < visibleElementCount">-->
+                  <!--                      <label for="{{entry.key}}" class="attributes-label"-->
+                  <!--                             style="font-size: 13px">{{ entry.key }}</label>-->
+                  <!--                      <select *ngIf="!isEmptyHash(entry.value)" class="form-control" id="{{entry.key}}"-->
+                  <!--                              (change)="onSelectAttribute($event)">-->
+                  <!--                        <option disabled selected></option>-->
+                  <!--                        <option *ngFor="let gg of entry.value">{{gg}}</option>-->
+                  <!--                      </select>-->
+                  <!--                      <input *ngIf="isEmptyHash(entry.value)" class="form-control" id="{{entry.key}}"-->
+                  <!--                             placeholder="Enter {{entry.key}}" (input)="onSelectAttribute($event)">-->
+                  <!--                    </div>-->
+                  <!--                  </div>-->
+                  <div class="col-md-6" *ngFor="let entry of hashMap | keyvalue; let i = index">
+                    <div *ngIf="i < visibleElementCount">
+                      <label for="{{entry.key}}" class="attributes-label"
+                             style="font-size: 13px">{{ entry.key }}</label>
+                      <select *ngIf="!isEmptyHash(entry.value)" class="form-control" id="{{entry.key}}"
+                              (change)="onSelectAttribute($event)">
+                        <option selected></option>
+                        <option *ngFor="let gg of entry.value">{{gg}}</option>
+                      </select>
+                      <!--                      <ng-select *ngIf="!isEmptyHash(entry.value)"-->
+                      <!--                                 id="{{entry.key}}"-->
+                      <!--                                 [multiple]="true"-->
+                      <!--                                 [options]="attributesArray"-->
+                      <!--                                 items-->
+                      <!--                      >-->
+
+                      <!--                      </ng-select>-->
+                      <input *ngIf="isEmptyHash(entry.value)" class="form-control" id="{{entry.key}}"
+                             placeholder="Enter {{entry.key}}" (input)="onSelectAttribute($event)">
+                    </div>
+                  </div>
+
+
+                  <button style="font-size: 10px; text-align: center; margin:0 auto;"
+                          *ngIf="showMoreMode && (visibleElementCount < Object.keys(hashMap).length)"
+                          class="btn btn-outline-primary" (click)="loadMore()">
+                    Show More
+                    <i class="fa fa-arrow-down"></i>
+                  </button>
+                  <button style="font-size: 10px; text-align: center; margin: 0 auto;" *ngIf="!showMoreMode"
+                          class="btn btn-outline-primary" (click)="loadMore()">
+                    Show Less
+                    <i class="fa fa-arrow-up"></i>
+                  </button>
+
+
+                  <!--                  <div *ngIf="visibleElementCount < Object.keys(hashMap).length" style="text-align: center">-->
+                  <!--                    &lt;!&ndash;                      <button (click)="loadMore()">Load More</button>&ndash;&gt;-->
+                  <!--                    <button class="btn btn-outline-primary" (click)="loadMore()" style="font-size: 10px; text-align: center; margin-left: 400px;">-->
+                  <!--                      Show More-->
+                  <!--                      <i class="fa fa-arrow-down"></i>-->
+                  <!--                    </button>-->
+                  <!--                  </div>-->
+                </div>
+              </div>
+              <!--              </div>-->
+            </div>
+          </div>
+
+        </div>
+
+
+        <!--        ++++++++++++++++++++ Variations Card ++++++++++++++++++-->
+
+        <!--old variation-->
+
+        <div *ngIf="isAvailableVariation" class="card">
+          <div class="card-header" style="display:flex; flex-direction:row ;">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="customSwitches"
+                     (click)="toggleDiv()">
+              <label class="custom-control-label" for="customSwitches">
+                <h5><strong> Variations </strong></h5>
+              </label>
+            </div>
+            <div>
+                      <span class="hproVari" style="margin-left: 5px" (click)="toggleHintPV()">
+                          <img style="text-align: right" src="assets/images/Help.png" height="20px" weight="20px"
+                               title="Upload Image Help">
+                      </span>
+              <span class="hproVari-hint" [hidden]="!showHintPV">
+
+                      </span>
+            </div>
+          </div>
+          <div [ngClass]="{'disabled-div': isDivDisabled}">
+            <div class="card-body blockVari col" style="padding-left: 50px;">
+              <div *ngFor="let variationkey of variationvalueArrayForNonObject;">
+                <label for="selectType" id="labels" class="labelForVariations col-12"
+                       style="margin-left: 10px;">{{variationkey}}</label>
+                <div *ngIf="variationkey != 'Select Your Color'" (load)="isColorVariation = false">
+                  <!--                  <select class="custom-select col-md-6">-->
+                  <!--                    <option *ngFor="let array of hashmapForVariations[variationkey]">{{array}}</option>-->
+                  <!--                  </select>-->
+
+                </div>
+                <!--$$$$$$$$$$$$$ for non objective color array-->
+                <div *ngIf="variationkey == 'Select Your Color'" class="col-12"
+                     style="max-width:; padding: 15px;">
+                  <!--                  <input class="custom-select" type="color" id="colorInput1"-->
+                  <!--                         name="profilesecondarycolor1"-->
+                  <!--                         list="profilecolorslist1" (change)="setColorArray()">-->
+                  <!--                  <datalist id="profilecolorslist1">-->
+                  <!--                    <option *ngFor="let array of hashmapForVariations[variationkey]"-->
+                  <!--                            value="{{array}}"-->
+                  <!--                            style="color: black">-->
+                  <!--                  </datalist>-->
+                  <ng-select [options]="variationOptions" style="width: 200px; float: left; {{selectColorErrorStyle}}"
+                             (selected)="onChange($event)"></ng-select>
+
+                  <div class="mainDev"
+                       style="display:block; justify-content: left; align-items: start;"
+                       *ngFor="let colorArraysForClothess of colorArrayForClothes; let i = index"
+                       [attr.data-index]="i">
+                    <label class="labelAppendSub"
+                           style="height: 25px; margin: 0px; margin-left: 1%; background: {{colorArraysForClothess}};"></label>
+                    <div class="clouseI" (click)="removeColorForClothes(i)"><i
+                      class="fa fa-close"></i>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div *ngFor="let variationkey of variationvalueArrayObject;" class="bgsize">
+                <label for="selectType" id="labels" class="labelForVariations col-12"
+                       style="margin-left: 10px;">{{variationkey}}
+                </label>
+                <div style="margin-top: 10px; padding: 15px;" id="selectType">
+                  <button class="btn btnblue" type="button"
+                          style="margin-right: 5px; margin-bottom:5px;"
+                          *ngFor="let variationkey of keyArrays;"
+                          [id]="variationkey"
+                          [ngStyle]="{
+                          'background-color': selectedType === variationkey ? '#192655' : '',
+                          'color': selectedType === variationkey ? 'white' : 'black'
+                          }"
+                          (click)="setSelectedType(variationkey)">{{variationkey}}
+                  </button>
+                </div>
+              </div>
+              <br>
+              <div class="row-cols-12 bgsize2">
+
+                <div class="col-md-4" style="float: left">
+                  <div *ngIf="isSelect && isClothing" class="">
+                    <label for="clothesSizeUk" id="labels" class="labelForVariations">Select
+                      Size</label>
+                    <select class="custom-select" id="clothesSizeUk" (change)="AddToSizeArray()">
+                      <option value="" disabled selected>Select Size</option>
+                      <option *ngFor="let size of hashmapForVariationsObj[this.sizeString]">{{size}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-md-8" style="float: left">
+                  <div class="labelBoxappend "
+                       style=" display: block; flex-direction: column;">
+                    <div class="mainDev divs"
+                         style="display:flex; justify-content: left; align-items: center;"
+                         *ngFor="let SizeArrays of sizeArrayForClothes; let i = index"
+                         [attr.data-index]="i">
+                      <label
+                        style="border-radius: 5px; color:#000; background-color: #fff; text-align: center; width: 60px; height:30px !important; margin: 0px;margin-left: 1%;box-shadow: 0 0 3px #000; padding-top: 2px; ">{{SizeArrays}}</label>
+                      <div class="clouseI-1" (click)="removeSizeForClothes(i)"><i
+                        class="fa fa-close"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <br>
+                <div class="row"
+                     style="display: block; justify-content: right; margin: 5px 5px 15px; text-align: right; ">
+                  <button class="btn btn-info" type="button" (click)="AddToTable()">Add to Table
+                  </button>
+                </div>
+              </div>
+              <div class="row-cols-12">
+                <hr class="col" style="color: black; border: 1px solid">
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="row form-input">
+                      <div class="col-md-4">
+                                  <span class="span"
+                                        style="display:flex; padding-top:0px; align-items: center; padding-left: 35px;">Seller SKU :</span>
+                      </div>
+                      <div class="col-md-8">
+                        <input class="form-control" id="Seller_SKU_2" type="text" required
+                               (keyup)="updateValueSku()">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6"></div>
+                </div>
+
+                <div class="row" style="display: flex; justify-content: center;">
+                              <span style=" color: red; justify-content: center; text-align: center; font-size: small"
+                                    *ngIf="!matchCountOfSizeAndColorsArrays">** does not match with Color count & Size count **</span>
+                </div>
+                <br>
+                <div class="container-fluid" style="max-height: 400px; overflow-y: auto;">
+                  <table class="table table-striped">
+                    <thead>
+                    <tr class="tr-new">
+                      <th scope="col">Color</th>
+                      <th *ngIf="isClothing" scope="col">size</th>
+                      <th scope="col">SKU Code</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr *ngFor="let clothesArray of clothesArray let i = index"
+                        [attr.data-index]="i">
+
+                      <td style="border-color: #f2f2f2; border-width: none;  position:relative; ">
+                        <div
+                          style=" position: absolute; left: 15px;right: 15px;top: 15px;bottom: 15px;background-color:{{clothesArray['color_']}};border-radius: 8px;"></div>
+                      </td>
+                      <td style="margin-top: 5px; margin-left: 2px; vertical-align: middle;">{{clothesArray['size_']}}</td>
+                      <td><input class="form-control" type="text"
+                                 value="{{clothesArray['sku_']}}" style="font-weight: 600"></td>
+                      <td>
+                        <button type="button" style="font-size: 10px; margin-left: 2%; margin-top: 5px;"
+                                (click)="deleteClothsRow(i)"
+                                class="btn btn-danger"><i class="fa fa-trash"
+                                                          aria-hidden="true"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!--old variation end -->
+
+        <div class="card">
+          <div class="card-header">
+            <h5><strong>Keywords</strong></h5>
+          </div>
+          <div class="card-body">
+            <div class="digital-add needs-validation">
+              <div class="form-group mb-0">
+                <div class="form-group">
+                  <label for="txt_keyword" class="col-form-label pt-0"> Add Keywords</label>
+                  <div class="row">
+                    <div class="col-6">
+                      <input class="form-control" id="txt_keyword" type="text" required=""
+                             (keyup)="separateFromComma($event)">
+                      <div class="form-group row" style="margin-left: -1.9%;">
+                        <div class="labelBoxappend">
+                          <div class="mainDev" *ngFor="let keyWordArrays of keyWordArray">
+                            <label class="labelAppendSub"
+                                   style="background: #000080">{{keyWordArrays['key']}}</label>
+                            <!--<input type="text" value="{{productPrefixArrayss['productPrefix']}">-->
+                            <div class="clouseI"
+                                 (click)="removeKeyWord(keyWordArrays['key'])"><i style="margin-left: 45px; margin-top: -20px;"
+                                                                                  class="fa fa-close"></i>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6">
+                      <div class="form-group row">
+                        <button type="button" (click)="addKeyWord()" class="btn btn-primary">Add
+                          Key
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <ng-template #content let-modal style="height: 10px">
+                    <div class="modal-header">
+                      <h5 class="modal-title f-w-600" id="exampleModalLabel">Choose Product</h5>
+                      <button type="button" class="close" aria-label="Close"
+                              (click)="modal.dismiss('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form class="needs-validation">
+                        <div class="form">
+                          <div class="form-group">
+                            <label for="mySearch" class="mb-1">Select your Category
+                              :</label>
+
+                            <input class="form-control" type="text" id="mySearch"
+                                   placeholder="Enter text"/>
+
+                            <ul id="myMenu" style="cursor: pointer">
+                              <li *ngFor="let catParths of categoryArray"
+                                  (click)="changeEvent(catParths['path'],catParths['code'],catParths['pricemargin'])"
+                                  (click)="modal.dismiss('Cross click')">
+                                <strong>&#x025FC; </strong>
+                                {{catParths['path']}}
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button class="btn btn-secondary" type="button" data-dismiss="modal"
+                              (click)="modal.dismiss('Cross click')">Close
+                      </button>
+                    </div>
+                  </ng-template>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="card">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6"></div>
+              <div class="col-md-6">
+                <button type="button" (click)="saveProduct()" class="btn btn-lg btn-primary pull-right" [disabled]="addProductClicked"
+                        style="margin: 15px;">Submit
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--</div>-->
+
+      </div>
+    </div>
+  </div>
+</form>
+<ng-template #myComponentTemplate>
+  <angular-editor [(ngModel)]="descriptionContent" (ngModelChange)="checkChars()" [config]="editorConfig"
+                  required></angular-editor>
+</ng-template>

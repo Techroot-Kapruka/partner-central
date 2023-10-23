@@ -1,0 +1,332 @@
+<style>
+  ul li:hover {
+    background: #000080 !important;
+    color: #fff !important;
+  }
+
+  #mySearch {
+    width: 100%;
+    font-size: 18px;
+    padding: 11px;
+    border: 1px solid #ddd;
+  }
+
+  #myMenu {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  #myMenu li {
+    padding: 12px;
+    text-decoration: none;
+    color: black;
+    display: block
+  }
+
+  #myMenu li:hover {
+    background-color: #eee;
+  }
+
+  .labelAppendSub {
+    text-align: center;
+    margin-top: 1px;
+    color: #fff;
+    padding: 1px 20px 1px 10px;
+    border-radius: 3px;
+    border: 1px solid #000080;
+
+  }
+
+  .labelBoxappend {
+    padding-left: -1%;
+  }
+
+  .mainDev {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin: 5px 5px 0 0;
+
+  }
+
+  .clouseI {
+    position: absolute;
+    right: 5px;
+    top: -1px;
+    color: #fff;
+
+  }
+
+  /*=================================================*/
+
+  /* The switch - the box around the slider */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    float: right;
+  }
+
+  /* Hide default HTML checkbox */
+  .switch input {
+    display: none;
+  }
+
+  /* The slider */
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+  input.default:checked + .slider {
+    background-color: #444;
+  }
+
+  input.primary:checked + .slider {
+    background-color: #2196F3;
+  }
+
+  input.success:checked + .slider {
+    background-color: #8bc34a;
+  }
+
+  input.info:checked + .slider {
+    background-color: #3de0f5;
+  }
+
+  input.warning:checked + .slider {
+    background-color: #FFC107;
+  }
+
+  input.danger:checked + .slider {
+    background-color: #f44336;
+  }
+
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+  /*=================================================*/
+
+</style>
+<form [formGroup]="shipmentForm">
+  <div class="container-fluid">
+    <div class="row product-adding">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="digital-add needs-validation">
+
+              <div class="row" style="float: right">
+                  <div class="form-group">
+                    <button type="button" (click)="backToLIst()" class="btn btn-sm btn-primary" data-toggle="tooltip" data-placement="top" title="Back to Shipment List">
+                      <i class="fa fa-arrow-circle-left" aria-hidden="true"></i> Back</button>
+                  </div>
+              </div>
+
+              <div class="row" style="margin-top: 4%;margin-bottom: 4%;">
+
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="txtShipmentId" class="col-form-label">Shipment Id</label>
+                    <input class="form-control" disabled id="txtShipmentId" value="{{id}}"
+                           type="text" required="">
+                  </div>
+                </div>
+
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="txtVendorId" class="col-form-label">Vendor Id</label>
+                    <input class="form-control" disabled id="txtVendorId" value="{{partnerId}}"
+                           type="text" required="">
+                  </div>
+                </div>
+
+
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="txtVendorName" class="col-form-label">Vendor Name</label>
+                    <input class="form-control" disabled id="txtVendorName" value="{{partnerName}}"
+                           type="text" required="">
+                  </div>
+                </div>
+
+
+              </div>
+
+              <table class="table table-striped table-hover table-sm">
+                <thead>
+                <tr>
+                  <th scope="col">Id</th>
+                  <th scope="col">Code</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Seller Income</th>
+                  <th scope="col">Rejected Qty</th>
+                  <th scope="col">Approved Qty</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Amount</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!--<tr *ngFor="let tableDatas of tableData ">-->
+                <tr *ngFor="let tableDatas of tableData; let i = index" [attr.data-index]="i">
+
+                  <td>{{i+1}}</td>
+                  <td>{{tableDatas['product_code']}}</td>
+                  <td>{{tableDatas['product_name']}}</td>
+                  <td>{{tableDatas['cost_price']}}</td>
+                  <td>{{tableDatas['rejected_qty']}}</td>
+                  <td>{{tableDatas['approved_qty']}}</td>
+                  <td>{{tableDatas['quantity']}}</td>
+                  <td>{{tableDatas['approved_amount']}}</td>
+                </tr>
+                </tbody>
+              </table>
+
+              <div class="row" style="margin-top: 4%;">
+                <div class="col-md-6">
+                  <div class="row" >
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                        <label for="txtAllQuantity" class="col-form-label">Total Quantity</label>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <input class="form-control" formControlName="txtAllQuantity" disabled id="txtAllQuantity"
+                               type="text" required="">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                        <label for="txtApprovedQty" class="col-form-label">Approved Qty</label>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <input class="form-control" formControlName="txtApprovedQty" disabled id="txtApprovedQty"
+                               type="text" required="">
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                        <label for="txtRejectedQty" class="col-form-label">Rejected Qty</label>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <input class="form-control" formControlName="txtRejectedQty" disabled id="txtRejectedQty"
+                               type="text" required="">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                        <label for="txtGrossAmount" class="col-form-label">Gross Amount</label>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <input class="form-control" formControlName="txtGrossAmount" disabled id="txtGrossAmount"
+                               type="text" required="">
+                      </div>
+                    </div>
+
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                        <label for="txtRejectedAmount" class="col-form-label">Rejected Amount</label>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <input class="form-control" formControlName="txtRejectedAmount" disabled id="txtRejectedAmount"
+                               type="text" required="">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                        <label for="txtApprovedAmount" class="col-form-label">Approved Amount</label>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                      <div class="form-group">
+                        <input class="form-control" formControlName="txtApprovedAmount" disabled id="txtApprovedAmount"
+                               type="text" required="">
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+
+
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+

@@ -1,0 +1,16 @@
+/* Add this CSS to your stylesheet or in a <style> tag in your component */
+
+.arrow {
+  display: inline-block;
+  width: 18px; /* Adjust the size as needed */
+  height: 18px; /* Adjust the size as needed */
+  border: 1px solid transparent; /* Transparent border by default */
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease; /* Add a smooth transition for the border color */
+}
+
+.arrow:hover {
+  border-color: #007bff; /* Change the border color on hover (you can use your desired color) */
+}
+

@@ -1,0 +1,26 @@
+<div *ngIf="isDisplay" [ngClass]="{'fade-in': isDisplay}" class="blockAB" style="margin: 0 15px 30px; width: calc(100% - 30px); ">
+  <div class="card-body" style="padding-bottom: 0">
+    <div class="stepper-wrapper">
+      <div class="stepper-item completed">
+        <div class="step-counter">1</div>
+        <div class="step-name">Sign Up</div>
+      </div>
+      <div [className]="fillInfo">
+        <div class="step-counter">2</div>
+        <div class="step-name">Fill Business Information</div>
+      </div>
+      <div [className]="pendingApproval">
+        <div class="step-counter">3</div>
+        <div class="step-name">Pending Approval</div>
+      </div>
+      <div [className]="bankDetails" [routerLink]="'/users/settings/profile/'+tempCode" style="cursor: pointer">
+        <div class="step-counter">4</div>
+        <div class="step-name">Add Bank Details</div>
+      </div>
+      <div [class]="listProduct" [routerLink]="'/products/digital/digital-add-product'" style="cursor: pointer">
+        <div class="step-counter">5</div>
+        <div class="step-name">List your First Product</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+//.containerShipment{
+//  display: flex;
+//  justify-content: space-around;
+//}
+//.row-y{
+//  display: flex;
+//  flex-direction: row;
+//  justify-content: space-around;
+//}
+//.input{
+//  justify-content: right;
+//}
+.input{
+  width: 100%;
+}
+.card-body{
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
+.item-data{
+  margin: 5%;
+  width: 40%;
+}
+.item-description{
+  display:flex;
+  flex-direction: row;
+  justify-content: space-around ;
+  align-content: space-evenly;
+  margin: 0px !important;
+}

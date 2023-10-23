@@ -1,0 +1,74 @@
+<!--&lt;!&ndash; Container-fluid starts&ndash;&gt;-->
+<style>
+  #select_od {
+    width: 350px !important;
+  }
+</style>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Order Details</h5>
+        </div>
+        <div class="card-body">
+          <!--<div class="custom-datatable">-->
+          <div *ngIf="isAdmin" class="btn-popup pull-right">
+            <select (change)="selectPartner()" id="select_od" class="form-control">
+              <option selected>-- Select Vendor --</option>
+              <option *ngFor="let partners of partner" value="{{partners['partner_u_id']}}">{{partners['name']}}
+              </option>
+            </select>
+          </div>
+
+
+          <table class="table table-striped table-hover table-sm" style="cursor: pointer; font-size: 13px">
+            <thead style="font-size: 15px">
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Status</th>
+              <th scope="col">Order Ref</th>
+              <th scope="col">Order Date</th>
+              <th scope="col">Product</th>
+              <th scope="col">Delivery Date</th>
+              <th scope="col">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr *ngFor="let paginateDatass of paginateDataOD">
+              <!--<th>1</th>-->
+              <td>{{paginateDatass['id']}}</td>
+              <td>
+                <span style="color: green" *ngIf="paginateDatass['statusStyleTwo']">&#10003;&nbsp; </span>
+                <span style="color: red; "
+                      *ngIf="paginateDatass['statusStyleOne']">&#8226;&nbsp; </span>
+                <span>{{paginateDatass['status']}}</span>
+              </td>
+              <td>{{paginateDatass['orderRef']}}</td>
+              <td>{{paginateDatass['orderDate']}}</td>
+              <td>{{paginateDatass['cartsnapshot']}}</td>
+              <td>{{paginateDatass['delivery_date']}}</td>
+              <td>
+                <button type="button" class="btn" (click)="viewOrders(paginateDatass['id'])"
+                        style="width: 65px;height:auto;font-size: 12px; background-color: green;border-color:green;color: white;font-weight: bold;text-align: center;">
+                  View
+                </button>
+              </td>
+            </tr>
+
+            </tbody>
+          </table>
+          <ngb-pagination [collectionSize]="totalPages" [(page)]="page" [maxSize]="10"
+                          [boundaryLinks]="true" (pageChange)="getSelectedRow(page)"></ngb-pagination>
+
+          <hr>
+
+          <pre><strong>Current Page :</strong> {{page}}</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->
