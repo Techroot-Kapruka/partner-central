@@ -1026,9 +1026,9 @@ export class DigitalListComponent implements OnInit {
   loadPage(index:number){
 
     if(this.filteredProducts.length>0){
-      window.open("https://www.kapruka.com/buyonline/"+this.filteredProducts[index].title.replace(/\s+/g, '-').toLowerCase()+"/"+"ef_pc_"+this.filteredProducts[index].productCode, '_blank');
+      window.open("https://www.kapruka.com/buyonline/"+this.filteredProducts[index].title.replace(/\s+/g, '-').toLowerCase()+"/kid/"+"ef_pc_"+this.filteredProducts[index].productCode, '_blank');
     }else{
-      window.open("https://www.kapruka.com/buyonline/"+this.list_pages[index].title.replace(/\s+/g, '-').toLowerCase()+"/"+"ef_pc_"+this.list_pages[index].productCode, '_blank');
+      window.open("https://www.kapruka.com/buyonline/"+this.list_pages[index].title.replace(/\s+/g, '-').toLowerCase()+"/kid/"+"ef_pc_"+this.list_pages[index].productCode, '_blank');
     }
 
   }
