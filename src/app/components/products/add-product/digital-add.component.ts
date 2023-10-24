@@ -257,8 +257,8 @@ export class DigitalAddComponent implements OnInit {
       if (inputElement && parseFloat(inputElement.value) < this.margin) {
         inputElement.value = this.categoryMargin.toFixed(2).toString();
         Swal.fire(
-          'Not Allow to Degrade Margin',
-          'Only Allow Increasing',
+          'You are Not Allowed to Degrade the Margin.',
+          'Only Increasing is Allowed',
           'warning'
         );
       } else {
@@ -1968,6 +1968,7 @@ export class DigitalAddComponent implements OnInit {
 
 
   setSelectedType(SizeType) {
+    this.sizeArrayForClothes = [];
     this.sizeString = SizeType;
     this.selectedType = SizeType;
 

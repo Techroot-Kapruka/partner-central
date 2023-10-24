@@ -658,12 +658,12 @@
                              (keyup)="separateFromComma($event)">
                       <div class="form-group row" style="margin-left: -1.9%;">
                         <div class="labelBoxappend">
-                          <div class="mainDev" *ngFor="let keyWordArrays of keyWordArray">
+                          <div class="mainDev" style="background-color: #ffffff; color: #00004d;" *ngFor="let keyWordArrays of keyWordArray">
                             <label class="labelAppendSub"
-                                   style="background: #000080">{{keyWordArrays['key']}}</label>
+                                   style="background-color: #ffffff; color: #00004d;">{{keyWordArrays['key']}}</label>
                             <!--<input type="text" value="{{productPrefixArrayss['productPrefix']}">-->
                             <div class="clouseI"
-                                 (click)="removeKeyWord(keyWordArrays['key'])"><i style="margin-left: 45px; margin-top: -20px;"
+                                 (click)="removeKeyWord(keyWordArrays['key'])"><i style="margin-left: 35px; margin-top: 0px;"
                                                                                   class="fa fa-close"></i>
                             </div>
                           </div>

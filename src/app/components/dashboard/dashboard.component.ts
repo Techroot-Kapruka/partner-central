@@ -53,10 +53,11 @@ export class DashboardComponent implements OnInit {
   public mathCountForApprovalPendingProduct = 0;
   public isApprovalPendingShow = false;
   public isGuest = false;
-  public productStatus ='';
+  public productStatus = '';
   public isDuoghnutChart = false;
   public isPieChart = false;
   public isColumnChart = false;
+  showViewShopButton = false;
 
   constructor(private dashboardService: DashboardService, private router: Router, private _Activatedroute: ActivatedRoute,
               private analyticsService: AnalyticsProductService) {
@@ -176,6 +177,7 @@ export class DashboardComponent implements OnInit {
 
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       this.isLoginUser = true;
+      this.showLoginButton();
       this.isLoginPartner = false;
       this.isOrderShow = true;
       this.qaTables = true;
@@ -228,6 +230,12 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     this.getShopUrl();
+  }
+
+  showLoginButton() {
+    setTimeout(() => {
+      this.showViewShopButton = true;
+    }, 2200);
   }
 
   redirectToShop() {
@@ -342,7 +350,7 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  getSumProductViewTotal(){
+  getSumProductViewTotal() {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
@@ -351,7 +359,7 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  getSumProductAddToCart(){
+  getSumProductAddToCart() {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
@@ -360,7 +368,7 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  getSumProductOrderTotal(){
+  getSumProductOrderTotal() {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
@@ -473,9 +481,9 @@ export class DashboardComponent implements OnInit {
           is_active: data.data[i].is_active,
           lastSync: data.data[i].lastSync
         };
-        if(data.data[i].is_active == 1){
+        if (data.data[i].is_active == 1) {
           this.productStatus = 'Active'
-        }else {
+        } else {
           this.productStatus = 'Pending'
         }
         this.latestSync = arr.lastSync;
@@ -596,11 +604,13 @@ export class DashboardComponent implements OnInit {
       this.analyticsProductViewTotal = data.data.product_view_total;
     }
   }
+
   manageGetSumProductAddToCart(data) {
     if (data.data != null) {
       this.analyticsProductCartTotal = data.data.product_cart_total;
     }
   }
+
   manageGetSumProductOrderTotal(data) {
     if (data.data != null) {
       this.analyticsProductOrderTotal = data.data.product_order_total;
