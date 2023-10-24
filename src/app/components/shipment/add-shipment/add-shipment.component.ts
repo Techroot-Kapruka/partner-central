@@ -386,7 +386,7 @@ export class AddShipmentComponent implements OnInit {
     if (dataForm.txtProductCode == '') {
       Swal.fire(
         'Whoops...!',
-        'Product Code empty',
+        'Please choose a product and input the quantity before submitting.',
         'error'
       );
     } else if (dataForm.txtProductName == '') {
@@ -577,8 +577,8 @@ export class AddShipmentComponent implements OnInit {
   manageHoldShipment(data) {
     if (data.status_code == 200) {
       Swal.fire(
-        'Good Job...!',
-        'Shipment Hold Success...!',
+        'Good Job..!',
+        'Shipment Successfully Put on Hold..!',
         'success'
       );
       this.tableData = [];

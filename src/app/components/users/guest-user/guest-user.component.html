@@ -10,23 +10,36 @@
           <img src="assets/images/loginPage/Logo.png" style="width: 180px; padding: 20px" alt="logo">
           <!--          <h1 class="main-txt" style="font-family: sans-serif; font-size: 24px; padding: 15px 0;">Sign up</h1>-->
           <!-- <span>or use your account</span> -->
-          <input id="contactPersonName" type="text" placeholder="First Name"/>
-            <input id="contactPersonLastName" type="text" placeholder="Last Name"/>
+          <input id="contactPersonName" type="text" placeholder="First Name" />
+          <label style="color: red; margin: 0px; display: none;   font-size: 14px;" id="LblfirstNameError">pleas enter valid first name !</label>
+
+          <input id="contactPersonLastName" type="text" placeholder="Last Name" />
+          <label style="color: red; margin: 0px; display: none;  font-size: 14px;" id="LblLastNameError">pleas enter valid last name !</label>
+
           <div class="clearfix"></div>
-          <div class="clearfix" style="margin: 0 auto;width: 80%; margin-bottom: 20px;">
+          <div class="clearfix" id="contactDiv" style="margin: 0 auto;width: 80%; margin-bottom: 20px">
             <input id="countryCode" type="text" placeholder="+94" value="+94" disabled/>
-            <input id="contactNumber"  (keydown)="removezero($event)" type="text" placeholder="Contact Number(eg:773246567)"/>
+            <input id="contactNumber" (keydown)="removezero($event)" type="text"
+                   placeholder="Contact Number(eg:773246567)"/>
           </div>
+          <label style="color: red; margin: 0px; display: none;  font-size: 14px;" id="LblMobileError">pleas enter valid mobile number !</label>
 
           <div class="clearfix"></div>
           <input id="email" type="email" placeholder="sE-mail"/>
+          <label style="color: red; margin: 0px; display: none;  font-size: 14px;" id="LblEmailError">pleas enter valid email !</label>
 
           <!--<label style="color: red; display: none; font-size: 12px; font-weight: normal" id="distext">Invalid Email !</label>-->
           <input id="password" type="password" placeholder="Password"/>
+          <label style="color: red; margin: 0px; display: none;  font-size: 14px;" id="LblPasswordError">Password must contain at least one letter, one digit & minimum 8 characters !</label>
+
           <input id="reEnterPassword" type="password" placeholder="Confirm Password"/>
+          <label style="color: red; margin: 0px; display: none;  font-size: 14px;" id="LblConfirmError">Password not match !</label>
+
           <!-- <a href="#">Forgot your password?</a> -->
           <button type="button" (click)="saveGuest()" [disabled]="OnetimeClicked">Sign Up</button>
-          <button class="btn-class" [routerLink]="'/auth/login'" type="button"  style="background-color:red; width: 30%;">Cancel</button>
+          <button class="btn-class" [routerLink]="'/auth/login'" type="button"
+                  style="background-color:red; width: 30%;">Cancel
+          </button>
 
         </form>
       </div>

@@ -1,8 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClientService} from "../../../shared/service/http-client.service";
+import {HttpClientService} from '../../../shared/service/http-client.service';
 import Swal from 'sweetalert2';
-import {Router} from "@angular/router";
-import {window} from "rxjs/internal/operators";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-guest-user',
@@ -16,6 +15,7 @@ export class GuestUserComponent implements OnInit {
   public message = '';
   public errAlert = false;
   public OnetimeClicked = false;
+
 
   public type = 'password';
   public type2 = 'password';
@@ -31,63 +31,33 @@ export class GuestUserComponent implements OnInit {
 
 
   saveGuest() {
-    let isEmailValid = false;
-    let ispasswordValid = false;
-    let isConfirmPasswordValid = false;
     let isEmpty = false;
-    let contactPersonName = (document.getElementById('contactPersonName') as HTMLInputElement).value + ' ' + (document.getElementById('contactPersonLastName') as HTMLInputElement).value;
-    let contactNumber = (document.getElementById('contactNumber') as HTMLInputElement).value;
-    let email = (document.getElementById('email') as HTMLInputElement).value;
-    let userName = (document.getElementById('email') as HTMLInputElement).value;
-    let password = (document.getElementById('password') as HTMLInputElement).value;
-    let countryCode = (document.getElementById('countryCode') as HTMLInputElement).value;
+    const contactPersonName = (document.getElementById('contactPersonName') as HTMLInputElement).value + ' ' + (document.getElementById('contactPersonLastName') as HTMLInputElement).value;
+    const contactNumber = (document.getElementById('contactNumber') as HTMLInputElement).value;
+    const email = (document.getElementById('email') as HTMLInputElement).value;
+    const userName = (document.getElementById('email') as HTMLInputElement).value;
+    const password = (document.getElementById('password') as HTMLInputElement).value;
+    const countryCode = (document.getElementById('countryCode') as HTMLInputElement).value;
     sessionStorage.setItem('sessionEmail', email);
-    let obj = {
-      contactPersonName: contactPersonName,
-      userName: userName,
-      email: email,
-      contactNo: countryCode+contactNumber,
-      password: password,
-      role: ["Guest"]
+    const obj = {
+      contactPersonName,
+      userName,
+      email,
+      contactNo: countryCode + contactNumber,
+      password,
+      role: ['Guest']
     };
 
-    isEmailValid = this.checkValidate();
-    ispasswordValid = this.checkPasswordValidate();
-    isConfirmPasswordValid = this.checkConfirmPassword();
     isEmpty = this.checkEmptyField();
-    console.log(obj);
-    if (isEmpty) {
-      if (isEmailValid) {
-        if (ispasswordValid) {
-          if (isConfirmPasswordValid) {
-            this.httpClientService.addUser(obj).subscribe(
-              data => this.manageUser(data),
-              error => this.manageUserError(error)
-            );
-            this.OnetimeClicked  = true;
-          }
-        } else {
-          Swal.fire(
-            'Whoops...!',
-            'Password must contains at least one letter & one digit & minimum 8 characters',
-            'error'
-          );
-        }
-      } else {
-        Swal.fire(
-          'Whoops...!',
-          'Invalid Email',
-          'error'
-        );
-      }
-    } else {
 
-      Swal.fire(
-        'Whoops...!',
-        'Please fill all fields',
-        'error'
+    if (isEmpty) {
+      this.httpClientService.addUser(obj).subscribe(
+        data => this.manageUser(data),
+        error => this.manageUserError(error)
       );
+      this.OnetimeClicked = true;
     }
+
   }
 
 
@@ -137,7 +107,7 @@ export class GuestUserComponent implements OnInit {
         document.getElementById('password').style.borderColor = 'green';
         document.getElementById('reEnterPassword').style.borderColor = 'green';
         if (data.status_code == 200) {
-          let url = '/user-verification/' + data.data.user_u_id;
+          const url = '/user-verification/' + data.data.user_u_id;
           this.router.navigate([url]);
         } else {
           Swal.fire(
@@ -159,36 +129,13 @@ export class GuestUserComponent implements OnInit {
     }
   }
 
-  // checkPasswordValidate() {
-  //   let validPassword = false;
-  //
-  //   const password = (document.getElementById('password') as HTMLInputElement).value;
-  //
-  //   // const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
-  //   const passwordRegex = /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[A-Z])(?=.*[-\#\$\.\%\@\*])(?=.*[a-zA-Z]).{8,16}$/;
-  //   const passwordResult = passwordRegex.test(password);
-  //   // let ret04 = false;
-  //   if (passwordResult) {
-  //     document.getElementById('password').style.borderColor = 'green';
-  //     // document.getElementById('distext').style.display = 'none';
-  //     validPassword = true;
-  //   } else {
-  //     document.getElementById('password').style.borderColor = 'red';
-  //     validPassword = false;
-  //     Swal.fire(
-  //       'Whoops...!',
-  //       'Password At least one letter / At least one digit/Minimum length of 8 characters',
-  //       'error'
-  //     );
-  //   }
-  //   return validPassword;
-  // }
+
 
   checkPasswordValidate() {
     let validPassword = false;
     const password = (document.getElementById('password') as HTMLInputElement).value;
 
-    const reg=/^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
+    const reg = /^(?=.*[A-Za-z])(?=.*\d).{8,}$/;
 
     if (reg.test(password)) {
       document.getElementById('password').style.borderColor = 'green';
@@ -203,30 +150,6 @@ export class GuestUserComponent implements OnInit {
   }
 
 
-
-  checkConfirmPassword() {
-    let isConfirmPassword = false;
-    const passwordConform = (document.getElementById('reEnterPassword') as HTMLInputElement).value;
-    const passwordc = (document.getElementById('password') as HTMLInputElement).value;
-
-    if (passwordc === passwordConform) {
-      if (passwordc !=''&& passwordConform!=''){
-        document.getElementById('reEnterPassword').style.borderColor = 'green';
-        isConfirmPassword = true;
-      }
-    } else {
-      document.getElementById('reEnterPassword').style.borderColor = 'red';
-      isConfirmPassword = false;
-      Swal.fire(
-        'Whoops...!',
-        'Password not match',
-        'error'
-      );
-    }
-
-    return isConfirmPassword;
-  }
-
   manageUserError(error) {
     Swal.fire({
       icon: 'error',
@@ -237,53 +160,115 @@ export class GuestUserComponent implements OnInit {
 
   checkEmptyField() {
     let isVEmpty = false;
-    let contactPersonName = (document.getElementById('contactPersonName') as HTMLInputElement).value;
-    let contactPersonLastName = (document.getElementById('contactPersonLastName') as HTMLInputElement).value;
-    let contactNumber = (document.getElementById('contactNumber') as HTMLInputElement).value;
-    let email = (document.getElementById('email') as HTMLInputElement).value;
-    let userName = (document.getElementById('email') as HTMLInputElement).value;
-    let password = (document.getElementById('password') as HTMLInputElement).value;
-    let rePassword = (document.getElementById('reEnterPassword') as HTMLInputElement).value;
 
-    if (contactPersonName != '' && contactNumber != '' && userName != '' && password != '' && rePassword != '' && email!='') {
-      isVEmpty = true;
-    }
-    if(contactPersonName ==''||!contactPersonName.match( /^[a-zA-Z ]+$/)){
+    let firstNameValidate = false;
+    let lastNameValidate = false;
+    let mobileValidate = false;
+    let emailValidate = false;
+    let passwordValidate = false;
+    let rePasswordValidate = false;
+
+    const contactPersonName = (document.getElementById('contactPersonName') as HTMLInputElement).value;
+    const contactPersonLastName = (document.getElementById('contactPersonLastName') as HTMLInputElement).value;
+    const contactNumber = (document.getElementById('contactNumber') as HTMLInputElement).value;
+    const email = (document.getElementById('email') as HTMLInputElement).value;
+    const password = (document.getElementById('password') as HTMLInputElement).value;
+    const rePassword = (document.getElementById('reEnterPassword') as HTMLInputElement).value;
+
+    if (contactPersonName === '') {
+      firstNameValidate = false;
       document.getElementById('contactPersonName').style.borderColor = 'red';
-      isVEmpty = false;
-    }else{
+      document.getElementById('contactPersonName').style.margin = '0';
+      document.getElementById('LblfirstNameError').style.display = 'block';
+    } else {
+      firstNameValidate = true;
       document.getElementById('contactPersonName').style.borderColor = 'green';
+      document.getElementById('contactPersonName').style.marginBottom = '15px';
+      document.getElementById('LblfirstNameError').style.display = 'none';
     }
 
-    if(contactPersonLastName=='' || !contactPersonLastName.match(/^[a-zA-Z ]+$/)){
+    if (contactPersonLastName === '') {
+      lastNameValidate = false;
       document.getElementById('contactPersonLastName').style.borderColor = 'red';
-      isVEmpty = false;
-    }else{
+      document.getElementById('contactPersonLastName').style.margin = '0';
+      document.getElementById('LblLastNameError').style.display = 'block';
+    } else {
+      lastNameValidate = true;
       document.getElementById('contactPersonLastName').style.borderColor = 'green';
+      document.getElementById('contactPersonLastName').style.marginBottom = '15px';
+      document.getElementById('LblLastNameError').style.display = 'none';
     }
 
-    if(contactNumber==''||!contactNumber.match(/^\d{9}$/)){
+    if (contactNumber === '' || !contactNumber.match(/^\d{9}$/)) {
+      mobileValidate = false;
       document.getElementById('contactNumber').style.borderColor = 'red';
-      isVEmpty = false;
-    }else {
+      document.getElementById('contactDiv').style.marginBottom = '2px';
+      document.getElementById('LblMobileError').style.display = 'block';
+    } else {
+      mobileValidate = true;
       document.getElementById('contactNumber').style.borderColor = 'green';
+      document.getElementById('LblMobileError').style.display = 'none';
     }
-    if(email==''){
+
+    if (email === '' || !email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+      emailValidate = false;
       document.getElementById('email').style.borderColor = 'red';
-      isVEmpty = false;
+      document.getElementById('email').style.margin = '0';
+      document.getElementById('LblEmailError').style.display = 'block';
+    } else {
+      emailValidate = true;
+      document.getElementById('email').style.borderColor = 'green';
+      document.getElementById('email').style.marginBottom = '15px';
+      document.getElementById('LblEmailError').style.display = 'none';
     }
-    if(password==''){
+
+    if (password === '' || !password.match(/^(?=.*[A-Za-z])(?=.*\d).{8,}$/)) {
+      passwordValidate = false;
       document.getElementById('password').style.borderColor = 'red';
-      isVEmpty = false;
+      document.getElementById('password').style.margin = '0';
+      document.getElementById('LblPasswordError').style.display = 'block';
+    } else {
+      passwordValidate = true;
+      document.getElementById('password').style.borderColor = 'green';
+      document.getElementById('password').style.marginBottom = '15px';
+      document.getElementById('LblPasswordError').style.display = 'none';
     }
-    if(rePassword==''){
+
+    if (password === rePassword) {
+      if (rePassword === '') {
+        rePasswordValidate = false;
+        document.getElementById('reEnterPassword').style.borderColor = 'red';
+        document.getElementById('reEnterPassword').style.margin = '0';
+        document.getElementById('LblConfirmError').style.display = 'block';
+      } else {
+        rePasswordValidate = true;
+        document.getElementById('reEnterPassword').style.borderColor = 'green';
+        document.getElementById('reEnterPassword').style.marginBottom = '15px';
+        document.getElementById('LblConfirmError').style.display = 'none';
+      }
+    } else {
+      rePasswordValidate = false;
       document.getElementById('reEnterPassword').style.borderColor = 'red';
-      isVEmpty = false;
+      document.getElementById('reEnterPassword').style.margin = '0';
+      document.getElementById('LblConfirmError').style.display = 'block';
     }
+
+
+    if (firstNameValidate && lastNameValidate && mobileValidate && emailValidate && passwordValidate && rePasswordValidate ) {
+      isVEmpty = true;
+    } else {
+      isVEmpty = false;
+      // Swal.fire(
+      //   'Whoops...!',
+      //   'Please fill all fields',
+      //   'error'
+      // );
+    }
+
     return isVEmpty;
   }
 
-  removezero(event){
+  removezero(event) {
     const inputValue = (document.getElementById('contactNumber') as HTMLInputElement).value;
     if (event.key === '0' && inputValue.length === 0) {
       // Prevent '0' from being added as the first character
@@ -291,27 +276,7 @@ export class GuestUserComponent implements OnInit {
     }
   }
 
-  checkValidate() {
 
-    let validEmail = false;
-    let email = (document.getElementById('email') as HTMLInputElement).value;
-
-
-    // const emailPartner = (document.getElementById('email') as HTMLInputElement).value;
-    const partnerRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    const partnerResult = partnerRegex.test(email);
-    if (partnerResult) {
-      document.getElementById('email').style.borderColor = 'green';
-      // document.getElementById('distext').style.display = 'none';
-      validEmail = true;
-    } else {
-      document.getElementById('email').style.borderColor = 'red';
-      // document.getElementById('distext').style.display = 'block';
-      validEmail = false;
-
-    }
-    return validEmail;
-  }
 
   toggle() {
     if (this.type == 'password') {
@@ -333,45 +298,45 @@ export class GuestUserComponent implements OnInit {
     }
   }
 
-pwFunction() {
-  const passwordField: HTMLInputElement | null = document.getElementById('password') as HTMLInputElement;
-  const passwordHint: HTMLSpanElement | null = document.querySelector('.password-hint') as HTMLSpanElement;
-  const hintIcon: HTMLElement | null = document.querySelector('.hint-icon') as HTMLElement;
+  pwFunction() {
+    const passwordField: HTMLInputElement | null = document.getElementById('password') as HTMLInputElement;
+    const passwordHint: HTMLSpanElement | null = document.querySelector('.password-hint') as HTMLSpanElement;
+    const hintIcon: HTMLElement | null = document.querySelector('.hint-icon') as HTMLElement;
 
-  if (passwordField && passwordHint && hintIcon) {
-    // Show the password hint when the hint icon is clicked
-    hintIcon.addEventListener('click', () => {
-      passwordHint.style.display = 'block';
-    });
+    if (passwordField && passwordHint && hintIcon) {
+      // Show the password hint when the hint icon is clicked
+      hintIcon.addEventListener('click', () => {
+        passwordHint.style.display = 'block';
+      });
 
-    // Hide the password hint when clicking outside of it
-    document.addEventListener('click', (event) => {
-      if (!passwordHint.contains(event.target as Node) && event.target !== hintIcon) {
-        passwordHint.style.display = 'none';
-      }
-    });
+      // Hide the password hint when clicking outside of it
+      document.addEventListener('click', (event) => {
+        if (!passwordHint.contains(event.target as Node) && event.target !== hintIcon) {
+          passwordHint.style.display = 'none';
+        }
+      });
 
-    // Real-time password validation
-    passwordField.addEventListener('input', () => {
-      const password: string = passwordField.value;
+      // Real-time password validation
+      passwordField.addEventListener('input', () => {
+        const password: string = passwordField.value;
 
-      // Define your password validation conditions here
-      const hasCapitalLetter: boolean = /[A-Z]/.test(password);
-      const hasNumber: boolean = /\d/.test(password);
-      const hasSpecialCharacter: boolean = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/.test(password);
-      const isLengthValid: boolean = password.length >= 8;
+        // Define your password validation conditions here
+        const hasCapitalLetter: boolean = /[A-Z]/.test(password);
+        const hasNumber: boolean = /\d/.test(password);
+        const hasSpecialCharacter: boolean = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\-]/.test(password);
+        const isLengthValid: boolean = password.length >= 8;
 
-      // Check conditions and update the hint message accordingly
-      if (hasCapitalLetter && hasNumber && hasSpecialCharacter && isLengthValid) {
-        passwordHint.textContent = 'Password is valid';
-        passwordHint.style.color = 'green';
-      } else {
-        passwordHint.textContent = 'Password must meet the criteria';
-        passwordHint.style.color = 'red';
-      }
-    });
+        // Check conditions and update the hint message accordingly
+        if (hasCapitalLetter && hasNumber && hasSpecialCharacter && isLengthValid) {
+          passwordHint.textContent = 'Password is valid';
+          passwordHint.style.color = 'green';
+        } else {
+          passwordHint.textContent = 'Password must meet the criteria';
+          passwordHint.style.color = 'red';
+        }
+      });
+    }
+
   }
-
-}
 
 }
