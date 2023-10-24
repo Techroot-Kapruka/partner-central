@@ -57,7 +57,7 @@ export class DigitalListComponent implements OnInit {
   public unique_code = '';
   public sub_type = '';
   public imagedefaultPathURI = '';
-  vstock:number;
+  vstock : number[]=[];
 
   public imagePathURI = environment.imageURIENV;
 
@@ -645,17 +645,17 @@ export class DigitalListComponent implements OnInit {
   }
 
   manageConsignmentProducts(data) {
-    console.log(1111111111111)
-    console.log(data)
-
     this.consignmentProducts = [];
     if (data.data != null) {
       if (data.status_code === 200) {
         for (let i = 0; i < data.data.length; i++) {
+          this.vstock[i]=null;
           const or = {
-            productCode: data.data[i].product_code,
-            productName: data.data[i].title,
-            inStock: data.data[i].in_Stock,
+            productCode: data.data[i].onDemand_products.product_code,
+            productName: data.data[i].onDemand_products.title,
+            inStock: data.data[i].onDemand_products.in_Stock,
+            path: data.data[i].category_path,
+            image: data.data[i].product_img.split('/product')[1],
             Action: ''
           };
           this.consignmentProducts.push(or);
@@ -665,9 +665,7 @@ export class DigitalListComponent implements OnInit {
   }
 
   UpdateVirtualStocks(row: any) {
-
-console.log(row.vstock)
-    if (row.vstock === null || row.vstock === undefined || isNaN(row.vstock) || row.vstock < 0) {
+    if (this.vstock[row] === null || this.vstock[row] === undefined || isNaN(this.vstock[row]) || this.vstock[row] < 0) {
       Swal.fire(
         'error!',
         'Invalid stock value. Please enter a valid number.',
@@ -677,9 +675,9 @@ console.log(row.vstock)
     }
 
     const payloard = {
-      product_code: row.productCode,
+      product_code: this.consignmentProducts[row].productCode,
       vendor: sessionStorage.getItem('partnerId'),
-      in_stock: row.vstock
+      in_stock: this.vstock[row]
     };
     this.productService.updateStock(payloard).subscribe(
       data => this.manageUpdateStock(data),
@@ -768,7 +766,6 @@ console.log(row.vstock)
         this.totalPagesPQC = Math.ceil(this.approvalPartnerProductList.length / this.list_pages2);
       }
     }
-
   }
 
   printImage(rowIndex) {
@@ -1050,12 +1047,11 @@ console.log(row.vstock)
         title: data.data[i].productName,
         action: '',
         unique_code: data.data[i].unique_code,
-        categoryPath:data.data[i].categoryPath,
-        image:data.data[i].image.split('/product')[1],
+        categoryPath: data.data[i].categoryPath,
+        image: data.data[i].image.split('/product')[1],
       };
       this.nonActiveEditedProductsArray.push(payloard);
     }
-    console.log(this.nonActiveEditedProductsArray)
   }
 
   ApproveEditProduct(i) {
@@ -1183,6 +1179,7 @@ console.log(row.vstock)
           price: (data.data[i].productVariation && data.data[i].productVariation[0] ? data.data[i].productVariation[0].selling_price : 0),
           in_stock: data.data[i].in_stock,
           createDate: data.data[i].create_date,
+          categoryPath: data.data[i].categoryPath,
           action: ''
         };
         this.list_suspend.push(or);
