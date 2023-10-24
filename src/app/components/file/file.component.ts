@@ -4,7 +4,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {FileUploadService} from '../../shared/service/file-upload.service';
 import Swal from 'sweetalert2';
 import {CategoryService} from '../../shared/service/category.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClientService} from '../../shared/service/http-client.service';
 import {ProductService} from '../../shared/service/product.service';
 import {HttpClient} from '@angular/common/http';
@@ -48,7 +48,7 @@ export class FileComponent implements OnInit {
     fileSource: new FormControl('')
   });
 
-  constructor(private fileUploadService: FileUploadService, private productService: ProductService, private categoryService: CategoryService, private _Activatedroute: ActivatedRoute, private httpClientService: HttpClientService, private http: HttpClient) {
+  constructor(private fileUploadService: FileUploadService, private productService: ProductService, private categoryService: CategoryService, private _Activatedroute: ActivatedRoute, private httpClientService: HttpClientService, private http: HttpClient, private router: Router) {
     this._Activatedroute.paramMap.subscribe(params => {
       this.getSelectedPartner(params.get('id'));
       this.ids = params.get('id');
@@ -87,6 +87,8 @@ export class FileComponent implements OnInit {
   }
 
   changeValue(event) {
+    this.tableArray = [];
+    this.uploaded = true;
     const getFileLabel = (document.getElementById('Exel_file') as HTMLInputElement).value;
     (document.getElementById('prepend-big-btn') as HTMLInputElement).innerText = getFileLabel;
     event.preventDefault();

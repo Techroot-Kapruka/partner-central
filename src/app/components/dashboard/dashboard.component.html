@@ -5,7 +5,7 @@
   }
 </style>
 
-<button (click)="redirectToShop()" class="absoluteButton" *ngIf="isLoginUser">View My Shop <img
+<button (click)="redirectToShop()" class="absoluteButton" *ngIf="showViewShopButton">View My Shop <img
   src="../../../../assets/images/ico/shop1.png" width="25px"></button>
 <div class="container-fluid test">
   <div class="row">
@@ -215,7 +215,7 @@
     </div>
     <div class="col-xl-12 xl-100">
       <div class="newAddition">
-        <h2>Sales Details</h2>
+        <h2>Latest Activity</h2>
         <div class="wrapB">
           <div class="bg1 bgC" routerLink="/orders/list-orders" style="cursor:pointer;">
             <div class="imgWrapD">
