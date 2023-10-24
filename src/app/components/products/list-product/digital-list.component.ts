@@ -226,7 +226,7 @@ export class DigitalListComponent implements OnInit {
     if (data.data == null) {
     } else {
       const lengthRes = data.data.length;
-      for (let i = 0; i < 20; i++) {
+      for (let i = 0; i < lengthRes; i++) {
         const or = {
           image: (data.data[i].productImage && data.data[i].productImage.image1 ? data.data[i].productImage.image1.split('/product')[1] : '') || '',
           title: data.data[i].title,
