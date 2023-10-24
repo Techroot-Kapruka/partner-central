@@ -44,3 +44,10 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# asset / images folder
+src/assets/images/product
+
+#environment ts
+src/environments
+
