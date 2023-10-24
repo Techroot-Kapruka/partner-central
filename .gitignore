@@ -48,6 +48,9 @@ Thumbs.db
 # asset / images folder
 src/assets/images/product
 
+#ignore partner image file
+src/assets/images/Partner
+
 #environment ts
 src/environments
 
