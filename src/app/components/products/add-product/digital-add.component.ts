@@ -1968,6 +1968,7 @@ export class DigitalAddComponent implements OnInit {
 
 
   setSelectedType(SizeType) {
+    this.sizeArrayForClothes = [];
     this.sizeString = SizeType;
     this.selectedType = SizeType;
 
