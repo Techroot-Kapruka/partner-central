@@ -343,6 +343,7 @@ export class DigitalListComponent implements OnInit {
   outButton(index: number, AP: number, OS: number) {
     Swal.fire({
       title: 'Are you sure?',
+      html: 'This action will make your product temporary marked Out Of Stock from the Kapruka Website.',
       icon: 'info',
       showCancelButton: true,
       confirmButtonText: 'Yes',
