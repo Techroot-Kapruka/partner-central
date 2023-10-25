@@ -97,4 +97,7 @@ export class HeaderComponent implements OnInit {
     let url = 'users/edit-partner-category/' + this.tempCode;//T00004
     this.router.navigate([url]);
   }
+  reloadPages() {
+    window.location.reload();
+  }
 }

@@ -93,7 +93,11 @@ export class ListOrdersComponent implements OnInit {
 
   orderArray(arr) {
     this.list_pages = [];
+    var errorMsg = document.getElementById('noOrderMsg');
+    var tableContent = document.getElementById('orderDetailsTbl');
     if (arr.data != null) {
+      tableContent.style.display='block';
+      errorMsg.style.display='none';
       const orArrLength = arr.data.length;
       for (let i = 0; i < orArrLength; i++) {
         let statusCode = true;
@@ -126,6 +130,8 @@ export class ListOrdersComponent implements OnInit {
 
       }
     } else {
+      tableContent.style.display='none';
+      errorMsg.style.display='block';
     }
   }
 
