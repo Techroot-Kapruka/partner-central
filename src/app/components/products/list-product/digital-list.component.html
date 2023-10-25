@@ -51,7 +51,7 @@
                                                         width="60px"
                                                         (error)="onImageError($event)" (click)="popUpImageActive(i)" /></td>
                                 <!--<td> <p>{{productDetail.title}}</p><p>{{ productDetail.productCode }}</p><p>{{productDetail.vendor}}</p><p>{{productDetail.categoryPath}}</p></td>-->
-                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000; cursor: pointer"><a (click)="loadPage(i)">{{ productDetail.title}}</a></p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ productDetail.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{productDetail.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{productDetail.categoryPath}}</p></td>
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; cursor: pointer"><a style="color: #3366cc !important;" (click)="loadPage(i)">{{ productDetail.title}}</a></p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ productDetail.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{productDetail.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{productDetail.categoryPath}}</p></td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="productDetail.price" autofocus/>
@@ -94,7 +94,7 @@
                                 <td align="center"><img src="{{ imagePathURI + productDetail.image }}" (click)="popUpImageActive(i)" height="60px"
                                                         width="60px"
                                                         (error)="onImageError($event)" /></td>
-                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000; cursor: pointer"><a (click)="loadPage(i)">{{ productDetail.title}}</a></p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ productDetail.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{productDetail.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{productDetail.categoryPath}}</p></td>
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000; cursor: pointer"><a style="color: #3366cc !important" (click)="loadPage(i)">{{ productDetail.title}}</a></p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ productDetail.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{productDetail.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{productDetail.categoryPath}}</p></td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="productDetail.price" autofocus/>
@@ -661,7 +661,7 @@
                                 <td align="center"><img src="{{ imagePathURI + suspendProduct.image }}" height="60px"
                                                         width="60px"
                                                         (error)="onImageError($event)"/></td>
-                                <td>{{ suspendProduct.title }}<br>{{ suspendProduct.productCode }}</td>
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ suspendProduct.title }}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ suspendProduct.productCode }}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{suspendProduct.categoryPath}}</p></td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="suspendProduct.price" autofocus/>
@@ -686,7 +686,7 @@
                                 <td align="center"><img src="{{ imagePathURI + suspendProduct.image }}" height="60px"
                                                         width="60px"
                                                         (error)="onImageError($event)"/></td>
-                                <td>{{ suspendProduct.title }}<br>{{ suspendProduct.productCode }}</td>
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ suspendProduct.title }}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ suspendProduct.productCode }}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{suspendProduct.categoryPath}}</p></td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="suspendProduct.price" autofocus/>
@@ -748,18 +748,18 @@
 
                       <ng-container>
                         <!-- Display filtered products -->
-                        <tr *ngFor="let nonActiveProduct of consignmentProducts; let j = index;">
-                          <td align="center"><img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"
+                        <tr *ngFor="let consignProducts of consignmentProducts; let j = index;">
+                          <td align="center"><img src="{{ imagePathURI + consignProducts.image }}" height="60px"
                                                   width="60px"
-                                                  (error)="onImageError($event)" (click)="popUpImage(j)" /></td>
+                                                  (error)="onImageError($event)" /></td>
                           <!--<td>{{ nonActiveProduct.title }}<br>{{ nonActiveProduct.productCode }}<br>{{ nonActiveProduct.vendor }} <br>{{ nonActiveProduct.categoryPath }}</td>-->
-                          <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ nonActiveProduct.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ nonActiveProduct.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{nonActiveProduct.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{nonActiveProduct.categoryPath}}</p></td>
+                          <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ consignProducts.productName}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ consignProducts.productCode }}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{consignProducts.path}}</p></td>
                           <td>
-                            {{nonActiveProduct.inStock}}
+                            {{consignProducts.inStock}}
                           </td>
                           <td>
-                            <input class="form-control" type="number" name="vstock" [(ngModel)]="vstock"
-                                   pattern="[0-9]*">
+                            <input class="form-control" type="number" name="vstock"  id="vstock"
+                                   pattern="[0-9]*"  [(ngModel)]="vstock[j]">
                           </td>
                           <td><button type="button"
                                       style="width: 96px;height: 28px;font-size: 10px;"

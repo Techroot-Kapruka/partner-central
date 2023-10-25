@@ -85,7 +85,7 @@ export class ListShipmentReservedComponent implements OnInit {
       for (let i = 0; i < data.data.length; i++) {
         let or = {
           shipmentId: data.data[i].shipment_id,
-          vendorName: data.data[i].vendor_name,
+          businessName: data.data[i].businessName,
           createDate: data.data[i].create_date,
           totalQuantity: data.data[i].total_quantity,
           grossAmount: data.data[i].gross_amount,
