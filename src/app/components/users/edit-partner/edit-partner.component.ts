@@ -44,6 +44,7 @@ export class EditPartnerComponent implements OnInit {
   public branchCode = '';
   public branchName = '';
   public accountNo = '';
+  public bstatement = '';
 
   public partnerBankDetailsEdit: FormGroup;
   public bankStatement: FormGroup;
@@ -766,7 +767,7 @@ export class EditPartnerComponent implements OnInit {
     const accountNo = (document.getElementById('accountNo') as HTMLInputElement).value;
     const vendorCode = sessionStorage.getItem('temp_code');
 
-    if (this.bankStatement.value.bankStatement !== ''|| this.holdername !== holderName || this.bankName !== this.bankName || this.branchCode!==this.branchCode||this.branchName!==branchName || this.accountNo!==accountNo) {
+    if (this.bankStatement.value.bankStatement !== '' || this.bankName !== bankName || this.holdername !== holderName || this.branchCode !== branchCode || this.branchName !== branchName || this.accountNo !== accountNo) {
       const result = this.validationTextField();
 
       if (result) {
@@ -995,6 +996,7 @@ export class EditPartnerComponent implements OnInit {
           this.branchCode = data.data[i].branch_code;
           this.branchName = data.data[i].branch_name;
           this.accountNo = data.data[i].account_no;
+          this.bstatement = data.data[i].bank_statement;
 
           this.partnerBankDetailsEdit = new FormGroup({
             holderName: new FormControl(data.data[i].account_holdername),
