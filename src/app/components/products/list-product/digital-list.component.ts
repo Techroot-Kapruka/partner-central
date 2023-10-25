@@ -57,7 +57,20 @@ export class DigitalListComponent implements OnInit {
   public unique_code = '';
   public sub_type = '';
   public imagedefaultPathURI = '';
+  public isvalidate:boolean = false;
+  public isoutOfStockValidate:boolean = false;
+  public isSuspendedValidate:boolean = false;
+  public isOnDemandValidate:boolean = false;
+  public isActiveValidate:boolean = false;
+
+
+  public errorMassage:boolean = false;
+  public outOfStockErrorMsg:boolean = false;
+  public suspendedErrorMsg:boolean = false;
+  public onDemandErrorMsg:boolean = false;
+  public activeErrorMsg:boolean = false;
   vstock : number[]=[];
+  dataLoaded: boolean = false;
 
   public imagePathURI = environment.imageURIENV;
 
@@ -68,6 +81,7 @@ export class DigitalListComponent implements OnInit {
   oldPrice: any;
   itemCode: any;
   priceChangeVendor: any;
+  stillLoading = true;
 
   page = 0;
   totPage = 0;
@@ -124,6 +138,13 @@ export class DigitalListComponent implements OnInit {
   @ViewChild('skuTabContent', {static: false}) skuTabContentRef!: ElementRef;
 
   ngOnInit() {
+    setTimeout(() => {
+      this.stopLoading();
+    }, 8000);
+  }
+
+  stopLoading(){
+    this.stillLoading = false;
   }
 
   showElerments() {
@@ -256,7 +277,11 @@ export class DigitalListComponent implements OnInit {
     this.list_pages = [];
 
     if (data.data == null) {
+      this.isActiveValidate=false;
+      this.activeErrorMsg=true;
     } else {
+      this.isActiveValidate=true;
+      this.activeErrorMsg=false;
       const lengthRes = data.data.length;
       for (let i = 0; i < lengthRes; i++) {
 
@@ -471,6 +496,7 @@ export class DigitalListComponent implements OnInit {
   }
 
   errorOrderManage(err) {
+    this.stopLoading();
     this.product = [];
     this.list_pages = [];
 
@@ -507,8 +533,10 @@ export class DigitalListComponent implements OnInit {
   }
 
   manageNonActiveProduct(data) {
+    console.log(data.data)
     this.nonActiveProductsArray = [];
     if (data.data == null) {
+      this.stopLoading();
     } else {
       if (data.status_code === 200) {
         for (let i = 0; i < data.data.length; i++) {
@@ -525,9 +553,11 @@ export class DigitalListComponent implements OnInit {
           };
           this.nonActiveProductsArray.push(or);
         }
+
         this.totalPagesPA = Math.ceil(this.nonActiveProductsArray.length / this.list_pages2);
       }
     }
+    if (this.nonActiveProductsArray.length === 0){this.stopLoading();}
   }
 
   PendingProductFilter(searchTerm: string): void {
@@ -647,7 +677,13 @@ export class DigitalListComponent implements OnInit {
 
   manageConsignmentProducts(data) {
     this.consignmentProducts = [];
+    if(data.data == null|| data.data.length==0){
+        this.isOnDemandValidate=false;
+        this.onDemandErrorMsg=true;
+    }
     if (data.data != null) {
+        this.isOnDemandValidate=true;
+        this.onDemandErrorMsg=false;
       if (data.status_code === 200) {
         for (let i = 0; i < data.data.length; i++) {
           this.vstock[i]=null;
@@ -662,6 +698,7 @@ export class DigitalListComponent implements OnInit {
           this.consignmentProducts.push(or);
         }
       }
+      console.log(this.consignmentProducts)
     }
   }
 
@@ -724,12 +761,15 @@ export class DigitalListComponent implements OnInit {
       }
     }
   }
-
   manegeMonActiveProductsByCompanyName(data) {
     this.approvalPartnerProductList = [];
     if (data.data == null) {
+      this.isvalidate=false;
+      this.errorMassage=true;
     } else {
       if (data.status_code === 200) {
+        this.isvalidate=true;
+        this.errorMassage=false;
         for (let i = 0; i < data.data.length; i++) {
           if(data.data[i].productImage!==null){
 
@@ -1096,6 +1136,7 @@ export class DigitalListComponent implements OnInit {
         editId: data.data[i].editId,
         requestedDate: data.data[i].requestedDate,
         title: data.data[i].title,
+        catePath: data.data[i].catePath,
         action: ''
 
       };
@@ -1124,9 +1165,12 @@ export class DigitalListComponent implements OnInit {
 
   private LoadOutofStockofVendor(data) {
     this.list_outof_stock = [];
-
-    if (data.data == null) {
+    if (data.data == null || data.data.length==0) {
+        this.isoutOfStockValidate=false;
+        this.outOfStockErrorMsg=true;
     } else {
+        this.outOfStockErrorMsg=false;
+        this.isoutOfStockValidate=true;
       const lengthRes = data.data.length;
       for (let i = 0; i < lengthRes; i++) {
         const or = {
@@ -1169,8 +1213,12 @@ export class DigitalListComponent implements OnInit {
   private LoadSuspendedProofVendor(data) {
     this.list_suspend = [];
 
-    if (data.data == null) {
+    if (data.data == null || data.data.length==0) {
+        this.isSuspendedValidate=false;
+        this.suspendedErrorMsg=true;
     } else {
+      this.isSuspendedValidate=true;
+      this.suspendedErrorMsg=false;
       const lengthRes = data.data.length;
       for (let i = 0; i < lengthRes; i++) {
         const or = {
@@ -1206,7 +1254,6 @@ export class DigitalListComponent implements OnInit {
   }
 
   updateTableData(Descrip: string) {
-
     if (Descrip === 'ActivePro') {
       const startIndex = (this.currentPage - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;

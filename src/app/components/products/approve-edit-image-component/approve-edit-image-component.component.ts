@@ -63,6 +63,7 @@ export class ApproveEditImageComponentComponent implements OnInit {
 
   manageImageForEdit(data) {
 
+    console.log(data)
     var imagePath = [];
 
     for (let i = 0; i < data.data.image.length ; i++){

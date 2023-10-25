@@ -29,6 +29,7 @@ import {ApproveEditImageComponentComponent} from './approve-edit-image-component
 import {PaginationComponent} from './pagination/pagination.component';
 import {AngularEditorModule} from '@kolkov/angular-editor';
 import {SelectModule} from 'ng-select';
+import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     maxFilesize: 50,
@@ -50,7 +51,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
         GalleryModule.forRoot(),
         NgxDatatableModule,
         AngularEditorModule,
-        SelectModule
+        SelectModule,
+        NgxSkeletonLoaderModule
     ],
     providers: [
         {
