@@ -58,6 +58,7 @@ export class DigitalListComponent implements OnInit {
   public sub_type = '';
   public imagedefaultPathURI = '';
   vstock : number[]=[];
+  dataLoaded: boolean = false;
 
   public imagePathURI = environment.imageURIENV;
 
@@ -68,6 +69,7 @@ export class DigitalListComponent implements OnInit {
   oldPrice: any;
   itemCode: any;
   priceChangeVendor: any;
+  stillLoading = true;
 
   page = 0;
   totPage = 0;
@@ -124,6 +126,13 @@ export class DigitalListComponent implements OnInit {
   @ViewChild('skuTabContent', {static: false}) skuTabContentRef!: ElementRef;
 
   ngOnInit() {
+    setTimeout(() => {
+      this.stopLoading();
+    }, 8000);
+  }
+
+  stopLoading(){
+    this.stillLoading = false;
   }
 
   showElerments() {
@@ -471,6 +480,7 @@ export class DigitalListComponent implements OnInit {
   }
 
   errorOrderManage(err) {
+    this.stopLoading();
     this.product = [];
     this.list_pages = [];
 
@@ -507,8 +517,10 @@ export class DigitalListComponent implements OnInit {
   }
 
   manageNonActiveProduct(data) {
+    console.log(data.data)
     this.nonActiveProductsArray = [];
     if (data.data == null) {
+      this.stopLoading();
     } else {
       if (data.status_code === 200) {
         for (let i = 0; i < data.data.length; i++) {
@@ -525,9 +537,11 @@ export class DigitalListComponent implements OnInit {
           };
           this.nonActiveProductsArray.push(or);
         }
+
         this.totalPagesPA = Math.ceil(this.nonActiveProductsArray.length / this.list_pages2);
       }
     }
+    if (this.nonActiveProductsArray.length === 0){this.stopLoading();}
   }
 
   PendingProductFilter(searchTerm: string): void {
@@ -662,6 +676,7 @@ export class DigitalListComponent implements OnInit {
           this.consignmentProducts.push(or);
         }
       }
+      console.log(this.consignmentProducts)
     }
   }
 
