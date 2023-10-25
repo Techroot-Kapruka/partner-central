@@ -1096,6 +1096,7 @@ export class DigitalListComponent implements OnInit {
         editId: data.data[i].editId,
         requestedDate: data.data[i].requestedDate,
         title: data.data[i].title,
+        catePath: data.data[i].catePath,
         action: ''
 
       };
