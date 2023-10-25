@@ -19,6 +19,11 @@ export class ListShipmentReservedComponent implements OnInit {
   public selected = [];
   public holdShipmentArray = [];
   public isAdmin = false;
+  public isRecievedShipmentValid = false;
+  public recievedShipmentErrorMsg = false;
+  public isShipmentValid = false;
+  public shipmentErrorMsg = false;
+
   public partnerArray = [];
   public recivedShipmentArray = [];
   public changePriceArray = [];
@@ -75,6 +80,8 @@ export class ListShipmentReservedComponent implements OnInit {
   ManageShippedShipment(data) {
     this.allShipmentArr = [];
     if (data.data != null) {
+      this.isShipmentValid=true;
+      this.shipmentErrorMsg=false;
       for (let i = 0; i < data.data.length; i++) {
         let or = {
           shipmentId: data.data[i].shipment_id,
@@ -90,6 +97,10 @@ export class ListShipmentReservedComponent implements OnInit {
       this.allShipmentArr.sort((a, b) => {
         return new Date(b.createDate).getTime() - new Date(a.createDate).getTime();
       });
+    }else{
+      this.isShipmentValid=false;
+      this.shipmentErrorMsg=true;
+
     }
   }
 
@@ -246,6 +257,8 @@ export class ListShipmentReservedComponent implements OnInit {
   managRecivedShipmetAll(data) {
     this.recivedShipmentArray = [];
     if (data.data != null) {
+      this.isRecievedShipmentValid=true;
+      this.recievedShipmentErrorMsg=false;
       for (let i = 0; i < data.data.length; i++) {
         let or = {
           shipmentId: data.data[i].shipment_id,
@@ -259,6 +272,9 @@ export class ListShipmentReservedComponent implements OnInit {
         };
         this.recivedShipmentArray.push(or);
       }
+    }else{
+      this.isRecievedShipmentValid=false;
+      this.recievedShipmentErrorMsg=true;
     }
   }
 
