@@ -7,6 +7,10 @@
 
             <ngb-tab [title]="getActiveTabTitle()" *ngIf="qaTables">
               <ng-template ngbTabContent>
+                <div *ngIf="activeErrorMsg">
+                  <h4>You have no Active products yet</h4>
+                </div>
+                <div *ngIf="isActiveValidate">
                 <div class="tab-pane fade active show" id="account" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
                     <div *ngIf="isAdmin" class="btn-popup pull-right">
@@ -27,7 +31,7 @@
                       <div class="col-md-9">
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
-                          <table class="table table-sm table-bordered">
+                          <table class="table table-sm table-bordered" id="activeProductTable">
                             <thead class="table-primary">
                             <tr>
                               <th>Product Image</th>
@@ -232,10 +236,11 @@
                     </div>
                   </div>
                 </div>
+                </div>
               </ng-template>
             </ngb-tab>
 
-            <ngb-tab [title]="getPendingApprovalList()" *ngIf="isAdmin">
+            <ngb-tab [title]="getPendingApprovalList()" *ngIf="isAdmin" id="p">
               <ng-template ngbTabContent>
                 <div class="tab-pane fade active show" id="account1" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
@@ -470,11 +475,13 @@
 
                       <ng-container>
                         <tr *ngFor="let nonActiveProduct of nonActiveEditedImageProductsArray; let j = index;">
+
                           <td><p
                             style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ nonActiveProduct.title}}</p>
                             <p
                               style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ nonActiveProduct.productCode }}</p>
                           </td>
+
                           <td>
                             {{nonActiveProduct.requestedDate}}
                           </td>
@@ -482,7 +489,7 @@
                             {{nonActiveProduct.requestBy}}
                           </td>
                           <td>
-                            <button type="button" (click)='ApproveEditProduct(j)'
+                            <button type="button" (click)='ApproveEditImageProduct(j)'
                                     style="width: 96px;height: 28px;font-size: 10px;"
                                     class="btn btn-outline-success">View
                             </button>
@@ -497,8 +504,13 @@
               </ng-template>
             </ngb-tab>
 
-            <ngb-tab [title]="getPendingQC()" *ngIf="isPartner">
-              <ng-template ngbTabContent>
+
+            <ngb-tab [title]="getPendingQC()" *ngIf="isPartner" >
+              <ng-template ngbTabContent >
+                <div *ngIf=errorMassage>
+                  <h4>You have no Pending Approval products yet</h4>
+                </div>
+                <div *ngIf="isvalidate">
                 <div class="tab-pane fade active show" id="account4" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
                     <div class="col-md-9">
@@ -510,7 +522,8 @@
                       <div class="col-md-9">
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
-                          <table class="table table-sm table-bordered">
+                          <h4 id="pendingApprovalMsg" style="display: none"> You have no Pending Approval Products yet</h4>
+                          <table class="table table-sm table-bordered" id="pendingProductTbl">
                             <thead class="table-primary">
                             <tr>
                               <th>Product Image</th>
@@ -596,11 +609,17 @@
                     </div>
                   </div>
                 </div>
+                </div>
               </ng-template>
             </ngb-tab>
 
-            <ngb-tab [title]="getOutofStock()" *ngIf="isPartner">
+
+            <ngb-tab [title]="getOutofStock()" *ngIf="isPartner" >
               <ng-template ngbTabContent>
+                <div *ngIf=outOfStockErrorMsg>
+                  <h4>You have no Out of Stock products yet</h4>
+                </div>
+                <div *ngIf="isoutOfStockValidate">
                 <div class="tab-pane fade active show" id="account5" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
                     <div class="col-md-9">
@@ -693,11 +712,17 @@
                     </div>
                   </div>
                 </div>
+                </div>
               </ng-template>
             </ngb-tab>
 
             <ngb-tab [title]="getSuspendedPro()" *ngIf="isPartner">
               <ng-template ngbTabContent>
+                <div *ngIf="suspendedErrorMsg">
+                  <h4>You have no Suspended products yet</h4>
+
+                </div>
+                <div *ngIf="isSuspendedValidate" >
                 <div class="tab-pane fade active show" id="account6" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
                     <div class="col-md-9">
@@ -794,11 +819,17 @@
                     </div>
                   </div>
                 </div>
+                </div>
               </ng-template>
             </ngb-tab>
 
             <ngb-tab [title]="getOnDemandPro()" *ngIf="isPartner">
               <ng-template ngbTabContent>
+                <div *ngIf="onDemandErrorMsg">
+                  <h4>You have no On Demand products yet</h4>
+
+                </div>
+                <div *ngIf="isOnDemandValidate" >
                 <div class="tab-pane fade active show" id="account5" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
                     <div class="clearfix"></div>
@@ -880,6 +911,7 @@
                     <!--</ngx-datatable-column>-->
                     <!--</ngx-datatable>-->
                   </div>
+                </div>
                 </div>
               </ng-template>
             </ngb-tab>
