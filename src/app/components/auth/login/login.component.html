@@ -107,32 +107,141 @@
     </div>
   </div>
 </section>
-<div class="footer">
-  <div class="square">
-    <div class="footer_p">
-      <div class="quote">
-        <img src="assets/images/loginPage/q.png">
-      </div>
-      <p>
-        Kapruka Partner Central provides you with the tools and resources you need to reach a wider audience, increase
-        your sales, and manage your business effectively. Whether you are a small retailer, a local brand, or a large
-        enterprise, we have the solutions to help you thrive in the digital marketplace.
-      </p>
-    </div>
+
+<style>
+  body, ul {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  footer {
+    background-color: #fafafa;
+    color: #000;
+    text-align: center;
+    padding: 10px;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+  }
+
+  .footer-contact,
+  .social-icons {
+    /*            margin-top: 15px;*/
+    display: flex;
+    align-items: center;
+  }
+
+  .footer-contact p,
+  .social-icons i {
+    color: #000;
+    margin: 5px 10px;
+    display: inline;
+  }
+
+  .footer-contact a,
+  .social-icons a {
+    color: #000;
+    text-decoration: none;
+  }
+
+  .footer-info p {
+
+    font-size: 12px;
+  }
+
+  .footer-logo img {
+    max-width: 100px;
+  }
+
+  .footer-contact p:not(:last-child):after {
+    content: "|";
+    margin: 0 5px;
+  }
+
+  .footer-contact i {
+    margin-right: 10px;
+  }
+
+
+  @media (max-width: 906px) {
+    .footer-contact {
+      flex-direction: column;
+      text-align: center;
+    }
+
+    .footer-contact p {
+      margin: 5px 0;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+    }
+
+    .footer-contact p:not(:last-child):after {
+      display: none;
+    }
+
+    .footer-info p {
+      font-size: 12px;
+    }
+
+    .footer-contact p i {
+      font-size: 12px;
+    }
+  }
+</style>
+
+<div class="footer-content">
+  <div class="footer-logo">
+    <img src="assets/images/loginPage/Logo.png" alt="PC Logo">
   </div>
-  <div class="footer_image">
-    <img src="assets/images/loginPage/14.jpg">
+  <div class="footer-contact">
+    <p><i class="fas fa-map-marker"></i> 147 Kottawa Road Nugegoda</p>
+    <p><i class="fas fa-phone"></i><a href="tel:+94117551111">+94117551111</a></p>
+    <p><i class="fab fa-whatsapp"></i><a href="https://web.whatsapp.com/send?phone=94702398310">+94 70 239 8310</a></p>
+    <p><i class="far fa-envelope"></i><a href="mailto:partnercentral@kapruka.com">partnercentral@kapruka.com</a></p>
   </div>
 </div>
-<div class="footerBottom">
-  <div class="blcokoneF">
-    <span>Tel:</span>
-    <a href="tel:+94117551111">+94117551111</a>
-  </div>
-  <div class="blcokoneF">
-    <span>Email:</span> <a href="mailto:+94117551111">partnercentral@kapruka.com</a>
-  </div>
+<div class="footer-info">
+  <p style="text-align: center; color: #2c2b76">&copy; 2000-2023 © Kapruka.com® Online Shopping for Sri Lankans around
+    the world. <br> All rights reserved.</p>
 </div>
+
+
+
+<!--<div class="footer">-->
+<!--  <div class="square">-->
+<!--    <div class="footer_p">-->
+<!--      <div class="quote">-->
+<!--        <img src="assets/images/loginPage/q.png">-->
+<!--      </div>-->
+<!--      <p>-->
+<!--        Kapruka Partner Central provides you with the tools and resources you need to reach a wider audience, increase-->
+<!--        your sales, and manage your business effectively. Whether you are a small retailer, a local brand, or a large-->
+<!--        enterprise, we have the solutions to help you thrive in the digital marketplace.-->
+<!--      </p>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--  <div class="footer_image">-->
+<!--    <img src="assets/images/loginPage/14.jpg">-->
+<!--  </div>-->
+<!--</div>-->
+<!--<div class="footerBottom">-->
+<!--  <div class="blcokoneF">-->
+<!--    <span>Tel:</span>-->
+<!--    <a href="tel:+94117551111">+94117551111</a>-->
+<!--  </div>-->
+<!--  <div class="blcokoneF">-->
+<!--    <span>Email:</span> <a href="mailto:+94117551111">partnercentral@kapruka.com</a>-->
+<!--  </div>-->
+<!--</div>-->
 
 
 
