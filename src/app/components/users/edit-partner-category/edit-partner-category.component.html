@@ -48,14 +48,14 @@
                       <div class="col-md-5">
                         <div class="form-group col-md-12">
                           <div class="row" style="border: 1px solid black; position: relative;padding-top: 30px;margin-top: 2%">
-                            <div style="position: absolute;background: #fff;padding: 0px 15px ;left: 15px;top: -15px"><strong>Requested Categories (Pending Approval)</strong></div>
+                            <div style="position: absolute;background: #fff;padding: 0px 15px ;left: 15px;top: -15px"><strong style="font-size: 13px">Requested Categories (Pending Approval)</strong></div>
                             <div class="form-group col-md-12"
                                  *ngFor="let nonApprovalCategoryArrs of nonApprovalCategoryArr; let i=index"
                                  [attr.data-index]="i">
                               <span style="height: 30px; padding-top: 8.8px; background-color: green !important;"
                                     class="badge badge-secondary">{{nonApprovalCategoryArrs['category_path']}}
                                 <i class="fa fa-window-close"
-                                   style="color: red;float: right; top: 0%;position: absolute !important;margin-left:1%;width: 4%"
+                                   style="color: red;float: right;position: absolute !important;margin-left:1%;width: 4%"
                                    (click)="removePartnerCategoryPending(i)" data-toggle="tooltip" data-placement="top" title="Remove Your Category"></i>
                               </span><br>
                             </div>
@@ -93,7 +93,7 @@
             <div class="col-md-12" style="margin-left: 16%;">
               <div class="form-group row">
                 <select class="custom-select col-xl-8 col-md-7" id="category_main" (change)="changeMainCategory()">
-                  <option value="">-- Select Category --</option>
+                  <option value="" style="text-align: center">-- Select Category --</option>
                   <option *ngFor="let mainCategoryArrs of mainCategoryArr"
                           value="{{mainCategoryArrs['code']}}">{{mainCategoryArrs['name']}}
                   </option>
@@ -114,6 +114,7 @@
               <div class="form-group row">
                 <select class="custom-select col-xl-8 col-md-7" id="Category_sub_sub">
                   <option value="">-- Select Sub Sub Category --</option>
+
                   <option *ngFor="let subSubCategoryArrs of subSubCategoryArr"
                           value="{{subSubCategoryArrs['code']}}">{{subSubCategoryArrs['name']}}
                   </option>
@@ -123,7 +124,7 @@
             <div class="col-md-12" style="margin-left: 16%;">
               <div class="form-group row">
                 <div class="pull-left">
-                  <button type="button" id="subSave" (click)="addCategoryBredCrums()" class="btn btn-info">Add
+                  <button type="button" id="subSave" (click)="addCategoryBredCrums()" class="btn btn-info" style="font-size: 10px;">Add
                   </button>
                 </div>
               </div>
@@ -132,9 +133,13 @@
             <div class="col-md-12">
               <nav aria-label="breadcrumb"
                    *ngFor="let allCategoryBreadcrumbArrs of allCategoryBreadcrumbArr; let i = index"
-                   [attr.data-index]="i" style="margin-left: 5%; !important;">
+                   [attr.data-index]="i" style="margin-left: 3%; !important; font-size: 12px;">
                 <i (click)="removeCategoryBreadcrum(i)" class="fa fa-close"
-                   style="color: red;float: right"></i>
+                   style="    position: absolute;
+                              color: red;
+                              right: 35px;
+                              top: 15px;
+                              float: right;"></i>
                 <ol class="breadcrumb">
                   <li *ngIf="allCategoryBreadcrumbArrs['cat_name_bool']" class="breadcrumb-item"><a
                     href="#">{{
@@ -154,9 +159,9 @@
             <div class="col-md-12" style="margin-top: 5%; margin-left: 54%;">
               <div class="form-group row">
                 <div class="pull-left">
-                  <button type="button" (click)="MakeYourCategoryRequest(modal)" class="btn btn-primary">Make Your
-                    Request
-                  </button>
+                  <!--<button type="button" (click)="MakeYourCategoryRequest(modal)" class="btn btn-primary">Make Your-->
+                    <!--Request-->
+                  <!--</button>-->
                 </div>
               </div>
             </div>
@@ -166,9 +171,18 @@
       </div>
     </form>
   </div>
+
+
+
+
+
   <div class="modal-footer">
+    <button type="button" (click)="MakeYourCategoryRequest(modal)" class="btn btn-primary" style="font-size: 12px;">Make Your
+      Request
+    </button>
+
     <button class="btn btn-danger" type="button" data-dismiss="modal"
-            (click)="modal.dismiss('Cross click')">Close
+            (click)="modal.dismiss('Cross click')" style="font-size: 12px;">Close
     </button>
   </div>
 </ng-template>
