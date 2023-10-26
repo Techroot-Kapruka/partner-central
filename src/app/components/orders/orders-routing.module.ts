@@ -3,6 +3,7 @@ import {ListOrdersComponent} from './list-orders/list-orders.component';
 import {NgModule} from '@angular/core';
 import {ViewOrdersComponent} from "./view-orders/view-orders.component";
 import {PoListComponent} from "./po-list/po-list.component";
+import {OrdersListComponent} from "./orders-list/orders-list.component";
 
 const routes: Routes = [
   {
@@ -29,6 +30,14 @@ const routes: Routes = [
         component: PoListComponent,
         data: {
           title: 'View PO Order',
+          breadcrumb: 'View PO Order'
+        }
+      },
+      {
+        path: 'orders-list',
+        component: OrdersListComponent,
+        data: {
+          title: 'Order List',
           breadcrumb: 'View PO Order'
         }
       }

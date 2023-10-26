@@ -10,10 +10,11 @@ import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { ViewOrdersComponent } from './view-orders/view-orders.component';
 import { PoListComponent } from './po-list/po-list.component';
 import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
+import { OrdersListComponent } from './orders-list/orders-list.component';
 
 
 @NgModule({
-  declarations: [ListOrdersComponent, ViewOrdersComponent, PoListComponent],
+  declarations: [ListOrdersComponent, ViewOrdersComponent, PoListComponent, OrdersListComponent],
   imports: [
     CommonModule,
     FormsModule,
