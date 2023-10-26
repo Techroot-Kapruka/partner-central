@@ -417,8 +417,39 @@ export class DigitalListComponent implements OnInit {
     }
   }
 
-  deleteActiveProduct(index) {
+  async deleteActiveProduct(productCode) {
 
+    const { value: text } = await Swal.fire({
+      title: 'Enter a comment',
+      input: 'text',
+      inputPlaceholder: 'Enter your comment here',
+      inputValidator: (value) => {
+        if (!value) {
+          return 'You need to write something!'
+        }
+      }
+    })
+      Swal.fire({
+        title: 'Do you want to save the changes?',
+        showCancelButton: true,
+        confirmButtonText: 'Save',
+      }).then((result) => {
+        const payLoad = {
+          product_code:productCode,
+          rejecteddBy: sessionStorage.getItem('userId'),
+          rejectReason:text
+        };
+        this.productService.deleteProduct(payLoad).subscribe(
+          data => this.getAllProduct(),
+          error => (error.status)
+        );
+
+        if (result.isConfirmed) {
+          Swal.fire('Saved!', '', 'success')
+        } else if (result.isDenied) {
+          Swal.fire('Changes are not saved', '', 'info')
+        }
+      })
   }
   popUpImageActive(index:number){
 

@@ -271,4 +271,11 @@ export class ProductService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/getProductVariation', payLoad, {headers});
   }
+  deleteProduct(payLoad) {
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.delete<any>(this.SERVER + 'product/removeProduct', {
+      headers: headers,
+      body: payLoad
+    });
+  }
 }
