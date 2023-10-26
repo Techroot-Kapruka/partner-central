@@ -34,7 +34,7 @@
         <td><input class="form-check-input" type="checkbox"></td>
         <td>{{i+1}}</td>
         <td>{{msgData['subject']}}</td>
-        <td (click)="displayMsgBody(i)">{{limitWords(msgData['message'])}}</td>
+        <td (click)="displayMsgBody(i)" [innerHTML]="limitWords(msgData['message'])"></td>
         <td>{{msgData['create_date_time']}}</td>
       </tr>
       </tbody>
