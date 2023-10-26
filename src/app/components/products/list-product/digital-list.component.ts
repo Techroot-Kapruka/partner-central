@@ -128,7 +128,7 @@ export class DigitalListComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.stopLoading();
-    }, 8000);
+    }, 12000);
   }
 
   stopLoading(){
