@@ -6,6 +6,10 @@
           <ngb-tabset class="tab-coupon">
             <ngb-tab title="Shipment List">
               <ng-template ngbTabContent>
+                <div *ngIf="shipmentErrorMsg">
+                  <h4>You have no Shipments yet</h4>
+                </div>
+                <div *ngIf="isShipmentValid" >
                 <div class="tab-pane fade active show" id="account" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
                     <!--<div *ngIf="isAdmin" class="btn-popup pull-right">-->
@@ -66,10 +70,15 @@
                     </ngx-datatable>
                   </div>
                 </div>
+                </div>
               </ng-template>
             </ngb-tab>
             <ngb-tab title="Shipment Received List">
               <ng-template ngbTabContent>
+                <div *ngIf="recievedShipmentErrorMsg">
+                  <h4>You have no Recieved Shipments yet</h4>
+                </div>
+                <div *ngIf="isRecievedShipmentValid">
                 <div class="tab-pane fade active show" id="account1" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
                     <div *ngIf="isAdmin" class="btn-popup pull-right">
@@ -116,6 +125,7 @@
                       </ngx-datatable-column>
                     </ngx-datatable>
                   </div>
+                </div>
                 </div>
               </ng-template>
             </ngb-tab>
