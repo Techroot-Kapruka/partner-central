@@ -64,8 +64,14 @@ export class UserNotificationsComponent implements OnInit {
   }
 
   displayMsgBody(i: number) {
-    Swal.fire('message', this.filteredMessageObjArray[i].message
-    );
+    const message = this.filteredMessageObjArray[i].message;
+    const messageDiv = document.createElement('div');
+    messageDiv.innerHTML = message;
+
+    Swal.fire({
+      title: 'Message',
+      html: messageDiv, // Use the created div with innerHTML
+    });
   }
 
   limitWords(paragraph: string) {
