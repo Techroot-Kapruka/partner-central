@@ -261,9 +261,19 @@ export class DigitalAddComponent implements OnInit {
           'Only Increasing is Allowed',
           'warning'
         );
-      } else {
-        this.categoryMargin = Number(inputElement.value);
-        this.setSellingPrice();
+
+      }else {
+        if (parseFloat(inputElement.value) > 100.00) {
+          inputElement.value = this.categoryMargin.toFixed(2).toString();
+          Swal.fire(
+            'Maximum Limit Reached.',
+            'Please Enter Valid Margin',
+            'warning'
+          );
+        }else{
+          this.categoryMargin = Number(inputElement.value);
+          this.setSellingPrice();
+        }
       }
     }
   }
@@ -2283,6 +2293,19 @@ export class DigitalAddComponent implements OnInit {
     this.attributeArr = this.attributesArray;
   }
 
+  formatCurrency(event:any){
+    let value = event.target.value.replace(/[^\d]/g, '').replace(/^0+/, '');
+
+    // Add commas for thousands separators
+    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+
+    (document.getElementById('price') as HTMLInputElement).value = value;
+
+    // Call your function to set the selling price
+    // this.setSellingPrice();
+  }
+
   setSellingPrice() {
     if ((document.getElementById('categoryPathInput') as HTMLInputElement).value === '') {
       Swal.fire(
@@ -2303,7 +2326,9 @@ export class DigitalAddComponent implements OnInit {
     }
   }
 
+
   onKeyPress(event: KeyboardEvent) {
+
     const pattern = /^[a-zA-Z0-9\s."'/\\,-]*$/; // Regular expression to allow alphanumeric characters
 
     const inputChar = event.key;
@@ -2319,8 +2344,9 @@ export class DigitalAddComponent implements OnInit {
 
   checkChars() {
 
-    const textarea = document.getElementById('product_description') as HTMLTextAreaElement;
-    const textLength = textarea.value.length;
+    // const textarea = document.getElementById('product_description') as HTMLTextAreaElement;
+    // const textLength = textarea.value.length;
+    const textLength = this.descriptionContent.length;
 
     if (textLength > 200 && textLength <= 6000) {
       this.showmsg = false;
