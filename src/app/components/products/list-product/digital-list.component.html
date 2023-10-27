@@ -420,7 +420,17 @@
 
                       <ng-container>
                         <tr *ngFor="let nonActiveProduct of nonActiveEditedImageProductsArray; let j = index;">
-                          <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ nonActiveProduct.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ nonActiveProduct.productCode }}</p></td>
+
+
+                          <td><p
+                            style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ nonActiveProduct.title}}</p>
+                            <p
+                              style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ nonActiveProduct.productCode }}</p>
+                            <p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600"> &nbsp;
+                              &nbsp;{{nonActiveProduct.catePath}}</p>
+                          </td>
+
+
                           <td>
                             {{nonActiveProduct.requestedDate}}
                           </td>
