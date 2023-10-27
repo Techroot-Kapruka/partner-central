@@ -1,3 +1,4 @@
+
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-12">
@@ -7,10 +8,6 @@
 
             <ngb-tab [title]="getActiveTabTitle()" *ngIf="qaTables">
               <ng-template ngbTabContent>
-                <div *ngIf="activeErrorMsg">
-                  <h4>You have no Active products yet</h4>
-                </div>
-                <div *ngIf="isActiveValidate">
                 <div class="tab-pane fade active show" id="account" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
                     <div *ngIf="isAdmin" class="btn-popup pull-right">
@@ -31,7 +28,7 @@
                       <div class="col-md-9">
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
-                          <table class="table table-sm table-bordered" id="activeProductTable">
+                          <table class="table table-sm table-bordered">
                             <thead class="table-primary">
                             <tr>
                               <th>Product Image</th>
@@ -48,23 +45,13 @@
                               <tr *ngFor="let productDetail of filteredProducts; let i = index;">
                                 <td align="center"><img src="{{ imagePathURI + productDetail.image }}" height="60px"
                                                         width="60px"
-                                                        (error)="onImageError($event)" (click)="popUpImageActive(i)"/>
-                                </td>
+                                                        (error)="onImageError($event)" (click)="popUpImageActive(i)" /></td>
                                 <!--<td> <p>{{productDetail.title}}</p><p>{{ productDetail.productCode }}</p><p>{{productDetail.vendor}}</p><p>{{productDetail.categoryPath}}</p></td>-->
-                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; cursor: pointer"><a
-                                  style="color: #3366cc !important;" (click)="loadPage(i)">{{ productDetail.title}}</a>
-                                </p>
-                                  <p
-                                    style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ productDetail.productCode }}</p>
-                                  <p style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp;
-                                    &nbsp;{{productDetail.vendor}}</p>
-                                  <p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600"> &nbsp;
-                                    &nbsp;{{productDetail.categoryPath}}</p></td>
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000; cursor: pointer"><a (click)="loadPage(i)">{{ productDetail.title}}</a></p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ productDetail.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{productDetail.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{productDetail.categoryPath}}</p></td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="productDetail.price" autofocus/>
-                                  <img [hidden]="true" style="text-align: right" mat-button
-                                       (click)="EditPricePopup(i,1)"
+                                  <img [hidden]="true" style="text-align: right" mat-button (click)="EditPricePopup(i,1)"
                                        *ngIf="EnablePriceEdit"
                                        src="assets/images/EditImage.png" height="20px" weight="20px" title="Edit Price">
                                 </td>
@@ -85,7 +72,7 @@
                                           style="width: 80px;height: 28px;font-size: 10px;"
                                           class="btn btn-outline-info">edit
                                   </button>
-                                  <button type="button" (click)='deleteActiveProduct(i)'
+                                  <button type="button" (click)='deleteActiveProduct(productDetail.productCode)'
                                           style="width: 80px;height: 28px;font-size: 10px;"
                                           class="btn btn-outline-danger">delete
                                   </button>
@@ -98,7 +85,6 @@
                             </ng-container>
                             <ng-template #paginatedData>
                               <!-- Display paginated items if filteredProducts is empty -->
-
                               <ng-container *ngFor="let rowIndex of [1,2,3]">
                                 <!--                              show skeleton loader until product load-->
                                 <tr *ngIf="stillLoading">
@@ -124,37 +110,22 @@
                               </ng-container>
                               <!--                              show skeleton loader until product loa end-->
 
-
                               <tr
                                 *ngFor="let productDetail of (paginatedItems.length > 0 ? paginatedItems : list_pages); let i = index;">
-
-                                <td align="center">{{stopLoading()}}<img src="{{ imagePathURI + productDetail.image }}"
-                                                                         (click)="popUpImageActive(i)" height="60px"
-                                                                         width="60px"
-                                                                         (error)="onImageError($event)"/></td>
-                                <td><p
-                                  style="margin: 0px; font-size: 16px;font-weight: 600; color: #000; cursor: pointer"><a
-                                  style="color: #3366cc !important" (click)="loadPage(i)">{{ productDetail.title}}</a>
-                                </p>
-                                  <p
-                                    style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ productDetail.productCode }}</p>
-                                  <p style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp;
-                                    &nbsp;{{productDetail.vendor}}</p>
-                                  <p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600"> &nbsp;
-                                    &nbsp;{{productDetail.categoryPath}}</p></td>
+                                <td align="center">{{stopLoading()}}<img src="{{ imagePathURI + productDetail.image }}" (click)="popUpImageActive(i)" height="60px"
+                                                        width="60px"
+                                                        (error)="onImageError($event)" /></td>
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000; cursor: pointer"><a (click)="loadPage(i)">{{ productDetail.title}}</a></p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ productDetail.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{productDetail.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{productDetail.categoryPath}}</p></td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="productDetail.price" autofocus/>
                                   <!--[hidden]="true"-->
-                                  <img [hidden]="true" style="text-align: right" mat-button
-                                       (click)="EditPricePopup(i, 1)"
+                                  <img [hidden]="true" style="text-align: right" mat-button (click)="EditPricePopup(i, 1)"
                                        *ngIf="EnablePriceEdit"
                                        src="assets/images/EditImage.png" height="20px" weight="20px" title="Edit Price">
 
                                   <button [hidden]="true" *ngIf="EnablePriceEdit" type="button" class="btn btn-primary"
-                                          style="text-align: right"
-                                          (click)="popup(productDetail.price,productDetail.productCode)"><i
-                                    class="fa fa-edit"></i></button>
+                                          style="text-align: right" (click)="popup(productDetail.price,productDetail.productCode)"><i class="fa fa-edit"></i> </button>
                                 </td>
                                 <td>
                                   <input type="text" disabled style="width:70px; height: 30px; border: none;"
@@ -170,7 +141,7 @@
                                           style="width: 80px;height: 28px;font-size: 10px;"
                                           class="btn btn-outline-info">edit
                                   </button>
-                                  <button type="button" (click)='deleteActiveProduct(i)'
+                                  <button type="button" (click)='deleteActiveProduct(productDetail.productCode)'
                                           style="width: 80px;height: 28px;font-size: 10px;"
                                           class="btn btn-outline-danger">delete
                                   </button>
@@ -182,7 +153,7 @@
                               </tr>
                             </ng-template>
                             <ng-template #imagePopup let-modal>
-                              <div class="modal-content">
+                              <div class="modal-content" >
                                 <div class="modal-header">
                                   <h4 class="modal-title">Image Preview</h4>
                                   <button type="button" class="close" (click)="closePopup()">
@@ -195,7 +166,7 @@
                               </div>
                             </ng-template>
                             <ng-template #pricePopup let-modal>
-                              <div class="modal-content">
+                              <div class="modal-content" >
                                 <div class="modal-header">
                                   <h4 class="modal-title">Change Price</h4>
                                   <button type="button" class="close" (click)="closePopup()">
@@ -207,8 +178,7 @@
                                     <div class="row">
                                       <div class="col-md-6">
                                         <label for="oldPrice">Old Price</label>
-                                        <input class="form-control" id="oldPrice" disabled type="text"
-                                               value="{{oldPrice}}"/>
+                                        <input class="form-control" id="oldPrice" disabled type="text" value="{{oldPrice}}"/>
                                       </div>
                                       <div class="col-md-6">
                                         <label for="newPrice">New Price</label>
@@ -236,11 +206,10 @@
                     </div>
                   </div>
                 </div>
-                </div>
               </ng-template>
             </ngb-tab>
 
-            <ngb-tab [title]="getPendingApprovalList()" *ngIf="isAdmin" id="p">
+            <ngb-tab [title]="getPendingApprovalList()" *ngIf="isAdmin">
               <ng-template ngbTabContent>
                 <div class="tab-pane fade active show" id="account1" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
@@ -251,7 +220,7 @@
                       </div>
                       <div class="col-md-6">
                         <input autofocus type="text" class="form-control" placeholder="Search By Business Name..."
-                               (input)="PendingProductFilterByBusinessName($event.target.value)" style="width: 60%"/>
+                               (input)="PendingProductFilterByBusinessName($event.target.value)"  style="width: 60%"/>
                       </div>
                     </div>
 
@@ -274,7 +243,7 @@
                             <tbody>
 
                             <ng-template #imagePopup let-modal>
-                              <div class="modal-content">
+                              <div class="modal-content" >
                                 <div class="modal-header">
                                   <h4 class="modal-title">Image Preview</h4>
                                   <button type="button" class="close" (click)="closePopup()">
@@ -292,16 +261,9 @@
                               <tr *ngFor="let nonActiveProduct of filteredPendingProducts; let j = index;">
                                 <td align="center"><img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"
                                                         width="60px"
-                                                        (error)="onImageError($event)" (click)="popUpImage(j)"/></td>
+                                                        (error)="onImageError($event)" (click)="popUpImage(j)" /></td>
                                 <!--<td>{{ nonActiveProduct.title }}<br>{{ nonActiveProduct.productCode }}<br>{{ nonActiveProduct.vendor }} <br>{{ nonActiveProduct.categoryPath }}</td>-->
-                                <td><p
-                                  style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ nonActiveProduct.title}}</p>
-                                  <p
-                                    style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ nonActiveProduct.productCode }}</p>
-                                  <p style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp;
-                                    &nbsp;{{nonActiveProduct.vendor}}</p>
-                                  <p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600"> &nbsp;
-                                    &nbsp;{{nonActiveProduct.categoryPath}}</p></td>
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ nonActiveProduct.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ nonActiveProduct.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{nonActiveProduct.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{nonActiveProduct.categoryPath}}</p></td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="nonActiveProduct.price" autofocus/>
@@ -329,14 +291,7 @@
                                                         width="60px"
                                                         (error)="onImageError($event)" (click)="popUpImage(j)"/></td>
                                 <!--<td>{{ nonActiveProduct.title }}<br>{{ nonActiveProduct.productCode }}<br>{{ nonActiveProduct.vendor }}<br>{{ nonActiveProduct.categoryPath }}</td>-->
-                                <td><p
-                                  style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ nonActiveProduct.title}}</p>
-                                  <p
-                                    style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ nonActiveProduct.productCode }}</p>
-                                  <p style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp;
-                                    &nbsp;{{nonActiveProduct.vendor}}</p>
-                                  <p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600"> &nbsp;
-                                    &nbsp;{{nonActiveProduct.categoryPath}}</p></td>
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ nonActiveProduct.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ nonActiveProduct.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{nonActiveProduct.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{nonActiveProduct.categoryPath}}</p></td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="nonActiveProduct.price" autofocus/>
@@ -378,13 +333,13 @@
                     <div class="clearfix"></div>
                     <div class="col-md-6">
                       <input autofocus type="text" class="form-control" placeholder="Search By Requested Name..."
-                             (input)="editProductApprovalFilter($event.target.value)" style="width: 60%"/>
+                             (input)="editProductApprovalFilter($event.target.value)"  style="width: 60%"/>
                     </div>
 
                     <table class="table table-sm table-bordered">
                       <thead class="table-primary">
                       <tr>
-                        <th>Product Image</th>
+                        <th>Product Image </th>
                         <th>Title</th>
                         <th>Requested Date</th>
                         <th>Request By</th>
@@ -398,14 +353,9 @@
                           <td align="center">
                             <img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"
                                  width="60px"
-                                 (error)="onImageError($event)"/>
+                                 (error)="onImageError($event)" />
                           </td>
-                          <td><p
-                            style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ nonActiveProduct.title}}</p>
-                            <p
-                              style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ nonActiveProduct.productCode }}</p>
-                            <p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600"> &nbsp;
-                              &nbsp;{{nonActiveProduct.categoryPath}}</p></td>
+                          <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ nonActiveProduct.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ nonActiveProduct.productCode }}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{nonActiveProduct.categoryPath}}</p></td>
                           <td>
                             {{nonActiveProduct.requestedDate}}
                           </td>
@@ -426,14 +376,9 @@
                           <td align="center">
                             <img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"
                                  width="60px"
-                                 (error)="onImageError($event)"/>
+                                 (error)="onImageError($event)" />
                           </td>
-                          <td><p
-                            style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ nonActiveProduct.title}}</p>
-                            <p
-                              style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ nonActiveProduct.productCode }}</p>
-                            <p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600"> &nbsp;
-                              &nbsp;{{nonActiveProduct.categoryPath}}</p></td>
+                          <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ nonActiveProduct.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ nonActiveProduct.productCode }}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{nonActiveProduct.categoryPath}}</p></td>
                           <td>
                             {{nonActiveProduct.requestedDate}}
                           </td>
@@ -476,6 +421,7 @@
                       <ng-container>
                         <tr *ngFor="let nonActiveProduct of nonActiveEditedImageProductsArray; let j = index;">
 
+
                           <td><p
                             style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ nonActiveProduct.title}}</p>
                             <p
@@ -484,6 +430,7 @@
                               &nbsp;{{nonActiveProduct.catePath}}</p>
                           </td>
 
+
                           <td>
                             {{nonActiveProduct.requestedDate}}
                           </td>
@@ -491,7 +438,7 @@
                             {{nonActiveProduct.requestBy}}
                           </td>
                           <td>
-                            <button type="button" (click)='ApproveEditImageProduct(j)'
+                            <button type="button" (click)='ApproveEditProduct(j)'
                                     style="width: 96px;height: 28px;font-size: 10px;"
                                     class="btn btn-outline-success">View
                             </button>
@@ -506,13 +453,8 @@
               </ng-template>
             </ngb-tab>
 
-
-            <ngb-tab [title]="getPendingQC()" *ngIf="isPartner" >
-              <ng-template ngbTabContent >
-                <div *ngIf=errorMassage>
-                  <h4>You have no Pending Approval products yet</h4>
-                </div>
-                <div *ngIf="isvalidate">
+            <ngb-tab [title]="getPendingQC()" *ngIf="isPartner">
+              <ng-template ngbTabContent>
                 <div class="tab-pane fade active show" id="account4" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
                     <div class="col-md-9">
@@ -524,8 +466,7 @@
                       <div class="col-md-9">
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
-                          <h4 id="pendingApprovalMsg" style="display: none"> You have no Pending Approval Products yet</h4>
-                          <table class="table table-sm table-bordered" id="pendingProductTbl">
+                          <table class="table table-sm table-bordered">
                             <thead class="table-primary">
                             <tr>
                               <th>Product Image</th>
@@ -541,15 +482,10 @@
                               <tr *ngFor="let pendingQC of filteredPendingQC; let x = index;">
                                 <td align="center"><img src="{{ imagePathURI + pendingQC.image }}" height="60px"
                                                         width="60px"
-                                                        (error)="onImageError($event)" (click)="popUpImagePending(x)"/>
+                                                        (error)="onImageError($event)" (click)="popUpImagePending(x)" />
                                   <!--<td class="productData">{{ pendingQC.title }} <br> {{ pendingQC.productCode }} <br>{{ pendingQC.categoryPath }} </td>-->
 
-                                <td><p
-                                  style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ pendingQC.title}}</p>
-                                  <p
-                                    style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ pendingQC.productCode }}</p>
-                                  <p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600"> &nbsp;
-                                    &nbsp;{{pendingQC.categoryPath}}</p></td>
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ pendingQC.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ pendingQC.productCode }}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{pendingQC.categoryPath}}</p></td>
                                 <td>{{ pendingQC.createDate }}</td>
                                 <td>{{ pendingQC.brand }}</td>
                                 <td>
@@ -566,14 +502,9 @@
                                 *ngFor="let pendingQC of (paginatedPendingQC.length > 0 ? paginatedPendingQC : approvalPartnerProductList); let x = index;">
                                 <td align="center"><img src="{{ imagePathURI + pendingQC.image }}" height="60px"
                                                         width="60px"
-                                                        (error)="onImageError($event)" (click)="popUpImagePending(x)"/>
+                                                        (error)="onImageError($event)" (click)="popUpImagePending(x)" />
                                   <!--<td class="productData">{{ pendingQC.title }} <br> {{ pendingQC.productCode }} <br>{{ pendingQC.categoryPath }} </td>-->
-                                <td><p
-                                  style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ pendingQC.title}}</p>
-                                  <p
-                                    style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ pendingQC.productCode }}</p>
-                                  <p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600"> &nbsp;
-                                    &nbsp;{{pendingQC.categoryPath}}</p></td>
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ pendingQC.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ pendingQC.productCode }}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{pendingQC.categoryPath}}</p></td>
                                 <td>{{ pendingQC.createDate }}</td>
                                 <td>{{ pendingQC.brand }}</td>
                                 <td>
@@ -585,7 +516,7 @@
                               </tr>
                             </ng-template>
                             <ng-template #imagePopup let-modal>
-                              <div class="modal-content">
+                              <div class="modal-content" >
                                 <div class="modal-header">
                                   <h4 class="modal-title">Image Preview</h4>
                                   <button type="button" class="close" (click)="closePopup()">
@@ -611,17 +542,11 @@
                     </div>
                   </div>
                 </div>
-                </div>
               </ng-template>
             </ngb-tab>
 
-
-            <ngb-tab [title]="getOutofStock()" *ngIf="isPartner" >
+            <ngb-tab [title]="getOutofStock()" *ngIf="isPartner">
               <ng-template ngbTabContent>
-                <div *ngIf=outOfStockErrorMsg>
-                  <h4>You have no Out of Stock products yet</h4>
-                </div>
-                <div *ngIf="isoutOfStockValidate">
                 <div class="tab-pane fade active show" id="account5" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
                     <div class="col-md-9">
@@ -687,9 +612,9 @@
                                 <td>
                                   <input type="text" disabled style="width:70px; height: 30px; border: none;"
                                          [value]="outofStockProduct.in_stock"/>
-                                  <img style="text-align: right" mat-button (click)="EditStockPopup(a,0,1)"
-                                       *ngIf="EnableStockEdit"
-                                       src="assets/images/EditImage.png" height="20px" weight="20px" title="Edit Stock">
+                                  <img  style="text-align: right" mat-button (click)="EditStockPopup(a,0,1)"
+                                        *ngIf="EnableStockEdit"
+                                        src="assets/images/EditImage.png" height="20px" weight="20px" title="Edit Stock">
                                 </td>
                                 <td>{{ outofStockProduct.createDate }}</td>
                                 <td>
@@ -714,17 +639,11 @@
                     </div>
                   </div>
                 </div>
-                </div>
               </ng-template>
             </ngb-tab>
 
             <ngb-tab [title]="getSuspendedPro()" *ngIf="isPartner">
               <ng-template ngbTabContent>
-                <div *ngIf="suspendedErrorMsg">
-                  <h4>You have no Suspended products yet</h4>
-
-                </div>
-                <div *ngIf="isSuspendedValidate" >
                 <div class="tab-pane fade active show" id="account6" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
                     <div class="col-md-9">
@@ -754,12 +673,7 @@
                                 <td align="center"><img src="{{ imagePathURI + suspendProduct.image }}" height="60px"
                                                         width="60px"
                                                         (error)="onImageError($event)"/></td>
-                                <td><p
-                                  style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ suspendProduct.title }}</p>
-                                  <p
-                                    style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ suspendProduct.productCode }}</p>
-                                  <p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600"> &nbsp;
-                                    &nbsp;{{suspendProduct.categoryPath}}</p></td>
+                                <td>{{ suspendProduct.title }}<br>{{ suspendProduct.productCode }}</td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="suspendProduct.price" autofocus/>
@@ -784,12 +698,7 @@
                                 <td align="center"><img src="{{ imagePathURI + suspendProduct.image }}" height="60px"
                                                         width="60px"
                                                         (error)="onImageError($event)"/></td>
-                                <td><p
-                                  style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ suspendProduct.title }}</p>
-                                  <p
-                                    style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ suspendProduct.productCode }}</p>
-                                  <p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600"> &nbsp;
-                                    &nbsp;{{suspendProduct.categoryPath}}</p></td>
+                                <td>{{ suspendProduct.title }}<br>{{ suspendProduct.productCode }}</td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="suspendProduct.price" autofocus/>
@@ -821,17 +730,11 @@
                     </div>
                   </div>
                 </div>
-                </div>
               </ng-template>
             </ngb-tab>
 
             <ngb-tab [title]="getOnDemandPro()" *ngIf="isPartner">
               <ng-template ngbTabContent>
-                <div *ngIf="onDemandErrorMsg">
-                  <h4>You have no On Demand products yet</h4>
-
-                </div>
-                <div *ngIf="isOnDemandValidate" >
                 <div class="tab-pane fade active show" id="account5" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
                     <div class="clearfix"></div>
@@ -851,31 +754,24 @@
 
                       <ng-container>
                         <!-- Display filtered products -->
-                        <tr *ngFor="let consignProducts of consignmentProducts; let j = index;">
-                          <td align="center"><img src="{{ imagePathURI + consignProducts.image }}" height="60px"
+                        <tr *ngFor="let nonActiveProduct of consignmentProducts; let j = index;">
+                          <td align="center"><img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"
                                                   width="60px"
-                                                  (error)="onImageError($event)"/></td>
+                                                  (error)="onImageError($event)" (click)="popUpImage(j)" /></td>
                           <!--<td>{{ nonActiveProduct.title }}<br>{{ nonActiveProduct.productCode }}<br>{{ nonActiveProduct.vendor }} <br>{{ nonActiveProduct.categoryPath }}</td>-->
-                          <td><p
-                            style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ consignProducts.productName}}</p>
-                            <p
-                              style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ consignProducts.productCode }}</p>
-                            <p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600"> &nbsp;
-                              &nbsp;{{consignProducts.path}}</p></td>
+                          <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ nonActiveProduct.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ nonActiveProduct.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{nonActiveProduct.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{nonActiveProduct.categoryPath}}</p></td>
                           <td>
-                            {{consignProducts.inStock}}
+                            {{nonActiveProduct.inStock}}
                           </td>
                           <td>
-                            <input class="form-control" type="number" name="vstock" id="vstock"
-                                   pattern="[0-9]*" [(ngModel)]="vstock[j]">
+                            <input class="form-control" type="number" name="vstock" [(ngModel)]="vstock"
+                                   pattern="[0-9]*">
                           </td>
-                          <td>
-                            <button type="button"
-                                    style="width: 96px;height: 28px;font-size: 10px;"
-                                    (click)="UpdateVirtualStocks(j)"
-                                    class="btn btn-outline-success">Save Stock
-                            </button>
-                          </td>
+                          <td><button type="button"
+                                      style="width: 96px;height: 28px;font-size: 10px;"
+                                      (click)="UpdateVirtualStocks(j)"
+                                      class="btn btn-outline-success">Save Stock
+                          </button></td>
                         </tr>
                       </ng-container>
                       </tbody>
@@ -913,7 +809,6 @@
                     <!--</ngx-datatable-column>-->
                     <!--</ngx-datatable>-->
                   </div>
-                </div>
                 </div>
               </ng-template>
             </ngb-tab>
