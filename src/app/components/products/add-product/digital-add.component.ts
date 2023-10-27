@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, Input, OnInit, ViewChild} from '@angular/core';
 import {DropzoneConfigInterface} from 'ngx-dropzone-wrapper';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ProductService} from '../../../shared/service/product.service';
@@ -23,11 +23,17 @@ interface Item {
 
 export class DigitalAddComponent implements OnInit {
 
+  @ViewChild('txtKeyword') txtKeyword: ElementRef;
   constructor(private modalService: NgbModal, private productService: ProductService, private router: Router, private categoryService: CategoryService, private el: ElementRef) {
     this.imageControlMethord();
     this.getCategory();
     this.isDisplay = 'block';
     this.getVariationColors();
+    // this.addCopyPasteListeners();
+  }
+
+  ngAfterViewInit() {
+    this.addCopyPasteListeners();
   }
 
   fileTypeError = false;
@@ -263,16 +269,16 @@ export class DigitalAddComponent implements OnInit {
         );
 
       }else {
-        if (parseFloat(inputElement.value) > 100.00) {
+        if (parseFloat(inputElement.value) > 100.00 || inputElement.value === '') {
           inputElement.value = this.categoryMargin.toFixed(2).toString();
           Swal.fire(
-            'Maximum Limit Reached.',
             'Please Enter Valid Margin',
+            '',
             'warning'
           );
         }else{
-          this.categoryMargin = Number(inputElement.value);
-          this.setSellingPrice();
+            this.categoryMargin = Number(inputElement.value);
+            this.setSellingPrice();
         }
       }
     }
@@ -1106,7 +1112,6 @@ export class DigitalAddComponent implements OnInit {
         this.attributeArr.push(attribute);
       }
     }
-    console.log(this.attributeArr);
   }
 
 
@@ -1761,7 +1766,6 @@ export class DigitalAddComponent implements OnInit {
   }
 
   getSub_category(catCode, catName, index, catMargin) {
-
     this.margin = catMargin;
     // variation arrays clear
     // this.variationKeyArray = [];
@@ -1812,6 +1816,7 @@ export class DigitalAddComponent implements OnInit {
   }
 
   manageAllSubCategory(data, catName, i) {
+
     this.indexCat = i;
     this.SubCategoryArray = [];
     this.categoryPath = '';
@@ -2439,6 +2444,14 @@ export class DigitalAddComponent implements OnInit {
       console.log('else return');
       return;
     }
+  }
+
+  addCopyPasteListeners() {
+    const inputElement = this.txtKeyword.nativeElement;
+
+    inputElement.addEventListener('paste', (event) => {
+      event.preventDefault();
+    });
   }
 
 }
