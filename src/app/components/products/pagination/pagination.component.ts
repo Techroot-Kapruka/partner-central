@@ -15,7 +15,18 @@ export class PaginationComponent implements OnInit {
   }
 
   get pages(): number[] {
-    return Array.from({ length: this.totalPages }, (_, i) => i + 1);
+    const maxPages = 5;
+    const totalPages = this.totalPages;
+
+    if (totalPages <= maxPages) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    } else {
+      const currentPage = this.currentPage;
+      const halfMaxPages = Math.floor(maxPages / 2);
+      const firstPage = Math.max(1, currentPage - halfMaxPages);
+      const lastPage = Math.min(totalPages, currentPage + halfMaxPages);
+      return Array.from({ length: lastPage - firstPage + 1 }, (_, i) => firstPage + i);
+    }
   }
 
   goToPage(page: number) {

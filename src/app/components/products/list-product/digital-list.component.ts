@@ -700,11 +700,12 @@ export class DigitalListComponent implements OnInit {
     if (data.data != null) {
       if (data.status_code === 200) {
         for (let i = 0; i < data.data.length; i++) {
-          this.vstock[i]=null;
+          this.vstock[i] = null;
           const or = {
             productCode: data.data[i].onDemand_products.product_code,
-            productName: data.data[i].onDemand_products.title,
+            title: data.data[i].onDemand_products.title,
             inStock: data.data[i].onDemand_products.in_Stock,
+            create_date: data.data[i].onDemand_products.create_date,
             path: data.data[i].category_path,
             image: data.data[i].product_img.split('/product')[1],
             Action: ''
@@ -1138,6 +1139,7 @@ export class DigitalListComponent implements OnInit {
   }
 
   private manageFieldImageEditData(data) {
+
     for (let i = 0; i < data.data.length; i++) {
 
       const payloard = {
@@ -1146,6 +1148,7 @@ export class DigitalListComponent implements OnInit {
         editId: data.data[i].editId,
         requestedDate: data.data[i].requestedDate,
         title: data.data[i].title,
+        catePath:data.data[i].catePath,
         action: ''
 
       };
