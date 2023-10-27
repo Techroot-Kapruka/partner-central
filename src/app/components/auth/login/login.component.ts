@@ -1,4 +1,14 @@
-import {Component, Input, OnInit, Output, EventEmitter, NgModule, ElementRef, Renderer2, ViewChild} from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  Output,
+  EventEmitter,
+  NgModule,
+  ElementRef,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 // import {AuthLoginInfo} from '../../../shared/auth/login-info';
 import {AuthService} from '../../../shared/auth/auth.service';
 import {TokenStorageService} from '../../../shared/auth/token-storage.service';
@@ -35,12 +45,33 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(): void {
-    sessionStorage.clear();
-    this.authService.send_login(this.login)
-      .subscribe(
-        data => this.tokenStorage.ifExistsToken(data),
-        error => this.manageLoginError(error)
-      );
+    console.log(this.login);
+    if (this.login.userName === '' && this.login.password === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'ERROR!',
+        text: 'Please enter a valid Username and Password',
+      });
+    } else if (this.login.userName === '' || !this.login.userName.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
+      Swal.fire({
+        icon: 'error',
+        title: 'ERROR!',
+        text: 'Please enter a valid Username ',
+      });
+    } else if (this.login.password === '') {
+      Swal.fire({
+        icon: 'error',
+        title: 'ERROR!',
+        text: 'Please enter a valid Password ',
+      });
+    } else {
+      sessionStorage.clear();
+      this.authService.send_login(this.login)
+        .subscribe(
+          data => this.tokenStorage.ifExistsToken(data),
+          error => this.manageLoginError(error)
+        );
+    }
   }
 
   reloadPage() {
@@ -71,7 +102,8 @@ export class LoginComponent implements OnInit {
     Swal.fire({
       icon: 'error',
       title: 'Oops...',
-      text: error.error.error,
+      text: 'Something went wrong',
+      // text: error.error.error,
     });
   }
 
@@ -94,6 +126,6 @@ export class LoginComponent implements OnInit {
     const scrollOffset = element.offsetTop + element.offsetHeight - window.innerHeight;
 
     // Use window.scrollTo with behavior: 'smooth'
-    window.scrollTo({ top: scrollOffset, behavior: 'smooth' });
+    window.scrollTo({top: scrollOffset, behavior: 'smooth'});
   }
 }
