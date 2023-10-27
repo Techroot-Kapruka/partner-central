@@ -43,6 +43,7 @@ export class EditPartnerCategoryComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
   getSelectedPartner(id) {
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       const payLoard = {
@@ -52,7 +53,7 @@ export class EditPartnerCategoryComponent implements OnInit {
         data => this.userAlertFunction(data),
         error => this.alartFunction(error.status)
       );
-    }else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER'){
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER') {
       const payLoard = {
         user_u_id: sessionStorage.getItem('userId')
       };
@@ -63,7 +64,8 @@ export class EditPartnerCategoryComponent implements OnInit {
     }
 
   }
-  categoryMangerCategories(data){
+
+  categoryMangerCategories(data) {
     if (data.data != null) {
       this.getCategoryByCategoryUser(data);
       this.getPendingCategory(data.data.user_u_id);
@@ -78,7 +80,7 @@ export class EditPartnerCategoryComponent implements OnInit {
     }
   }
 
-  getCategoryByCategoryUser(data){
+  getCategoryByCategoryUser(data) {
     const sendObj = {
       user_u_id: data.data.user_u_id
     }
@@ -167,6 +169,7 @@ export class EditPartnerCategoryComponent implements OnInit {
     const senDdata = {
       code: cat_code
     };
+
     this.categoryService.getAllCategory(senDdata).subscribe(
       data => this.manageSelectedSubCategory(data),
     );
@@ -214,6 +217,8 @@ export class EditPartnerCategoryComponent implements OnInit {
     let sub_cat_name_bool = true;
     let cat_sub_sub_name_bool = true;
 
+    let equalVl = false;
+
     if (sub_category_id === '' && cat_sub_sub_id === '') {
       this.categoryRequestArr.push(category_id);
 
@@ -238,6 +243,7 @@ export class EditPartnerCategoryComponent implements OnInit {
         cat_sub_sub_name_bool = false;
       }
 
+
       if (this.mainCategoryArr[i].code === category_id) {
         cat_name = this.mainCategoryArr[i].name;
 
@@ -254,7 +260,8 @@ export class EditPartnerCategoryComponent implements OnInit {
         }
       }
 
-      this.getAllCategoryForRequest();
+
+      // this.getAllCategoryForRequest();
       this.changeMainCategory();
       this.changeSubCategory();
 
@@ -268,9 +275,17 @@ export class EditPartnerCategoryComponent implements OnInit {
       sub_cat_name_bool,
       cat_sub_sub_name_bool
     };
-
-    this.allCategoryBreadcrumbArr.push(arr);
-
+    if (category_id !== '') {
+      // this.allCategoryBreadcrumbArr.push(arr);
+      for (let i = 0; i < this.allCategoryBreadcrumbArr.length; i++) {
+        if (this.allCategoryBreadcrumbArr[i].cat_name === cat_name) {
+          equalVl = true;
+        }
+      }
+      if (equalVl === false){
+        this.allCategoryBreadcrumbArr.push(arr);
+      }
+    }
     document.getElementById('sub_cat_dev').style.display = 'none';
     document.getElementById('sub_sub_cat_dev').style.display = 'none';
     // this.getAllCategory();
@@ -285,7 +300,7 @@ export class EditPartnerCategoryComponent implements OnInit {
   }
 
   MakeYourCategoryRequest(modal) {
-    if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER'){
+    if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       const sendPayload = {
         partner_u_id: sessionStorage.getItem('partnerId'),
         partnerCategories: this.categoryRequestArr
@@ -293,7 +308,7 @@ export class EditPartnerCategoryComponent implements OnInit {
       this.categoryService.callMakeYourCategoryRequest(sendPayload).subscribe(
         data => this.manageCallMakeYourCategoryRequest(data, modal),
       );
-    } else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER'){
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER') {
       const sendPayload = {
         user_u_id: sessionStorage.getItem('userId'),
         user_categories: this.categoryRequestArr
@@ -319,14 +334,14 @@ export class EditPartnerCategoryComponent implements OnInit {
   }
 
   getPendingCategory(data) {
-    if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER'){
+    if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       const payLoard = {
         id: data
       };
       this.categoryService.getPendingCategoryByPartner(payLoard).subscribe(
         data => this.managePendingCategoryByPartner(data),
       );
-    }else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER'){
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER') {
       const payLoard = {
         user_u_id: sessionStorage.getItem('userId')
       }
@@ -347,7 +362,7 @@ export class EditPartnerCategoryComponent implements OnInit {
   }
 
   removePartnerCategoryPending(index) {
-    if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER'){
+    if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       const payLoard = {
         temp_code: sessionStorage.getItem('temp_code'),
         partner_u_id: sessionStorage.getItem('partnerId'),
@@ -359,7 +374,7 @@ export class EditPartnerCategoryComponent implements OnInit {
       this.categoryService.deletePendingCategoryByPartner(payLoard).subscribe(
         data => this.manageDeletePendingCategoryByPartner(data),
       );
-    }else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER'){
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER') {
       const payLoard = {
         user_u_id: sessionStorage.getItem('userId'),
         user_categories: [
