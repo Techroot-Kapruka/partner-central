@@ -255,7 +255,7 @@
                    or model number for effective stock tracking and identification.
                  </span>
                 </span>
-                <input class="form-control" id="Seller_SKU" type="text" required (keyup)="updateSku()">
+                <input class="form-control" id="Seller_SKU" type="text" required (keyup)="updateSku()" maxlength="20">
               </div>
 
             </div>
@@ -271,7 +271,8 @@
                     <span class="input-group-text">LKR</span>
                   </div>
                   <input class="form-control" id="price" type="text" required
-                         (change)="setSellingPrice()">
+                         (change)="setSellingPrice()" maxlength="8">
+                  <!--(input)="formatCurrency($event)"-->
                 </div>
               </div>
             </div>
@@ -350,7 +351,7 @@
                 <ng-container *ngTemplateOutlet="myComponentTemplate"
                 ></ng-container>
                 <textarea hidden class="form-control" id="product_description"
-                          (keydown)="onKeyPress($event)" (change)="checkChars()"
+                          (keydown)="onKeyPress($event)" (input)="checkChars()"
                           required>{{descriptionContent}}</textarea>
                 <span class="span p-0" *ngIf="showmsg"
                       [style.color]="'red'">Please provide more than 200 characters</span>
@@ -725,11 +726,17 @@
         <div class="card">
           <div class="card-body">
             <div class="row">
-              <div class="col-md-6"></div>
+              <div class="col-md-5"></div>
               <div class="col-md-6">
                 <button type="button" (click)="saveProduct()" class="btn btn-lg btn-primary pull-right" [disabled]="addProductClicked"
-                        style="margin: 15px;">Submit
+                        style="margin: 15px;">{{ addProductClicked ? 'Processing' : 'Submit' }}
                 </button>
+                <div class="col-md-1" *ngIf="addProductClicked">
+                  <div class="loading">
+                    <div id="preloader"></div>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
