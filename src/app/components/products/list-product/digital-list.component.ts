@@ -265,7 +265,7 @@ export class DigitalListComponent implements OnInit {
 
   getSelectedPartnerProduct() {
     const name = (document.getElementById('select_pro') as HTMLInputElement).value;
-    this.productService.getProductByBussiness(name, this.categoryUID).subscribe(
+    this.productService.getAllActiveProductList(name, this.categoryUID).subscribe(
       data => this.getSelectedProductManage(data),
       error => this.errorOrderManage(error)
     );

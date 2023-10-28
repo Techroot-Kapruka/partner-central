@@ -24,13 +24,13 @@ export class ProductService {
     return this.httpClient.get<any>(this.SERVER + 'partner/viewAllPartnersBusinessName', {headers});
   }
 
-  getProductByBussiness(businessName, UserID) {
-    const formData: FormData = new FormData();
-    formData.append('businessName', businessName);
-    formData.append('categoryUID ', UserID);
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.post<any>(this.SERVER + 'product/activeProductsByCompanyName', formData, {headers});
-  }
+  // getProductByBussiness(businessName, UserID) {
+  //   const formData: FormData = new FormData();
+  //   formData.append('businessName', businessName);
+  //   formData.append('categoryUID ', UserID);
+  //   const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+  //   return this.httpClient.post<any>(this.SERVER + 'product/activeProductsByCompanyName', formData, {headers});
+  // }
 
   getAllActiveProductList(businessName, UserID) {
     const formData: FormData = new FormData();
@@ -236,10 +236,10 @@ export class ProductService {
     return this.httpClient.get<any>(this.SERVER + 'product/getAllActiveProducts', {headers});
   }
 
-  getAllProductsByCatManager(payLoard) {
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.post<any>(this.SERVER + 'product/getAllProductsByCatManager', payLoard, {headers});
-  }
+  // getAllProductsByCatManager(payLoard) {
+  //   const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+  //   return this.httpClient.post<any>(this.SERVER + 'product/getAllProductsByCatManager', payLoard, {headers});
+  // }
 
   getConsignmentProducts(payLoard) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
