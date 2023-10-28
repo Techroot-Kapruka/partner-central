@@ -211,23 +211,31 @@ export class DigitalListComponent implements OnInit {
   getAllProduct() {
     const busName = sessionStorage.getItem('businessName');
     const userRole = sessionStorage.getItem('userRole');
+    const categoryID = sessionStorage.getItem('userId');
 
-    if (userRole === 'ROLE_ADMIN') {
-      this.productService.getAllProducts().subscribe(
-        data => this.LoadAllProduct(data),
-      );
-    } else if (userRole === 'ROLE_CATEGORY_MANAGER') {
-      const payLoard = {
-        user_u_id: sessionStorage.getItem('userId')
-      };
-      this.productService.getAllProductsByCatManager(payLoard).subscribe(
-        data => this.LoadAllProduct(data),
-      );
-    } else if (userRole === 'ROLE_PARTNER' || userRole === 'ROLE_USER') {
-      this.productService.getProductByBussiness(busName, this.categoryUID).subscribe(
-        data => this.getSelectedProductManage(data),
-      );
-    }
+    this.productService.getAllActiveProductList(busName, categoryID).subscribe(
+      data => this.getSelectedProductManage(data),
+    );
+    // if (userRole === 'ROLE_ADMIN') {
+    //   // this.productService.getAllProducts().subscribe(
+    //   //   data => this.LoadAllProduct(data),
+    //   // );
+    //
+    // } else if (userRole === 'ROLE_CATEGORY_MANAGER') {
+    //   // const payLoard = {
+    //   //   user_u_id: sessionStorage.getItem('userId')
+    //   // };
+    //   // this.productService.getAllProductsByCatManager(payLoard).subscribe(
+    //   //   data => this.LoadAllProduct(data),
+    //   // );
+    //   this.productService.getProductByBussiness(busName, categoryID).subscribe(
+    //     data => this.getSelectedProductManage(data),
+    //   );
+    // } else if (userRole === 'ROLE_PARTNER' || userRole === 'ROLE_USER') {
+    //   this.productService.getProductByBussiness(busName, categoryID).subscribe(
+    //     data => this.getSelectedProductManage(data),
+    //   );
+    // }
   }
 
   LoadAllProduct(data) {
@@ -257,7 +265,7 @@ export class DigitalListComponent implements OnInit {
 
   getSelectedPartnerProduct() {
     const name = (document.getElementById('select_pro') as HTMLInputElement).value;
-    this.productService.getProductByBussiness(name, this.categoryUID).subscribe(
+    this.productService.getAllActiveProductList(name, this.categoryUID).subscribe(
       data => this.getSelectedProductManage(data),
       error => this.errorOrderManage(error)
     );
