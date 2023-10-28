@@ -1,6 +1,7 @@
 {
   "extends": "tslint:recommended",
   "rules": {
+    "no-console": false,
     "align": {
       "options": [
         "parameters",
@@ -55,14 +56,14 @@
         ]
       }
     ],
-    "no-console": [
-      true,
-      "debug",
-      "info",
-      "time",
-      "timeEnd",
-      "trace"
-    ],
+//    "no-console": [
+//      true,
+//      "debug",
+//      "info",
+//      "time",
+//      "timeEnd",
+//      "trace"
+//    ],
     "no-empty": false,
     "no-inferrable-types": [
       true,
