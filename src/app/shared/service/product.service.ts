@@ -24,12 +24,20 @@ export class ProductService {
     return this.httpClient.get<any>(this.SERVER + 'partner/viewAllPartnersBusinessName', {headers});
   }
 
-  getProductByBussiness(businessName, UserID) {
+  // getProductByBussiness(businessName, UserID) {
+  //   const formData: FormData = new FormData();
+  //   formData.append('businessName', businessName);
+  //   formData.append('categoryUID ', UserID);
+  //   const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+  //   return this.httpClient.post<any>(this.SERVER + 'product/activeProductsByCompanyName', formData, {headers});
+  // }
+
+  getAllActiveProductList(businessName, UserID) {
     const formData: FormData = new FormData();
     formData.append('businessName', businessName);
     formData.append('categoryUID ', UserID);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.post<any>(this.SERVER + 'product/activeProductsByCompanyName', formData, {headers});
+    return this.httpClient.post<any>(this.SERVER + 'product/getAllActiveProductList', formData, {headers});
   }
 
   getSearchCategory(payloard) {
@@ -79,10 +87,12 @@ export class ProductService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.get<any>(this.SERVER + 'product/nonActiveProducts', {headers});
   }
+
   getnonActiveImageProduct() {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.get<any>(this.SERVER + 'fieldEdit/editProductImageList', {headers});
   }
+
   ApproveProduct(payloard: any) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/approveProduct', payloard, {headers});
@@ -112,6 +122,7 @@ export class ProductService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'fieldEdit/getProductImage', payloard, {headers});
   }
+
   UpdatetProduct(payloard) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/editProduct', payloard, {headers});
@@ -121,11 +132,13 @@ export class ProductService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/nonActiveProductsByCompanyName', payloard, {headers});
   }
-  getPartnersQrImage(payloard){
+
+  getPartnersQrImage(payloard) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/getProductQRList', payloard, {headers});
 
   }
+
   getSpecialGiftsByPrefixSet2(payLoard) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/specialGiftByVendorNameAndPrefix', payLoard, {headers});
@@ -139,6 +152,7 @@ export class ProductService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/specialGiftsByPrefixInPage', formData, {headers});
   }
+
   qaChecked(payLoard) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/approveQualityAssurance', payLoard, {headers});
@@ -180,22 +194,27 @@ export class ProductService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'fieldEdit/getEditProductByCode', payloard, {headers});
   }
+
   getEditFieldsImageDataAllForApproval(payloard: any) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'fieldEdit/getProductImage', payloard, {headers});
   }
+
   approveFields(payloard: any) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'fieldEdit/approved', payloard, {headers});
   }
+
   approveImageFields(payloard: any) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'fieldEdit/approveImages', payloard, {headers});
   }
+
   rejectImageFields(payloard: any) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'fieldEdit/rejectImages', payloard, {headers});
   }
+
   rejectFields(payloard: any) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'fieldEdit/rejectEditItem', payloard, {headers});
@@ -212,42 +231,42 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'product/getNonActiveProductsCategoryWise', payLoard, {headers});
   }
 
-  getAllProducts(){
+  getAllProducts() {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.get<any>(this.SERVER + 'product/getAllActiveProducts', {headers});
   }
 
-  getAllProductsByCatManager(payLoard){
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.post<any>(this.SERVER + 'product/getAllProductsByCatManager', payLoard, {headers});
-  }
+  // getAllProductsByCatManager(payLoard) {
+  //   const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+  //   return this.httpClient.post<any>(this.SERVER + 'product/getAllProductsByCatManager', payLoard, {headers});
+  // }
 
-  getConsignmentProducts(payLoard){
+  getConsignmentProducts(payLoard) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/getConsignmentProductsByVendor', payLoard, {headers});
   }
 
-  updateStock(payload){
+  updateStock(payload) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/updateConsignmentProductsVirtualStock', payload, {headers});
   }
 
-  getOutofStockofVendor(payload){
+  getOutofStockofVendor(payload) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/getOutofStockProductsofVendor', payload, {headers});
   }
 
-  getSuspendedProofVendor(payload){
+  getSuspendedProofVendor(payload) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/getSuspendedProductsofVendor', payload, {headers});
   }
 
-  rejectProduct(payload){
+  rejectProduct(payload) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/rejectProduct', payload, {headers});
   }
 
-  updateProductStock(payLoad){
+  updateProductStock(payLoad) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'productOut/setStockOut', payLoad, {headers});
   }
@@ -257,20 +276,21 @@ export class ProductService {
   //   return this.httpClient.post<any>(this.SERVER + 'productOut/setAvailability', payLoad, {headers});
   // }
 
-  getProductPrices(payLoad){
+  getProductPrices(payLoad) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/getProductPrices', payLoad, {headers});
   }
 
-  getAllColorsForVariation(){
+  getAllColorsForVariation() {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.get<any>(this.SERVER + 'product/getAllColors', {headers});
   }
 
-  getProductVariation(payLoad){
+  getProductVariation(payLoad) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/getProductVariation', payLoad, {headers});
   }
+
   deleteProduct(payLoad) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.delete<any>(this.SERVER + 'product/removeProduct', {
