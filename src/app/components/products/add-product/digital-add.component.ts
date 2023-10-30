@@ -1086,14 +1086,15 @@ export class DigitalAddComponent implements OnInit {
     // Image upload validation
     const mimeType = event.target.files[0].type;
 
-    if (!mimeType.match(/image\/(jpg)/i) || mimeType.match(/^image\/jfif$/i)) {
+    if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
         'error',
-        'Please select a JPG image.',
+        'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
     }
+
 
     this.mainImageAdded = true;
     // Image upload
@@ -1146,10 +1147,11 @@ export class DigitalAddComponent implements OnInit {
     }
     // Image upload validation
     const mimeType = event.target.files[0].type;
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i)) {
+
+    if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
         'error',
-        'Please select a JPEG, PNG, or BMP image.',
+        'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
@@ -1177,11 +1179,13 @@ export class DigitalAddComponent implements OnInit {
       return;
     }
     // Image upload validation
+    // Image upload validation
     const mimeType = event.target.files[0].type;
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i)) {
+
+    if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
         'error',
-        'Please select a JPEG, PNG, or BMP image.',
+        'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
@@ -1209,10 +1213,11 @@ export class DigitalAddComponent implements OnInit {
     }
     // Image upload validation
     const mimeType = event.target.files[0].type;
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i)) {
+
+    if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
         'error',
-        'Please select a JPEG, PNG, or BMP image.',
+        'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
@@ -1238,12 +1243,13 @@ export class DigitalAddComponent implements OnInit {
     if (event.target.files.length === 0) {
       return;
     }
-    // Image upload validation
+// Image upload validation
     const mimeType = event.target.files[0].type;
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i)) {
+
+    if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
         'error',
-        'Please select a JPEG, PNG, or BMP image.',
+        'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
@@ -1290,7 +1296,7 @@ export class DigitalAddComponent implements OnInit {
     } else {
       Swal.fire(
         "Failed",
-        data.data.message,
+        data.message,
         'warning'
       )
     }
