@@ -662,7 +662,7 @@ export class DigitalAddComponent implements OnInit {
           if (brandHtml) {
             brand_ = (document.getElementById('Brand') as HTMLInputElement).value;
           }
-          const payloard = {
+          const payload = {
             category_code: this.objectCategoryCode,
             title: product_name,
             brand: brand_,
@@ -691,8 +691,37 @@ export class DigitalAddComponent implements OnInit {
             },
             productAttributes: this.attributeArr
           };
-          this.productService.insertProduct(payloard).subscribe(
-            data => this.manageProductResult(data),
+
+          //set images
+          let one = this.imageCliant.get('fileSource').value;
+          let one2 = this.imageCliant.get('fileSource2').value;
+          let one3 = this.imageCliant.get('fileSource3').value;
+          let one4 = this.imageCliant.get('fileSource4').value;
+          let one5 = this.imageCliant.get('fileSource5').value;
+          const pricecc = new File([''], '');
+          if (one === '') {
+
+            one = pricecc;
+          }
+
+          if (one2 === '') {
+            one2 = pricecc;
+          }
+
+          if (one3 === '') {
+            one3 = pricecc;
+          }
+
+          if (one4 === '') {
+            one4 = pricecc;
+          }
+
+          if (one5 === '') {
+            one5 = pricecc;
+          }
+
+          this.productService.insertProductWithImages(one, one2, one3, one4, one5, payload).subscribe(
+            data => this.successAlert(data),
             error => this.mnageErrorProduct(error)
           );
 
@@ -1063,10 +1092,10 @@ export class DigitalAddComponent implements OnInit {
     // Image upload validation
     const mimeType = event.target.files[0].type;
 
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i) || mimeType.match(/^image\/jfif$/i)) {
+    if (!mimeType.match(/image\/(jpg)/i) || mimeType.match(/^image\/jfif$/i)) {
       Swal.fire(
         'error',
-        'Please select a JPEG, PNG, or BMP image.',
+        'Please select a JPG image.',
         'warning'
       );
       return;
@@ -1241,27 +1270,36 @@ export class DigitalAddComponent implements OnInit {
   }
 
   successAlert(data) {
-    Swal.fire(
-      'New Product Added Successfully...!',
-      'Your product will go live after Approved by Kapruka.This may take upto 6-12 Hrs',
-      'success'
-    );
-    const partId = sessionStorage.getItem('partnerId');
-    const url = 'products/digital/digital-product-list';
-    this.router.navigate([url]);
+    if (data.message_status === 'Success'){
+      Swal.fire(
+        'New Product Added Successfully...!',
+        'Your product will go live after Approved by Kapruka.This may take upto 6-12 Hrs',
+        'success'
+      );
+      const partId = sessionStorage.getItem('partnerId');
+      const url = 'products/digital/digital-product-list';
+      this.router.navigate([url]);
 
 
-    // this.clearAllFeilds();
-    this.colorNameArray = [];
-    this.colorCodeArray = [];
-    this.sizeNameArray = [];
-    this.colorArray = [];
-    this.sizeArray = [];
-    this.productGroupTabel = [];
-    this.nonGroupArray = [];
-    this.weightValue = '';
-    // const url = '/products/digital/digital-product-list/';
-    // this.router.navigate([url]);
+      // this.clearAllFeilds();
+      this.colorNameArray = [];
+      this.colorCodeArray = [];
+      this.sizeNameArray = [];
+      this.colorArray = [];
+      this.sizeArray = [];
+      this.productGroupTabel = [];
+      this.nonGroupArray = [];
+      this.weightValue = '';
+      // const url = '/products/digital/digital-product-list/';
+      // this.router.navigate([url]);
+    } else {
+      Swal.fire(
+        "Failed",
+        data.data.message,
+        'warning'
+      )
+    }
+
   }
 
   clearAllFeilds() {
