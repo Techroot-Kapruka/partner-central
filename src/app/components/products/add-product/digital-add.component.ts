@@ -646,6 +646,35 @@ export class DigitalAddComponent implements OnInit {
       if (isListingPrice) {
         this.addProductClicked = true;
         const productVariation = [];
+
+        //set images
+        let one = this.imageCliant.get('fileSource').value;
+        let one2 = this.imageCliant.get('fileSource2').value;
+        let one3 = this.imageCliant.get('fileSource3').value;
+        let one4 = this.imageCliant.get('fileSource4').value;
+        let one5 = this.imageCliant.get('fileSource5').value;
+        const pricecc = new File([''], '');
+        if (one === '') {
+
+          one = pricecc;
+        }
+
+        if (one2 === '') {
+          one2 = pricecc;
+        }
+
+        if (one3 === '') {
+          one3 = pricecc;
+        }
+
+        if (one4 === '') {
+          one4 = pricecc;
+        }
+
+        if (one5 === '') {
+          one5 = pricecc;
+        }
+
         if (this.clothesArray.length === 0) {
           const pp = {
             changing_amount: 0,
@@ -692,33 +721,7 @@ export class DigitalAddComponent implements OnInit {
             productAttributes: this.attributeArr
           };
 
-          //set images
-          let one = this.imageCliant.get('fileSource').value;
-          let one2 = this.imageCliant.get('fileSource2').value;
-          let one3 = this.imageCliant.get('fileSource3').value;
-          let one4 = this.imageCliant.get('fileSource4').value;
-          let one5 = this.imageCliant.get('fileSource5').value;
-          const pricecc = new File([''], '');
-          if (one === '') {
 
-            one = pricecc;
-          }
-
-          if (one2 === '') {
-            one2 = pricecc;
-          }
-
-          if (one3 === '') {
-            one3 = pricecc;
-          }
-
-          if (one4 === '') {
-            one4 = pricecc;
-          }
-
-          if (one5 === '') {
-            one5 = pricecc;
-          }
 
           this.productService.insertProductWithImages(one, one2, one3, one4, one5, payload).subscribe(
             data => this.successAlert(data),
@@ -752,7 +755,7 @@ export class DigitalAddComponent implements OnInit {
           if (brandHtml) {
             brand_ = (document.getElementById('Brand') as HTMLInputElement).value;
           }
-          const payloard = {
+          const payload = {
             category_code: this.objectCategoryCode,
             title: product_name,
             brand: brand_,
@@ -781,7 +784,7 @@ export class DigitalAddComponent implements OnInit {
             },
             productAttributes: this.attributeArr
           };
-          this.productService.insertProduct(payloard).subscribe(
+          this.productService.insertProductWithImages(one, one2, one3, one4, one5, payload).subscribe(
             data => this.manageProductResult(data),
             error => this.mnageErrorProduct(error)
           );
