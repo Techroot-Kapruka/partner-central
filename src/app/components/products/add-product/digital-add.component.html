@@ -228,7 +228,7 @@
                                                               style="color: red; padding: 15px; padding-left: 5px">*</span>
               </div>
               <div class="col-md-8">
-                <input class="form-control input" type="text" id="product_name" required>
+                <input class="form-control input" type="text" id="product_name" required maxlength="100">
               </div>
 
             </div>
@@ -656,8 +656,8 @@
                   <label for="txt_keyword" class="col-form-label pt-0"> Add Keywords</label>
                   <div class="row">
                     <div class="col-6">
-                      <input class="form-control" id="txt_keyword" type="text" required=""
-                             (keyup)="separateFromComma($event)">
+                      <input class="form-control no-copy-paste" #txtKeyword id="txt_keyword" type="text" required=""
+                             (keyup)="separateFromComma($event)" maxlength="15">
                       <div class="form-group row" style="margin-left: -1.9%;">
                         <div class="labelBoxappend">
                           <div class="mainDev" style="background-color: #ffffff; color: #00004d;"

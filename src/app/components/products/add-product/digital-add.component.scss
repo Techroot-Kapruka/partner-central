@@ -735,3 +735,7 @@ input::placeholder {
   }
 
 }
+
+.no-copy-paste {
+  user-select: none;
+}
