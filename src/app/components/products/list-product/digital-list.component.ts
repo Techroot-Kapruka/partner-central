@@ -4,8 +4,8 @@ import Swal from 'sweetalert2';
 import {Router} from '@angular/router';
 import {error} from 'protractor';
 import {environment} from '../../../../environments/environment.prod';
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {AuthService} from "../../../shared/auth/auth.service";
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {AuthService} from '../../../shared/auth/auth.service';
 
 @Component({
   selector: 'app-digital-list',
@@ -58,14 +58,14 @@ export class DigitalListComponent implements OnInit {
   public unique_code = '';
   public sub_type = '';
   public imagedefaultPathURI = '';
-  vstock : number[]=[];
+  vstock: number[] = [];
   dataLoaded: boolean = false;
 
   public imagePathURI = environment.imageURIENV;
 
   public list_pages2 = 20;
   public virtualstock = 0;
-  imageUrl:any;
+  imageUrl: any;
   modalRef: any;
   oldPrice: any;
   itemCode: any;
@@ -89,7 +89,8 @@ export class DigitalListComponent implements OnInit {
 
   @ViewChild('imagePopup') imagePopup: ElementRef;
   @ViewChild('pricePopup') pricePopup: ElementRef;
-  constructor(private productService: ProductService, private router: Router,private modal: NgbModal,private authService:AuthService) {
+
+  constructor(private productService: ProductService, private router: Router, private modal: NgbModal, private authService: AuthService) {
     this.getFieldEditData();
     this.getAllProduct();
     this.hideElement();
@@ -132,7 +133,7 @@ export class DigitalListComponent implements OnInit {
     }, 12000);
   }
 
-  stopLoading(){
+  stopLoading() {
     this.stillLoading = false;
   }
 
@@ -239,7 +240,7 @@ export class DigitalListComponent implements OnInit {
   }
 
   LoadAllProduct(data) {
-    this.startIndex=0;
+    this.startIndex = 0;
     this.list_pages = [];
 
     if (data.data == null) {
@@ -254,7 +255,7 @@ export class DigitalListComponent implements OnInit {
           in_stock: data.data[i].in_stock,
           createDate: data.data[i].create_date,
           vendor: data.data[i].vendor,
-          categoryPath:data.data[i].categoryPath,
+          categoryPath: data.data[i].categoryPath,
           action: ''
         };
         this.list_pages.push(or);
@@ -272,7 +273,7 @@ export class DigitalListComponent implements OnInit {
   }
 
   getSelectedProductManage(data) {
-    this.startIndex=0;
+    this.startIndex = 0;
     this.list_pages = [];
 
     if (data.data == null) {
@@ -370,14 +371,14 @@ export class DigitalListComponent implements OnInit {
       cancelButtonText: 'No',
     }).then((result) => {
       let payLoad;
-      if(this.filteredProducts.length >0){
-         payLoad = {
-          product_code: this.filteredProducts[this.startIndex+index].productCode,
+      if (this.filteredProducts.length > 0) {
+        payLoad = {
+          product_code: this.filteredProducts[this.startIndex + index].productCode,
           updatedBy: sessionStorage.getItem('userId')
         };
-      }else{
-         payLoad = {
-          product_code: this.list_pages[this.startIndex+index].productCode,
+      } else {
+        payLoad = {
+          product_code: this.list_pages[this.startIndex + index].productCode,
           updatedBy: sessionStorage.getItem('userId')
         };
       }
@@ -396,11 +397,11 @@ export class DigitalListComponent implements OnInit {
 
   editGetProduct2(index) {
 
-    if(this.filteredProducts.length >0){
+    if (this.filteredProducts.length > 0) {
       const productCode = this.list_pages[this.startIndex + index].productCode;
       const url = 'products/digital/digital-edit-product/' + productCode;
       this.router.navigate([url]);
-    }else{
+    } else {
       const productCode = this.list_pages[this.startIndex + index].productCode;
       const url = 'products/digital/digital-edit-product/' + productCode;
       this.router.navigate([url]);
@@ -409,11 +410,11 @@ export class DigitalListComponent implements OnInit {
 
   editGetProduct3(index) {
 
-    if(this.filteredProducts.length >0){
+    if (this.filteredProducts.length > 0) {
       const productCode = this.filteredProducts[this.startIndex + index].productCode;
       const url = 'products/digital/view-product/' + productCode;
       this.router.navigate([url]);
-    }else{
+    } else {
       const productCode = this.list_pages[this.startIndex + index].productCode;
       const url = 'products/digital/view-product/' + productCode;
       this.router.navigate([url]);
@@ -422,15 +423,16 @@ export class DigitalListComponent implements OnInit {
 
   async deleteActiveProduct(productCode) {
 
-    const { value: text } = await Swal.fire({
+    const {value: text} = await Swal.fire({
       title: 'Enter a comment',
       input: 'text',
       inputPlaceholder: 'Enter your comment here',
       inputValidator: (value) => {
         if (!value) {
-          return 'You need to write something!'
+          return 'You need to write something!';
         }
       }
+
     })
     if(text){
       Swal.fire({
@@ -457,44 +459,47 @@ export class DigitalListComponent implements OnInit {
       });
     }
   }
-  popUpImageActive(index:number){
 
-    if(this.filteredProducts.length >0){
-      this.imageUrl=this.imagePathURI+this.filteredProducts[this.startIndex+index].image;
-      this.modalRef = this.modal.open(this.imagePopup, { centered: true });
-    }else{
-      this.imageUrl=this.imagePathURI+this.list_pages[this.startIndex+index].image;
-      this.modalRef = this.modal.open(this.imagePopup, { centered: true });
+  popUpImageActive(index: number) {
+
+    if (this.filteredProducts.length > 0) {
+      this.imageUrl = this.imagePathURI + this.filteredProducts[this.startIndex + index].image;
+      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+    } else {
+      this.imageUrl = this.imagePathURI + this.list_pages[this.startIndex + index].image;
+      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
     }
 
   }
-  popup(price: number , itemCode: String){
+
+  popup(price: number, itemCode: String) {
     this.priceChangeVendor = sessionStorage.getItem('partnerId');
     this.oldPrice = price;
     this.itemCode = itemCode;
-    this.modalRef = this.modal.open(this.pricePopup, { centered: true });
+    this.modalRef = this.modal.open(this.pricePopup, {centered: true});
   }
 
-  popUpImagePending(index:number){
+  popUpImagePending(index: number) {
 
-    if(this.filteredPendingQC.length > 0){
-      this.imageUrl=this.imagePathURI+this.filteredPendingQC[index].image;
-      this.modalRef = this.modal.open(this.imagePopup, { centered: true });
-    }else{
-      this.imageUrl=this.imagePathURI+this.approvalPartnerProductList[index].image;
-      this.modalRef = this.modal.open(this.imagePopup, { centered: true });
+    if (this.filteredPendingQC.length > 0) {
+      this.imageUrl = this.imagePathURI + this.filteredPendingQC[index].image;
+      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+    } else {
+      this.imageUrl = this.imagePathURI + this.approvalPartnerProductList[index].image;
+      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
     }
   }
 
-  popUpImage(index: number){
-    if(this.filteredPendingProducts.length !== 0){
-      this.imageUrl=this.imagePathURI+this.filteredPendingProducts[this.startIndex+index].image;
-      this.modalRef = this.modal.open(this.imagePopup, { centered: true });
-    }else{
-      this.imageUrl=this.imagePathURI+this.nonActiveProductsArray[this.startIndex+index].image;
-      this.modalRef = this.modal.open(this.imagePopup, { centered: true });
+  popUpImage(index: number) {
+    if (this.filteredPendingProducts.length !== 0) {
+      this.imageUrl = this.imagePathURI + this.filteredPendingProducts[this.startIndex + index].image;
+      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+    } else {
+      this.imageUrl = this.imagePathURI + this.nonActiveProductsArray[this.startIndex + index].image;
+      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
     }
   }
+
   closePopup() {
     this.modalRef.close();
     this.imageUrl = undefined;
@@ -537,7 +542,7 @@ export class DigitalListComponent implements OnInit {
     this.product = [];
     this.list_pages = [];
 
-    if(err.status==401){
+    if (err.status == 401) {
       Swal.fire({
         title: 'Session Time Out',
         text: 'Please Log Again to continue',
@@ -556,26 +561,11 @@ export class DigitalListComponent implements OnInit {
     const categoryID = sessionStorage.getItem('userId');
 
     this.productService.getnonActiveProduct(busName, categoryID).subscribe(
-          data => this.manageNonActiveProduct(data),
-          error => this.errorOrderManage(error)
+      data => this.manageNonActiveProduct(data),
+      error => this.errorOrderManage(error)
     );
 
-    // if (role === 'ROLE_CATEGORY_MANAGER') {
-    //   const payLoard = {
-    //     user_u_id: sessionStorage.getItem('userId')
-    //   };
-    //   this.productService.getCategoryWiseProducts(payLoard).subscribe(
-    //     data => this.manageNonActiveProduct(data),
-    //     error => this.errorOrderManage(error)
-    //   );
-    // } else {
-    //   this.productService.getnonActiveProduct().subscribe(
-    //     data => this.manageNonActiveProduct(data),
-    //     error => this.errorOrderManage(error)
-    //   );
-    // }
   }
-
 
 
   manageNonActiveProduct(data) {
@@ -603,7 +593,9 @@ export class DigitalListComponent implements OnInit {
         this.totalPagesPA = Math.ceil(this.nonActiveProductsArray.length / this.list_pages2);
       }
     }
-    if (this.nonActiveProductsArray.length === 0){this.stopLoading();}
+    if (this.nonActiveProductsArray.length === 0) {
+      this.stopLoading();
+    }
   }
 
   PendingProductFilter(searchTerm: string): void {
@@ -645,10 +637,10 @@ export class DigitalListComponent implements OnInit {
 
   ApproveProductNon(value) {
 
-    if(this.filteredPendingProducts.length !== 0){
+    if (this.filteredPendingProducts.length !== 0) {
       const url = 'products/digital/digital-approve-product/' + this.filteredPendingProducts[this.startIndex + value].productCode;
       this.router.navigate([url]);
-    }else{
+    } else {
       const url = 'products/digital/digital-approve-product/' + this.nonActiveProductsArray[this.startIndex + value].productCode;
       this.router.navigate([url]);
     }
@@ -672,11 +664,11 @@ export class DigitalListComponent implements OnInit {
 
   editGetProduct(index) {
 
-    if(this.filteredPendingQC.length > 0){
+    if (this.filteredPendingQC.length > 0) {
       const productCode = this.filteredPendingQC[this.startIndex + index].productCode;
       const url = 'products/digital/digital-edit-product/' + productCode;
       this.router.navigate([url]);
-    }else{
+    } else {
       const productCode = this.approvalPartnerProductList[this.startIndex + index].productCode;
       const url = 'products/digital/digital-edit-product/' + productCode;
       this.router.navigate([url]);
@@ -797,13 +789,13 @@ export class DigitalListComponent implements OnInit {
   }
 
   manegeMonActiveProductsByCompanyName(data) {
-    this.startIndex=0;
+    this.startIndex = 0;
     this.approvalPartnerProductList = [];
     if (data.data == null) {
     } else {
       if (data.status_code === 200) {
         for (let i = 0; i < data.data.length; i++) {
-          if(data.data[i].productImage!==null){
+          if (data.data[i].productImage !== null) {
 
             const or = {
               productCode: data.data[i].product_code,
@@ -812,23 +804,23 @@ export class DigitalListComponent implements OnInit {
               brand: data.data[i].brand,
               categoryCode: data.data[i].category_code,
               vendor: data.data[i].vendor,
-              categoryPath:data.data[i].categoryPath,
-              image:data.data[i].productImage.image1.slice(data.data[i].productImage.image1.indexOf("/product") + 8 ),
+              categoryPath: data.data[i].categoryPath,
+              image: data.data[i].productImage.image1.slice(data.data[i].productImage.image1.indexOf('/product') + 8),
               approved: 'Non Active',
               Action: '',
               // ,
             };
             this.approvalPartnerProductList.push(or);
-          }else{
-           const or = {
+          } else {
+            const or = {
               productCode: data.data[i].product_code,
               title: data.data[i].title,
               createDate: data.data[i].create_date,
               brand: data.data[i].brand,
               categoryCode: data.data[i].category_code,
-             categoryPath:data.data[i].categoryPath,
+              categoryPath: data.data[i].categoryPath,
               vendor: data.data[i].vendor,
-              image:'',
+              image: '',
               approved: 'Non Active',
               Action: '',
             };
@@ -1095,11 +1087,11 @@ export class DigitalListComponent implements OnInit {
     }
   }
 
-  loadPage(index:number){
-    if(this.filteredProducts.length>0){
-      window.open("https://www.kapruka.com/buyonline/"+this.filteredProducts[this.startIndex + index].title.replace(/\s+/g, '-').toLowerCase()+"/kid/"+"ef_pc_"+this.filteredProducts[this.startIndex + index].productCode, '_blank');
-    }else{
-      window.open("https://www.kapruka.com/buyonline/"+this.list_pages[this.startIndex + index].title.replace(/\s+/g, '-').toLowerCase()+"/kid/"+"ef_pc_"+this.list_pages[this.startIndex + index].productCode, '_blank');
+  loadPage(index: number) {
+    if (this.filteredProducts.length > 0) {
+      window.open('https://www.kapruka.com/buyonline/' + this.filteredProducts[this.startIndex + index].title.replace(/\s+/g, '-').toLowerCase() + '/kid/' + 'ef_pc_' + this.filteredProducts[this.startIndex + index].productCode, '_blank');
+    } else {
+      window.open('https://www.kapruka.com/buyonline/' + this.list_pages[this.startIndex + index].title.replace(/\s+/g, '-').toLowerCase() + '/kid/' + 'ef_pc_' + this.list_pages[this.startIndex + index].productCode, '_blank');
     }
 
   }
@@ -1128,14 +1120,14 @@ export class DigitalListComponent implements OnInit {
 
   ApproveEditProduct(i) {
 
-    if(this.filterededitProductApproval.length > 0){
+    if (this.filterededitProductApproval.length > 0) {
       const product_code = this.filterededitProductApproval[i].productCode;
       const unique_code = this.filterededitProductApproval[i].unique_code;
       const sub_type = this.filterededitProductApproval[i].subType;
       const ProDetails = product_code + '-' + unique_code + '-' + sub_type;
 
       this.router.navigate(['products/digital/edited-approve-product/' + ProDetails]);
-    }else{
+    } else {
       const product_code = this.nonActiveEditedProductsArray[i].productCode;
       const unique_code = this.nonActiveEditedProductsArray[i].unique_code;
       const sub_type = this.nonActiveEditedProductsArray[i].subType;
@@ -1168,7 +1160,7 @@ export class DigitalListComponent implements OnInit {
         editId: data.data[i].editId,
         requestedDate: data.data[i].requestedDate,
         title: data.data[i].title,
-        catePath:data.data[i].catePath,
+        catePath: data.data[i].catePath,
         action: ''
 
       };
@@ -1217,7 +1209,7 @@ export class DigitalListComponent implements OnInit {
     }
   }
 
-  onClickImage(url){
+  onClickImage(url) {
     const newWindow = window.open(url, '_blank');
     if (newWindow) {
       newWindow.focus();
