@@ -548,23 +548,32 @@ export class DigitalListComponent implements OnInit {
   }
 
   getNonActiveProdcut() {
-    const role = sessionStorage.getItem('userRole');
+    const busName = sessionStorage.getItem('businessName');
+    const userRole = sessionStorage.getItem('userRole');
+    const categoryID = sessionStorage.getItem('userId');
 
-    if (role === 'ROLE_CATEGORY_MANAGER') {
-      const payLoard = {
-        user_u_id: sessionStorage.getItem('userId')
-      };
-      this.productService.getCategoryWiseProducts(payLoard).subscribe(
-        data => this.manageNonActiveProduct(data),
-        error => this.errorOrderManage(error)
-      );
-    } else {
-      this.productService.getnonActiveProduct().subscribe(
-        data => this.manageNonActiveProduct(data),
-        error => this.errorOrderManage(error)
-      );
-    }
+    this.productService.getnonActiveProduct(busName, categoryID).subscribe(
+          data => this.manageNonActiveProduct(data),
+          error => this.errorOrderManage(error)
+    );
+
+    // if (role === 'ROLE_CATEGORY_MANAGER') {
+    //   const payLoard = {
+    //     user_u_id: sessionStorage.getItem('userId')
+    //   };
+    //   this.productService.getCategoryWiseProducts(payLoard).subscribe(
+    //     data => this.manageNonActiveProduct(data),
+    //     error => this.errorOrderManage(error)
+    //   );
+    // } else {
+    //   this.productService.getnonActiveProduct().subscribe(
+    //     data => this.manageNonActiveProduct(data),
+    //     error => this.errorOrderManage(error)
+    //   );
+    // }
   }
+
+
 
   manageNonActiveProduct(data) {
     this.nonActiveProductsArray = [];
