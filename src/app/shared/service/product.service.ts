@@ -40,6 +40,14 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'product/getAllActiveProductList', formData, {headers});
   }
 
+  getPendingStockAllocationList(businessName, UserID) {
+    const formData: FormData = new FormData();
+    formData.append('businessName', businessName);
+    formData.append('categoryUID ', UserID);
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'product/getPendingStockAllocation', formData, {headers});
+  }
+
   getSearchCategory(payloard) {
     // return this.httpClient.post<any>(this.loginUr4, payloard);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
@@ -277,14 +285,20 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'product/updateConsignmentProductsVirtualStock', payload, {headers});
   }
 
-  getOutofStockofVendor(payload) {
+  getOutofStockofVendor(businessName, UserID) {
+    const formData: FormData = new FormData();
+    formData.append('businessName', businessName);
+    formData.append('categoryUID ', UserID);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.post<any>(this.SERVER + 'product/getOutofStockProductsofVendor', payload, {headers});
+    return this.httpClient.post<any>(this.SERVER + 'product/getOutStockProdutList', formData, {headers});
   }
 
-  getSuspendedProofVendor(payload) {
+  getSuspendedProofVendor(businessName, UserID) {
+    const formData: FormData = new FormData();
+    formData.append('businessName', businessName);
+    formData.append('categoryUID ', UserID);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.post<any>(this.SERVER + 'product/getSuspendedProductsofVendor', payload, {headers});
+    return this.httpClient.post<any>(this.SERVER + 'product/getSuspendProdutList', formData, {headers});
   }
 
   rejectProduct(payload) {

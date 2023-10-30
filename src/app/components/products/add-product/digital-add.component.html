@@ -255,7 +255,7 @@
                    or model number for effective stock tracking and identification.
                  </span>
                 </span>
-                <input class="form-control" id="Seller_SKU" type="text" required (keyup)="updateSku()" maxlength="20">
+                <input class="form-control input" id="Seller_SKU" type="text" required (keyup)="updateSku()" maxlength="20">
               </div>
 
             </div>
@@ -271,7 +271,7 @@
                     <span class="input-group-text">LKR</span>
                   </div>
                   <input class="form-control" id="price" type="text" required
-                         (change)="setSellingPrice()" maxlength="8">
+                         (change)="setSellingPrice()" maxlength="8" style="width: 200px">
                   <!--(input)="formatCurrency($event)"-->
                 </div>
               </div>
@@ -284,7 +284,7 @@
               </div>
               <div class="col-md-8">
                 <input (change)=updateInputValue() class="form-control" id="initialMargin" step="0.50"
-                       type="number" required>
+                       type="number" required >
               </div>
             </div>
 
