@@ -96,7 +96,7 @@ export class ListOrdersComponent implements OnInit {
     var errorMsg = document.getElementById('noOrderMsg');
     var tableContent = document.getElementById('orderDetailsTbl');
     if (arr.data != null) {
-      tableContent.style.display='block';
+      tableContent.style.display='table';
       errorMsg.style.display='none';
       const orArrLength = arr.data.length;
       for (let i = 0; i < orArrLength; i++) {

@@ -621,7 +621,7 @@ export class DigitalAddComponent implements OnInit {
     }
     if (this.mainImageAdded === false) {
       Swal.fire(
-        'Whoops...!',
+        'Whoops..!',
         'Main Image cannot be empty!',
         'error'
       );
