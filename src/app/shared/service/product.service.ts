@@ -83,10 +83,21 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'attribute/getCategoryBasicProductAttribute', payloard, {headers});
   }
 
-  getnonActiveProduct() {
+  getnonActiveProduct(businessName, UserID) {
+    const formData: FormData = new FormData();
+    formData.append('businessName', businessName);
+    formData.append('categoryUID ', UserID);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.get<any>(this.SERVER + 'product/nonActiveProducts', {headers});
+    return this.httpClient.post<any>(this.SERVER + 'product/nonActiveProducts', formData, {headers});
   }
+
+  // getAllActiveProductList(businessName, UserID) {
+  //   const formData: FormData = new FormData();
+  //   formData.append('businessName', businessName);
+  //   formData.append('categoryUID ', UserID);
+  //   const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+  //   return this.httpClient.post<any>(this.SERVER + 'product/getAllActiveProductList', formData, {headers});
+  // }
 
   getnonActiveImageProduct() {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
