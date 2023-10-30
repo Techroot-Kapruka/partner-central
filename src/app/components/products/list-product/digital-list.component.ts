@@ -15,9 +15,11 @@ import {AuthService} from "../../../shared/auth/auth.service";
 export class DigitalListComponent implements OnInit {
 
   public list_pages = [];
+  public pending_stock_allocation = [];
   public list_outof_stock = [];
   public list_suspend = [];
   public filteredProducts: any = [];
+  public filterdPendingAllocation: any = [];
   public filteredPendingProducts: any = [];
   public filteredPendingQC: any = [];
   public filteredoutOfStock: any = [];
@@ -222,6 +224,10 @@ export class DigitalListComponent implements OnInit {
     this.productService.getAllActiveProductList(busName, categoryID).subscribe(
       data => this.getSelectedProductManage(data),
     );
+
+    this.productService.getPendingStockAllocationList(busName, categoryID).subscribe(
+      data => this.getPendingStockAllocationList(data),
+    );
     // if (userRole === 'ROLE_ADMIN') {
     //   // this.productService.getAllProducts().subscribe(
     //   //   data => this.LoadAllProduct(data),
@@ -277,6 +283,77 @@ export class DigitalListComponent implements OnInit {
     );
   }
 
+  getSelectedPartnerAllocationProduct() {
+    const name = (document.getElementById('select_pro') as HTMLInputElement).value;
+    this.productService.getAllActiveProductList(name, this.categoryUID).subscribe(
+      data => this.getSelectedPartnerAllocationProductManage(data),
+      error => this.errorOrderManage(error)
+    );
+  }
+
+  getSelectedPartnerSuspendedProduct(){
+    const name = (document.getElementById('select_pro') as HTMLInputElement).value;
+    this.productService.getSuspendedProofVendor(name, this.categoryUID).subscribe(
+      data => this.LoadSuspendedProofVendor(data),
+      error => this.errorOrderManage(error)
+    );
+  }
+
+  getSelectedPartnerOutProduct(){
+    const name = (document.getElementById('select_pro') as HTMLInputElement).value;
+    this.productService.getOutofStockofVendor(name, this.categoryUID).subscribe(
+      data => this.LoadOutofStockofVendor(data),
+      error => this.errorOrderManage(error)
+    );
+  }
+
+  getPendingStockAllocationList(data){
+    this.pending_stock_allocation = [];
+
+    for (let i = 0; i < data.data.length; i++) {
+
+      const or = {
+        image: (data.data[i].productImage && data.data[i].productImage.image1 ? data.data[i].productImage.image1.split('/product')[1] : '') || '',
+        title: data.data[i].title,
+        productCode: data.data[i].product_code,
+        price: data.data[i].selling_price,
+        in_stock: data.data[i].in_stock,
+        vendor: data.data[i].vendor,
+        createDate: data.data[i].create_date,
+        categoryPath: data.data[i].categoryPath,
+        action: '',
+
+      };
+      this.pending_stock_allocation.push(or);
+    }
+
+  }
+  getSelectedPartnerAllocationProductManage(data){
+    this.startIndex = 0;
+    this.pending_stock_allocation = [];
+
+    if (data.data == null) {
+    } else {
+      const lengthRes = data.data.length;
+      for (let i = 0; i < lengthRes; i++) {
+
+        const or = {
+          image: (data.data[i].productImage && data.data[i].productImage.image1 ? data.data[i].productImage.image1.split('/product')[1] : '') || '',
+          title: data.data[i].title,
+          productCode: data.data[i].product_code,
+          price: data.data[i].selling_price,
+          in_stock: data.data[i].in_stock,
+          vendor: data.data[i].vendor,
+          createDate: data.data[i].create_date,
+          categoryPath: data.data[i].categoryPath,
+          action: '',
+
+        };
+        this.pending_stock_allocation.push(or);
+      }
+    }
+  }
+
   getSelectedProductManage(data) {
     this.startIndex = 0;
     this.list_pages = [];
@@ -306,6 +383,13 @@ export class DigitalListComponent implements OnInit {
 
   ActiveProductFilter(searchTerm: string): void {
     this.filteredProducts = this.list_pages.filter(product =>
+      product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
+
+  PendingStockAllocationFilter(searchTerm: String): void{
+    this.filterdPendingAllocation = this.pending_stock_allocation.filter(product =>
       product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -1189,10 +1273,10 @@ export class DigitalListComponent implements OnInit {
   }
 
   getOutOfStock() {
-    const payLoard = {
-      vendor: sessionStorage.getItem('partnerId')
-    };
-    this.productService.getOutofStockofVendor(payLoard).subscribe(
+    const busName = sessionStorage.getItem('businessName');
+    const userRole = sessionStorage.getItem('userRole');
+    const categoryID = sessionStorage.getItem('userId');
+    this.productService.getOutofStockofVendor(busName, categoryID).subscribe(
       data => this.LoadOutofStockofVendor(data),
     );
   }
@@ -1211,6 +1295,8 @@ export class DigitalListComponent implements OnInit {
           price: (data.data[i].productVariation && data.data[i].productVariation[0] ? data.data[i].productVariation[0].selling_price : 0),
           in_stock: data.data[i].in_stock,
           createDate: data.data[i].create_date,
+          categoryPath: data.data[i].categoryPath,
+          vendor: data.data[i].vendor,
           action: ''
         };
         this.list_outof_stock.push(or);
@@ -1233,10 +1319,11 @@ export class DigitalListComponent implements OnInit {
   }
 
   getSuspendedProducts() {
-    const payLoard = {
-      vendor: sessionStorage.getItem('partnerId')
-    };
-    this.productService.getSuspendedProofVendor(payLoard).subscribe(
+    const busName = sessionStorage.getItem('businessName');
+    const userRole = sessionStorage.getItem('userRole');
+    const categoryID = sessionStorage.getItem('userId');
+
+    this.productService.getSuspendedProofVendor(busName , categoryID).subscribe(
       data => this.LoadSuspendedProofVendor(data),
     );
   }
@@ -1256,6 +1343,7 @@ export class DigitalListComponent implements OnInit {
           in_stock: data.data[i].in_stock,
           createDate: data.data[i].create_date,
           categoryPath: data.data[i].categoryPath,
+          vendor: data.data[i].vendor,
           action: ''
         };
         this.list_suspend.push(or);

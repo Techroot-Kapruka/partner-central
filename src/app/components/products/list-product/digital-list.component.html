@@ -213,18 +213,17 @@
               <ng-template ngbTabContent>
                 <div class="tab-pane fade active show" id="account" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
-                    <!--<div *ngIf="isAdmin" class="btn-popup pull-right">-->
-                      <!--<select (change)="getSelectedPartnerProduct()" id="select_pro" class="form-control">-->
-                        <!--<option selected>&#45;&#45; Select Vendor &#45;&#45;</option>-->
-                        <!--<option *ngFor="let partnerArrays of partnerArray" value="{{partnerArrays['name']}}">-->
-                          <!--{{partnerArrays['name']}}-->
-                        <!--</option>-->
-
-                      <!--</select>-->
-                    <!--</div>-->
+                    <div *ngIf="isAdmin" class="btn-popup pull-right">
+                      <select (change)="getSelectedPartnerAllocationProduct()" id="select_pro" class="form-control">
+                        <option selected>-- Select Vendor --</option>
+                        <option *ngFor="let partnerArrays of partnerArray" value="{{partnerArrays['name']}}">
+                          {{partnerArrays['name']}}
+                        </option>
+                      </select>
+                    </div>
                     <div class="col-md-10">
                       <input autofocus type="text" class="form-control" placeholder="Search By Product Name..."
-                             (input)="ActiveProductFilter($event.target.value)"/>
+                             (input)="PendingStockAllocationFilter($event.target.value)"/>
                     </div>
                     <div class="clearfix"></div>
                     <div class="row">
@@ -239,18 +238,17 @@
                               <th>Price</th>
                               <th>Stock in hand</th>
                               <th>Create Date</th>
-                              <th>Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <ng-container *ngIf="filteredProducts.length > 0; else paginatedData">
+                            <ng-container *ngIf="filterdPendingAllocation.length > 0; else paginatedData">
                               <!-- Display filtered products -->
-                              <tr *ngFor="let productDetail of filteredProducts; let i = index;">
+                              <tr *ngFor="let productDetail of filterdPendingAllocation; let i = index;">
                                 <td align="center"><img src="{{ imagePathURI + productDetail.image }}" height="60px"
                                                         width="60px"
                                                         (error)="onImageError($event)" (click)="popUpImageActive(i)" /></td>
                                 <!--<td> <p>{{productDetail.title}}</p><p>{{ productDetail.productCode }}</p><p>{{productDetail.vendor}}</p><p>{{productDetail.categoryPath}}</p></td>-->
-                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000; cursor: pointer"><a (click)="loadPage(i)">{{ productDetail.title}}</a></p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ productDetail.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{productDetail.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{productDetail.categoryPath}}</p></td>
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000; cursor: pointer">{{ productDetail.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ productDetail.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{productDetail.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{productDetail.categoryPath}}</p></td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="productDetail.price" autofocus/>
@@ -266,59 +264,41 @@
                                        src="assets/images/EditImage.png" height="20px" weight="20px" title="Edit Stock">
                                 </td>
                                 <td>{{ productDetail.createDate }}</td>
-                                <td>
-                                  <button type="button" (click)='editGetProduct3(i)'
-                                          style="width: 80px;height: 28px;font-size: 10px;"
-                                          class="btn btn-outline-success">View
-                                  </button>
-                                  <button *ngIf="isPartner" type="button" (click)='editGetProduct2(i)'
-                                          style="width: 80px;height: 28px;font-size: 10px;"
-                                          class="btn btn-outline-info">edit
-                                  </button>
-                                  <button type="button" (click)='deleteActiveProduct(productDetail.productCode)'
-                                          style="width: 80px;height: 28px;font-size: 10px;"
-                                          class="btn btn-outline-danger">delete
-                                  </button>
-                                  <button type="button" (click)='outButton(i, 1,0)'
-                                          style="width: 80px;height: 28px;font-size: 10px;"
-                                          class="btn btn-outline-warning">out
-                                  </button>
-                                </td>
                               </tr>
                             </ng-container>
                             <ng-template #paginatedData>
                               <!-- Display paginated items if filteredProducts is empty -->
-                              <ng-container *ngFor="let rowIndex of [1,2,3]">
-                                <!--                              show skeleton loader until product load-->
-                                <tr *ngIf="stillLoading">
-                                  <td>
-                                    <ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>
-                                  </td>
-                                  <td>
-                                    <ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>
-                                  </td>
-                                  <td>
-                                    <ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>
-                                  </td>
-                                  <td>
-                                    <ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>
-                                  </td>
-                                  <td>
-                                    <ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>
-                                  </td>
-                                  <td>
-                                    <ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>
-                                  </td>
-                                </tr>
-                              </ng-container>
+                              <!--<ng-container *ngFor="let rowIndex of [1,2,3]">-->
+                                <!--&lt;!&ndash;                              show skeleton loader until product load&ndash;&gt;-->
+                                <!--<tr *ngIf="stillLoading">-->
+                                  <!--<td>-->
+                                    <!--<ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>-->
+                                  <!--</td>-->
+                                  <!--<td>-->
+                                    <!--<ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>-->
+                                  <!--</td>-->
+                                  <!--<td>-->
+                                    <!--<ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>-->
+                                  <!--</td>-->
+                                  <!--<td>-->
+                                    <!--<ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>-->
+                                  <!--</td>-->
+                                  <!--<td>-->
+                                    <!--<ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>-->
+                                  <!--</td>-->
+                                  <!--<td>-->
+                                    <!--<ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>-->
+                                  <!--</td>-->
+                                <!--</tr>-->
+                              <!--</ng-container>-->
                               <!--                              show skeleton loader until product loa end-->
 
                               <tr
-                                *ngFor="let productDetail of (paginatedItems.length > 0 ? paginatedItems : list_pages); let i = index;">
+                                *ngFor="let productDetail of pending_stock_allocation; let i = index;">
                                 <td align="center">{{stopLoading()}}<img src="{{ imagePathURI + productDetail.image }}" (click)="popUpImageActive(i)" height="60px"
                                                                          width="60px"
                                                                          (error)="onImageError($event)" /></td>
-                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000; cursor: pointer"><a (click)="loadPage(i)">{{ productDetail.title}}</a></p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ productDetail.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{productDetail.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{productDetail.categoryPath}}</p></td>
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000; cursor: pointer">{{ productDetail.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ productDetail.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{productDetail.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{productDetail.categoryPath}}</p></td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="productDetail.price" autofocus/>
@@ -335,78 +315,20 @@
                                          [value]="productDetail.in_stock"/>
                                 </td>
                                 <td>{{ productDetail.createDate }}</td>
-                                <td>
-                                  <button type="button" (click)='editGetProduct3(i)'
-                                          style="width: 80px;height: 28px;font-size: 10px;"
-                                          class="btn btn-outline-success">view
-                                  </button>
-                                  <button *ngIf="isPartner" type="button" (click)='editGetProduct2(i)'
-                                          style="width: 80px;height: 28px;font-size: 10px;"
-                                          class="btn btn-outline-info">edit
-                                  </button>
-                                  <button type="button" (click)='deleteActiveProduct(productDetail.productCode)'
-                                          style="width: 80px;height: 28px;font-size: 10px;"
-                                          class="btn btn-outline-danger">delete
-                                  </button>
-                                  <button type="button" (click)='outButton(i, 1,0)'
-                                          style="width: 80px;height: 28px;font-size: 10px;"
-                                          class="btn btn-outline-warning">out
-                                  </button>
-                                </td>
                               </tr>
-                            </ng-template>
-                            <ng-template #imagePopup let-modal>
-                              <div class="modal-content" >
-                                <div class="modal-header">
-                                  <h4 class="modal-title">Image Preview</h4>
-                                  <button type="button" class="close" (click)="closePopup()">
-                                    <span aria-hidden="true">&times;</span>
-                                  </button>
-                                </div>
-                                <div class="modal-body">
-                                  <img [src]="imageUrl" alt="Image" class="img-fluid">
-                                </div>
-                              </div>
-                            </ng-template>
-                            <ng-template #pricePopup let-modal>
-                              <div class="modal-content" >
-                                <div class="modal-header">
-                                  <h4 class="modal-title">Change Price</h4>
-                                  <button type="button" class="close" (click)="closePopup()">
-                                    <span aria-hidden="true">&times;</span>
-                                  </button>
-                                </div>
-                                <div class="modal-body">
-                                  <form>
-                                    <div class="row">
-                                      <div class="col-md-6">
-                                        <label for="oldPrice">Old Price</label>
-                                        <input class="form-control" id="oldPrice" disabled type="text" value="{{oldPrice}}"/>
-                                      </div>
-                                      <div class="col-md-6">
-                                        <label for="newPrice">New Price</label>
-                                        <input class="form-control" id="newPrice" type="text"/>
-                                      </div>
-                                    </div>
-                                    <br>
-                                    <button type="submit" class="btn btn-primary" style="float: right">Submit</button>
-                                  </form>
-                                </div>
-
-                              </div>
                             </ng-template>
                             </tbody>
                           </table>
                         </div>
                       </div>
                     </div>
-                    <div class="pull-right" style="margin-top: 15px">
-                      <app-pagination
-                        [currentPage]="currentPage"
-                        [totalPages]="totalPages"
-                        (pageChange)="onPageChange($event,'ActivePro')"
-                      ></app-pagination>
-                    </div>
+                    <!--<div class="pull-right" style="margin-top: 15px">-->
+                      <!--<app-pagination-->
+                        <!--[currentPage]="currentPage"-->
+                        <!--[totalPages]="totalPages"-->
+                        <!--(pageChange)="onPageChange($event,'ActivePro')"-->
+                      <!--&gt;</app-pagination>-->
+                    <!--</div>-->
                   </div>
                 </div>
               </ng-template>
@@ -748,11 +670,20 @@
               </ng-template>
             </ngb-tab>
 
-            <ngb-tab [title]="getOutofStock()" *ngIf="isPartner">
+            <ngb-tab [title]="getOutofStock()" *ngIf="qaTables">
               <ng-template ngbTabContent>
                 <div class="tab-pane fade active show" id="account5" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
-                    <div class="col-md-9">
+
+                    <div *ngIf="isAdmin" class="btn-popup pull-right">
+                      <select (change)="getSelectedPartnerOutProduct()" id="select_pro" class="form-control">
+                        <option selected>-- Select Vendor --</option>
+                        <option *ngFor="let partnerArrays of partnerArray" value="{{partnerArrays['name']}}">
+                          {{partnerArrays['name']}}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-md-10">
                       <input autofocus type="text" class="form-control" placeholder="Search By Product Name..."
                              (input)="OutofStockFilter($event.target.value)"/>
                     </div>
@@ -779,7 +710,8 @@
                                 <td align="center"><img src="{{ imagePathURI + outofStockProduct.image }}" height="60px"
                                                         width="60px"
                                                         (error)="onImageError($event)"/></td>
-                                <td>{{ outofStockProduct.title }}<br>{{ outofStockProduct.productCode }}</td>
+                                <!--<td>{{ outofStockProduct.title }}<br>{{ outofStockProduct.productCode }}</td>-->
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000; cursor: pointer">{{outofStockProduct.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ outofStockProduct.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{ outofStockProduct.categoryPath }}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{ outofStockProduct.vendor }}</p></td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="outofStockProduct.price" autofocus/>
@@ -807,7 +739,8 @@
                                 <td align="center"><img src="{{ imagePathURI + outofStockProduct.image }}" height="60px"
                                                         width="60px"
                                                         (error)="onImageError($event)"/></td>
-                                <td>{{ outofStockProduct.title }}<br>{{ outofStockProduct.productCode }}</td>
+                                <!--<td>{{ outofStockProduct.title }}<br>{{ outofStockProduct.productCode }}</td>-->
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000; cursor: pointer">{{outofStockProduct.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ outofStockProduct.productCode }}</p><p  style="margin: 0; color: #190482; font-weight: 600; font-size: 14px">&nbsp; &nbsp;{{ outofStockProduct.categoryPath }}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{ outofStockProduct.vendor }}</p></td>
                                 <td>
                                   <input type="text" disabled style="width: 100px; height: 30px; border: none;"
                                          [value]="outofStockProduct.price" autofocus/>
@@ -845,14 +778,23 @@
               </ng-template>
             </ngb-tab>
 
-            <ngb-tab [title]="getSuspendedPro()" *ngIf="isPartner">
+            <ngb-tab [title]="getSuspendedPro()" *ngIf="qaTables">
               <ng-template ngbTabContent>
                 <div class="tab-pane fade active show" id="account6" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
-                    <div class="col-md-9">
+                    <div *ngIf="isAdmin" class="btn-popup pull-right">
+                      <select (change)="getSelectedPartnerSuspendedProduct()" id="select_pro" class="form-control">
+                        <option selected>-- Select Vendor --</option>
+                        <option *ngFor="let partnerArrays of partnerArray" value="{{partnerArrays['name']}}">
+                          {{partnerArrays['name']}}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-md-10">
                       <input autofocus type="text" class="form-control" placeholder="Search By Product Name..."
                              (input)="SuspendProductFilter($event.target.value)"/>
                     </div>
+
                     <div class="clearfix"></div>
                     <div class="row">
                       <div class="col-md-9">
@@ -876,7 +818,7 @@
                                 <td align="center"><img src="{{ imagePathURI + suspendProduct.image }}" height="60px"
                                                         width="60px"
                                                         (error)="onImageError($event)"/></td>
-                                <td>{{ suspendProduct.title }}<br>{{ suspendProduct.productCode }}</td>
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ suspendProduct.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ suspendProduct.productCode}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{suspendProduct.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{suspendProduct.categoryPath}}</p></td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="suspendProduct.price" autofocus/>
@@ -902,7 +844,7 @@
                                                         width="60px"
                                                         (error)="onImageError($event)"/></td>
                                 <!--<td>{{ suspendProduct.title }}<br>{{ suspendProduct.productCode }}</td>-->
-                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ suspendProduct.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ suspendProduct.productCode}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{suspendProduct.categoryPath}}</p></td>
+                                <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{ suspendProduct.title}}</p><p  style="margin: 0px;font-size: 16px; font-weight: 600;color: #000">{{ suspendProduct.productCode}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{suspendProduct.vendor}}</p><p style="margin: 0; color: #190482; font-size: 14px; font-weight: 600" > &nbsp; &nbsp;{{suspendProduct.categoryPath}}</p></td>
                                 <td>
                                   <input type="text" disabled style="width:100px; height: 30px; border: none;"
                                          [value]="suspendProduct.price" autofocus/>
