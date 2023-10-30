@@ -51,6 +51,21 @@ export class ProductService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/saveProduct', payloard, {headers});
   }
+  insertProductWithImages(image1: any, image2: any, image3: any, image4: any, image5: any, payload: any) {
+    const formData: FormData = new FormData();
+
+    formData.append('image1', image1);
+    formData.append('image2', image2);
+    formData.append('image3', image3);
+    formData.append('image4', image4);
+    formData.append('image5', image5);
+
+    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    formData.append('data', blob);
+
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'product/saveProductWithImages',formData, {headers});
+  }
 
   insertProductImage(image1: any, image2: any, image3: any, image4: any, image5: any, id: any) {
     const formData: FormData = new FormData();
