@@ -104,6 +104,8 @@ export class DigitalListComponent implements OnInit {
     this.getConsignmentProducts();
     this.getOutOfStock();
     this.getSuspendedProducts();
+
+    // NO
     // this.UpdateVirtualStocks();
 
     const sessionUser2 = sessionStorage.getItem('userRole');
@@ -179,6 +181,10 @@ export class DigitalListComponent implements OnInit {
   getActiveTabTitle() {
     const count = this.list_pages.length;
     return `Active (${count})`;
+  }
+
+  PendingStockAllocation(){
+
   }
 
   getPendingApprovalList() {
@@ -264,7 +270,7 @@ export class DigitalListComponent implements OnInit {
   }
 
   getSelectedProductManage(data) {
-    this.startIndex=0;
+    this.startIndex = 0;
     this.list_pages = [];
 
     if (data.data == null) {
@@ -1139,7 +1145,6 @@ export class DigitalListComponent implements OnInit {
   }
 
   private manageFieldImageEditData(data) {
-
     for (let i = 0; i < data.data.length; i++) {
 
       const payloard = {
