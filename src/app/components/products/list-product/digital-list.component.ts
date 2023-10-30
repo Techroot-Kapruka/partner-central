@@ -524,7 +524,7 @@ export class DigitalListComponent implements OnInit {
       }
 
     })
-    if(text){
+    if (text) {
       Swal.fire({
         title: 'Do you want to save the changes?',
         showCancelButton: true,
@@ -532,9 +532,9 @@ export class DigitalListComponent implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
           const payLoad = {
-            product_code:productCode,
+            product_code: productCode,
             rejecteddBy: sessionStorage.getItem('userId'),
-            rejectReason:text
+            rejectReason: text
           };
 
           this.productService.deleteProduct(payLoad).subscribe(
@@ -895,6 +895,7 @@ export class DigitalListComponent implements OnInit {
               categoryCode: data.data[i].category_code,
               vendor: data.data[i].vendor,
               categoryPath: data.data[i].categoryPath,
+
               image: data.data[i].productImage.image1.slice(data.data[i].productImage.image1.indexOf('/product') + 8),
               approved: 'Non Active',
               Action: '',
@@ -1182,7 +1183,7 @@ export class DigitalListComponent implements OnInit {
       window.open('https://www.kapruka.com/buyonline/' + this.filteredProducts[this.startIndex + index].title.replace(/\s+/g, '-').toLowerCase() + '/kid/' + 'ef_pc_' + this.filteredProducts[this.startIndex + index].productCode, '_blank');
     } else {
       window.open('https://www.kapruka.com/buyonline/' + this.list_pages[this.startIndex + index].title.replace(/\s+/g, '-').toLowerCase() + '/kid/' + 'ef_pc_' + this.list_pages[this.startIndex + index].productCode, '_blank');
-    }
+   }
 
   }
 
