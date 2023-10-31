@@ -40,6 +40,14 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'product/getAllActiveProductList', formData, {headers});
   }
 
+  getPendingStockAllocationList(businessName, UserID) {
+    const formData: FormData = new FormData();
+    formData.append('businessName', businessName);
+    formData.append('categoryUID ', UserID);
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'product/getPendingStockAllocation', formData, {headers});
+  }
+
   getSearchCategory(payloard) {
     // return this.httpClient.post<any>(this.loginUr4, payloard);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
@@ -50,6 +58,21 @@ export class ProductService {
     // return this.httpClient.post<any>(this.saveProductUrl, payloard);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/saveProduct', payloard, {headers});
+  }
+  insertProductWithImages(image1: any, image2: any, image3: any, image4: any, image5: any, payload: any) {
+    const formData: FormData = new FormData();
+
+    formData.append('image1', image1);
+    formData.append('image2', image2);
+    formData.append('image3', image3);
+    formData.append('image4', image4);
+    formData.append('image5', image5);
+
+    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
+    formData.append('data', blob);
+
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'product/saveProductWithImages',formData, {headers});
   }
 
   insertProductImage(image1: any, image2: any, image3: any, image4: any, image5: any, id: any) {
@@ -262,14 +285,20 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'product/updateConsignmentProductsVirtualStock', payload, {headers});
   }
 
-  getOutofStockofVendor(payload) {
+  getOutofStockofVendor(businessName, UserID) {
+    const formData: FormData = new FormData();
+    formData.append('businessName', businessName);
+    formData.append('categoryUID ', UserID);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.post<any>(this.SERVER + 'product/getOutofStockProductsofVendor', payload, {headers});
+    return this.httpClient.post<any>(this.SERVER + 'product/getOutStockProdutList', formData, {headers});
   }
 
-  getSuspendedProofVendor(payload) {
+  getSuspendedProofVendor(businessName, UserID) {
+    const formData: FormData = new FormData();
+    formData.append('businessName', businessName);
+    formData.append('categoryUID ', UserID);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.post<any>(this.SERVER + 'product/getSuspendedProductsofVendor', payload, {headers});
+    return this.httpClient.post<any>(this.SERVER + 'product/getSuspendProdutList', formData, {headers});
   }
 
   rejectProduct(payload) {

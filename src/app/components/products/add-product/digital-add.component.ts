@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, HostListener, Input, OnInit, ViewChild} from '@angular/core';
 import {DropzoneConfigInterface} from 'ngx-dropzone-wrapper';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ProductService} from '../../../shared/service/product.service';
@@ -23,11 +23,17 @@ interface Item {
 
 export class DigitalAddComponent implements OnInit {
 
+  @ViewChild('txtKeyword') txtKeyword: ElementRef;
   constructor(private modalService: NgbModal, private productService: ProductService, private router: Router, private categoryService: CategoryService, private el: ElementRef) {
     this.imageControlMethord();
     this.getCategory();
     this.isDisplay = 'block';
     this.getVariationColors();
+    // this.addCopyPasteListeners();
+  }
+
+  ngAfterViewInit() {
+    this.addCopyPasteListeners();
   }
 
   fileTypeError = false;
@@ -263,16 +269,16 @@ export class DigitalAddComponent implements OnInit {
         );
 
       }else {
-        if (parseFloat(inputElement.value) > 100.00) {
+        if (parseFloat(inputElement.value) > 100.00 || inputElement.value === '') {
           inputElement.value = this.categoryMargin.toFixed(2).toString();
           Swal.fire(
-            'Maximum Limit Reached.',
             'Please Enter Valid Margin',
+            '',
             'warning'
           );
         }else{
-          this.categoryMargin = Number(inputElement.value);
-          this.setSellingPrice();
+            this.categoryMargin = Number(inputElement.value);
+            this.setSellingPrice();
         }
       }
     }
@@ -615,7 +621,7 @@ export class DigitalAddComponent implements OnInit {
     }
     if (this.mainImageAdded === false) {
       Swal.fire(
-        'Whoops...!',
+        'Whoops..!',
         'Main Image cannot be empty!',
         'error'
       );
@@ -640,6 +646,35 @@ export class DigitalAddComponent implements OnInit {
       if (isListingPrice) {
         this.addProductClicked = true;
         const productVariation = [];
+
+        //set images
+        let one = this.imageCliant.get('fileSource').value;
+        let one2 = this.imageCliant.get('fileSource2').value;
+        let one3 = this.imageCliant.get('fileSource3').value;
+        let one4 = this.imageCliant.get('fileSource4').value;
+        let one5 = this.imageCliant.get('fileSource5').value;
+        const pricecc = new File([''], '');
+        if (one === '') {
+
+          one = pricecc;
+        }
+
+        if (one2 === '') {
+          one2 = pricecc;
+        }
+
+        if (one3 === '') {
+          one3 = pricecc;
+        }
+
+        if (one4 === '') {
+          one4 = pricecc;
+        }
+
+        if (one5 === '') {
+          one5 = pricecc;
+        }
+
         if (this.clothesArray.length === 0) {
           const pp = {
             changing_amount: 0,
@@ -656,7 +691,7 @@ export class DigitalAddComponent implements OnInit {
           if (brandHtml) {
             brand_ = (document.getElementById('Brand') as HTMLInputElement).value;
           }
-          const payloard = {
+          const payload = {
             category_code: this.objectCategoryCode,
             title: product_name,
             brand: brand_,
@@ -685,8 +720,11 @@ export class DigitalAddComponent implements OnInit {
             },
             productAttributes: this.attributeArr
           };
-          this.productService.insertProduct(payloard).subscribe(
-            data => this.manageProductResult(data),
+
+
+
+          this.productService.insertProductWithImages(one, one2, one3, one4, one5, payload).subscribe(
+            data => this.successAlert(data),
             error => this.mnageErrorProduct(error)
           );
 
@@ -717,7 +755,7 @@ export class DigitalAddComponent implements OnInit {
           if (brandHtml) {
             brand_ = (document.getElementById('Brand') as HTMLInputElement).value;
           }
-          const payloard = {
+          const payload = {
             category_code: this.objectCategoryCode,
             title: product_name,
             brand: brand_,
@@ -746,7 +784,7 @@ export class DigitalAddComponent implements OnInit {
             },
             productAttributes: this.attributeArr
           };
-          this.productService.insertProduct(payloard).subscribe(
+          this.productService.insertProductWithImages(one, one2, one3, one4, one5, payload).subscribe(
             data => this.manageProductResult(data),
             error => this.mnageErrorProduct(error)
           );
@@ -1057,14 +1095,15 @@ export class DigitalAddComponent implements OnInit {
     // Image upload validation
     const mimeType = event.target.files[0].type;
 
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i) || mimeType.match(/^image\/jfif$/i)) {
+    if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
         'error',
-        'Please select a JPEG, PNG, or BMP image.',
+        'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
     }
+
 
     this.mainImageAdded = true;
     // Image upload
@@ -1106,7 +1145,6 @@ export class DigitalAddComponent implements OnInit {
         this.attributeArr.push(attribute);
       }
     }
-    console.log(this.attributeArr);
   }
 
 
@@ -1117,10 +1155,11 @@ export class DigitalAddComponent implements OnInit {
     }
     // Image upload validation
     const mimeType = event.target.files[0].type;
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i)) {
+
+    if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
         'error',
-        'Please select a JPEG, PNG, or BMP image.',
+        'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
@@ -1148,11 +1187,13 @@ export class DigitalAddComponent implements OnInit {
       return;
     }
     // Image upload validation
+    // Image upload validation
     const mimeType = event.target.files[0].type;
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i)) {
+
+    if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
         'error',
-        'Please select a JPEG, PNG, or BMP image.',
+        'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
@@ -1180,10 +1221,11 @@ export class DigitalAddComponent implements OnInit {
     }
     // Image upload validation
     const mimeType = event.target.files[0].type;
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i)) {
+
+    if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
         'error',
-        'Please select a JPEG, PNG, or BMP image.',
+        'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
@@ -1209,12 +1251,13 @@ export class DigitalAddComponent implements OnInit {
     if (event.target.files.length === 0) {
       return;
     }
-    // Image upload validation
+// Image upload validation
     const mimeType = event.target.files[0].type;
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i)) {
+
+    if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
         'error',
-        'Please select a JPEG, PNG, or BMP image.',
+        'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
@@ -1236,27 +1279,36 @@ export class DigitalAddComponent implements OnInit {
   }
 
   successAlert(data) {
-    Swal.fire(
-      'New Product Added Successfully...!',
-      'Your product will go live after Approved by Kapruka.This may take upto 6-12 Hrs',
-      'success'
-    );
-    const partId = sessionStorage.getItem('partnerId');
-    const url = 'products/digital/digital-product-list';
-    this.router.navigate([url]);
+    if (data.message_status === 'Success'){
+      Swal.fire(
+        'New Product Added Successfully...!',
+        'Your product will go live after Approved by Kapruka.This may take upto 6-12 Hrs',
+        'success'
+      );
+      const partId = sessionStorage.getItem('partnerId');
+      const url = 'products/digital/digital-product-list';
+      this.router.navigate([url]);
 
 
-    // this.clearAllFeilds();
-    this.colorNameArray = [];
-    this.colorCodeArray = [];
-    this.sizeNameArray = [];
-    this.colorArray = [];
-    this.sizeArray = [];
-    this.productGroupTabel = [];
-    this.nonGroupArray = [];
-    this.weightValue = '';
-    // const url = '/products/digital/digital-product-list/';
-    // this.router.navigate([url]);
+      // this.clearAllFeilds();
+      this.colorNameArray = [];
+      this.colorCodeArray = [];
+      this.sizeNameArray = [];
+      this.colorArray = [];
+      this.sizeArray = [];
+      this.productGroupTabel = [];
+      this.nonGroupArray = [];
+      this.weightValue = '';
+      // const url = '/products/digital/digital-product-list/';
+      // this.router.navigate([url]);
+    } else {
+      Swal.fire(
+        "Failed",
+        data.message,
+        'warning'
+      )
+    }
+
   }
 
   clearAllFeilds() {
@@ -1761,7 +1813,6 @@ export class DigitalAddComponent implements OnInit {
   }
 
   getSub_category(catCode, catName, index, catMargin) {
-
     this.margin = catMargin;
     // variation arrays clear
     // this.variationKeyArray = [];
@@ -1812,6 +1863,7 @@ export class DigitalAddComponent implements OnInit {
   }
 
   manageAllSubCategory(data, catName, i) {
+
     this.indexCat = i;
     this.SubCategoryArray = [];
     this.categoryPath = '';
@@ -2439,6 +2491,14 @@ export class DigitalAddComponent implements OnInit {
       console.log('else return');
       return;
     }
+  }
+
+  addCopyPasteListeners() {
+    const inputElement = this.txtKeyword.nativeElement;
+
+    inputElement.addEventListener('paste', (event) => {
+      event.preventDefault();
+    });
   }
 
 }
