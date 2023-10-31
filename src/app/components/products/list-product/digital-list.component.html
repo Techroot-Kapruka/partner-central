@@ -16,8 +16,11 @@
                         <option *ngFor="let partnerArrays of partnerArray" value="{{partnerArrays['name']}}">
                           {{partnerArrays['name']}}
                         </option>
-
                       </select>
+                      <!--<input type="text" id="inputBox" [(ngModel)]="userInput" (input)="filterSuggestions()" style="width: 100%;">-->
+                      <!--<ul *ngIf="filteredSuggestions.length > 0">-->
+                        <!--<li *ngFor="let suggestion of filteredSuggestions">{{ suggestion.name}}</li>-->
+                      <!--</ul>-->
                     </div>
                     <div class="col-md-10">
                       <input autofocus type="text" class="form-control" placeholder="Search By Product Name..."

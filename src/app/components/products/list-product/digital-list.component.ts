@@ -87,6 +87,11 @@ export class DigitalListComponent implements OnInit {
   totalPagesOS = 0; // Total number of pages
   totalPagesSus = 0; // Total number of pages
 
+
+  filteredSuggestions: string[] = [];
+  userInput = '';
+
+
   protected readonly print = print;
 
   @ViewChild('imagePopup') imagePopup: ElementRef;
@@ -1397,5 +1402,17 @@ export class DigitalListComponent implements OnInit {
       const endIndex = startIndex + this.list_pages2;
       this.paginatedSuspend = this.list_suspend.slice(startIndex, endIndex);
     }
+  }
+
+  filterSuggestions(){
+    if (this.userInput == null){
+      this.filteredSuggestions.length = 0;
+    }
+    console.log(this.partnerArray)
+    this.filteredSuggestions = this.partnerArray.filter(
+      partnerArray => partnerArray.name.toLowerCase().includes(this.userInput.toLowerCase())
+    );
+
+    console.log(this.filteredSuggestions);
   }
 }
