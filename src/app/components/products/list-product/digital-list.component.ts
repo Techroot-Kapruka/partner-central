@@ -721,6 +721,7 @@ export class DigitalListComponent implements OnInit {
     this.filteredPendingProducts = this.nonActiveProductsArray.filter(product =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
     this.totalPagesPA = Math.ceil(this.filteredPendingProducts.length / this.list_pages2);
     this.onPageChange(1,'PendingPro');
   }
@@ -1459,7 +1460,7 @@ export class DigitalListComponent implements OnInit {
       const endIndex = startIndex + this.list_pages2;
       this.startIndex = startIndex;
 
-      if (this.filteredPendingProducts > 0){
+      if (this.filteredPendingProducts.length > 0){
         this.paginatedPendingItems = this.filteredPendingProducts.slice(startIndex, endIndex);
       }else{
         this.paginatedPendingItems = this.nonActiveProductsArray.slice(startIndex, endIndex);

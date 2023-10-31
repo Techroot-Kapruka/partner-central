@@ -278,7 +278,7 @@
                             <tbody>
                             <ng-container *ngIf="filterdPendingAllocation.length > 0; else paginatedData">
                               <!-- Display filtered products -->
-                              <tr *ngFor="let productDetail of (filterdPendingAllocation.length > 0 ? filterdPendingAllocation : paginatedPendingStockAllow); let i = index;">
+                              <tr *ngFor="let productDetail of (paginatedPendingStockAllow.length > 0 ? paginatedPendingStockAllow : filterdPendingAllocation); let i = index;">
                                 <td align="center"><img src="{{ imagePathURI + productDetail.image }}" height="60px"
                                                         width="60px"
                                                         (error)="onImageError($event)" (click)="popUpImagePendingAllocation(i)"/>
@@ -409,7 +409,7 @@
 
                             <ng-container *ngIf="filteredPendingProducts.length > 0; else paginatedData_PA">
                               <!-- Display filtered products -->
-                              <tr *ngFor="let nonActiveProduct of filteredPendingProducts; let j = index;">
+                              <tr *ngFor="let nonActiveProduct of (paginatedPendingItems.length > 0 ? paginatedPendingItems : filteredPendingProducts); let j = index;">
                                 <td align="center"><img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"
                                                         width="60px"
                                                         (error)="onImageError($event)" (click)="popUpImage(j)"/></td>
@@ -521,7 +521,7 @@
                             <tbody>
 
                             <ng-container *ngIf="filterededitProductApproval.length > 0; else paginatedDataEditProduct">
-                              <tr *ngFor="let nonActiveProduct of paginatedEditProApproval; let j = index;">
+                              <tr *ngFor="let nonActiveProduct of (paginatedEditProApproval.length > 0 ? paginatedEditProApproval : filterededitProductApproval); let j = index;">
                                 <td align="center">
                                   <img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"
                                        width="60px"
@@ -621,7 +621,7 @@
                             <tbody>
 
                             <ng-container *ngIf="filterdEditImgApproval.length > 0; else paginatedDataEditImage">
-                              <tr *ngFor="let nonActiveProduct of paginatedEditImgApproval; let j = index;">
+                              <tr *ngFor="let nonActiveProduct of (paginatedEditImgApproval.length > 0 ? paginatedEditImgApproval : filterdEditImgApproval); let j = index;">
                                 <td><p
                                   style="margin: 0px; font-size: 16px;font-weight: 600; color: #000">{{
                                   nonActiveProduct.title}}</p>
@@ -714,7 +714,7 @@
                             <tbody>
                             <ng-container *ngIf="filteredPendingQC.length > 0; else paginatedData_PQC">
                               <!-- Display filtered products -->
-                              <tr *ngFor="let pendingQC of paginatedPendingQC; let x = index;">
+                              <tr *ngFor="let pendingQC of (paginatedPendingQC.length > 0 ? paginatedPendingQC :filteredPendingQC); let x = index;">
                                 <td align="center"><img src="{{ imagePathURI + pendingQC.image }}" height="60px"
                                                         width="60px"
                                                         (error)="onImageError($event)" (click)="popUpImagePending(x)"/>
@@ -824,7 +824,7 @@
                             <tbody>
                             <ng-container *ngIf="filteredoutOfStock.length > 0; else paginatedData_OutStock">
                               <!-- Display filtered products -->
-                              <tr *ngFor="let outofStockProduct of paginatedOutofStock; let a = index;">
+                              <tr *ngFor="let outofStockProduct of (paginatedOutofStock.length > 0 ? paginatedOutofStock :filteredoutOfStock); let a = index;">
                                 <td align="center"><img src="{{ imagePathURI + outofStockProduct.image }}" height="60px"
                                                         width="60px"
                                                         (error)="onImageError($event)"/></td>
@@ -945,7 +945,7 @@
                             <tbody>
                             <ng-container *ngIf="filteredSuspendProduct.length > 0; else paginatedData_Suspend">
                               <!-- Display filtered products -->
-                              <tr *ngFor="let suspendProduct of filteredSuspendProduct; let b = index;">
+                              <tr *ngFor="let suspendProduct of (paginatedSuspend.length > 0 ? paginatedSuspend :filteredSuspendProduct); let b = index;">
                                 <td align="center"><img src="{{ imagePathURI + suspendProduct.image }}" height="60px"
                                                         width="60px"
                                                         (error)="onImageError($event)"/></td>
