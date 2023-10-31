@@ -1087,6 +1087,57 @@ export class DigitalAddComponent implements OnInit {
     });
   }
 
+  resizeImage(src: string, callback: (resizedImage: string) => void) {
+    const image = new Image();
+    image.src = src;
+
+    image.onload = () => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+
+      const targetWidth = 400;
+      const targetHeight = 400;
+
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+
+      // Fill the canvas with a white background
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      const width = image.width;
+      const height = image.height;
+      const aspectRatio = width / height;
+
+      let drawWidth, drawHeight, offsetX, offsetY;
+
+      if (aspectRatio > 1) {
+        // Landscape orientation (wider than tall)
+        drawWidth = canvas.width;
+        drawHeight = canvas.width / aspectRatio;
+        offsetX = 0;
+        offsetY = (canvas.height - drawHeight) / 2;
+      } else {
+        // Portrait orientation (taller than wide)
+        drawWidth = canvas.height * aspectRatio;
+        drawHeight = canvas.height;
+        offsetX = (canvas.width - drawWidth) / 2;
+        offsetY = 0;
+      }
+
+      try {
+        // Draw the image on the canvas
+        ctx.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
+        const resizedImage = canvas.toDataURL('image/jpeg');
+        callback(resizedImage);
+      } catch (error) {
+        console.log(error);
+        Swal.fire('error', 'Error while resizing the image.', 'error');
+        callback(null);
+      }
+    };
+  }
+
   changeValue(event: any, i) {
 
     if (event.target.files.length === 0) {
@@ -1111,8 +1162,14 @@ export class DigitalAddComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
 
     reader.onload = (_event) => {
-      (document.getElementById('imageOneO') as HTMLInputElement).src = reader.result.toString();
-      (document.getElementById('mainImage') as HTMLInputElement).src = reader.result.toString();
+      const originalImageSrc = reader.result.toString();
+
+      // Resize the image to 400x400
+      this.resizeImage(originalImageSrc, (resizedImage) => {
+        // Set the resized image as the source of 'imageOneO' and 'mainImage'
+        (document.getElementById('imageOneO') as HTMLImageElement).src = resizedImage;
+        // (document.getElementById('mainImage') as HTMLImageElement).src = resizedImage;
+      });
     };
 
     // ========================================================
@@ -1169,7 +1226,14 @@ export class DigitalAddComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
 
     reader.onload = (_event) => {
-      (document.getElementById('imageTwoO') as HTMLInputElement).src = reader.result.toString();
+      const originalImageSrc = reader.result.toString();
+
+      // Resize the image to 400x400
+      this.resizeImage(originalImageSrc, (resizedImage) => {
+        // Set the resized image as the source of 'imageOneO' and 'mainImage'
+        (document.getElementById('imageTwoO') as HTMLImageElement).src = resizedImage;
+        // (document.getElementById('mainImage') as HTMLImageElement).src = resizedImage;
+      });
     };
 
 
@@ -1203,7 +1267,14 @@ export class DigitalAddComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
 
     reader.onload = (_event) => {
-      (document.getElementById('imageTreeE') as HTMLInputElement).src = reader.result.toString();
+      const originalImageSrc = reader.result.toString();
+
+      // Resize the image to 400x400
+      this.resizeImage(originalImageSrc, (resizedImage) => {
+        // Set the resized image as the source of 'imageOneO' and 'mainImage'
+        (document.getElementById('imageTreeE') as HTMLImageElement).src = resizedImage;
+        // (document.getElementById('mainImage') as HTMLImageElement).src = resizedImage;
+      });
     };
 
     if (event.target.files.length > 0) {
@@ -1235,7 +1306,15 @@ export class DigitalAddComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
 
     reader.onload = (_event) => {
-      (document.getElementById('imageFourR') as HTMLInputElement).src = reader.result.toString();
+      const originalImageSrc = reader.result.toString();
+
+      // Resize the image to 400x400
+      this.resizeImage(originalImageSrc, (resizedImage) => {
+        // Set the resized image as the source of 'imageOneO' and 'mainImage'
+        (document.getElementById('imageFourR') as HTMLImageElement).src = resizedImage;
+        // (document.getElementById('mainImage') as HTMLImageElement).src = resizedImage;
+      });
+
     };
 
     if (event.target.files.length > 0) {
@@ -1267,7 +1346,15 @@ export class DigitalAddComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
 
     reader.onload = (_event) => {
-      (document.getElementById('imageFiveE') as HTMLInputElement).src = reader.result.toString();
+      const originalImageSrc = reader.result.toString();
+
+      // Resize the image to 400x400
+      this.resizeImage(originalImageSrc, (resizedImage) => {
+        // Set the resized image as the source of 'imageOneO' and 'mainImage'
+        (document.getElementById('imageFiveE') as HTMLImageElement).src = resizedImage;
+        // (document.getElementById('mainImage') as HTMLImageElement).src = resizedImage;
+      });
+
     };
 
     if (event.target.files.length > 0) {
@@ -1367,7 +1454,7 @@ export class DigitalAddComponent implements OnInit {
       document.getElementById('amountGroup').style.display = 'block';
       document.getElementById('rateGroup').style.display = 'block';
       document.getElementById('sellingPrice').style.display = 'block';
-      document.getElementById('TbaleTT').style.display = 'block';
+      document.getElementById('TSbaleTT').style.display = 'block';
       document.getElementById('TbaleTT2').style.display = 'none';
 
       document.getElementById('btnTwo').style.display = 'block';
