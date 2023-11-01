@@ -74,6 +74,7 @@ export class DigitalAddComponent implements OnInit {
   showHintBrand = false;
   showHintSku = false;
   showHintSCP = false;
+  showHintKey = false;
   margin: any;
   variationColors = [];
   variationOptions = [];
@@ -2449,7 +2450,12 @@ export class DigitalAddComponent implements OnInit {
     this.showHintPV = !this.showHintPV;
   }
 
-  /* Product Brand  */
+  /* Product Variation  */
+  toggleHintKey() {
+    this.showHintKey = !this.showHintKey;
+  }
+
+  /* Product Key  */
   toggleHintBrand() {
     this.showHintBrand = !this.showHintBrand;
   }

@@ -19,7 +19,7 @@
             </strong></h5>
           </div>
           <div>
-            <span class="span">Upload Images 3 to 5</span><span class="span"
+            <span class="span" id="help01">Upload Images 3 to 5</span><span class="span"
                                                                 style="color: red; padding-left: 5px">*</span>
           </div>
 
@@ -143,9 +143,8 @@
                           If not, please proceed to selecting the Sub Category accordingly. </span>
 
               </span>
-              <div class="col-md-4">
-                                <span class="span"
-                                      style="padding: 15px; padding-left: 35px; color: #000; font-weight: 400">Select Category Path :</span>
+              <div class="col-md-4" id="help02">
+                                <span class="span"  style="padding: 15px; padding-left: 35px; color: #000; font-weight: 400">Select Category Path :</span>
                 <span class="SCPInfo" style="margin-left: 5px" (click)="toggleHintSCP()">
                 <img style="text-align: right" src="assets/images/Help.png" height="20px" weight="20px"
                      title="Upload Image Help">
@@ -368,7 +367,7 @@
         <div class="card">
           <div class="card-header" style="margin-bottom: 0px; padding-bottom: 0px;">
 
-            <h5><strong>
+            <h5><strong class="p-att">
               Product Attribute
               <span class="hproDesc" style="margin-left: 5px" (click)="toggleHintPD()">
                 <img style="text-align: right" src="assets/images/Help.png" height="20px" weight="20px"
@@ -383,7 +382,7 @@
           <div class="card-body" id="attrId" style="padding-top: 10px;">
             <div class="form-input row" style="display: none">
               <div class="col-md-6">
-                                <span class="span"
+                                <span class="span" id="product01"
                                       style="padding: 15px; padding-left: 35px;">Product Attributes : </span><span
                 class="span" style="color: red; padding: 15px; padding-left: 5px">*</span>
               </div>
@@ -647,13 +646,22 @@
 
         <div class="card">
           <div class="card-header">
-            <h5><strong>Keywords</strong></h5>
+            <h5><strong>Keywords
+              <span class="hproKey" style="margin-left: 5px" (click)="toggleHintKey()">
+                <img style="text-align: right" src="assets/images/Help.png" height="20px" weight="20px"
+                     title="Upload Image Help"></span>
+            </strong></h5>
           </div>
           <div class="card-body">
             <div class="digital-add needs-validation">
               <div class="form-group mb-0">
                 <div class="form-group">
-                  <label for="txt_keyword" class="col-form-label pt-0"> Add Keywords</label>
+                  <span class="hproKey-hint" [hidden]="!showHintKey" style="left: 160px; top: 30px; ">
+                 <span style="font-weight: bold;">'Enter search terms you feel your buyers will use when looking for your product'
+ </span>
+
+              </span>
+                  <label for="txt_keyword" class="col-form-label pt-0" id="group"> Add Keywords</label>
                   <div class="row">
                     <div class="col-6">
                       <input class="form-control no-copy-paste" #txtKeyword id="txt_keyword" type="text" required=""
@@ -667,7 +675,7 @@
                             <!--<input type="text" value="{{productPrefixArrayss['productPrefix']}">-->
                             <div class="clouseI"
                                  (click)="removeKeyWord(keyWordArrays['key'])"><i
-                              style="margin-left: 35px; margin-top: 0px;"
+                              style="margin-left: auto; margin-top: 0px;"
                               class="fa fa-close"></i>
                             </div>
                           </div>
