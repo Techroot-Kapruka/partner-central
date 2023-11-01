@@ -1249,27 +1249,6 @@ export class DigitalAddComponent implements OnInit {
     }
   }
 
-  onSelectAttribute($event) {
-    const key = $event.target.id;
-    const value = $event.target.value;
-    const existingAttributeIndex = this.attributeArr.findIndex(attr => Object.keys(attr)[0] === key);
-
-    if (value === '') {
-      if (existingAttributeIndex !== -1) {
-        this.attributeArr.splice(existingAttributeIndex, 1);
-      }
-    } else {
-      const attribute = {
-        [key]: value
-      };
-      if (existingAttributeIndex !== -1) {
-        this.attributeArr[existingAttributeIndex][key] = value;
-      } else {
-        this.attributeArr.push(attribute);
-      }
-    }
-  }
-
   changeValue2(event) {
     if (event.target.files.length === 0) {
       return;

@@ -895,7 +895,7 @@ export class DigitalListComponent implements OnInit {
   }
 
   UpdateVirtualStocks(row: any) {
-    if (this.vstock[row] === null || this.vstock[row] === undefined || isNaN(this.vstock[row]) || this.vstock[row] < 0) {
+    if (this.vstock[this.startIndex + row] === null || this.vstock[this.startIndex + row] === undefined || isNaN(this.vstock[this.startIndex + row]) || this.vstock[this.startIndex + row] < 0) {
       Swal.fire(
         'error!',
         'Invalid stock value. Please enter a valid number.',
@@ -905,11 +905,10 @@ export class DigitalListComponent implements OnInit {
     }
 
     const payloard = {
-      product_code: this.filteredOnDemandProduct.length>0?this.filteredOnDemandProduct[this.startIndex + row].productCode:this.consignmentProducts[this.startIndex + row].productCode,
+      product_code: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].productCode : this.consignmentProducts[this.startIndex + row].productCode,
       vendor: sessionStorage.getItem('partnerId'),
-      in_stock: this.vstock[row]
+      in_stock: this.vstock[this.startIndex + row]
     };
-    console.log(payloard)
     this.productService.updateStock(payloard).subscribe(
       data => this.manageUpdateStock(data),
     );
@@ -1548,7 +1547,6 @@ export class DigitalListComponent implements OnInit {
       const startIndex = (this.currentPageOnDemand - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;
       this.startIndex = startIndex;
-
       if (this.filteredOnDemandProduct.length > 0){
         this.paginatedOnDemand = this.filteredOnDemandProduct.slice(startIndex, endIndex);
       }else{
@@ -1594,4 +1592,17 @@ export class DigitalListComponent implements OnInit {
     );
   }
 
+  onVstockChange(row: number) {
+    if (this.vstock[this.startIndex + row] < 0) {
+      Swal.fire({
+        title: 'Stock Cannot be a negative value',
+        text: 'Please enter a valid stock value.',
+        icon: 'warning',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.vstock[this.startIndex + row] = null;
+        }
+      });
+    }
+  }
 }
