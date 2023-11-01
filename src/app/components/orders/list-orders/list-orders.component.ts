@@ -257,6 +257,7 @@ export class ListOrdersComponent implements OnInit {
   manageLimitedOrders(data) {
     this.paginateData = [];
     if (data.data.content != null) {
+      this.loading = false;
       for (let z = 0; z < data.data.content.length; z++) {
         let statusStyleOne = false;
         let statusStyleTwo = false;
