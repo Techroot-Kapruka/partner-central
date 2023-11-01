@@ -71,6 +71,7 @@ export class DigitalAddComponent implements OnInit {
   showHint = false;
   showHintPI = false;
   showHintPD = false;
+  showHintPA = false;
   showHintPV = false;
   showHintBrand = false;
   showHintSku = false;
@@ -82,6 +83,11 @@ export class DigitalAddComponent implements OnInit {
   visibleElementCount = 6;
   totalElementCount: number;
   loadMoreElements = 30;
+  imgUploaded1:boolean=false;
+  imgUploaded2:boolean=false;
+  imgUploaded3:boolean=false;
+  imgUploaded4:boolean=false;
+  imgUploaded5:boolean=false;
 
 
   editorConfig: AngularEditorConfig = {
@@ -1175,6 +1181,7 @@ export class DigitalAddComponent implements OnInit {
 
 
     this.mainImageAdded = true;
+    this.imgUploaded1 = true;
     // Image upload
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
@@ -1185,7 +1192,6 @@ export class DigitalAddComponent implements OnInit {
     };
 
     // ========================================================
-
     if (event.target.files.length > 0) {
 
       const file = event.target.files[0];
@@ -1197,8 +1203,74 @@ export class DigitalAddComponent implements OnInit {
     }
   }
 
-  changeValue2(event) {
+  removeimg(x: number){
+    switch (x) {
+      case 1:
+        this.imgUploaded1 = false;
+        this.mainImageAdded = false;
+        this.imageCliant.patchValue({
+          fileSource: '',
+          imageOne: '',
+        });
+        (document.getElementById('imageOneO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 2:
+        this.imgUploaded2 = false;
+        this.imageCliant.patchValue({
+          fileSource2: '',
+          imageOne2:'',
+        });
+        (document.getElementById('imageTwoO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 3:
+        this.imgUploaded3 = false;
+        this.imageCliant.patchValue({
+          fileSource3: '',
+          imageOne3:'',
+        });
+        (document.getElementById('imageTreeE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 4:
+        this.imgUploaded4 = false;
+        this.imageCliant.patchValue({
+          fileSource4: '',
+          imageOne4:'',
+        });
+        (document.getElementById('imageFourR') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 5:
+        this.imgUploaded5 = false;
+        this.imageCliant.patchValue({
+          fileSource5: '',
+          imageOne5:'',
+        });
+        (document.getElementById('imageFiveE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+    }
+  }
 
+  onSelectAttribute($event) {
+    const key = $event.target.id;
+    const value = $event.target.value;
+    const existingAttributeIndex = this.attributeArr.findIndex(attr => Object.keys(attr)[0] === key);
+
+    if (value === '') {
+      if (existingAttributeIndex !== -1) {
+        this.attributeArr.splice(existingAttributeIndex, 1);
+      }
+    } else {
+      const attribute = {
+        [key]: value
+      };
+      if (existingAttributeIndex !== -1) {
+        this.attributeArr[existingAttributeIndex][key] = value;
+      } else {
+        this.attributeArr.push(attribute);
+      }
+    }
+  }
+
+  changeValue2(event) {
     if (event.target.files.length === 0) {
       return;
     }
@@ -1214,6 +1286,7 @@ export class DigitalAddComponent implements OnInit {
       return;
     }
     // Image upload
+    this.imgUploaded2 = true;
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
 
@@ -1250,6 +1323,7 @@ export class DigitalAddComponent implements OnInit {
       return;
     }
     // Image upload
+    this.imgUploaded3 = true;
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
 
@@ -1284,6 +1358,7 @@ export class DigitalAddComponent implements OnInit {
       return;
     }
     // Image upload
+    this.imgUploaded4 = true;
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
 
@@ -1318,6 +1393,7 @@ export class DigitalAddComponent implements OnInit {
       return;
     }
     // Image upload
+    this.imgUploaded5 = true;
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
 
@@ -2499,6 +2575,10 @@ export class DigitalAddComponent implements OnInit {
   /* Product Description  */
   toggleHintPD() {
     this.showHintPD = !this.showHintPD;
+  }
+
+  toggleHintPA() {
+    this.showHintPA = !this.showHintPA;
   }
 
   /* Product Variation  */

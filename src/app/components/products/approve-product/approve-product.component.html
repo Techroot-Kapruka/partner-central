@@ -758,8 +758,6 @@
 
 
         <br>
-
-        <!--        <br>-->
         <div class="container">
           <hr>
           <br>
@@ -768,9 +766,11 @@
             <div class="col-md-3"></div>
             <div class="col-md-5">
               <button type="submit" id="saveId" [disabled]="approveButtonClicked" (click)="approveProduct()" class="btn btn-lg btn-primary"
-                      style="margin-bottom: 14%;">APPROVE PRODUCTS
+                      style="margin-bottom: 14%;">{{approveButtonClicked ? 'PROCESSING' : 'APPROVE PRODUCTS'}}
               </button>
-
+              <div class="loading" *ngIf="approveButtonClicked">
+                <div id="preloader"></div>
+              </div>
               <button type="button" class="btn btn-lg btn-danger" style="margin-bottom: 14%;"
                       (click)="goToDeclinedMessageFormForProduct()">DECLINE PRODUCTS
               </button>
