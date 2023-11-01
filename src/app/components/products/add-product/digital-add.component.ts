@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostListener, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {DropzoneConfigInterface} from 'ngx-dropzone-wrapper';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ProductService} from '../../../shared/service/product.service';
@@ -24,6 +24,7 @@ interface Item {
 export class DigitalAddComponent implements OnInit {
 
   @ViewChild('txtKeyword') txtKeyword: ElementRef;
+
   constructor(private modalService: NgbModal, private productService: ProductService, private router: Router, private categoryService: CategoryService, private el: ElementRef) {
     this.imageControlMethord();
     this.getCategory();
@@ -274,7 +275,7 @@ export class DigitalAddComponent implements OnInit {
           'warning'
         );
 
-      }else {
+      } else {
         if (parseFloat(inputElement.value) > 100.00 || inputElement.value === '') {
           inputElement.value = this.categoryMargin.toFixed(2).toString();
           Swal.fire(
@@ -282,9 +283,9 @@ export class DigitalAddComponent implements OnInit {
             '',
             'warning'
           );
-        }else{
-            this.categoryMargin = Number(inputElement.value);
-            this.setSellingPrice();
+        } else {
+          this.categoryMargin = Number(inputElement.value);
+          this.setSellingPrice();
         }
       }
     }
@@ -659,6 +660,8 @@ export class DigitalAddComponent implements OnInit {
         let one3 = this.imageCliant.get('fileSource3').value;
         let one4 = this.imageCliant.get('fileSource4').value;
         let one5 = this.imageCliant.get('fileSource5').value;
+
+        console.log(one);
         const pricecc = new File([''], '');
         if (one === '') {
 
@@ -726,7 +729,6 @@ export class DigitalAddComponent implements OnInit {
             },
             productAttributes: this.attributeArr
           };
-
 
 
           this.productService.insertProductWithImages(one, one2, one3, one4, one5, payload).subscribe(
@@ -1093,56 +1095,72 @@ export class DigitalAddComponent implements OnInit {
     });
   }
 
-  resizeImage(src: string, callback: (resizedImage: string) => void) {
-    const image = new Image();
-    image.src = src;
 
-    image.onload = () => {
+
+
+  onSelectAttribute($event) {
+    const key = $event.target.id;
+    const value = $event.target.value;
+    const existingAttributeIndex = this.attributeArr.findIndex(attr => Object.keys(attr)[0] === key);
+
+    if (value === '') {
+      if (existingAttributeIndex !== -1) {
+        this.attributeArr.splice(existingAttributeIndex, 1);
+      }
+    } else {
+      const attribute = {
+        [key]: value
+      };
+      if (existingAttributeIndex !== -1) {
+        this.attributeArr[existingAttributeIndex][key] = value;
+      } else {
+        this.attributeArr.push(attribute);
+      }
+    }
+  }
+
+  resizeImage(file: File): Promise<File> {
+    return new Promise((resolve, reject) => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
 
-      const targetWidth = 400;
-      const targetHeight = 400;
+      const image = new Image();
+      image.src = URL.createObjectURL(file);
 
-      canvas.width = targetWidth;
-      canvas.height = targetHeight;
+      image.onload = () => {
+        // Calculate the new width and height for reduced resolution
+        let newWidth, newHeight;
+        const maxDimension = 800; // Set your desired maximum dimension
 
-      // Fill the canvas with a white background
-      ctx.fillStyle = 'white';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+        if (image.width > image.height) {
+          newWidth = maxDimension;
+          newHeight = (maxDimension / image.width) * image.height;
+        } else {
+          newHeight = maxDimension;
+          newWidth = (maxDimension / image.height) * image.width;
+        }
 
-      const width = image.width;
-      const height = image.height;
-      const aspectRatio = width / height;
+        // Set the canvas size to the reduced resolution
+        canvas.width = newWidth;
+        canvas.height = newHeight;
 
-      let drawWidth, drawHeight, offsetX, offsetY;
+        // Create a white background
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      if (aspectRatio > 1) {
-        // Landscape orientation (wider than tall)
-        drawWidth = canvas.width;
-        drawHeight = canvas.width / aspectRatio;
-        offsetX = 0;
-        offsetY = (canvas.height - drawHeight) / 2;
-      } else {
-        // Portrait orientation (taller than wide)
-        drawWidth = canvas.height * aspectRatio;
-        drawHeight = canvas.height;
-        offsetX = (canvas.width - drawWidth) / 2;
-        offsetY = 0;
-      }
+        // Draw the reduced-resolution image onto the canvas
+        ctx.drawImage(image, 0, 0, newWidth, newHeight);
 
-      try {
-        // Draw the image on the canvas
-        ctx.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
-        const resizedImage = canvas.toDataURL('image/jpeg');
-        callback(resizedImage);
-      } catch (error) {
-        console.log(error);
-        Swal.fire('error', 'Error while resizing the image.', 'error');
-        callback(null);
-      }
-    };
+        // Convert the canvas content to a File
+        canvas.toBlob((blob) => {
+          const resizedFile = new File([blob], file.name, { type: file.type });
+          resolve(resizedFile);
+        }, file.type);
+      };
+    });
   }
+
+
 
   changeValue(event: any, i) {
 
@@ -1169,22 +1187,18 @@ export class DigitalAddComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
 
     reader.onload = (_event) => {
-      const originalImageSrc = reader.result.toString();
-
-      // Resize the image to 400x400
-      this.resizeImage(originalImageSrc, (resizedImage) => {
-        // Set the resized image as the source of 'imageOneO' and 'mainImage'
-        (document.getElementById('imageOneO') as HTMLImageElement).src = resizedImage;
-        // (document.getElementById('mainImage') as HTMLImageElement).src = resizedImage;
-      });
+      (document.getElementById('imageOneO') as HTMLInputElement).src = reader.result.toString();
+      (document.getElementById('mainImage') as HTMLInputElement).src = reader.result.toString();
     };
 
     // ========================================================
     if (event.target.files.length > 0) {
 
       const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource: file
+      this.resizeImage(file).then((resizedFile) => {
+        this.imageCliant.patchValue({
+          fileSource: resizedFile
+        });
       });
     }
   }
@@ -1256,7 +1270,6 @@ export class DigitalAddComponent implements OnInit {
     }
   }
 
-
   changeValue2(event) {
     if (event.target.files.length === 0) {
       return;
@@ -1278,21 +1291,16 @@ export class DigitalAddComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
 
     reader.onload = (_event) => {
-      const originalImageSrc = reader.result.toString();
-
-      // Resize the image to 400x400
-      this.resizeImage(originalImageSrc, (resizedImage) => {
-        // Set the resized image as the source of 'imageOneO' and 'mainImage'
-        (document.getElementById('imageTwoO') as HTMLImageElement).src = resizedImage;
-        // (document.getElementById('mainImage') as HTMLImageElement).src = resizedImage;
-      });
+      (document.getElementById('imageTwoO') as HTMLInputElement).src = reader.result.toString();
     };
 
 
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource2: file
+      this.resizeImage(file).then((resizedFile) => {
+        this.imageCliant.patchValue({
+          fileSource2: resizedFile
+        });
       });
     }
   }
@@ -1320,20 +1328,15 @@ export class DigitalAddComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
 
     reader.onload = (_event) => {
-      const originalImageSrc = reader.result.toString();
-
-      // Resize the image to 400x400
-      this.resizeImage(originalImageSrc, (resizedImage) => {
-        // Set the resized image as the source of 'imageOneO' and 'mainImage'
-        (document.getElementById('imageTreeE') as HTMLImageElement).src = resizedImage;
-        // (document.getElementById('mainImage') as HTMLImageElement).src = resizedImage;
-      });
+      (document.getElementById('imageTreeE') as HTMLInputElement).src = reader.result.toString();
     };
 
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource3: file
+      this.resizeImage(file).then((resizedFile) => {
+        this.imageCliant.patchValue({
+          fileSource3: resizedFile
+        });
       });
     }
   }
@@ -1360,21 +1363,15 @@ export class DigitalAddComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
 
     reader.onload = (_event) => {
-      const originalImageSrc = reader.result.toString();
-
-      // Resize the image to 400x400
-      this.resizeImage(originalImageSrc, (resizedImage) => {
-        // Set the resized image as the source of 'imageOneO' and 'mainImage'
-        (document.getElementById('imageFourR') as HTMLImageElement).src = resizedImage;
-        // (document.getElementById('mainImage') as HTMLImageElement).src = resizedImage;
-      });
-
+      (document.getElementById('imageFourR') as HTMLInputElement).src = reader.result.toString();
     };
 
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource4: file
+      this.resizeImage(file).then((resizedFile) => {
+        this.imageCliant.patchValue({
+          fileSource4: resizedFile
+        });
       });
     }
   }
@@ -1401,27 +1398,21 @@ export class DigitalAddComponent implements OnInit {
     reader.readAsDataURL(event.target.files[0]);
 
     reader.onload = (_event) => {
-      const originalImageSrc = reader.result.toString();
-
-      // Resize the image to 400x400
-      this.resizeImage(originalImageSrc, (resizedImage) => {
-        // Set the resized image as the source of 'imageOneO' and 'mainImage'
-        (document.getElementById('imageFiveE') as HTMLImageElement).src = resizedImage;
-        // (document.getElementById('mainImage') as HTMLImageElement).src = resizedImage;
-      });
-
+      (document.getElementById('imageFiveE') as HTMLInputElement).src = reader.result.toString();
     };
 
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource5: file
+      this.resizeImage(file).then((resizedFile) => {
+        this.imageCliant.patchValue({
+          fileSource5: resizedFile
+        });
       });
     }
   }
 
   successAlert(data) {
-    if (data.message_status === 'Success'){
+    if (data.message_status === 'Success') {
       Swal.fire(
         'New Product Added Successfully...!',
         'Your product will go live after Approved by Kapruka.This may take upto 6-12 Hrs',
@@ -1509,7 +1500,7 @@ export class DigitalAddComponent implements OnInit {
       document.getElementById('amountGroup').style.display = 'block';
       document.getElementById('rateGroup').style.display = 'block';
       document.getElementById('sellingPrice').style.display = 'block';
-      document.getElementById('TSbaleTT').style.display = 'block';
+      document.getElementById('TbaleTT').style.display = 'block';
       document.getElementById('TbaleTT2').style.display = 'none';
 
       document.getElementById('btnTwo').style.display = 'block';
@@ -2487,7 +2478,7 @@ export class DigitalAddComponent implements OnInit {
     this.attributeArr = this.attributesArray;
   }
 
-  formatCurrency(event:any){
+  formatCurrency(event: any) {
     let value = event.target.value.replace(/[^\d]/g, '').replace(/^0+/, '');
 
     // Add commas for thousands separators
