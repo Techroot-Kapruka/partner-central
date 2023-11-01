@@ -1129,6 +1129,8 @@ export class DigitalAddComponent implements OnInit {
         // Draw the image on the canvas
         ctx.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
         const resizedImage = canvas.toDataURL('image/jpeg');
+        console.log(canvas.width)
+        console.log(canvas.height)
         callback(resizedImage);
       } catch (error) {
         console.log(error);
@@ -1167,6 +1169,7 @@ export class DigitalAddComponent implements OnInit {
       // Resize the image to 400x400
       this.resizeImage(originalImageSrc, (resizedImage) => {
         // Set the resized image as the source of 'imageOneO' and 'mainImage'
+
         (document.getElementById('imageOneO') as HTMLImageElement).src = resizedImage;
         // (document.getElementById('mainImage') as HTMLImageElement).src = resizedImage;
       });
