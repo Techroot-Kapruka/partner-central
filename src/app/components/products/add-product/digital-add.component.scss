@@ -795,3 +795,21 @@ input::placeholder {
 .no-copy-paste {
   user-select: none;
 }
+
+li .box-input-file button{
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  top: -19px;
+  margin-right: -147%;
+  background: transparent;
+  border: none;
+}
+
+li .box-input-file button .removeImg{
+  width: 30px;
+  height: 27px;
+  position: absolute;
+  top: -6px;
+  margin-left: -140%;
+}

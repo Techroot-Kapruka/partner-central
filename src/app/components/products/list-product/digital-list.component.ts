@@ -24,6 +24,8 @@ export class DigitalListComponent implements OnInit {
   public filteredPendingQC: any = [];
   public filteredoutOfStock: any = [];
   public filteredSuspendProduct: any = [];
+  public filteredOnDemandProduct: any = [];
+  public filterdEditImgApproval: any = [];
   public nonActiveProductsArray = [];
   public nonActiveEditedImageProductsArray = [];
   public nonActiveEditedProductsArray = [];
@@ -43,6 +45,10 @@ export class DigitalListComponent implements OnInit {
   public paginatedPendingQC = [];
   public paginatedOutofStock = [];
   public paginatedSuspend = [];
+  public paginatedEditProApproval = [];
+  public paginatedEditImgApproval = [];
+  public paginatedOnDemand = [];
+  public paginatedPendingStockAllow = [];
   public filterededitProductApproval = [];
 
   public isAdmin = false;
@@ -71,6 +77,7 @@ export class DigitalListComponent implements OnInit {
   modalRef: any;
   oldPrice: any;
   itemCode: any;
+  OnDemandsearchInput: any;
   priceChangeVendor: any;
   stillLoading = true;
 
@@ -81,17 +88,29 @@ export class DigitalListComponent implements OnInit {
   currentPagePQC = 1; // Current page
   currentPageOS = 1; // Current page
   currentPageSus = 1; // Current page
+  currentPagePendingAllo = 1; // Current page
+  currentPageEditProApproval = 1; // Current page
+  currentPageEditImgApproval = 1; // Current page
+  currentPageOnDemand = 1; // Current page
   totalPages = 0; // Total number of pages
   totalPagesPA = 0; // Total number of pages
   totalPagesPQC = 0; // Total number of pages
   totalPagesOS = 0; // Total number of pages
   totalPagesSus = 0; // Total number of pages
+  totalPagesOnDemand = 0; // Total number of pages
+  totalPagesPendingAllow = 0; // Total number of pages
+  totalPagesEditProApproval = 0; // Total number of pages
+  totalPagesEditImgApproval = 0; // Total number of pages
+
+
+  filteredSuggestions: string[] = [];
+  userInput = '';
+
 
   protected readonly print = print;
 
   @ViewChild('imagePopup') imagePopup: ElementRef;
   @ViewChild('pricePopup') pricePopup: ElementRef;
-
   constructor(private productService: ProductService, private router: Router, private modal: NgbModal, private authService: AuthService) {
     this.getFieldEditData();
     this.getAllProduct();
@@ -187,7 +206,8 @@ export class DigitalListComponent implements OnInit {
   }
 
   PendingStockAllocation(){
-
+    const count = this.pending_stock_allocation.length;
+    return `Pending Stock Allocation (${count})`;
   }
 
   getPendingApprovalList() {
@@ -276,14 +296,6 @@ export class DigitalListComponent implements OnInit {
     }
   }
 
-  getSelectedPartnerProduct() {
-    const name = (document.getElementById('select_pro') as HTMLInputElement).value;
-    this.productService.getAllActiveProductList(name, this.categoryUID).subscribe(
-      data => this.getSelectedProductManage(data),
-      error => this.errorOrderManage(error)
-    );
-  }
-
   getSelectedPartnerAllocationProduct() {
     const name = (document.getElementById('select_pro') as HTMLInputElement).value;
     this.productService.getAllActiveProductList(name, this.categoryUID).subscribe(
@@ -327,6 +339,8 @@ export class DigitalListComponent implements OnInit {
       };
       this.pending_stock_allocation.push(or);
     }
+    this.totalPagesPendingAllow = Math.ceil(this.pending_stock_allocation.length / this.list_pages2);
+    this.onPageChange(1,'PendingStockAllocation')
 
   }
   getSelectedPartnerAllocationProductManage(data){
@@ -352,6 +366,8 @@ export class DigitalListComponent implements OnInit {
         };
         this.pending_stock_allocation.push(or);
       }
+      this.totalPagesPendingAllow = Math.ceil(this.pending_stock_allocation.length / this.list_pages2);
+      this.onPageChange(1,'PendingStockAllocation')
     }
   }
 
@@ -374,11 +390,11 @@ export class DigitalListComponent implements OnInit {
           createDate: data.data[i].create_date,
           categoryPath: data.data[i].categoryPath,
           action: '',
-
         };
         this.list_pages.push(or);
       }
       this.totalPages = Math.ceil(this.list_pages.length / this.list_pages2);
+      this.onPageChange(1,'ActivePro')
     }
   }
 
@@ -387,6 +403,8 @@ export class DigitalListComponent implements OnInit {
       product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    this.totalPages = Math.ceil(this.filteredProducts.length / this.list_pages2);
+    this.onPageChange(1,'ActivePro')
   }
 
   PendingStockAllocationFilter(searchTerm: String): void{
@@ -394,6 +412,8 @@ export class DigitalListComponent implements OnInit {
       product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    this.totalPagesPendingAllow = Math.ceil(this.filterdPendingAllocation.length / this.list_pages2);
+    this.onPageChange(1,'PendingStockAllocation')
   }
 
   /*  AP = Active Products
@@ -550,6 +570,17 @@ export class DigitalListComponent implements OnInit {
     }
   }
 
+  popUpImagePendingAllocation(index: number) {
+
+    if (this.filterdPendingAllocation.length > 0) {
+      this.imageUrl = this.imagePathURI + this.filterdPendingAllocation[this.startIndex + index].image;
+      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+    } else {
+      this.imageUrl = this.imagePathURI + this.pending_stock_allocation[this.startIndex + index].image;
+      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+    }
+  }
+
   popUpImageActive(index: number) {
 
     if (this.filteredProducts.length > 0) {
@@ -681,6 +712,7 @@ export class DigitalListComponent implements OnInit {
         }
 
         this.totalPagesPA = Math.ceil(this.nonActiveProductsArray.length / this.list_pages2);
+        this.onPageChange(1,'PendingPro');
       }
     }
     if (this.nonActiveProductsArray.length === 0) {
@@ -693,36 +725,76 @@ export class DigitalListComponent implements OnInit {
     this.filteredPendingProducts = this.nonActiveProductsArray.filter(product =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    this.totalPagesPA = Math.ceil(this.filteredPendingProducts.length / this.list_pages2);
+    this.onPageChange(1,'PendingPro');
   }
 
   editProductApprovalFilter(searchTerm: string): void {
     this.filterededitProductApproval = this.nonActiveEditedProductsArray.filter(product =>
-      product.requestBy.toLowerCase().includes(searchTerm.toLowerCase())
+      product.requestBy.toLowerCase().includes(searchTerm.toLowerCase()) || product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    this.totalPagesEditProApproval = Math.ceil(this.filterededitProductApproval.length / this.list_pages2);
+    this.onPageChange(1,'EditProApproval');
   }
 
   PendingProductFilterByBusinessName(searchTerm: string): void {
     this.filteredPendingProducts = this.nonActiveProductsArray.filter(product =>
       product.vendor.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    this.totalPagesPA = Math.ceil(this.filteredPendingProducts.length / this.list_pages2);
+    this.onPageChange(1,'PendingPro');
   }
 
   PendingQCFilter(searchTerm: string): void {
     this.filteredPendingQC = this.approvalPartnerProductList.filter(product =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    this.totalPagesPQC = Math.ceil(this.filteredPendingQC.length / this.list_pages2);
+    this.onPageChange(1,'PendingQC');
   }
 
   OutofStockFilter(searchTerm: string): void {
     this.filteredoutOfStock = this.list_outof_stock.filter(product =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    this.totalPagesOS = Math.ceil(this.filteredoutOfStock.length / this.list_pages2);
+    this.onPageChange(1,'OutofStock');
   }
+
+  filterOutofStockByBusinessName(searchTerm: string): void {
+    this.filteredoutOfStock = this.list_outof_stock.filter(product =>
+      product.vendor.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    this.totalPagesOS = Math.ceil(this.filteredoutOfStock.length / this.list_pages2);
+    this.onPageChange(1,'OutofStock');
+  }
+
 
   SuspendProductFilter(searchTerm: string): void {
     this.filteredSuspendProduct = this.list_suspend.filter(product =>
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
+    this.totalPagesSus = Math.ceil(this.filteredSuspendProduct.length / this.list_pages2);
+    this.onPageChange(1,'Suspend');
+  }
+
+  SuspendProductFilterByBusinessName(searchTerm: string): void {
+    this.filteredSuspendProduct = this.list_suspend.filter(product =>
+      product.vendor.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    this.totalPagesSus = Math.ceil(this.filteredSuspendProduct.length / this.list_pages2);
+    this.onPageChange(1,'Suspend');
+  }
+
+  OnDemandProductFilter(searchTerm: string): void {
+    this.filteredOnDemandProduct = this.consignmentProducts.filter(product =>
+      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    this.totalPagesOnDemand = Math.ceil(this.filteredOnDemandProduct.length / this.list_pages2);
+    this.onPageChange(1,'PendingOnDemand');
   }
 
   ApproveProductNon(value) {
@@ -799,6 +871,8 @@ export class DigitalListComponent implements OnInit {
 
   manageConsignmentProducts(data) {
     this.consignmentProducts = [];
+    this.filteredOnDemandProduct = [];
+    this.OnDemandsearchInput = '';
     if (data.data != null) {
       if (data.status_code === 200) {
         for (let i = 0; i < data.data.length; i++) {
@@ -814,6 +888,8 @@ export class DigitalListComponent implements OnInit {
           };
           this.consignmentProducts.push(or);
         }
+        this.totalPagesOnDemand = Math.ceil(this.consignmentProducts.length / this.list_pages2);
+        this.onPageChange(1,'PendingOnDemand');
       }
     }
   }
@@ -829,10 +905,11 @@ export class DigitalListComponent implements OnInit {
     }
 
     const payloard = {
-      product_code: this.consignmentProducts[row].productCode,
+      product_code: this.filteredOnDemandProduct.length>0?this.filteredOnDemandProduct[this.startIndex + row].productCode:this.consignmentProducts[this.startIndex + row].productCode,
       vendor: sessionStorage.getItem('partnerId'),
       in_stock: this.vstock[row]
     };
+    console.log(payloard)
     this.productService.updateStock(payloard).subscribe(
       data => this.manageUpdateStock(data),
     );
@@ -920,6 +997,7 @@ export class DigitalListComponent implements OnInit {
         }
 
         this.totalPagesPQC = Math.ceil(this.approvalPartnerProductList.length / this.list_pages2);
+        this.onPageChange(1,'PendingQC');
       }
     }
   }
@@ -1207,23 +1285,23 @@ export class DigitalListComponent implements OnInit {
       };
       this.nonActiveEditedProductsArray.push(payloard);
     }
+    this.totalPagesEditProApproval = Math.ceil(this.nonActiveEditedProductsArray.length / this.list_pages2);
+    this.onPageChange(1,'EditProApproval');
   }
 
   ApproveEditProduct(i) {
 
     if (this.filterededitProductApproval.length > 0) {
-      const product_code = this.filterededitProductApproval[i].productCode;
-      const unique_code = this.filterededitProductApproval[i].unique_code;
-      const sub_type = this.filterededitProductApproval[i].subType;
+      const product_code = this.filterededitProductApproval[this.startIndex + i].productCode;
+      const unique_code = this.filterededitProductApproval[this.startIndex + i].unique_code;
+      const sub_type = this.filterededitProductApproval[this.startIndex + i].subType;
       const ProDetails = product_code + '-' + unique_code + '-' + sub_type;
-
       this.router.navigate(['products/digital/edited-approve-product/' + ProDetails]);
     } else {
-      const product_code = this.nonActiveEditedProductsArray[i].productCode;
-      const unique_code = this.nonActiveEditedProductsArray[i].unique_code;
-      const sub_type = this.nonActiveEditedProductsArray[i].subType;
+      const product_code = this.nonActiveEditedProductsArray[this.startIndex+i].productCode;
+      const unique_code = this.nonActiveEditedProductsArray[this.startIndex+i].unique_code;
+      const sub_type = this.nonActiveEditedProductsArray[this.startIndex+i].subType;
       const ProDetails = product_code + '-' + unique_code + '-' + sub_type;
-
       this.router.navigate(['products/digital/edited-approve-product/' + ProDetails]);
     }
 
@@ -1231,14 +1309,26 @@ export class DigitalListComponent implements OnInit {
   }
 
   ApproveEditImageProduct(rowIndex) {
-    const url = 'products/digital/edited-image-approve-product/' + this.nonActiveEditedImageProductsArray[rowIndex].productCode;
-    this.router.navigate([url], {
-      queryParams: {
-        product_code: this.product_code,
-        unique_code: this.nonActiveEditedImageProductsArray[rowIndex].editId,
-        requested_by: this.nonActiveEditedImageProductsArray[rowIndex].requestBy
-      }
-    });
+    if(this.filterdEditImgApproval.length > 0){
+      const url = 'products/digital/edited-image-approve-product/' + this.filterdEditImgApproval[this.startIndex + rowIndex].productCode;
+      this.router.navigate([url], {
+        queryParams: {
+          product_code: this.product_code,
+          unique_code: this.nonActiveEditedImageProductsArray[this.startIndex+rowIndex].editId,
+          requested_by: this.nonActiveEditedImageProductsArray[this.startIndex+rowIndex].requestBy
+        }
+      });
+    }else{
+      const url = 'products/digital/edited-image-approve-product/' + this.nonActiveEditedImageProductsArray[this.startIndex+rowIndex].productCode;
+      this.router.navigate([url], {
+        queryParams: {
+          product_code: this.product_code,
+          unique_code: this.nonActiveEditedImageProductsArray[this.startIndex+rowIndex].editId,
+          requested_by: this.nonActiveEditedImageProductsArray[this.startIndex+rowIndex].requestBy
+        }
+      });
+    }
+
   }
 
   private manageFieldImageEditData(data) {
@@ -1259,8 +1349,9 @@ export class DigitalListComponent implements OnInit {
       this.unique_code = data.data[i].editId;
 
       this.nonActiveEditedImageProductsArray.push(payloard);
-
     }
+    this.totalPagesEditImgApproval = Math.ceil(this.nonActiveEditedImageProductsArray.length / this.list_pages2);
+    this.onPageChange(1,'EditImgApproval');
   }
 
   onImageError(event: any): void {
@@ -1298,6 +1389,7 @@ export class DigitalListComponent implements OnInit {
         this.list_outof_stock.push(or);
       }
       this.totalPagesOS = Math.ceil(this.list_outof_stock.length / this.list_pages2);
+      this.onPageChange(1,'OutofStock');
     }
   }
 
@@ -1359,39 +1451,147 @@ export class DigitalListComponent implements OnInit {
       this.currentPageOS = page;
     } else if (Descrip === 'Suspend') {
       this.currentPageSus = page;
+    }else if (Descrip === 'PendingStockAllocation'){
+      this.currentPagePendingAllo = page;
+    }else if (Descrip === 'EditProApproval' ){
+      this.currentPageEditProApproval = page;
+    }else if (Descrip === 'EditImgApproval'){
+      this.currentPageEditImgApproval = page;
+    }else if (Descrip === 'PendingOnDemand'){
+      this.currentPageOnDemand = page;
     }
     // Fetch or filter your table data based on the new page
     this.updateTableData(Descrip);
   }
 
   updateTableData(Descrip: string) {
-
     if (Descrip === 'ActivePro') {
       const startIndex = (this.currentPage - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;
       this.startIndex = startIndex;
-      this.paginatedItems = this.list_pages.slice(startIndex, endIndex);
-
+      if ( this.filteredProducts.length > 0 ){
+        this.paginatedItems = this.filteredProducts.slice(startIndex, endIndex);
+      }else{
+        this.paginatedItems = this.list_pages.slice(startIndex, endIndex);
+      }
     } else if (Descrip === 'PendingPro') {
       const startIndex = (this.currentPagePA - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;
       this.startIndex = startIndex;
-      this.paginatedPendingItems = this.nonActiveProductsArray.slice(startIndex, endIndex);
 
+      if (this.filteredPendingProducts.length > 0){
+        this.paginatedPendingItems = this.filteredPendingProducts.slice(startIndex, endIndex);
+      }else{
+        this.paginatedPendingItems = this.nonActiveProductsArray.slice(startIndex, endIndex);
+      }
     } else if (Descrip === 'PendingQC') {
       const startIndex = (this.currentPagePQC - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;
       this.startIndex = startIndex;
-      this.paginatedPendingQC = this.approvalPartnerProductList.slice(startIndex, endIndex);
+
+      if (this.filteredPendingQC.length > 0){
+        this.paginatedPendingQC = this.filteredPendingQC.slice(startIndex, endIndex);
+      }else{
+        this.paginatedPendingQC = this.approvalPartnerProductList.slice(startIndex, endIndex);
+      }
     } else if (Descrip === 'OutofStock') {
       const startIndex = (this.currentPageOS - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;
-      this.paginatedOutofStock = this.list_outof_stock.slice(startIndex, endIndex);
-
+      this.startIndex = startIndex;
+      if(this.filteredoutOfStock.length > 0 ){
+        this.paginatedOutofStock = this.filteredoutOfStock.slice(startIndex, endIndex);
+      }else{
+        this.paginatedOutofStock = this.list_outof_stock.slice(startIndex, endIndex);
+      }
     } else if (Descrip === 'Suspend') {
       const startIndex = (this.currentPageSus - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;
-      this.paginatedSuspend = this.list_suspend.slice(startIndex, endIndex);
+      this.startIndex = startIndex
+
+      if(this.filteredSuspendProduct.length > 0){
+        this.paginatedSuspend = this.filteredSuspendProduct.slice(startIndex, endIndex);
+      }else{
+        this.paginatedSuspend = this.list_suspend.slice(startIndex, endIndex);
+      }
+
+    }else if (Descrip === 'PendingStockAllocation'){
+      const startIndex = (this.currentPagePendingAllo - 1) * this.list_pages2;
+      const endIndex = startIndex + this.list_pages2;
+
+      if (this.filterdPendingAllocation.length > 0){
+        this.paginatedPendingStockAllow = this.filterdPendingAllocation.slice(startIndex, endIndex);
+      }else{
+        this.paginatedPendingStockAllow = this.pending_stock_allocation.slice(startIndex, endIndex);
+      }
+    }else if (Descrip === 'EditProApproval'){
+      const startIndex = (this.currentPageEditProApproval - 1) * this.list_pages2;
+      const endIndex = startIndex + this.list_pages2;
+      this.startIndex = startIndex;
+
+      if(this.filterededitProductApproval.length > 0){
+        this.paginatedEditProApproval = this.filterededitProductApproval.slice(startIndex, endIndex);
+      }else{
+        this.paginatedEditProApproval = this.nonActiveEditedProductsArray.slice(startIndex, endIndex);
+      }
+    }else if (Descrip === 'EditImgApproval'){
+      const startIndex = (this.currentPageEditImgApproval - 1) * this.list_pages2;
+      const endIndex = startIndex + this.list_pages2;
+      this.startIndex = startIndex;
+
+      if(this.filterdEditImgApproval.length > 0){
+        this.paginatedEditImgApproval = this.filterdEditImgApproval.slice(startIndex, endIndex);
+      }else{
+        this.paginatedEditImgApproval = this.nonActiveEditedImageProductsArray.slice(startIndex, endIndex);
+      }
+
+    }else if (Descrip === 'PendingOnDemand'){
+      const startIndex = (this.currentPageOnDemand - 1) * this.list_pages2;
+      const endIndex = startIndex + this.list_pages2;
+      this.startIndex = startIndex;
+
+      if (this.filteredOnDemandProduct.length > 0){
+        this.paginatedOnDemand = this.filteredOnDemandProduct.slice(startIndex, endIndex);
+      }else{
+        this.paginatedOnDemand = this.consignmentProducts.slice(startIndex, endIndex);
+      }
     }
   }
+
+  filterAllProducts(searchTerm: string): void {
+
+    this.filteredProducts = this.list_pages.filter(product =>
+      product.vendor.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    this.totalPages = Math.ceil(this.filteredProducts.length / this.list_pages2);
+    this.onPageChange(1,'ActivePro')
+  }
+
+  filterPendingStockAllocationByBusinessName(searchTerm: string): void {
+    this.filterdPendingAllocation = this.pending_stock_allocation.filter(product =>
+      product.vendor.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    this.totalPagesPendingAllow = Math.ceil(this.filterdPendingAllocation.length / this.list_pages2);
+    this.onPageChange(1,'PendingStockAllocation');
+  }
+
+  editImgApprovalFilter(searchTerm: string): void {
+    this.filterdEditImgApproval = this.nonActiveEditedImageProductsArray.filter(product =>
+      product.requestBy.toLowerCase().includes(searchTerm.toLowerCase()) || product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    this.totalPagesEditImgApproval = Math.ceil(this.filterdEditImgApproval.length / this.list_pages2);
+    this.onPageChange(1,'EditImgApproval');
+  }
+
+  getSelectedPartnerProduct(businessName :any) {
+    this.userInput = businessName;
+    this.filteredSuggestions = [];
+    // const name = (document.getElementById('select_pro') as HTMLInputElement).value;
+    this.productService.getAllActiveProductList(businessName, this.categoryUID).subscribe(
+      data => this.getSelectedProductManage(data),
+      error => this.errorOrderManage(error)
+    );
+  }
+
 }
