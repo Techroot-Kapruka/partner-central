@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostListener, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {DropzoneConfigInterface} from 'ngx-dropzone-wrapper';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ProductService} from '../../../shared/service/product.service';
@@ -24,6 +24,7 @@ interface Item {
 export class DigitalAddComponent implements OnInit {
 
   @ViewChild('txtKeyword') txtKeyword: ElementRef;
+
   constructor(private modalService: NgbModal, private productService: ProductService, private router: Router, private categoryService: CategoryService, private el: ElementRef) {
     this.imageControlMethord();
     this.getCategory();
@@ -70,6 +71,7 @@ export class DigitalAddComponent implements OnInit {
   showHint = false;
   showHintPI = false;
   showHintPD = false;
+  showHintPA = false;
   showHintPV = false;
   showHintBrand = false;
   showHintSku = false;
@@ -82,6 +84,11 @@ export class DigitalAddComponent implements OnInit {
   visibleElementCount = 6;
   totalElementCount: number;
   loadMoreElements = 30;
+  imgUploaded1:boolean=false;
+  imgUploaded2:boolean=false;
+  imgUploaded3:boolean=false;
+  imgUploaded4:boolean=false;
+  imgUploaded5:boolean=false;
 
 
   editorConfig: AngularEditorConfig = {
@@ -269,7 +276,7 @@ export class DigitalAddComponent implements OnInit {
           'warning'
         );
 
-      }else {
+      } else {
         if (parseFloat(inputElement.value) > 100.00 || inputElement.value === '') {
           inputElement.value = this.categoryMargin.toFixed(2).toString();
           Swal.fire(
@@ -277,9 +284,9 @@ export class DigitalAddComponent implements OnInit {
             '',
             'warning'
           );
-        }else{
-            this.categoryMargin = Number(inputElement.value);
-            this.setSellingPrice();
+        } else {
+          this.categoryMargin = Number(inputElement.value);
+          this.setSellingPrice();
         }
       }
     }
@@ -654,6 +661,8 @@ export class DigitalAddComponent implements OnInit {
         let one3 = this.imageCliant.get('fileSource3').value;
         let one4 = this.imageCliant.get('fileSource4').value;
         let one5 = this.imageCliant.get('fileSource5').value;
+
+        console.log(one);
         const pricecc = new File([''], '');
         if (one === '') {
 
@@ -721,7 +730,6 @@ export class DigitalAddComponent implements OnInit {
             },
             productAttributes: this.attributeArr
           };
-
 
 
           this.productService.insertProductWithImages(one, one2, one3, one4, one5, payload).subscribe(
@@ -1088,44 +1096,8 @@ export class DigitalAddComponent implements OnInit {
     });
   }
 
-  changeValue(event: any, i) {
-
-    if (event.target.files.length === 0) {
-      return;
-    }
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-
-    if (!mimeType.match(/^image\/jpeg$/i)) {
-      Swal.fire(
-        'error',
-        'Please select a JPEG (jpg) image.',
-        'warning'
-      );
-      return;
-    }
 
 
-    this.mainImageAdded = true;
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-
-    reader.onload = (_event) => {
-      (document.getElementById('imageOneO') as HTMLInputElement).src = reader.result.toString();
-      (document.getElementById('mainImage') as HTMLInputElement).src = reader.result.toString();
-    };
-
-    // ========================================================
-
-    if (event.target.files.length > 0) {
-
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource: file
-      });
-    }
-  }
 
   onSelectAttribute($event) {
     const key = $event.target.id;
@@ -1148,8 +1120,50 @@ export class DigitalAddComponent implements OnInit {
     }
   }
 
+  resizeImage(file: File): Promise<File> {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
 
-  changeValue2(event) {
+      const image = new Image();
+      image.src = URL.createObjectURL(file);
+
+      image.onload = () => {
+        // Calculate the new width and height for reduced resolution
+        let newWidth, newHeight;
+        const maxDimension = 800; // Set your desired maximum dimension
+
+        if (image.width > image.height) {
+          newWidth = maxDimension;
+          newHeight = (maxDimension / image.width) * image.height;
+        } else {
+          newHeight = maxDimension;
+          newWidth = (maxDimension / image.height) * image.width;
+        }
+
+        // Set the canvas size to the reduced resolution
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+
+        // Create a white background
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw the reduced-resolution image onto the canvas
+        ctx.drawImage(image, 0, 0, newWidth, newHeight);
+
+        // Convert the canvas content to a File
+        canvas.toBlob((blob) => {
+          const resizedFile = new File([blob], file.name, { type: file.type });
+          resolve(resizedFile);
+        }, file.type);
+      };
+    });
+  }
+
+
+
+  changeValue(event: any, i) {
 
     if (event.target.files.length === 0) {
       return;
@@ -1165,7 +1179,94 @@ export class DigitalAddComponent implements OnInit {
       );
       return;
     }
+
+
+    this.mainImageAdded = true;
+    this.imgUploaded1 = true;
     // Image upload
+    const reader = new FileReader();
+    reader.readAsDataURL(event.target.files[0]);
+
+    reader.onload = (_event) => {
+      (document.getElementById('imageOneO') as HTMLInputElement).src = reader.result.toString();
+      (document.getElementById('mainImage') as HTMLInputElement).src = reader.result.toString();
+    };
+
+    // ========================================================
+    if (event.target.files.length > 0) {
+
+      const file = event.target.files[0];
+      this.resizeImage(file).then((resizedFile) => {
+        this.imageCliant.patchValue({
+          fileSource: resizedFile
+        });
+      });
+    }
+  }
+
+  removeimg(x: number){
+    switch (x) {
+      case 1:
+        this.imgUploaded1 = false;
+        this.mainImageAdded = false;
+        this.imageCliant.patchValue({
+          fileSource: '',
+          imageOne: '',
+        });
+        (document.getElementById('imageOneO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 2:
+        this.imgUploaded2 = false;
+        this.imageCliant.patchValue({
+          fileSource2: '',
+          imageOne2:'',
+        });
+        (document.getElementById('imageTwoO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 3:
+        this.imgUploaded3 = false;
+        this.imageCliant.patchValue({
+          fileSource3: '',
+          imageOne3:'',
+        });
+        (document.getElementById('imageTreeE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 4:
+        this.imgUploaded4 = false;
+        this.imageCliant.patchValue({
+          fileSource4: '',
+          imageOne4:'',
+        });
+        (document.getElementById('imageFourR') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 5:
+        this.imgUploaded5 = false;
+        this.imageCliant.patchValue({
+          fileSource5: '',
+          imageOne5:'',
+        });
+        (document.getElementById('imageFiveE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+    }
+  }
+
+  changeValue2(event) {
+    if (event.target.files.length === 0) {
+      return;
+    }
+    // Image upload validation
+    const mimeType = event.target.files[0].type;
+
+    if (!mimeType.match(/^image\/jpeg$/i)) {
+      Swal.fire(
+        'error',
+        'Please select a JPEG (jpg) image.',
+        'warning'
+      );
+      return;
+    }
+    // Image upload
+    this.imgUploaded2 = true;
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
 
@@ -1176,8 +1277,10 @@ export class DigitalAddComponent implements OnInit {
 
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource2: file
+      this.resizeImage(file).then((resizedFile) => {
+        this.imageCliant.patchValue({
+          fileSource2: resizedFile
+        });
       });
     }
   }
@@ -1200,6 +1303,7 @@ export class DigitalAddComponent implements OnInit {
       return;
     }
     // Image upload
+    this.imgUploaded3 = true;
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
 
@@ -1209,8 +1313,10 @@ export class DigitalAddComponent implements OnInit {
 
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource3: file
+      this.resizeImage(file).then((resizedFile) => {
+        this.imageCliant.patchValue({
+          fileSource3: resizedFile
+        });
       });
     }
   }
@@ -1232,6 +1338,7 @@ export class DigitalAddComponent implements OnInit {
       return;
     }
     // Image upload
+    this.imgUploaded4 = true;
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
 
@@ -1241,8 +1348,10 @@ export class DigitalAddComponent implements OnInit {
 
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource4: file
+      this.resizeImage(file).then((resizedFile) => {
+        this.imageCliant.patchValue({
+          fileSource4: resizedFile
+        });
       });
     }
   }
@@ -1264,6 +1373,7 @@ export class DigitalAddComponent implements OnInit {
       return;
     }
     // Image upload
+    this.imgUploaded5 = true;
     const reader = new FileReader();
     reader.readAsDataURL(event.target.files[0]);
 
@@ -1273,14 +1383,16 @@ export class DigitalAddComponent implements OnInit {
 
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource5: file
+      this.resizeImage(file).then((resizedFile) => {
+        this.imageCliant.patchValue({
+          fileSource5: resizedFile
+        });
       });
     }
   }
 
   successAlert(data) {
-    if (data.message_status === 'Success'){
+    if (data.message_status === 'Success') {
       Swal.fire(
         'New Product Added Successfully...!',
         'Your product will go live after Approved by Kapruka.This may take upto 6-12 Hrs',
@@ -2346,7 +2458,7 @@ export class DigitalAddComponent implements OnInit {
     this.attributeArr = this.attributesArray;
   }
 
-  formatCurrency(event:any){
+  formatCurrency(event: any) {
     let value = event.target.value.replace(/[^\d]/g, '').replace(/^0+/, '');
 
     // Add commas for thousands separators
@@ -2443,6 +2555,10 @@ export class DigitalAddComponent implements OnInit {
   /* Product Description  */
   toggleHintPD() {
     this.showHintPD = !this.showHintPD;
+  }
+
+  toggleHintPA() {
+    this.showHintPA = !this.showHintPA;
   }
 
   /* Product Variation  */
