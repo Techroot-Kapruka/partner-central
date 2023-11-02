@@ -24,6 +24,7 @@ export class DigitalListComponent implements OnInit {
   public filteredPendingQC: any = [];
   public filteredoutOfStock: any = [];
   public filteredSuspendProduct: any = [];
+  public filteredOnDemandProduct: any = [];
   public filterdEditImgApproval: any = [];
   public nonActiveProductsArray = [];
   public nonActiveEditedImageProductsArray = [];
@@ -46,6 +47,7 @@ export class DigitalListComponent implements OnInit {
   public paginatedSuspend = [];
   public paginatedEditProApproval = [];
   public paginatedEditImgApproval = [];
+  public paginatedOnDemand = [];
   public paginatedPendingStockAllow = [];
   public filterededitProductApproval = [];
 
@@ -75,6 +77,7 @@ export class DigitalListComponent implements OnInit {
   modalRef: any;
   oldPrice: any;
   itemCode: any;
+  OnDemandsearchInput: any;
   priceChangeVendor: any;
   stillLoading = true;
 
@@ -88,11 +91,13 @@ export class DigitalListComponent implements OnInit {
   currentPagePendingAllo = 1; // Current page
   currentPageEditProApproval = 1; // Current page
   currentPageEditImgApproval = 1; // Current page
+  currentPageOnDemand = 1; // Current page
   totalPages = 0; // Total number of pages
   totalPagesPA = 0; // Total number of pages
   totalPagesPQC = 0; // Total number of pages
   totalPagesOS = 0; // Total number of pages
   totalPagesSus = 0; // Total number of pages
+  totalPagesOnDemand = 0; // Total number of pages
   totalPagesPendingAllow = 0; // Total number of pages
   totalPagesEditProApproval = 0; // Total number of pages
   totalPagesEditImgApproval = 0; // Total number of pages
@@ -106,7 +111,6 @@ export class DigitalListComponent implements OnInit {
 
   @ViewChild('imagePopup') imagePopup: ElementRef;
   @ViewChild('pricePopup') pricePopup: ElementRef;
-
   constructor(private productService: ProductService, private router: Router, private modal: NgbModal, private authService: AuthService) {
     this.getFieldEditData();
     this.getAllProduct();
@@ -785,6 +789,14 @@ export class DigitalListComponent implements OnInit {
     this.onPageChange(1,'Suspend');
   }
 
+  OnDemandProductFilter(searchTerm: string): void {
+    this.filteredOnDemandProduct = this.consignmentProducts.filter(product =>
+      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    this.totalPagesOnDemand = Math.ceil(this.filteredOnDemandProduct.length / this.list_pages2);
+    this.onPageChange(1,'PendingOnDemand');
+  }
+
   ApproveProductNon(value) {
 
     if (this.filteredPendingProducts.length !== 0) {
@@ -859,6 +871,8 @@ export class DigitalListComponent implements OnInit {
 
   manageConsignmentProducts(data) {
     this.consignmentProducts = [];
+    this.filteredOnDemandProduct = [];
+    this.OnDemandsearchInput = '';
     if (data.data != null) {
       if (data.status_code === 200) {
         for (let i = 0; i < data.data.length; i++) {
@@ -874,12 +888,14 @@ export class DigitalListComponent implements OnInit {
           };
           this.consignmentProducts.push(or);
         }
+        this.totalPagesOnDemand = Math.ceil(this.consignmentProducts.length / this.list_pages2);
+        this.onPageChange(1,'PendingOnDemand');
       }
     }
   }
 
   UpdateVirtualStocks(row: any) {
-    if (this.vstock[row] === null || this.vstock[row] === undefined || isNaN(this.vstock[row]) || this.vstock[row] < 0) {
+    if (this.vstock[this.startIndex + row] === null || this.vstock[this.startIndex + row] === undefined || isNaN(this.vstock[this.startIndex + row]) || this.vstock[this.startIndex + row] < 0) {
       Swal.fire(
         'error!',
         'Invalid stock value. Please enter a valid number.',
@@ -889,9 +905,9 @@ export class DigitalListComponent implements OnInit {
     }
 
     const payloard = {
-      product_code: this.consignmentProducts[row].productCode,
+      product_code: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].productCode : this.consignmentProducts[this.startIndex + row].productCode,
       vendor: sessionStorage.getItem('partnerId'),
-      in_stock: this.vstock[row]
+      in_stock: this.vstock[this.startIndex + row]
     };
     this.productService.updateStock(payloard).subscribe(
       data => this.manageUpdateStock(data),
@@ -1438,8 +1454,10 @@ export class DigitalListComponent implements OnInit {
       this.currentPagePendingAllo = page;
     }else if (Descrip === 'EditProApproval' ){
       this.currentPageEditProApproval = page;
-    }else if(Descrip === 'EditImgApproval'){
+    }else if (Descrip === 'EditImgApproval'){
       this.currentPageEditImgApproval = page;
+    }else if (Descrip === 'PendingOnDemand'){
+      this.currentPageOnDemand = page;
     }
     // Fetch or filter your table data based on the new page
     this.updateTableData(Descrip);
@@ -1487,7 +1505,7 @@ export class DigitalListComponent implements OnInit {
     } else if (Descrip === 'Suspend') {
       const startIndex = (this.currentPageSus - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;
-      this.startIndex=startIndex
+      this.startIndex = startIndex
 
       if(this.filteredSuspendProduct.length > 0){
         this.paginatedSuspend = this.filteredSuspendProduct.slice(startIndex, endIndex);
@@ -1525,6 +1543,15 @@ export class DigitalListComponent implements OnInit {
         this.paginatedEditImgApproval = this.nonActiveEditedImageProductsArray.slice(startIndex, endIndex);
       }
 
+    }else if (Descrip === 'PendingOnDemand'){
+      const startIndex = (this.currentPageOnDemand - 1) * this.list_pages2;
+      const endIndex = startIndex + this.list_pages2;
+      this.startIndex = startIndex;
+      if (this.filteredOnDemandProduct.length > 0){
+        this.paginatedOnDemand = this.filteredOnDemandProduct.slice(startIndex, endIndex);
+      }else{
+        this.paginatedOnDemand = this.consignmentProducts.slice(startIndex, endIndex);
+      }
     }
   }
 
@@ -1565,4 +1592,17 @@ export class DigitalListComponent implements OnInit {
     );
   }
 
+  onVstockChange(row: number) {
+    if (this.vstock[this.startIndex + row] < 0) {
+      Swal.fire({
+        title: 'Stock Cannot be a negative value',
+        text: 'Please enter a valid stock value.',
+        icon: 'warning',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.vstock[this.startIndex + row] = null;
+        }
+      });
+    }
+  }
 }
