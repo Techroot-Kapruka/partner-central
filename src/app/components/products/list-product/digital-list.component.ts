@@ -508,7 +508,7 @@ export class DigitalListComponent implements OnInit {
   editGetProduct2(index) {
 
     if (this.filteredProducts.length > 0) {
-      const productCode = this.list_pages[this.startIndex + index].productCode;
+      const productCode = this.filteredProducts[this.startIndex + index].productCode;
       const url = 'products/digital/digital-edit-product/' + productCode;
       this.router.navigate([url]);
     } else {
@@ -571,7 +571,6 @@ export class DigitalListComponent implements OnInit {
   }
 
   popUpImagePendingAllocation(index: number) {
-
     if (this.filterdPendingAllocation.length > 0) {
       this.imageUrl = this.imagePathURI + this.filterdPendingAllocation[this.startIndex + index].image;
       this.modalRef = this.modal.open(this.imagePopup, {centered: true});
@@ -1313,8 +1312,8 @@ export class DigitalListComponent implements OnInit {
       this.router.navigate([url], {
         queryParams: {
           product_code: this.product_code,
-          unique_code: this.nonActiveEditedImageProductsArray[this.startIndex+rowIndex].editId,
-          requested_by: this.nonActiveEditedImageProductsArray[this.startIndex+rowIndex].requestBy
+          unique_code: this.filterdEditImgApproval[this.startIndex+rowIndex].editId,
+          requested_by: this.filterdEditImgApproval[this.startIndex+rowIndex].requestBy
         }
       });
     }else{

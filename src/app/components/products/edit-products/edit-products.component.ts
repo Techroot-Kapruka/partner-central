@@ -23,6 +23,7 @@ export class EditProductsComponent implements OnInit {
   public baseInfo: FormGroup;
   public description: FormGroup;
   public offer: FormGroup;
+  public category: FormGroup;
   @Input()
   public catParth = [];
   public isColor = false;
@@ -44,9 +45,11 @@ export class EditProductsComponent implements OnInit {
   public variationValue = '';
   public weightValue = '';
   public weightBool = false;
+  public isAdmin = false;
   public storageValue = '';
   public capacityValue = '';
   public nonGroupArray = [];
+  public parts = [];
   public imageOne = '';
   public imageOne2 = '';
   public imageOne3 = '';
@@ -105,18 +108,27 @@ export class EditProductsComponent implements OnInit {
   };
 
 
-
   constructor(private router: Router, private _Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService) {
     this.ids = '';
     this._Activatedroute.paramMap.subscribe(params => {
       this.getProductByEdit(params.get('id'));
       this.ids = params.get('id');
     });
-
-
     this.imageControlMethord();
     this.editFormControlMethode();
     this.getImages();
+    this.hideElement();
+
+  }
+
+  hideElement(): void {
+    const role = sessionStorage.getItem('userRole');
+
+    if (role === 'ROLE_ADMIN' || role === 'ROLE_CATEGORY_MANAGER' || role === 'ROLE_STORES_MANAGER') {
+      this.isAdmin = true;
+    } else {
+      this.isAdmin = false;
+    }
   }
 
   getImages() {
@@ -258,26 +270,26 @@ export class EditProductsComponent implements OnInit {
     });
   }
 
-  loadimg(x:number){
+  loadimg(x: number) {
     switch (x) {
       case 1:
-        this.selectedimg=this.imageOne
+        this.selectedimg = this.imageOne
         break;
 
       case 2:
-        this.selectedimg=this.imageOne2
+        this.selectedimg = this.imageOne2
         break;
 
       case 3:
-        this.selectedimg=this.imageOne3
+        this.selectedimg = this.imageOne3
         break;
 
       case 4:
-        this.selectedimg=this.imageOne4
+        this.selectedimg = this.imageOne4
         break;
 
       case 5:
-        this.selectedimg=this.imageOne5
+        this.selectedimg = this.imageOne5
         break;
     }
   }
@@ -367,7 +379,7 @@ export class EditProductsComponent implements OnInit {
   }
 
   changeValue4(event) {
-    this.selectedimg=this.imageOne4;
+    this.selectedimg = this.imageOne4;
     if (event.target.files.length === 0) {
       return;
     }
@@ -435,7 +447,6 @@ export class EditProductsComponent implements OnInit {
   managetSelecedProductByEdit(data, proCodeImg) {
 
     // base info
-
     this.baseInfo.get('Title').setValue(data.data.product.title);
     this.baseInfo.get('Brand').setValue(data.data.product.brand);
     this.baseInfo.get('Manufacture').setValue(data.data.product.manufacture);
@@ -444,8 +455,6 @@ export class EditProductsComponent implements OnInit {
     this.oldManufacture = data.data.product.manufacture;
 
     // description
-
-
     this.description.get('txt_description').setValue(data.data.product.productDescription.description);
     this.descriptionContent = data.data.product.productDescription.description;
     this.description.get('special_notes').setValue(data.data.product.productDescription.special_notes);
@@ -454,8 +463,13 @@ export class EditProductsComponent implements OnInit {
     this.old_special_notes = data.data.product.productDescription.special_notes;
     this.old_availability = data.data.product.productDescription.availability.toUpperCase();
 
-    //offer
+    // category
+    this.parts = data.data.category_path.split('> ');
+    for (let i = 1; i <= this.parts.length; i++){
+      this.category.get('Category'+ i).setValue(this.parts[i-1]);
+    }
 
+    //offer
     this.offer.get('txt_seller_sku').setValue(data.data.product.productOffer.seller_sku);
     this.offer.get('condition').setValue(data.data.product.productOffer.condition);
     this.old_txt_seller_sku = data.data.product.productOffer.seller_sku;
@@ -604,6 +618,9 @@ export class EditProductsComponent implements OnInit {
 //   handleTabClick($event) {
 //     $event.preventDefault();
 //   }
+  saveFieldCategory(x: number){
+console.log('category Clicked!!')
+  }
 
   saveFieldBaseInfo() {
     let partnerId = sessionStorage.getItem('partnerId');
@@ -664,6 +681,13 @@ export class EditProductsComponent implements OnInit {
     this.offer = new FormGroup({
       txt_seller_sku: new FormControl(''),
       condition: new FormControl(''),
+    });
+
+    // -------------category-----------
+    this.category = new FormGroup({
+      Category1: new FormControl(''),
+      Category2: new FormControl(''),
+      Category3: new FormControl('')
     });
 
     this.offer.get('txt_seller_sku').disable();
