@@ -1547,6 +1547,7 @@ export class DigitalListComponent implements OnInit {
       const startIndex = (this.currentPageOnDemand - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;
       this.startIndex = startIndex;
+
       if (this.filteredOnDemandProduct.length > 0){
         this.paginatedOnDemand = this.filteredOnDemandProduct.slice(startIndex, endIndex);
       }else{
