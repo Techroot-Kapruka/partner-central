@@ -1131,7 +1131,7 @@ export class DigitalAddComponent implements OnInit {
       image.onload = () => {
         // Calculate the new width and height for reduced resolution
         let newWidth, newHeight;
-        const maxDimension = 800; // Set your desired maximum dimension
+        const maxDimension = 400; // Set your desired maximum dimension
 
         if (image.width > image.height) {
           newWidth = maxDimension;
