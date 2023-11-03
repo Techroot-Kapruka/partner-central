@@ -46,7 +46,6 @@ export class ApproveEditImageComponentComponent implements OnInit {
   }
 
   private getAllData() {
-
     let paloard = {
       editId: this.uniqueCode_,
       productCode: this.ids,
@@ -65,24 +64,24 @@ export class ApproveEditImageComponentComponent implements OnInit {
     var imagePath = [];
 
     for (let i = 0; i < data.data.image.length ; i++){
-      imagePath = data.data.image[i].split('/edit_image_temp');
+      imagePath = data.data.image[i].split('/editimagetemp');
       this.imageData.push(imagePath[1]);
     }
   }
 
   private manageGetEditImageFieldsDataAllForApproval(data) {
-
     this.manageImageForEdit(data);
 
-    (document.getElementById('productCode_') as HTMLInputElement).value = this.productCode_;
+    (document.getElementById('productCode_') as HTMLInputElement).value = data.data.productCode;
     (document.getElementById('vendorName_') as HTMLInputElement).value = data.data.vendorName;
     (document.getElementById('productName_') as HTMLInputElement).value = data.data.productName;
-    (document.getElementById('vendorId_') as HTMLInputElement).value = this.requestedBy;
+    (document.getElementById('vendorId_') as HTMLInputElement).value = data.data.partnerId;
   }
 
   approvedProductsImages() {
     let payloads = {
       productCode: this.productCode_,
+      // productCode: 'ELEC0V18P00009',
       isApproved: 1,
       approvedUser: sessionStorage.getItem('userId'),
       editId : this.uniqueCode_
