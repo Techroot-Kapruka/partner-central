@@ -1131,7 +1131,7 @@ export class DigitalAddComponent implements OnInit {
       image.onload = () => {
         // Calculate the new width and height for reduced resolution
         let newWidth, newHeight;
-        const maxDimension = 800; // Set your desired maximum dimension
+        const maxDimension = 400; // Set your desired maximum dimension
 
         if (image.width > image.height) {
           newWidth = maxDimension;
@@ -1247,27 +1247,6 @@ export class DigitalAddComponent implements OnInit {
         });
         (document.getElementById('imageFiveE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
         break;
-    }
-  }
-
-  onSelectAttribute($event) {
-    const key = $event.target.id;
-    const value = $event.target.value;
-    const existingAttributeIndex = this.attributeArr.findIndex(attr => Object.keys(attr)[0] === key);
-
-    if (value === '') {
-      if (existingAttributeIndex !== -1) {
-        this.attributeArr.splice(existingAttributeIndex, 1);
-      }
-    } else {
-      const attribute = {
-        [key]: value
-      };
-      if (existingAttributeIndex !== -1) {
-        this.attributeArr[existingAttributeIndex][key] = value;
-      } else {
-        this.attributeArr.push(attribute);
-      }
     }
   }
 
