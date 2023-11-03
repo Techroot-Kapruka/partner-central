@@ -39,7 +39,7 @@
                       <input class="form-control" formControlName="Manufacture" id="txt_manufacture" type="text"
                              required="">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" *ngIf="!isAdmin">
                       <button class="btn btn-primary pull-right" type="submit" style="margin-bottom: 30px;">Save
                       </button>
                     </div>
@@ -84,7 +84,7 @@
                     </div>
 
                     <div class="form-group">
-                      <button class="btn btn-primary pull-right" type="submit" style="margin-bottom: 30px;">Save
+                      <button class="btn btn-primary pull-right" type="submit" style="margin-bottom: 30px;">UPDATE
                       </button>
                     </div>
                   </div>
@@ -125,7 +125,8 @@
         </ngb-tab>
 
         <!--        Offer Tab-->
-        <ngb-tab title="Offer">
+        <ngb-tab title="Product">
+
           <ng-template ngbTabContent>
             <div class="tab-pane fade active show" role="tabpanel" aria-labelledby="account-tab">
               <div class="card-body">
@@ -250,6 +251,35 @@
               </div>
             </div>
 
+          </ng-template>
+        </ngb-tab>
+
+        <ngb-tab title="Category" *ngIf="isAdmin">
+          <ng-template ngbTabContent>
+            <div class="tab-pane fade active show" role="tabpanel" aria-labelledby="account-tab">
+              <div class="card-body">
+                <form [formGroup]="category">
+                  <div class="digital-add needs-validation">
+                    <div class="form-group">
+                      <label for="txt_category" class="col-form-label pt-0"> Category</label>
+                      <input class="form-control" formControlName="Category1" id="txt_category" type="text" required="" disabled>
+                    </div>
+                    <div class="form-group">
+                      <label for="txt_subcategory" class="col-form-label">Sub Category</label>
+                      <input class="form-control" formControlName="Category2" id="txt_subcategory" type="text" required="" style="width: 50%;">
+                      <button class="btn btn-primary" style="position: absolute; top: 190px;margin-left: 51%;" (click)="saveFieldCategory(1)">UPDATE</button>
+                    </div>
+                    <div class="form-group">
+                      <label for="txt_subsubcategory" class="col-form-label">Sub Sub Category</label>
+                      <input class="form-control" formControlName="Category3" id="txt_subsubcategory" type="text"
+                             required="" style="width: 50%;">
+                      <button class="btn btn-primary" style="position: absolute; top: 279px;margin-left: 51%;" (click)="saveFieldCategory(2)">UPDATE</button>
+                    </div>
+                  </div>
+                </form>
+
+              </div>
+            </div>
           </ng-template>
         </ngb-tab>
 

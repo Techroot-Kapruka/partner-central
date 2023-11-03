@@ -1,4 +1,4 @@
-import {Component, ElementRef, HostListener, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {DropzoneConfigInterface} from 'ngx-dropzone-wrapper';
 import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {ProductService} from '../../../shared/service/product.service';
@@ -24,6 +24,7 @@ interface Item {
 export class DigitalAddComponent implements OnInit {
 
   @ViewChild('txtKeyword') txtKeyword: ElementRef;
+
   constructor(private modalService: NgbModal, private productService: ProductService, private router: Router, private categoryService: CategoryService, private el: ElementRef) {
     this.imageControlMethord();
     this.getCategory();
@@ -54,6 +55,7 @@ export class DigitalAddComponent implements OnInit {
   selectedType = '';
   showMoreMode = true;
   isColorVariation = false;
+  showImageCropper = false;
 
   public keyArrays = [];
   attributesKeyArr = [];
@@ -70,10 +72,12 @@ export class DigitalAddComponent implements OnInit {
   showHint = false;
   showHintPI = false;
   showHintPD = false;
+  showHintPA = false;
   showHintPV = false;
   showHintBrand = false;
   showHintSku = false;
   showHintSCP = false;
+  showHintKey = false;
   margin: any;
   variationColors = [];
   variationOptions = [];
@@ -81,6 +85,11 @@ export class DigitalAddComponent implements OnInit {
   visibleElementCount = 6;
   totalElementCount: number;
   loadMoreElements = 30;
+  imgUploaded1: boolean = false;
+  imgUploaded2: boolean = false;
+  imgUploaded3: boolean = false;
+  imgUploaded4: boolean = false;
+  imgUploaded5: boolean = false;
 
 
   editorConfig: AngularEditorConfig = {
@@ -268,7 +277,7 @@ export class DigitalAddComponent implements OnInit {
           'warning'
         );
 
-      }else {
+      } else {
         if (parseFloat(inputElement.value) > 100.00 || inputElement.value === '') {
           inputElement.value = this.categoryMargin.toFixed(2).toString();
           Swal.fire(
@@ -276,9 +285,9 @@ export class DigitalAddComponent implements OnInit {
             '',
             'warning'
           );
-        }else{
-            this.categoryMargin = Number(inputElement.value);
-            this.setSellingPrice();
+        } else {
+          this.categoryMargin = Number(inputElement.value);
+          this.setSellingPrice();
         }
       }
     }
@@ -621,7 +630,7 @@ export class DigitalAddComponent implements OnInit {
     }
     if (this.mainImageAdded === false) {
       Swal.fire(
-        'Whoops...!',
+        'Whoops..!',
         'Main Image cannot be empty!',
         'error'
       );
@@ -646,6 +655,37 @@ export class DigitalAddComponent implements OnInit {
       if (isListingPrice) {
         this.addProductClicked = true;
         const productVariation = [];
+
+        //set images
+        let one = this.imageCliant.get('fileSource').value;
+        let one2 = this.imageCliant.get('fileSource2').value;
+        let one3 = this.imageCliant.get('fileSource3').value;
+        let one4 = this.imageCliant.get('fileSource4').value;
+        let one5 = this.imageCliant.get('fileSource5').value;
+
+        console.log(one);
+        const pricecc = new File([''], '');
+        if (one === '') {
+
+          one = pricecc;
+        }
+
+        if (one2 === '') {
+          one2 = pricecc;
+        }
+
+        if (one3 === '') {
+          one3 = pricecc;
+        }
+
+        if (one4 === '') {
+          one4 = pricecc;
+        }
+
+        if (one5 === '') {
+          one5 = pricecc;
+        }
+
         if (this.clothesArray.length === 0) {
           const pp = {
             changing_amount: 0,
@@ -662,7 +702,7 @@ export class DigitalAddComponent implements OnInit {
           if (brandHtml) {
             brand_ = (document.getElementById('Brand') as HTMLInputElement).value;
           }
-          const payloard = {
+          const payload = {
             category_code: this.objectCategoryCode,
             title: product_name,
             brand: brand_,
@@ -691,8 +731,10 @@ export class DigitalAddComponent implements OnInit {
             },
             productAttributes: this.attributeArr
           };
-          this.productService.insertProduct(payloard).subscribe(
-            data => this.manageProductResult(data),
+
+
+          this.productService.insertProductWithImages(one, one2, one3, one4, one5, payload).subscribe(
+            data => this.successAlert(data),
             error => this.mnageErrorProduct(error)
           );
 
@@ -723,7 +765,7 @@ export class DigitalAddComponent implements OnInit {
           if (brandHtml) {
             brand_ = (document.getElementById('Brand') as HTMLInputElement).value;
           }
-          const payloard = {
+          const payload = {
             category_code: this.objectCategoryCode,
             title: product_name,
             brand: brand_,
@@ -752,8 +794,8 @@ export class DigitalAddComponent implements OnInit {
             },
             productAttributes: this.attributeArr
           };
-          this.productService.insertProduct(payloard).subscribe(
-            data => this.manageProductResult(data),
+          this.productService.insertProductWithImages(one, one2, one3, one4, one5, payload).subscribe(
+            data => this.successAlert(data),
             error => this.mnageErrorProduct(error)
           );
 
@@ -779,6 +821,16 @@ export class DigitalAddComponent implements OnInit {
     const productBrandHtml = (document.getElementById('Brand') as HTMLInputElement);
     if (productBrandHtml) {
       const productBrand = (document.getElementById('Brand') as HTMLInputElement).value;
+    }
+    const pattern = /[^A-Za-z0-9-]/;
+    if(pattern.test(product_name)){
+      Swal.fire(
+        'Whoops...!',
+        'Product Name Cannot Contain Special Characters',
+        'error'
+      );
+      document.getElementById('product_name').style.borderColor = 'red';
+      return false;
     }
 
     // Check if any of the fields are empty, and update isVEmpty accordingly
@@ -1009,7 +1061,7 @@ export class DigitalAddComponent implements OnInit {
         one5 = pricecc;
       }
 
-      this.productService.insertProductImage(one, one2, one3, one4, one5, datas.data.product_code).subscribe(
+      this.productService.insertProductWithImages(one, one2, one3, one4, one5, datas.data.product_code).subscribe(
         data => this.successAlert(data),
         error => this.mnageErrorProduct(error)
       );
@@ -1018,11 +1070,41 @@ export class DigitalAddComponent implements OnInit {
 
   mnageErrorProduct(error) {
     this.addProductClicked = false;
-    Swal.fire(
-      'Oops...',
-      error.message,
-      'error'
-    );
+    switch (error.status){
+      case 200: {
+        Swal.fire(
+          'Oops...',
+          error.message,
+          'error'
+        );
+        break;
+      }
+      case 401: {
+        Swal.fire(
+          'Oops...',
+          "Unauthorized! Please login agin",
+          'error'
+        );
+        break;
+      }
+      case 400: {
+        Swal.fire(
+          'Oops...',
+          'Invalid Request! Please check your values',
+          'error'
+        );
+        break;
+      }
+      case 500: {
+        Swal.fire(
+          'Oops...',
+          'Something Went Wrong! Please contact the administrator.',
+          'error'
+        );
+        break;
+      }
+    }
+
   }
 
   imageControlMethord() {
@@ -1055,44 +1137,6 @@ export class DigitalAddComponent implements OnInit {
     });
   }
 
-  changeValue(event: any, i) {
-
-    if (event.target.files.length === 0) {
-      return;
-    }
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i) || mimeType.match(/^image\/jfif$/i)) {
-      Swal.fire(
-        'error',
-        'Please select a JPEG, PNG, or BMP image.',
-        'warning'
-      );
-      return;
-    }
-
-    this.mainImageAdded = true;
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-
-    reader.onload = (_event) => {
-      (document.getElementById('imageOneO') as HTMLInputElement).src = reader.result.toString();
-      (document.getElementById('mainImage') as HTMLInputElement).src = reader.result.toString();
-    };
-
-    // ========================================================
-
-    if (event.target.files.length > 0) {
-
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource: file
-      });
-    }
-  }
-
   onSelectAttribute($event) {
     const key = $event.target.id;
     const value = $event.target.value;
@@ -1114,154 +1158,546 @@ export class DigitalAddComponent implements OnInit {
     }
   }
 
+  resizeImage(file: File): Promise<File> {
+    return new Promise((resolve, reject) => {
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
 
-  changeValue2(event) {
+      const image = new Image();
+      image.src = URL.createObjectURL(file);
 
+      image.onload = () => {
+        // Calculate the new width and height for reduced resolution
+        let newWidth, newHeight;
+        const maxDimension = 400; // Set your desired maximum dimension
+
+        if (image.width > image.height) {
+          newWidth = maxDimension;
+          newHeight = (maxDimension / image.width) * image.height;
+        } else {
+          newHeight = maxDimension;
+          newWidth = (maxDimension / image.height) * image.width;
+        }
+
+        // Set the canvas size to the reduced resolution
+        canvas.width = newWidth;
+        canvas.height = newHeight;
+
+        // Create a white background
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw the reduced-resolution image onto the canvas
+        try {
+          ctx.drawImage(image, 0, 0, newWidth, newHeight);
+        } catch (e) {
+          reject('Image Drawing Error');
+          return;
+        }
+
+        // Convert the canvas content to a File
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const resizedFile = new File([blob], file.name, { type: file.type });
+            resolve(resizedFile);
+          } else {
+            reject('Canvas toBlob Error');
+          }
+        }, file.type);
+      };
+
+      image.onerror = () => {
+        reject('Image Loading Error');
+      };
+    });
+  }
+
+
+  async changeValue(event: any, i) {
     if (event.target.files.length === 0) {
       return;
     }
+
     // Image upload validation
     const mimeType = event.target.files[0].type;
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i)) {
+
+    if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
-        'error',
-        'Please select a JPEG, PNG, or BMP image.',
+        'Error',
+        'Please select a JPEG (jpg) image.',
         'warning'
       );
-      return;
+      return; // Stop further actions if the image is not a JPEG
     }
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
 
-    reader.onload = (_event) => {
-      (document.getElementById('imageTwoO') as HTMLInputElement).src = reader.result.toString();
-    };
+    // Check the image resolution
+    let image = new Image();
+    image.src = URL.createObjectURL(event.target.files[0]);
 
+    // Create a promise to hold the async operation
+    const checkImageResolution = new Promise<void>((resolve, reject) => {
+      image.onload = () => {
+        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+          Swal.fire(
+            'Error',
+            'The maximum resolution supported for images is 5000x5000 pixels.',
+            'error'
+          );
+          this.removeimg(0);
+          reject('Invalid image resolution'); // Reject the promise to stop further actions
+        } else {
+          resolve(); // Resolve the promise to continue with further actions
+        }
+      };
+    });
 
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource2: file
-      });
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
+
+      // Continue with further actions here because the image is valid
+      this.showImageCropper = true;
+      this.mainImageAdded = true;
+      this.imgUploaded1 = true;
+
+      // Display the image
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+
+      reader.onload = (_event) => {
+        (document.getElementById('imageOneO') as HTMLInputElement).src = reader.result.toString();
+        (document.getElementById('mainImage') as HTMLInputElement).src = reader.result.toString();
+      };
+
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource: resizedFile
+            });
+          })
+          .catch((error) => {
+            this.removeimg(1);
+            Swal.fire(
+              'error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
     }
   }
 
-  changeValue3(event) {
 
-    if (event.target.files.length === 0) {
-      return;
-    }
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i)) {
-      Swal.fire(
-        'error',
-        'Please select a JPEG, PNG, or BMP image.',
-        'warning'
-      );
-      return;
-    }
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-
-    reader.onload = (_event) => {
-      (document.getElementById('imageTreeE') as HTMLInputElement).src = reader.result.toString();
-    };
-
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource3: file
-      });
-    }
-  }
-
-  changeValue4(event) {
-
-    if (event.target.files.length === 0) {
-      return;
-    }
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i)) {
-      Swal.fire(
-        'error',
-        'Please select a JPEG, PNG, or BMP image.',
-        'warning'
-      );
-      return;
-    }
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-
-    reader.onload = (_event) => {
-      (document.getElementById('imageFourR') as HTMLInputElement).src = reader.result.toString();
-    };
-
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource4: file
-      });
+  removeimg(x: number) {
+    switch (x) {
+      case 1:
+        this.imgUploaded1 = false;
+        this.mainImageAdded = false;
+        this.imageCliant.patchValue({
+          fileSource: '',
+          imageOne: '',
+        });
+        (document.getElementById('imageOneO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 2:
+        this.imgUploaded2 = false;
+        this.imageCliant.patchValue({
+          fileSource2: '',
+          imageOne2: '',
+        });
+        (document.getElementById('imageTwoO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 3:
+        this.imgUploaded3 = false;
+        this.imageCliant.patchValue({
+          fileSource3: '',
+          imageOne3: '',
+        });
+        (document.getElementById('imageTreeE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 4:
+        this.imgUploaded4 = false;
+        this.imageCliant.patchValue({
+          fileSource4: '',
+          imageOne4: '',
+        });
+        (document.getElementById('imageFourR') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 5:
+        this.imgUploaded5 = false;
+        this.imageCliant.patchValue({
+          fileSource5: '',
+          imageOne5: '',
+        });
+        (document.getElementById('imageFiveE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
     }
   }
 
-  changeValue5(event) {
+  async changeValue2(event) {
+    if (event.target.files.length === 0) {
+      return;
+    }
+    // Image upload validation
+    const mimeType = event.target.files[0].type;
+
+    if (!mimeType.match(/^image\/jpeg$/i)) {
+      Swal.fire(
+        'Error',
+        'Please select a JPEG (jpg) image.',
+        'warning'
+      );
+      return;
+    }
+    // Check the image resolution
+    let image = new Image();
+    image.src = URL.createObjectURL(event.target.files[0]);
+
+    // Create a promise to hold the async operation
+    const checkImageResolution = new Promise<void>((resolve, reject) => {
+      image.onload = () => {
+        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+          Swal.fire(
+            'Error',
+            'The maximum resolution supported for images is 5000x5000 pixels.',
+            'error'
+          );
+          this.removeimg(2);
+          reject('Invalid image resolution'); // Reject the promise to stop further actions
+        } else {
+          resolve(); // Resolve the promise to continue with further actions
+        }
+      };
+    });
+
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
+
+      // Continue with further actions here because the image is valid
+      this.showImageCropper = true;
+      this.mainImageAdded = true;
+      this.imgUploaded2 = true;
+
+      // Display the image
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+
+      reader.onload = (_event) => {
+        (document.getElementById('imageTwoO') as HTMLInputElement).src = reader.result.toString();
+      };
+
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource2: resizedFile
+            });
+          })
+          .catch((error) => {
+            this.removeimg(2);
+            Swal.fire(
+              'error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
+    }
+  }
+
+  async changeValue3(event) {
+
+    if (event.target.files.length === 0) {
+      return;
+    }
+    // Image upload validation
+    // Image upload validation
+    const mimeType = event.target.files[0].type;
+
+    if (!mimeType.match(/^image\/jpeg$/i)) {
+      Swal.fire(
+        'Error',
+        'Please select a JPEG (jpg) image.',
+        'warning'
+      );
+      return;
+    }
+    // Check the image resolution
+    let image = new Image();
+    image.src = URL.createObjectURL(event.target.files[0]);
+
+    // Create a promise to hold the async operation
+    const checkImageResolution = new Promise<void>((resolve, reject) => {
+      image.onload = () => {
+        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+          Swal.fire(
+            'Error',
+            'The maximum resolution supported for images is 5000x5000 pixels.',
+            'error'
+          );
+          this.removeimg(3);
+          reject('Invalid image resolution'); // Reject the promise to stop further actions
+        } else {
+          resolve(); // Resolve the promise to continue with further actions
+        }
+      };
+    });
+
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
+
+      // Continue with further actions here because the image is valid
+      this.showImageCropper = true;
+      this.mainImageAdded = true;
+      this.imgUploaded3 = true;
+
+      // Display the image
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+
+      reader.onload = (_event) => {
+        (document.getElementById('imageTreeE') as HTMLInputElement).src = reader.result.toString();
+      };
+
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource3: resizedFile
+            });
+          })
+          .catch((error) => {
+            this.removeimg(3);
+            Swal.fire(
+              'error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
+    }
+  }
+
+  async changeValue4(event) {
 
     if (event.target.files.length === 0) {
       return;
     }
     // Image upload validation
     const mimeType = event.target.files[0].type;
-    if (!mimeType.match(/image\/(jpeg|png|bmp)/i)) {
+
+    if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
-        'error',
-        'Please select a JPEG, PNG, or BMP image.',
+        'Error',
+        'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
     }
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
+    // Check the image resolution
+    let image = new Image();
+    image.src = URL.createObjectURL(event.target.files[0]);
 
-    reader.onload = (_event) => {
-      (document.getElementById('imageFiveE') as HTMLInputElement).src = reader.result.toString();
-    };
+    // Create a promise to hold the async operation
+    const checkImageResolution = new Promise<void>((resolve, reject) => {
+      image.onload = () => {
+        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+          Swal.fire(
+            'Error',
+            'The maximum resolution supported for images is 5000x5000 pixels.',
+            'error'
+          );
+          this.removeimg(4);
+          reject('Invalid image resolution'); // Reject the promise to stop further actions
+        } else {
+          resolve(); // Resolve the promise to continue with further actions
+        }
+      };
+    });
 
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource5: file
-      });
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
+
+      // Continue with further actions here because the image is valid
+      this.showImageCropper = true;
+      this.mainImageAdded = true;
+      this.imgUploaded4 = true;
+
+      // Display the image
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+
+      reader.onload = (_event) => {
+        (document.getElementById('imageFourR') as HTMLInputElement).src = reader.result.toString();
+      };
+
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource4: resizedFile
+            });
+          })
+          .catch((error) => {
+            this.removeimg(4);
+            Swal.fire(
+              'error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
+    }
+  }
+
+  async changeValue5(event) {
+
+    if (event.target.files.length === 0) {
+      return;
+    }
+// Image upload validation
+    const mimeType = event.target.files[0].type;
+
+    if (!mimeType.match(/^image\/jpeg$/i)) {
+      Swal.fire(
+        'Error',
+        'Please select a JPEG (jpg) image.',
+        'warning'
+      );
+      return;
+    }
+    // Check the image resolution
+    let image = new Image();
+    image.src = URL.createObjectURL(event.target.files[0]);
+
+    // Create a promise to hold the async operation
+    const checkImageResolution = new Promise<void>((resolve, reject) => {
+      image.onload = () => {
+        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+          Swal.fire(
+            'Error',
+            'The maximum resolution supported for images is 5000x5000 pixels.',
+            'error'
+          );
+          this.removeimg(5);
+          reject('Invalid image resolution'); // Reject the promise to stop further actions
+        } else {
+          resolve(); // Resolve the promise to continue with further actions
+        }
+      };
+    });
+
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
+
+      // Continue with further actions here because the image is valid
+      this.showImageCropper = true;
+      this.mainImageAdded = true;
+      this.imgUploaded5 = true;
+
+      // Display the image
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+
+      reader.onload = (_event) => {
+        (document.getElementById('imageFiveE') as HTMLInputElement).src = reader.result.toString();
+      };
+
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource4: resizedFile
+            });
+          })
+          .catch((error) => {
+            this.removeimg(5);
+            Swal.fire(
+              'Error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
     }
   }
 
   successAlert(data) {
-    Swal.fire(
-      'New Product Added Successfully...!',
-      'Your product will go live after Approved by Kapruka.This may take upto 6-12 Hrs',
-      'success'
-    );
-    const partId = sessionStorage.getItem('partnerId');
-    const url = 'products/digital/digital-product-list';
-    this.router.navigate([url]);
+    if (data.message_status === 'Success') {
+      Swal.fire(
+        'New Product Added Successfully...!',
+        'Your product will go live after Approved by Kapruka.This may take upto 6-12 Hrs',
+        'success'
+      );
+      const partId = sessionStorage.getItem('partnerId');
+      const url = 'products/digital/digital-product-list';
+      this.router.navigate([url]);
 
 
-    // this.clearAllFeilds();
-    this.colorNameArray = [];
-    this.colorCodeArray = [];
-    this.sizeNameArray = [];
-    this.colorArray = [];
-    this.sizeArray = [];
-    this.productGroupTabel = [];
-    this.nonGroupArray = [];
-    this.weightValue = '';
-    // const url = '/products/digital/digital-product-list/';
-    // this.router.navigate([url]);
+      // this.clearAllFeilds();
+      this.colorNameArray = [];
+      this.colorCodeArray = [];
+      this.sizeNameArray = [];
+      this.colorArray = [];
+      this.sizeArray = [];
+      this.productGroupTabel = [];
+      this.nonGroupArray = [];
+      this.weightValue = '';
+      // const url = '/products/digital/digital-product-list/';
+      // this.router.navigate([url]);
+    } else {
+      Swal.fire(
+        "Failed",
+        data.message,
+        'warning'
+      )
+    }
+
   }
 
   clearAllFeilds() {
@@ -2298,7 +2734,7 @@ export class DigitalAddComponent implements OnInit {
     this.attributeArr = this.attributesArray;
   }
 
-  formatCurrency(event:any){
+  formatCurrency(event: any) {
     let value = event.target.value.replace(/[^\d]/g, '').replace(/^0+/, '');
 
     // Add commas for thousands separators
@@ -2314,7 +2750,7 @@ export class DigitalAddComponent implements OnInit {
   setSellingPrice() {
     if ((document.getElementById('categoryPathInput') as HTMLInputElement).value === '') {
       Swal.fire(
-        'error',
+        'Error',
         'category path should not be empty..!',
         'warning'
       );
@@ -2397,12 +2833,21 @@ export class DigitalAddComponent implements OnInit {
     this.showHintPD = !this.showHintPD;
   }
 
+  toggleHintPA() {
+    this.showHintPA = !this.showHintPA;
+  }
+
   /* Product Variation  */
   toggleHintPV() {
     this.showHintPV = !this.showHintPV;
   }
 
-  /* Product Brand  */
+  /* Product Variation  */
+  toggleHintKey() {
+    this.showHintKey = !this.showHintKey;
+  }
+
+  /* Product Key  */
   toggleHintBrand() {
     this.showHintBrand = !this.showHintBrand;
   }

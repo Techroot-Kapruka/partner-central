@@ -96,7 +96,7 @@ export class ListOrdersComponent implements OnInit {
     var errorMsg = document.getElementById('noOrderMsg');
     var tableContent = document.getElementById('orderDetailsTbl');
     if (arr.data != null) {
-      tableContent.style.display='block';
+      tableContent.style.display='table';
       errorMsg.style.display='none';
       const orArrLength = arr.data.length;
       for (let i = 0; i < orArrLength; i++) {
@@ -257,6 +257,7 @@ export class ListOrdersComponent implements OnInit {
   manageLimitedOrders(data) {
     this.paginateData = [];
     if (data.data.content != null) {
+      this.loading = false;
       for (let z = 0; z < data.data.content.length; z++) {
         let statusStyleOne = false;
         let statusStyleTwo = false;

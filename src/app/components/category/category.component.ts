@@ -37,7 +37,7 @@ export class CategoryComponent implements OnInit {
   public subcategoryArray = [];
   public subSubSubCategoryArray = [];
 
-  constructor(private formBuilder: FormBuilder, private categoryService: CategoryService, private router: Router, private authGuard:AuthGuard) {
+  constructor(private formBuilder: FormBuilder, private categoryService: CategoryService, private router: Router, private authGuard: AuthGuard) {
     // this.authGuard.canActivate();
     // create all forms
     this.createAccountForm();
@@ -281,13 +281,13 @@ export class CategoryComponent implements OnInit {
   }
 
   manageSubcategory(data) {
-    if (data.message_status === 'Failed'){
+    if (data.message_status === 'Failed') {
       Swal.fire(
         'warning',
-        'Category Name Already Exists',
+        data.message,
         'warning'
       );
-    }else{
+    } else {
       this.createAccountForm();
       Swal.fire(
         data.data.name,
@@ -384,12 +384,21 @@ export class CategoryComponent implements OnInit {
   }
 
   manageAllSubSubCategory(data) {
-    this.createAccountForm();
-    Swal.fire(
-      data.data.name,
-      data.message,
-      'success'
-    );
+    if (data.message_status === 'Failed') {
+      Swal.fire(
+        'warning',
+        data.message,
+        'warning'
+      );
+      this.createAccountForm();
+    } else {
+      Swal.fire(
+        data.data.name,
+        data.message,
+        'success'
+      );
+      this.createAccountForm();
+    }
   }
 
   // ========== Edit Category ============ >>>>>>>>>>>>>>>>
@@ -574,7 +583,7 @@ export class CategoryComponent implements OnInit {
         parentId: this.subSubSubCategory.value.subSubCatCode3,
         description: this.subSubSubCategory.value.subSubSubCategoryDescription,
         isActive: 1,
-        selling_price_margin:this.subSubSubCategory.value.subsubsubPricerate
+        selling_price_margin: this.subSubSubCategory.value.subsubsubPricerate
       };
       this.categoryService.saveCategory(sendData).subscribe(
         data => this.manageSubSubSubCategory(data)
@@ -598,7 +607,7 @@ export class CategoryComponent implements OnInit {
         cat_code: this.subSubSubCategory.value.mainCategoryCode,
         sub_cat_code: this.subSubSubCategory.value.subCategoryCode,
         description: this.subSubSubCategory.value.subSubSubCategoryDescription,
-        selling_price_margin:this.subSubSubCategory.value.subsubsubPricerate
+        selling_price_margin: this.subSubSubCategory.value.subsubsubPricerate
       };
       this.categoryService.updateSubCategory(payLoard).subscribe(
         data => this.manageEditAllSubSubSubCategory(data),
@@ -607,13 +616,26 @@ export class CategoryComponent implements OnInit {
   }
 
   manageSubSubSubCategory(data) {
-    Swal.fire(
-      data.data.name,
-      data.message,
-      'success'
-    );
-    this.createAccountForm();
-    this.getSubSubSubCategoriesAll();
+
+    if (data.message_status === 'Failed') {
+      Swal.fire(
+        'warning',
+        data.message,
+        'warning'
+      );
+      this.createAccountForm();
+      this.getSubSubSubCategoriesAll();
+    } else {
+      Swal.fire(
+        data.data.name,
+        data.message,
+        'success'
+      );
+      this.createAccountForm();
+      this.getSubSubSubCategoriesAll();
+    }
+
+
   }
 
   // ==================== Edit Sub Sub Sub category ============= >>>>>>>>>>>>>>>>>
