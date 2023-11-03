@@ -822,16 +822,6 @@ export class DigitalAddComponent implements OnInit {
     if (productBrandHtml) {
       const productBrand = (document.getElementById('Brand') as HTMLInputElement).value;
     }
-    const pattern = /[^A-Za-z0-9-]/;
-    if(pattern.test(product_name)){
-      Swal.fire(
-        'Whoops...!',
-        'Product Name Cannot Contain Special Characters',
-        'error'
-      );
-      document.getElementById('product_name').style.borderColor = 'red';
-      return false;
-    }
 
     // Check if any of the fields are empty, and update isVEmpty accordingly
     if (product_name === '' || sellerSKU === '' || listing_price === '' || product_description === '' || this.categoryPath === '') {
