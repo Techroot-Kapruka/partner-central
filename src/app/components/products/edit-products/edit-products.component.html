@@ -83,7 +83,7 @@
                       </select>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" *ngIf="!isAdmin">
                       <button class="btn btn-primary pull-right" type="submit" style="margin-bottom: 30px;">UPDATE
                       </button>
                     </div>
@@ -184,27 +184,27 @@
                             <!--=========================-->
                             <li>
                               <div class="box-input-file">
-                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png">
+                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
                                 <input class="upload" id="image01" type="file" formControlName="fileSource"
-                                       (change)="changeValue($event, 1)" (click)="loadimg(1)">
+                                       (change)="!isAdmin && changeValue($event, 1)" (click)="!isAdmin && loadimg(1)">
                                 <img class="imgUpload" id="imageOneO" alt="" src="{{imagePathURI+imageOne}}">
                               </div>
                             </li>
 
                             <li>
                               <div class="box-input-file" *ngIf="imageOne2">
-                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png">
+                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
                                 <input class="upload" type="file" formControlName="fileSource2"
-                                       (change)="changeValue2($event)" (click)="loadimg(2)">
+                                       (change)="!isAdmin && changeValue2($event)" (click)="!isAdmin && loadimg(2)">
                                 <img class="imgUpload" id="imageTwoO" alt="" src="{{imagePathURI+imageOne2}}">
                               </div>
                             </li>
 
                             <li>
                               <div class="box-input-file" *ngIf="imageOne3">
-                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png">
+                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
                                 <input class="upload" type="file" formControlName="fileSource3"
-                                       (change)="changeValue3($event)" (click)="loadimg(3)">
+                                       (change)="!isAdmin && changeValue3($event)" (click)="!isAdmin && loadimg(3)">
                                 <img class="imgUpload" id="imageTreeE" alt="" src="{{imagePathURI+imageOne3}}">
 
                               </div>
@@ -212,9 +212,9 @@
 
                             <li>
                               <div class="box-input-file" *ngIf="imageOne4">
-                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png">
+                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
                                 <input class="upload" type="file" formControlName="fileSource4"
-                                       (change)="changeValue4($event)" (click)="loadimg(4)">
+                                       (change)="!isAdmin && changeValue4($event)" (click)="!isAdmin && loadimg(4)">
                                 <img class="imgUpload" id="imageFourR" alt="" src="{{imagePathURI+imageOne4}}">
 
                               </div>
@@ -223,9 +223,9 @@
 
                             <li>
                               <div class="box-input-file" *ngIf="imageOne5">
-                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png">
+                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
                                 <input class="upload" type="file" formControlName="fileSource5"
-                                       (change)="changeValue5($event)" (click)="loadimg(5)">
+                                       (change)="!isAdmin && changeValue5($event)" (click)="!isAdmin && loadimg(5)">
                                 <img class="imgUpload" id="imageFiveE" alt="" src="{{imagePathURI+imageOne5}}">
 
                               </div>
@@ -244,7 +244,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-group">
+              <div class="form-group" *ngIf="!isAdmin">
                 <button class="btn btn-primary pull-right" type="button" (click)="saveEditedImage()"
                         style="margin-bottom: 30px;">Save
                 </button>
