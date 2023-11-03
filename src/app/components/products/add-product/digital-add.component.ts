@@ -1152,34 +1152,35 @@ export class DigitalAddComponent implements OnInit {
     return new Promise((resolve, reject) => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
+      canvas.width = 700;
+      canvas.height = 700;
 
       const image = new Image();
       image.src = URL.createObjectURL(file);
 
       image.onload = () => {
-        // Calculate the new width and height for reduced resolution
-        let newWidth, newHeight;
-        const maxDimension = 400; // Set your desired maximum dimension
-
+        // Calculate the new image dimensions, maintaining aspect ratio
+        let width, height;
         if (image.width > image.height) {
-          newWidth = maxDimension;
-          newHeight = (maxDimension / image.width) * image.height;
+          width = canvas.width;
+          height = image.height * (canvas.width / image.width);
         } else {
-          newHeight = maxDimension;
-          newWidth = (maxDimension / image.height) * image.width;
+          height = canvas.height;
+          width = image.width * (canvas.height / image.height);
         }
 
-        // Set the canvas size to the reduced resolution
-        canvas.width = newWidth;
-        canvas.height = newHeight;
+        // Calculate position to center the image
+        const offsetX = (canvas.width - width) / 2;
+        const offsetY = (canvas.height - height) / 2;
+
 
         // Create a white background
         ctx.fillStyle = '#fff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Draw the reduced-resolution image onto the canvas
+        // Draw the centered and resized image onto the canvas
         try {
-          ctx.drawImage(image, 0, 0, newWidth, newHeight);
+          ctx.drawImage(image, offsetX, offsetY, width, height);
         } catch (e) {
           reject('Image Drawing Error');
           return;
