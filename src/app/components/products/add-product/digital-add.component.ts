@@ -1137,7 +1137,6 @@ export class DigitalAddComponent implements OnInit {
     });
   }
 
-
   onSelectAttribute($event) {
     const key = $event.target.id;
     const value = $event.target.value;
