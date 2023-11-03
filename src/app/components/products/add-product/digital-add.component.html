@@ -37,10 +37,9 @@
                             <li class="list">
                               <div class="box-input-file"
                                    style="position: relative; color: #00c292">
-                                <button (click)="removeimg(1)" *ngIf="imgUploaded1"><img class="removeImg" src="assets/images/dashboard/remove.png"></button>
+                                <button (click)="removeimg(1)" *ngIf="imgUploaded1"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" id="image01" type="file"
                                        formControlName="imageOne" accept="image/jpeg"
-                                       style="justify-items: center;"
                                        (change)="changeValue($event, 1)" required>
                                 <img class="imgUpload" id="imageOneO"
                                      alt="Click To Add Image"
@@ -57,7 +56,7 @@
                             <li class="list">
                               <div class="box-input-file"
                                    style="position: relative; color: #00c292">
-                                <button (click)="removeimg(2)" *ngIf="imgUploaded2"><img class="removeImg" src="assets/images/dashboard/remove.png"></button>
+                                <button (click)="removeimg(2)" *ngIf="imgUploaded2"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" type="file"
                                        formControlName="imageOne2" accept="image/jpeg"
                                        (change)="changeValue2($event)">
@@ -76,7 +75,7 @@
                             <li class="list">
                               <div class="box-input-file"
                                    style="position: relative; color: #00c292">
-                                <button (click)="removeimg(3)" *ngIf="imgUploaded3"><img class="removeImg" src="assets/images/dashboard/remove.png"></button>
+                                <button (click)="removeimg(3)" *ngIf="imgUploaded3"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" type="file" accept="image/jpeg"
                                        formControlName="imageOne3"
                                        (change)="changeValue3($event)">
@@ -94,7 +93,7 @@
                             <li class="list">
                               <div class="box-input-file"
                                    style="position: relative; color: #00c292">
-                                <button (click)="removeimg(4)" *ngIf="imgUploaded4"><img class="removeImg" src="assets/images/dashboard/remove.png"></button>
+                                <button (click)="removeimg(4)" *ngIf="imgUploaded4"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" type="file" accept="image/jpeg"
                                        formControlName="imageOne4"
                                        (change)="changeValue4($event)">
@@ -112,7 +111,7 @@
                             <li class="list">
                               <div class="box-input-file"
                                    style="position: relative; color: #00c292">
-                                <button (click)="removeimg(5)" *ngIf="imgUploaded5"><img class="removeImg" src="assets/images/dashboard/remove.png"></button>
+                                <button (click)="removeimg(5)" *ngIf="imgUploaded5"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" type="file" accept="image/jpeg"
                                        formControlName="imageOne5"
                                        (change)="changeValue5($event)">
