@@ -679,6 +679,8 @@ export class DigitalListComponent implements OnInit {
     const busName = sessionStorage.getItem('businessName');
     const userRole = sessionStorage.getItem('userRole');
     const categoryID = sessionStorage.getItem('userId');
+    console.log('AA : '+ busName);
+    console.log('AA : '+ categoryID);
 
     this.productService.getnonActiveProduct(busName, categoryID).subscribe(
       data => this.manageNonActiveProduct(data),
@@ -850,11 +852,22 @@ export class DigitalListComponent implements OnInit {
   }
 
   nonActiveProductsByCompanyName() {
-    const payloard = {
-      businessName: sessionStorage.getItem('businessName')
-    };
-    this.productService.nonActiveProductsByCompanyName(payloard).subscribe(
+    // const payloard = {
+    //   businessName: sessionStorage.getItem('businessName')
+    // };
+    // console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+    // this.productService.nonActiveProductsByCompanyName(payloard).subscribe(
+    //   data => this.manegeMonActiveProductsByCompanyName(data),
+    // );
+
+    const busName = sessionStorage.getItem('businessName');
+    const categoryID = sessionStorage.getItem('userId');
+    console.log('AA : '+ busName);
+    console.log('AA : '+ categoryID);
+
+    this.productService.getnonActiveProduct(busName, categoryID).subscribe(
       data => this.manegeMonActiveProductsByCompanyName(data),
+      error => this.errorOrderManage(error)
     );
   }
 
