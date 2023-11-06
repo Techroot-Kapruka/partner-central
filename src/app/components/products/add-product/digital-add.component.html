@@ -185,7 +185,7 @@
                            [attr.data-index]="i"
                            class="tiles">
                         <li class="li" id="sub{{i}}"
-                            (click)="getSub_sub_category(subCategory['code'],subCategory['name'],i,subCategory['pricemargin']) ; getAttribytes(subCategory['code']);"
+                            (click)="getSub_sub_category(subCategory['code'],subCategory['name'],i,subCategory['pricemargin']) ;"
                             value="">{{subCategory['name']}}
                         </li>
                       </div>
@@ -199,7 +199,7 @@
                            [attr.data-index]="i"
                            class="tiles ">
                         <li class="li" id="subSub{{i}}"
-                            (click)="getsub_sub_sub_category(subsubCategory['code'],subsubCategory['name'],i,subsubCategory['pricemargin']); getAttribytes(subsubCategory['code']);"
+                            (click)="getsub_sub_sub_category(subsubCategory['code'],subsubCategory['name'],i,subsubCategory['pricemargin']); "
                             value="">{{subsubCategory['name']}}
                         </li>
                       </div>
