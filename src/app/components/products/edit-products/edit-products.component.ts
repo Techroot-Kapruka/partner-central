@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import {FormControl, FormGroup} from '@angular/forms';
 import {environment} from '../../../../environments/environment.prod';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
+import {CategoryService} from "../../../shared/service/category.service";
 
 
 @Component({
@@ -49,6 +50,9 @@ export class EditProductsComponent implements OnInit {
   public storageValue = '';
   public capacityValue = '';
   public nonGroupArray = [];
+  public productCategoryArray = [];
+  public productSubCategoryArray = [];
+  public productSubSubCategoryArray = [];
   public parts = [];
   public imageOne = '';
   public imageOne2 = '';
@@ -63,6 +67,9 @@ export class EditProductsComponent implements OnInit {
   public amountBefor = '';
   showmsg = false;
   showmsg1 = false;
+
+  filteredSubCategory = [];
+  filteredSubSubCategory = [];
 
   public oldTitle = '';
   public oldBrand = '';
@@ -108,12 +115,14 @@ export class EditProductsComponent implements OnInit {
   };
 
 
-  constructor(private router: Router, private _Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService) {
+  constructor(private categoryService: CategoryService, private router: Router, private _Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService) {
     this.ids = '';
+    this.getAllCategory();
     this._Activatedroute.paramMap.subscribe(params => {
       this.getProductByEdit(params.get('id'));
       this.ids = params.get('id');
     });
+
     this.imageControlMethord();
     this.editFormControlMethode();
     this.getImages();
@@ -434,6 +443,120 @@ export class EditProductsComponent implements OnInit {
 
 // ===============================================================start edit methods====================================
 
+  // ============================================================================
+  getAllCategory() {
+    const sendData = {
+      code: 'c'
+    };
+
+    this.categoryService.getAllCategory(sendData).subscribe(
+      data => this.setAllCategory(data),
+    );
+  }
+
+  setAllCategory(data) {
+    let cr = {};
+    cr = {
+      name: '',
+      code: ''
+    };
+
+    if (data.data != null) {
+      for (let i = 0; i < data.data.length; i++) {
+        cr = {
+          name: data.data[i].name,
+          code: data.data[i].code
+        };
+        this.productCategoryArray.push(cr);
+      }
+    }
+  }
+
+  getSubcategoryForSubSub(code) {
+    // const tex = (document.getElementById('category_id_sub_sub') as HTMLInputElement).value;
+    const senDdata = {
+      code: code
+    };
+    this.categoryService.getAllCategory(senDdata).subscribe(
+      data => this.manageGetSubcategoryForSubSubSub(data)
+    );
+  }
+
+  manageGetSubcategoryForSubSubSub(data) {
+    this.productSubSubCategoryArray = [];
+    let cr = {};
+    cr = {
+      name: '',
+      code: ''
+    };
+    if (data.data != null) {
+      for (let i = 0; i < data.data.length; i++) {
+        cr = {
+          name: data.data[i].name,
+          code: data.data[i].code
+        };
+        this.productSubSubCategoryArray.push(cr);
+      }
+    }
+  }
+
+  selectSubcategory(event, x: number){
+    switch (x) {
+      case 1:
+        const tex = (document.getElementById('category_ids') as HTMLInputElement).value;
+        this.filteredSubCategory = this.productSubCategoryArray.filter((item) => (item as any).name === tex);
+
+        this.category.get('Category2').setValue(tex);
+        this.category.get('Category3').setValue('');
+        event.target.value = ''
+        this.filteredSubSubCategory=[];
+
+        this.getSubcategoryForSubSub(this.filteredSubCategory[0].code);
+        break;
+      case 2:
+        const sub = (document.getElementById('category_sub_subids') as HTMLInputElement).value;
+        this.filteredSubSubCategory = this.productSubSubCategoryArray.filter((item) => (item as any).name === sub);
+
+        this.category.get('Category3').setValue(sub);
+        event.target.value = ''
+        break;
+      default:
+    }
+  }
+
+  getSubcategory(cate) {
+    for (let i=0; i < this.productCategoryArray.length; i++){
+      if(this.productCategoryArray[i].name === cate){
+        const senDdata = {
+          code: this.productCategoryArray[i].code
+        };
+        this.categoryService.getAllCategory(senDdata).subscribe(
+          data => this.manageAllSubCategory(data)
+        );
+      }
+    }
+  }
+
+  manageAllSubCategory(data) {
+    this.productSubCategoryArray = [];
+    let cr = {};
+    cr = {
+      name: '',
+      code: ''
+    };
+    if (data.data != null) {
+      for (let i = 0; i < data.data.length; i++) {
+        cr = {
+          name: data.data[i].name,
+          code: data.data[i].code
+        };
+        this.productSubCategoryArray.push(cr);
+      }
+    }
+  }
+
+
+   // ------------------------------------------------------------------------
   getProductByEdit(id) {
     let payloard = {
       product_code: id
@@ -445,6 +568,7 @@ export class EditProductsComponent implements OnInit {
   }
 
   managetSelecedProductByEdit(data, proCodeImg) {
+    this.getSubcategory(data.data.product.item_group);
 
     // base info
     this.baseInfo.get('Title').setValue(data.data.product.title);
@@ -619,7 +743,59 @@ export class EditProductsComponent implements OnInit {
 //     $event.preventDefault();
 //   }
   saveFieldCategory(x: number){
-console.log('category Clicked!!')
+    switch (x) {
+      case 1:
+        if ( this.filteredSubCategory.length > 0 ){
+          const payload = {
+
+            column : 'category_code',
+            tblname: 'product_basic_info',
+            value : this.filteredSubCategory[0].code,
+            whereClause : 'product_code',
+            whereValue : this.ids
+          }
+          this.productService.editAdminSave(payload).subscribe(
+            data => Swal.fire(
+              'Updated!',
+              '',
+              'success'
+            )
+          );
+        }else{
+          Swal.fire(
+            'No Changes Found!',
+            '',
+            'info'
+          );
+        }
+        break;
+      case 2:
+        if ( this.filteredSubSubCategory.length > 0){
+          const payload = {
+            column : 'category_code',
+            tblname: 'product_basic_info',
+            value : this.filteredSubSubCategory[0].code,
+            whereClause : 'product_code',
+            whereValue : this.ids
+          }
+          this.productService.editAdminSave(payload).subscribe(
+            data => Swal.fire(
+              'Updated!',
+              '',
+              'success'
+            )
+          );
+        }else{
+          Swal.fire(
+            'No Changes Found!',
+            '',
+            'info'
+          );
+        }
+        break;
+      default:
+    }
+
   }
 
   saveFieldBaseInfo() {
@@ -705,44 +881,76 @@ console.log('category Clicked!!')
   }
 
   saveFieldDescription() {
-    let partnerId = sessionStorage.getItem('partnerId');
-    let description = this.descriptionContent;
-    let specialNotes = this.description.get('special_notes').value;
-    let availability = this.description.get('availability').value;
-    let productId = this.ids;
-
-    let payload = {
-      referenceId: productId,
-      type: 'PRODUCT',
-      sub_type: 'product_description',
-      comment: 'Test',
-      requestedBy: partnerId,
-      data: [
-        {
-          column_name: 'description',
-          old_value: this.old_Txt_description,
-          new_value: description,
-          call_name: 'description',
-        },
-        {
-          column_name: 'special_notes',
-          old_value: this.old_special_notes,
-          new_value: specialNotes,
-          call_name: 'special_notes',
-        },
-        {
-          column_name: 'availability',
-          old_value: this.old_availability,
-          new_value: availability,
-          call_name: 'availability',
+    if (this.isAdmin){
+      if (this.old_Txt_description === this.descriptionContent){
+        Swal.fire(
+            'No Changes Found!',
+            '',
+            'info'
+          );
+      }else{
+        const payload = {
+          column : 'description',
+          tblname: 'product_description',
+          value : this.descriptionContent,
+          whereClause : 'pro_code',
+          whereValue : this.ids
         }
-      ]
-    };
+        this.productService.editAdminSave(payload).subscribe(
+          data => {
+            Swal.fire(
+              'Updated!',
+              '',
+              'success'
+            ).then((result) => {
+              if (result.isConfirmed) {
+                this.descriptionContent === this.old_Txt_description
+              }
+            });
+          }
+        );
+      }
+    }else{
+      let partnerId = sessionStorage.getItem('partnerId');
+      let description = this.descriptionContent;
+      let specialNotes = this.description.get('special_notes').value;
+      let availability = this.description.get('availability').value;
+      let productId = this.ids;
+
+      let payload = {
+        referenceId: productId,
+        type: 'PRODUCT',
+        sub_type: 'product_description',
+        comment: 'Test',
+        requestedBy: partnerId,
+        data: [
+          {
+            column_name: 'description',
+            old_value: this.old_Txt_description,
+            new_value: description,
+            call_name: 'description',
+          },
+          {
+            column_name: 'special_notes',
+            old_value: this.old_special_notes,
+            new_value: specialNotes,
+            call_name: 'special_notes',
+          },
+          {
+            column_name: 'availability',
+            old_value: this.old_availability,
+            new_value: availability,
+            call_name: 'availability',
+          }
+        ]
+      };
 
 
-    this.productService.editField(payload).subscribe(
-      data => this.manageEditField(data),
-    );
+      this.productService.editField(payload).subscribe(
+        data => this.manageEditField(data),
+      );
+    }
+
   }
 
   saveOfferFields() {
