@@ -207,6 +207,12 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'fieldEdit/save', payloard, {headers});
   }
 
+  editAdminSave(payloard: any){
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'genaralutill/doSimpleColumnUpdate', payloard, {headers});
+  }
+
+
   editFieldImageSave(image1: any, image2: any, image3: any, image4: any, image5: any, id: any) {
     const formData: FormData = new FormData();
     formData.append('image1', image1);
