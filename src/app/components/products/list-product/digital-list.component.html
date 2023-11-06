@@ -91,7 +91,7 @@
                                           style="width: 80px;height: 28px;font-size: 10px;"
                                           class="btn btn-outline-success">View
                                   </button>
-                                  <button *ngIf="isPartner" type="button" (click)='editGetProduct2(i)'
+                                  <button type="button" (click)='editGetProduct2(i)'
                                           style="width: 80px;height: 28px;font-size: 10px;"
                                           class="btn btn-outline-info">edit
                                   </button>
@@ -171,7 +171,7 @@
                                           style="width: 80px;height: 28px;font-size: 10px;"
                                           class="btn btn-outline-success">view
                                   </button>
-                                  <button *ngIf="isPartner" type="button" (click)='editGetProduct2(i)'
+                                  <button type="button" (click)='editGetProduct2(i)'
                                           style="width: 80px;height: 28px;font-size: 10px;"
                                           class="btn btn-outline-info">edit
                                   </button>
@@ -312,7 +312,7 @@
                               <tr
                                 *ngFor="let productDetail of (paginatedPendingStockAllow.length > 0 ? paginatedPendingStockAllow : pending_stock_allocation); let i = index;">
                                 <td align="center">{{stopLoading()}}<img src="{{ imagePathURI + productDetail.image }}"
-                                                                         (click)="popUpImageActive(i)" height="60px"
+                                                                         (click)="popUpImagePendingAllocation(i)" height="60px"
                                                                          width="60px"
                                                                          (error)="onImageError($event)"/></td>
                                 <td><p style="margin: 0px; font-size: 16px;font-weight: 600; color: #000;">{{
@@ -1082,7 +1082,7 @@
                                 </td>
                                 <td>
                                   <input class="form-control" type="number" name="vstock" id="vstock"
-                                         pattern="[0-9]*" [(ngModel)]="vstock[startIndex+j]" (ngModelChange)="onVstockChange(j)">
+                                         pattern="[0-9]*" [(ngModel)]="vstock[startIndex+j]" (ngModelChange)="onVstockChange(j)" maxlength="5" style="width: 70%;">
                                 </td>
                                 <td>
                                   <button type="button"
@@ -1111,7 +1111,7 @@
                                 </td>
                                 <td>
                                   <input class="form-control" type="number" name="vstock" id="vstock"
-                                         pattern="[0-9]*" [(ngModel)]="vstock[startIndex+j]" (ngModelChange)="onVstockChange(j)">
+                                         pattern="[0-9]*" [(ngModel)]="vstock[startIndex+j]" (ngModelChange)="onVstockChange(j)"  style="width: 70%;">
                                 </td>
                                 <td>
                                   <button type="button"
