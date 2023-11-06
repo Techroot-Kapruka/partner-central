@@ -778,7 +778,7 @@ export class DigitalAddComponent implements OnInit {
             productDescription: {
               description: product_description,
               special_notes: ' ',
-              availability: 'yes'
+              availability: 'no'
             },
             productOffer: {
               seller_sku: sellerSKU,
