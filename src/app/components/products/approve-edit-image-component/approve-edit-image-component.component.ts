@@ -70,6 +70,7 @@ export class ApproveEditImageComponentComponent implements OnInit {
   }
 
   private manageGetEditImageFieldsDataAllForApproval(data) {
+    this.productCode_ = data.data.productCode;
     this.manageImageForEdit(data);
 
     (document.getElementById('productCode_') as HTMLInputElement).value = data.data.productCode;
