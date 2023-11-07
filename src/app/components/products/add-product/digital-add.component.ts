@@ -778,7 +778,7 @@ export class DigitalAddComponent implements OnInit {
             productDescription: {
               description: product_description,
               special_notes: ' ',
-              availability: 'yes'
+              availability: 'no'
             },
             productOffer: {
               seller_sku: sellerSKU,
@@ -815,7 +815,7 @@ export class DigitalAddComponent implements OnInit {
     let isVEmpty = true; // Assume all fields are filled initially
 
     const listing_price = ((document.getElementById('price') as HTMLInputElement).value);
-    const sellerSKU = (document.getElementById('Seller_SKU') as HTMLInputElement).value;
+    // const sellerSKU = (document.getElementById('Seller_SKU') as HTMLInputElement).value;
     const product_name = (document.getElementById('product_name') as HTMLInputElement).value;
     const product_description = (document.getElementById('product_description') as HTMLInputElement).value;
     const productBrandHtml = (document.getElementById('Brand') as HTMLInputElement);
@@ -824,11 +824,11 @@ export class DigitalAddComponent implements OnInit {
     }
 
     // Check if any of the fields are empty, and update isVEmpty accordingly
-    if (product_name === '' || sellerSKU === '' || listing_price === '' || product_description === '' || this.categoryPath === '') {
+    if (product_name === '' || listing_price === '' || product_description === '' || this.categoryPath === '') {
       isVEmpty = false;
     }
     document.getElementById('product_name').style.borderColor = product_name ? 'green' : 'red';
-    document.getElementById('Seller_SKU').style.borderColor = sellerSKU ? 'green' : 'red';
+    // document.getElementById('Seller_SKU').style.borderColor = sellerSKU ? 'green' : 'red';
     document.getElementById('price').style.borderColor = listing_price ? 'green' : 'red';
     // document.getElementById('Brand').style.borderColor = productBrand ? 'green' : 'red';
     document.getElementById('product_description').style.borderColor = product_description ? 'green' : 'red';
