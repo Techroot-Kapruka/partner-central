@@ -1659,6 +1659,7 @@ export class DigitalAddComponent implements OnInit {
   }
 
   successAlert(data) {
+    this.addProductClicked = false;
     if (data.message_status === 'Success') {
       Swal.fire(
         'New Product Added Successfully...!',
@@ -2491,6 +2492,8 @@ export class DigitalAddComponent implements OnInit {
 
     this.colorArrayForClothes = [];
     this.sizeArrayForClothes = [];
+    this.sizeString = '';
+    this.selectedType = '';
   }
 
   deleteClothsRow(index) {
