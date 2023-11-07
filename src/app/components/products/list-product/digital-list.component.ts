@@ -1,11 +1,12 @@
 import {Component, ElementRef, AfterViewInit, Input, OnInit, ViewChild, Output, EventEmitter} from '@angular/core';
 import {ProductService} from '../../../shared/service/product.service';
 import Swal from 'sweetalert2';
-import {Router} from '@angular/router';
+import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import {error} from 'protractor';
 import {environment} from '../../../../environments/environment.prod';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal, NgbTabset} from '@ng-bootstrap/ng-bootstrap';
 import {AuthService} from '../../../shared/auth/auth.service';
+import {PendingStockAllocationShareService} from "../../../shared/service/pending-stock-allocation-share.service";
 
 @Component({
   selector: 'app-digital-list',
@@ -50,6 +51,7 @@ export class DigitalListComponent implements OnInit {
   public paginatedOnDemand = [];
   public paginatedPendingStockAllow = [];
   public filterededitProductApproval = [];
+  public filtereDpendingStockByOnDemand = [];
 
   public isAdmin = false;
   public isPartner = false;
@@ -68,6 +70,7 @@ export class DigitalListComponent implements OnInit {
   public imagedefaultPathURI = '';
   vstock: number[] = [];
   dataLoaded: boolean = false;
+  stockUpdate: boolean = false;
 
   public imagePathURI = environment.imageURIENV;
 
@@ -111,7 +114,9 @@ export class DigitalListComponent implements OnInit {
 
   @ViewChild('imagePopup') imagePopup: ElementRef;
   @ViewChild('pricePopup') pricePopup: ElementRef;
-  constructor(private productService: ProductService, private router: Router, private modal: NgbModal, private authService: AuthService) {
+  @ViewChild('ondemandTab', { static: true }) onDemandTab: NgbTabset;
+
+  constructor(private route: ActivatedRoute, private productService: ProductService, private router: Router, private modal: NgbModal, private authService: AuthService, private pendingStockShare: PendingStockAllocationShareService) {
     this.getFieldEditData();
     this.getAllProduct();
     this.hideElement();
@@ -900,30 +905,45 @@ export class DigitalListComponent implements OnInit {
           };
           this.consignmentProducts.push(or);
         }
+
         this.totalPagesOnDemand = Math.ceil(this.consignmentProducts.length / this.list_pages2);
         this.onPageChange(1,'PendingOnDemand');
       }
     }
   }
 
+  pendingStockAllocationAction(productDetail : any){
+    this.filtereDpendingStockByOnDemand = this.consignmentProducts.filter((item) => (item as any).productCode === productDetail.productCode);
+    if (this.filtereDpendingStockByOnDemand.length === 0){
+      this.filtereDpendingStockByOnDemand[0]=productDetail
+      this.pendingStockShare.setDataArray(this.filtereDpendingStockByOnDemand);
+      const url = 'shipment/add-shipment';
+      this.router.navigate([url]);
+        }else{
+      this.onDemandTab.select('ondemandTab');
+        }
+  }
+
   UpdateVirtualStocks(row: any) {
-    if (this.vstock[this.startIndex + row] === null || this.vstock[this.startIndex + row] === undefined || isNaN(this.vstock[this.startIndex + row]) || this.vstock[this.startIndex + row] < 0) {
+    if (this.vstock[this.startIndex + row] === null || this.vstock[this.startIndex + row] === undefined || isNaN(this.vstock[this.startIndex + row]) || this.stockUpdate) {
       Swal.fire(
         'error!',
         'Invalid stock value. Please enter a valid number.',
         'error'
       );
+      this.vstock[this.startIndex+ row]=null
       return;
     }
 
-    const payloard = {
-      product_code: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].productCode : this.consignmentProducts[this.startIndex + row].productCode,
-      vendor: sessionStorage.getItem('partnerId'),
-      in_stock: this.vstock[this.startIndex + row]
-    };
-    this.productService.updateStock(payloard).subscribe(
-      data => this.manageUpdateStock(data),
-    );
+      const payloard = {
+        product_code: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].productCode : this.consignmentProducts[this.startIndex + row].productCode,
+        vendor: sessionStorage.getItem('partnerId'),
+        in_stock: this.vstock[this.startIndex + row]
+      };
+      this.productService.updateStock(payloard).subscribe(
+        data => this.manageUpdateStock(data),
+      );
+
   }
 
   manageUpdateStock(data) {
@@ -1528,7 +1548,7 @@ export class DigitalListComponent implements OnInit {
     }else if (Descrip === 'PendingStockAllocation'){
       const startIndex = (this.currentPagePendingAllo - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;
-
+      this.startIndex = startIndex
       if (this.filterdPendingAllocation.length > 0){
         this.paginatedPendingStockAllow = this.filterdPendingAllocation.slice(startIndex, endIndex);
       }else{
@@ -1606,16 +1626,30 @@ export class DigitalListComponent implements OnInit {
   }
 
   onVstockChange(row: number) {
-      if (this.vstock[this.startIndex + row] < 0) {
+    if (this.filteredOnDemandProduct.length > 0){
+      if (this.vstock[this.startIndex + row] + this.filteredOnDemandProduct[this.startIndex + row].inStock < 0){
         Swal.fire({
-          title: 'Stock Cannot be a negative value',
+              title: 'Add Stock Must Be More Than In Stock',
+              text: 'Please enter a valid stock value.',
+              icon: 'warning',
+            });
+        this.vstock[this.startIndex + row] = null;
+        this.stockUpdate = true;
+      }else{
+        this.stockUpdate = false;
+      }
+    }else{
+      if (this.consignmentProducts[this.startIndex + row].inStock + this.vstock[this.startIndex + row] < 0){
+        Swal.fire({
+          title: 'Add Stock Must Be More Than In Stock',
           text: 'Please enter a valid stock value.',
           icon: 'warning',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.vstock[this.startIndex + row] = null;
-          }
         });
+        this.vstock[this.startIndex + row] = null;
+        this.stockUpdate = true;
+      }else{
+        this.stockUpdate = false;
       }
+    }
   }
 }
