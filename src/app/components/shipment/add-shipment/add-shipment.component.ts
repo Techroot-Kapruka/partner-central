@@ -2,13 +2,15 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup} from '@angular/forms';
 import Swal from 'sweetalert2';
 import {ShipmentNewService} from '../../../shared/service/shipment-new.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {isNotNullOrUndefined} from 'codelyzer/util/isNotNullOrUndefined';
 import {OrderShareService} from '../../../shared/service/order-share.service';
 import { jsPDF } from 'jspdf';
 
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {PriceChangeService} from "../../../shared/service/price-change.service";
+import {state} from "@angular/animations";
+import {PendingStockAllocationShareService} from "../../../shared/service/pending-stock-allocation-share.service";
 
 function getColorWord(colorValue) {
   const colorToWordMap = new Map([
@@ -53,6 +55,8 @@ export class AddShipmentComponent implements OnInit {
   public qtys = 0;
   public isPriceChange = 0;
   sharedData = [];
+  filteredData = [];
+  productDetails = [];
   orderRef = '';
   // isPriceChange = '';
   changeProName: any;
@@ -64,11 +68,11 @@ export class AddShipmentComponent implements OnInit {
   modalRef: any;
 
   @ViewChild('changePricePopup') changePricePopup: ElementRef;
-  constructor(private route: ActivatedRoute, private shipmentNewService: ShipmentNewService,
-              private order: OrderShareService, private modal: NgbModal, private priceChangeService: PriceChangeService) {
+  constructor(private route: ActivatedRoute, private shipmentNewService: ShipmentNewService,private router: Router,
+              private order: OrderShareService, private pendingStockShare: PendingStockAllocationShareService ,private modal: NgbModal, private priceChangeService: PriceChangeService) {
+
     this.createFormConteolerForShipment();
     this.searchProduct();
-
   }
 
   ngOnInit(): void {
@@ -78,6 +82,10 @@ export class AddShipmentComponent implements OnInit {
 
     this.order.dataArray$.subscribe(data => {
       this.sharedData = data;
+    });
+
+    this.pendingStockShare.dataArray$.subscribe(data => {
+      this.productDetails = data;
     });
 
     if (isNotNullOrUndefined(this.proCode)) {
