@@ -1593,16 +1593,16 @@ export class DigitalListComponent implements OnInit {
   }
 
   onVstockChange(row: number) {
-    if (this.vstock[this.startIndex + row] < 0) {
-      Swal.fire({
-        title: 'Stock Cannot be a negative value',
-        text: 'Please enter a valid stock value.',
-        icon: 'warning',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.vstock[this.startIndex + row] = null;
-        }
-      });
-    }
+      if (this.vstock[this.startIndex + row] < 0) {
+        Swal.fire({
+          title: 'Stock Cannot be a negative value',
+          text: 'Please enter a valid stock value.',
+          icon: 'warning',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.vstock[this.startIndex + row] = null;
+          }
+        });
+      }
   }
 }
