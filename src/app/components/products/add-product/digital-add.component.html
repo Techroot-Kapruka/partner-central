@@ -272,7 +272,7 @@
                     <span class="input-group-text">LKR</span>
                   </div>
                   <input class="form-control" id="price" type="text" required
-                         (change)="setSellingPrice()" maxlength="8" style="width: 200px" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                         (keydown)="setSellingPrice()" maxlength="8" style="width: 200px" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                   <!--(input)="formatCurrency($event)"-->
                 </div>
               </div>
