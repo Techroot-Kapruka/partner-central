@@ -300,7 +300,7 @@ export class DigitalAddComponent implements OnInit {
       (document.getElementById('Seller_SKU_2') as HTMLInputElement).value = (document.getElementById('Seller_SKU') as HTMLInputElement).value;
       (document.getElementById('Seller_SKU') as HTMLInputElement).disabled = false;
     } else {
-      (document.getElementById('Seller_SKU') as HTMLInputElement).disabled = true;
+      (document.getElementById('Seller_SKU') as HTMLInputElement).disabled = false;
     }
   }
 
@@ -1849,7 +1849,7 @@ export class DigitalAddComponent implements OnInit {
     this.categoryPath = this.categoryArray[this.indexCat].path + '>' + this.SubCategoryArray[this.indexSubCat].name + '>' + this.subSubCategoryArray[this.indexSubSubCat].name + '>' + subSubSubCatName;
   }
 
-  getAttribytes(code) {
+  getVariations(code) {
     this.attributesArray = [];
     for (const key in this.hashMap) {
       delete this.hashMap[key];
@@ -1858,8 +1858,22 @@ export class DigitalAddComponent implements OnInit {
       category_code: code
     };
     this.productService.getAttributes(payLoard).subscribe(
-      data => this.manageAttributes(data),
+      data => this.manageVariations(data),
       error => this.manageError(error)
+    );
+  }
+
+  getAttributes(code) {
+    this.attributesArray = [];
+    for (const key in this.hashMap) {
+      delete this.hashMap[key];
+    }
+    const payLoard = {
+      category_code: code
+    };
+    this.productService.getAttributes(payLoard).subscribe(
+        data => this.manageAttributes(data),
+        error => this.manageError(error)
     );
   }
 
@@ -1871,8 +1885,8 @@ export class DigitalAddComponent implements OnInit {
     return value.length === 0;
   }
 
-  private manageAttributes(data) {
-
+  private manageVariations(data) {
+    console.log(data)
     if (data.data.attribute_object != null) {
       this.attributesArray = Object.keys(data.data.attribute_object);
     }
@@ -1950,6 +1964,33 @@ export class DigitalAddComponent implements OnInit {
     }
 
     this.attributeArr = this.attributesArray;
+  }
+
+  private manageAttributes(data) {
+    console.log(data)
+    if (data.data.attribute_object != null) {
+      this.attributesArray = Object.keys(data.data.attribute_object);
+    }
+// Converting object to hash map
+    for (const key in data.data.attribute_object) {
+      this.hashMap[key] = data.data.attribute_object[key];
+    }
+
+
+    // attributes
+    for (let i = 0; i < this.attributesArray.length; i++) {
+      const key = this.attributesArray[i];
+
+      // Creating a hash map
+
+// Converting object to hash map
+      for (const key in data.data.attribute_object) {
+        this.hashMap[key] = data.data.attribute_object[key];
+      }
+
+
+      this.attributeArr = this.attributesArray;
+    }
   }
 
   formatCurrency(event: any) {

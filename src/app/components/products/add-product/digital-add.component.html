@@ -171,7 +171,7 @@
                       <div *ngFor="let category of categoryArray; let i = index"
                            [attr.data-index]="i" class="tiles">
                         <li class="li" id="{{i}}"
-                            (click)="getSub_category(category['code'] , category['path'] , i ,category['pricemargin']); getAttribytes(category['code']);"
+                            (click)="getSub_category(category['code'] , category['path'] , i ,category['pricemargin']); getVariations(category['code']);"
                             value="">{{category['path']}}
                         </li>
                       </div>
@@ -185,7 +185,7 @@
                            [attr.data-index]="i"
                            class="tiles">
                         <li class="li" id="sub{{i}}"
-                            (click)="getSub_sub_category(subCategory['code'],subCategory['name'],i,subCategory['pricemargin']) ;"
+                            (click)="getSub_sub_category(subCategory['code'],subCategory['name'],i,subCategory['pricemargin']); getAttributes(subCategory['code'])"
                             value="">{{subCategory['name']}}
                         </li>
                       </div>
@@ -199,7 +199,7 @@
                            [attr.data-index]="i"
                            class="tiles ">
                         <li class="li" id="subSub{{i}}"
-                            (click)="getsub_sub_sub_category(subsubCategory['code'],subsubCategory['name'],i,subsubCategory['pricemargin']); "
+                            (click)="getsub_sub_sub_category(subsubCategory['code'],subsubCategory['name'],i,subsubCategory['pricemargin']);getAttributes(subsubCategory['code']) "
                             value="">{{subsubCategory['name']}}
                         </li>
                       </div>
@@ -213,7 +213,7 @@
                            [attr.data-index]="i"
                            class="tiles">
                         <li class="li" id="subSubSub{{i}}"
-                            (click)="finalArrayCreater(subSubSubCategory['name'],i,subSubSubCategory['pricemargin'])"
+                            (click)="finalArrayCreater(subSubSubCategory['name'],i,subSubSubCategory['pricemargin']); getAttributes(subSubSubCategory['code'])"
                             value="">{{subSubSubCategory['name']}}
                         </li>
                       </div>
@@ -390,7 +390,7 @@
               </div>
               <div hidden class="col-md-6">
                 <input class="form-control input" style="cursor: pointer;" type="text"
-                       (click)="isAttributesCollapsed = !isAttributesCollapsed; getAttribytes(categoryCode);"
+                       (click)="isAttributesCollapsed = !isAttributesCollapsed; getVariations(categoryCode);"
                        [attr.aria-expanded]="!isAttributesCollapsed">
               </div>
             </div>
