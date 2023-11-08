@@ -187,8 +187,9 @@
                             <li>
                               <div class="box-input-file">
                                 <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
-                                <input class="upload" id="image01" type="file" formControlName="fileSource"
-                                       (change)="!isAdmin && changeValue($event, 1)" (click)="!isAdmin && loadimg(1)">
+                                <input class="upload" id="image01" type="file"
+                                       formControlName="imageOne" accept="image/jpeg"
+                                       (change)="changeValue($event, 1)" (click)="loadimg(1)">
                                 <img class="imgUpload" id="imageOneO" alt="" src="{{imagePathURI+imageOne}}">
                               </div>
                             </li>
@@ -196,8 +197,9 @@
                             <li>
                               <div class="box-input-file" *ngIf="imageOne2">
                                 <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
-                                <input class="upload" type="file" formControlName="fileSource2"
-                                       (change)="!isAdmin && changeValue2($event)" (click)="!isAdmin && loadimg(2)">
+                                <input class="upload" type="file"
+                                       formControlName="imageOne2" accept="image/jpeg"
+                                       (change)="changeValue2($event)" (click)="loadimg(2)">
                                 <img class="imgUpload" id="imageTwoO" alt="" src="{{imagePathURI+imageOne2}}">
                               </div>
                             </li>
@@ -205,8 +207,9 @@
                             <li>
                               <div class="box-input-file" *ngIf="imageOne3">
                                 <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
-                                <input class="upload" type="file" formControlName="fileSource3"
-                                       (change)="!isAdmin && changeValue3($event)" (click)="!isAdmin && loadimg(3)">
+                                <input class="upload" type="file" accept="image/jpeg"
+                                       formControlName="imageOne3"
+                                       (change)="changeValue3($event)" (click)="loadimg(3)">
                                 <img class="imgUpload" id="imageTreeE" alt="" src="{{imagePathURI+imageOne3}}">
 
                               </div>
@@ -215,8 +218,9 @@
                             <li>
                               <div class="box-input-file" *ngIf="imageOne4">
                                 <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
-                                <input class="upload" type="file" formControlName="fileSource4"
-                                       (change)="!isAdmin && changeValue4($event)" (click)="!isAdmin && loadimg(4)">
+                                <input class="upload" type="file" accept="image/jpeg"
+                                       formControlName="imageOne4"
+                                       (change)="changeValue4($event)" (click)="loadimg(4)">
                                 <img class="imgUpload" id="imageFourR" alt="" src="{{imagePathURI+imageOne4}}">
 
                               </div>
@@ -226,8 +230,9 @@
                             <li>
                               <div class="box-input-file" *ngIf="imageOne5">
                                 <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
-                                <input class="upload" type="file" formControlName="fileSource5"
-                                       (change)="!isAdmin && changeValue5($event)" (click)="!isAdmin && loadimg(5)">
+                                <input class="upload" type="file" accept="image/jpeg"
+                                       formControlName="imageOne5"
+                                       (change)="changeValue5($event)" (click)="loadimg(5)">
                                 <img class="imgUpload" id="imageFiveE" alt="" src="{{imagePathURI+imageOne5}}">
 
                               </div>
