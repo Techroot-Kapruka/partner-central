@@ -69,6 +69,7 @@ export class EditProductsComponent implements OnInit {
     public amountBefor = '';
     showmsg = false;
     showmsg1 = false;
+    public activeUpdate = false;
 
     filteredSubCategory = [];
     filteredSubSubCategory = [];
@@ -750,7 +751,6 @@ export class EditProductsComponent implements OnInit {
             data => this.setAllCategory(data),
         );
     }
-
     setAllCategory(data) {
         let cr = {};
         cr = {
@@ -758,37 +758,17 @@ export class EditProductsComponent implements OnInit {
             code: ''
         };
 
-        this.productSubSubCategoryArray.push(cr);
-      }
+        if (data.data != null) {
+            for (let i = 0; i < data.data.length; i++) {
+                cr = {
+                    name: data.data[i].name,
+                    code: data.data[i].code
+                };
+                this.productCategoryArray.push(cr);
+            }
+        }
     }
-  }
 
-  selectSubcategory(event, x: number) {
-
-    
-    switch (x) {
-      case 1:
-        const tex = (document.getElementById('category_ids') as HTMLInputElement).value;
-        this.filteredSubCategory = this.productSubCategoryArray.filter((item) => (item as any).name === tex);
-
-        this.category.get('Category2').setValue(tex);
-        this.category.get('Category3').setValue('');
-        event.target.value = ''
-        this.filteredSubSubCategory = [];
-        this.activeUpdate = true;
-
-        this.getSubcategoryForSubSub(this.filteredSubCategory[0].code);
-        break;
-      case 2:
-        const sub = (document.getElementById('category_sub_subids') as HTMLInputElement).value;
-        this.filteredSubSubCategory = this.productSubSubCategoryArray.filter((item) => (item as any).name === sub);
-
-        this.category.get('Category3').setValue(sub);
-        event.target.value = ''
-        break;
-      default:
-
-    }
 
     getSubcategoryForSubSub(code) {
         // const tex = (document.getElementById('category_id_sub_sub') as HTMLInputElement).value;
@@ -819,6 +799,7 @@ export class EditProductsComponent implements OnInit {
     }
 
     selectSubcategory(event, x: number) {
+
         switch (x) {
             case 1:
                 const tex = (document.getElementById('category_ids') as HTMLInputElement).value;
@@ -828,6 +809,7 @@ export class EditProductsComponent implements OnInit {
                 this.category.get('Category3').setValue('');
                 event.target.value = ''
                 this.filteredSubSubCategory = [];
+                this.activeUpdate = true;
 
                 this.getSubcategoryForSubSub(this.filteredSubCategory[0].code);
                 break;
@@ -839,6 +821,40 @@ export class EditProductsComponent implements OnInit {
                 event.target.value = ''
                 break;
             default:
+        }
+    }
+
+    updateSubSubCategory() {
+        if (this.filteredSubSubCategory.length > 0) {
+            const payload = {
+                column: 'category_code',
+                tblname: 'product_basic_info',
+                value: this.filteredSubSubCategory[0].code,
+                whereClause: 'product_code',
+                whereValue: this.ids
+            }
+            this.productService.editAdminSave(payload).subscribe(
+                data => {
+                    Swal.fire(
+                        'Updated!',
+                        '',
+                        'success'
+                    ),
+                        this.getProductByEdit(this.ids);
+                    this.activeUpdate = false;
+                    this.productSubSubCategoryArray = []
+                }
+            );
+
+        } else {
+            Swal.fire(
+                'Updated!',
+                '',
+                'success'
+            );
+            this.activeUpdate = false;
+            this.productSubSubCategoryArray = []
+            this.getProductByEdit(this.ids);
         }
     }
 
@@ -905,10 +921,21 @@ export class EditProductsComponent implements OnInit {
         this.old_special_notes = data.data.product.productDescription.special_notes;
         this.old_availability = data.data.product.productDescription.availability.toUpperCase();
 
-        // category
+// category
         this.parts = data.data.category_path.split('> ');
-        for (let i = 1; i <= this.parts.length; i++) {
-            this.category.get('Category' + i).setValue(this.parts[i - 1]);
+        switch (this.parts.length) {
+            case 1:
+                this.category.get('Category1').setValue(data.data.category_path);
+                break;
+            case 2:
+                this.category.get('Category1').setValue(data.data.category_path);
+                this.category.get('Category2').setValue(this.parts[1]);
+                break;
+            case 3:
+                this.category.get('Category1').setValue(data.data.category_path);
+                this.category.get('Category2').setValue(this.parts[1]);
+                this.category.get('Category3').setValue(this.parts[2]);
+                break;
         }
 
         //offer
@@ -1060,58 +1087,24 @@ export class EditProductsComponent implements OnInit {
 //   handleTabClick($event) {
 //     $event.preventDefault();
 //   }
-    saveFieldCategory(x: number) {
-        switch (x) {
-            case 1:
-                if (this.filteredSubCategory.length > 0) {
-                    const payload = {
+    saveFieldCategory() {
 
-                        column: 'category_code',
-                        tblname: 'product_basic_info',
-                        value: this.filteredSubCategory[0].code,
-                        whereClause: 'product_code',
-                        whereValue: this.ids
-                    }
-                    this.productService.editAdminSave(payload).subscribe(
-                        data => Swal.fire(
-                            'Updated!',
-                            '',
-                            'success'
-                        )
-                    );
-                } else {
-                    Swal.fire(
-                        'No Changes Found!',
-                        '',
-                        'info'
-                    );
-                }
-                break;
-            case 2:
-                if (this.filteredSubSubCategory.length > 0) {
-                    const payload = {
-                        column: 'category_code',
-                        tblname: 'product_basic_info',
-                        value: this.filteredSubSubCategory[0].code,
-                        whereClause: 'product_code',
-                        whereValue: this.ids
-                    }
-                    this.productService.editAdminSave(payload).subscribe(
-                        data => Swal.fire(
-                            'Updated!',
-                            '',
-                            'success'
-                        )
-                    );
-                } else {
-                    Swal.fire(
-                        'No Changes Found!',
-                        '',
-                        'info'
-                    );
-                }
-                break;
-            default:
+        if (this.filteredSubCategory.length > 0) {
+            const payload = {
+                column: 'category_code',
+                tblname: 'product_basic_info',
+                value: this.filteredSubCategory[0].code,
+                whereClause: 'product_code',
+                whereValue: this.ids
+            }
+            this.productService.editAdminSave(payload).subscribe(
+                data => this.updateSubSubCategory());
+        } else {
+            Swal.fire(
+                'No Changes Found!',
+                '',
+                'info'
+            );
         }
 
     }
