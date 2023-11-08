@@ -933,6 +933,8 @@ export class EditProductsComponent implements OnInit {
   }
 
   selectSubcategory(event, x: number) {
+
+    
     switch (x) {
       case 1:
         const tex = (document.getElementById('category_ids') as HTMLInputElement).value;
