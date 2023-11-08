@@ -273,7 +273,9 @@
                               <th>Price</th>
                               <th>Stock in hand</th>
                               <th>Create Date</th>
+                              <th>Action</th>
                             </tr>
+                            <!--*ngIf="isPartner"-->
                             </thead>
                             <tbody>
                             <ng-container *ngIf="filterdPendingAllocation.length > 0; else paginatedData">
@@ -306,6 +308,7 @@
                                        src="assets/images/EditImage.png" height="20px" weight="20px" title="Edit Stock">
                                 </td>
                                 <td>{{ productDetail.createDate }}</td>
+                                <td><button class="btn btn-success" (click)="pendingStockAllocationAction(productDetail)">Add Stock</button></td>
                               </tr>
                             </ng-container>
                             <ng-template #paginatedData>
@@ -341,6 +344,7 @@
                                          [value]="productDetail.in_stock"/>
                                 </td>
                                 <td>{{ productDetail.createDate }}</td>
+                                <td><button class="btn btn-success" (click)="pendingStockAllocationAction(productDetail)">Add Stock</button></td>
                               </tr>
                             </ng-template>
                             <ng-template #imagePopup let-modal>
@@ -1035,7 +1039,7 @@
               </ng-template>
             </ngb-tab>
 
-            <ngb-tab [title]="getOnDemandPro()" *ngIf="isPartner">
+            <ngb-tab #ondemandTab [title]="getOnDemandPro()" *ngIf="isPartner">
               <ng-template ngbTabContent>
                 <div class="tab-pane fade active show" id="account5" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
@@ -1081,8 +1085,10 @@
                                   {{nonActiveProduct.inStock}}
                                 </td>
                                 <td>
-                                  <input class="form-control" type="number" name="vstock" id="vstock"
-                                         pattern="[0-9]*" [(ngModel)]="vstock[startIndex+j]" (ngModelChange)="onVstockChange(j)" maxlength="5" style="width: 70%;">
+                                  <input class="form-control" name="vstock" id="vstock" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                         type = "number"
+                                         maxlength = "5"
+                                         pattern="[0-9]*" [(ngModel)]="vstock[startIndex+j]" (ngModelChange)="onVstockChange(j)"  maxlength="5" style="width: 70%;">
                                 </td>
                                 <td>
                                   <button type="button"
@@ -1110,8 +1116,10 @@
                                   {{nonActiveProduct.inStock}}
                                 </td>
                                 <td>
-                                  <input class="form-control" type="number" name="vstock" id="vstock"
-                                         pattern="[0-9]*" [(ngModel)]="vstock[startIndex+j]" (ngModelChange)="onVstockChange(j)"  style="width: 70%;">
+                                  <input class="form-control" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                         type = "number"
+                                         maxlength = "5" name="vstock" id="vstock"
+                                         pattern="[0-9]*" [(ngModel)]="vstock[startIndex+j]" (ngModelChange)="onVstockChange(j)" style="width: 70%;">
                                 </td>
                                 <td>
                                   <button type="button"

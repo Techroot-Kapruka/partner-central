@@ -4,42 +4,57 @@
     <div class="col-sm-12">
       <div class="card tab2-card">
         <div class="card-body tab2-card">
-          <ngb-tabset class="tab-coupon">
-            <ngb-tab title="Category">
-              <ng-template ngbTabContent>
+          <ngb-tabset class="tab-coupon" (tabChange)="changeTab($event)">
+            <ngb-tab title="Category" [id]="0">
+
+              <ng-template ngbTabContent >
+                <div >
                 <div class="tab-pane fade active show col-md-8" id="account" role="tabpanel"
                      aria-labelledby="account-tab">
                   <form [formGroup]="accountForm" (ngSubmit)="callingFunction()" class="needs-validation user-add"
-                        novalida>
+                        novalidate>
                     <h4>Category Details</h4>
                     <div class="form-group row">
                       <label for="txt_cat_name" class="col-xl-3 col-md-4">Name</label>
                       <input formControlName="code" hidden class="form-control col-xl-8 col-md-7" id="txt_cat_code"
                              type="text" required="">
-                      <input formControlName="categoryName" class="form-control col-xl-8 col-md-7" id="txt_cat_name"
+                      <input  formControlName="categoryName" class="form-control col-xl-8 col-md-7 catInput inputTxt" id="txt_cat_name"
                              type="text" required>
+                      <div class="col" style="margin-left: 25%;">
+                        <span id="nameError" class="errorMsg" style="display: none; color:red; position: relative; font-size: 14px;">Please enter a name</span>
+
+                      </div>
+
                     </div>
                     <div class="form-group row">
                       <label for="txt_cat_description" class="col-xl-3 col-md-4"> Description</label>
-                      <input formControlName="description" class="form-control col-xl-8 col-md-7"
+                      <input formControlName="description" class="form-control col-xl-8 col-md-7 catInput inputTxt"
                              id="txt_cat_description"
                              type="text" required="">
+                      <div class="col" style="margin-left: 25%;">
+                        <span id="descError" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Description must consist of fewer than 200 characters</span>
+
+                      </div>
                     </div>
                     <div class="form-group row">
                       <label for="txt_price_rate" class="col-xl-3 col-md-4"> Price Rate</label>
-                      <input formControlName="price_rate" class="form-control col-xl-4 col-md-7"
+                      <input formControlName="price_rate" class="form-control col-xl-4 col-md-7 catInput inputTxt"
                              id="txt_price_rate"
                              type="text" required="">
 
                       <label for="txt_price_rate" class="col-xl-3 col-md-4" style="font-weight: bold; position: relative;margin-left: -10%;"> %</label>
+                      <div class="col-8" style="margin-left: 25%">
+                        <span id="priceError" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Please enter a rate</span>
 
+                      </div>
                     </div>
+
                     <div class="form-group row" style="float: right; margin-right: 6%">
                       <div class="pull-right" style="margin-right: 13px;">
                         <button type="submit" style="display: none" id="update" class="btn btn-success">Update</button>
                       </div>
                       <div class="pull-left">
-                        <button type="submit" id="save" class="btn btn-primary">Save</button>
+                        <button type="submit" id="save" class="btn btn-primary" (click)="btnValue=0">Save</button>
                       </div>
                     </div>
                   </form>
@@ -51,7 +66,8 @@
                   <ngx-datatable class="bootstrap expandable" [rows]="proMainCat" [columnMode]="'force'"
                                  [headerHeight]="50"
                                  [footerHeight]="50" [rowHeight]="'auto'" [limit]="list_pages2" [selected]="selected"
-                                 [selectionType]="false" [selectAllRowsOnPage]="false">
+                                 [selectionType]="false" [selectAllRowsOnPage]="false"
+                  >
                     <ngx-datatable-column name="Name" [width]="30"></ngx-datatable-column>
                     <ngx-datatable-column name="Description" [width]="30"></ngx-datatable-column>
                     <ngx-datatable-column name="Price Rate" [width]="30"></ngx-datatable-column>
@@ -66,11 +82,12 @@
                     </ngx-datatable-column>
                   </ngx-datatable>
                 </div>
+                </div>
               </ng-template>
             </ngb-tab>
 
             <!--=========================================Sub Category Creating template=====================================================-->
-            <ngb-tab title="Sub Category">
+            <ngb-tab title="Sub Category" [id]="1">
               <ng-template ngbTabContent>
                 <div class="tab-pane fade active show col-md-12" id="account1" role="tabpanel"
                      aria-labelledby="account-tab">
@@ -78,23 +95,26 @@
                         novalida>
                     <h4>Sub Category Details</h4>
                     <div class="row">
-                      <div class="col-md-6">
+                      <div class="col-md-6 hiddenFields" >
                         <div class="form-group row">
-                          <label class="col-xl-4 col-md-4">Category</label>
-                          <select class="custom-select col-xl-8 col-md-7" id="select01" formControlName="catCode">
+                          <label class="col-xl-4 col-md-4" >Category</label>
+                          <select class="custom-select col-xl-8 col-md-7 catInput" id="select01" formControlName="catCode">
                             <option value="">-- Select Category --</option>
                             <option *ngFor="let productCategor of productCategoryArray"
                                     ngValue="{{productCategor['code']}}">
                               {{productCategor['name']}}
                             </option>
                           </select>
+                          <div class="col" style="margin-left: 30%">
+                            <span id="categoryError1" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Please select a category</span>
+                          </div>
                         </div>
                       </div>
                       <!-- =======editable Input for update button=========== -->
                       <div class="col-md-6">
                         <div class="form-group row">
                           <label for="validationCustom123" style="display: none" id="oldCatDev"
-                                 class="col-xl-4 col-md-4">Old Category</label>
+                                 class="col-xl-4 col-md-4">Category</label>
                           <input class="form-control col-xl-8 col-md-7" style="display: none" disabled
                                  formControlName="mainCatName"
                                  id="oldCatName"
@@ -107,36 +127,45 @@
                       <div class="col-md-6">
                         <div class="form-group row">
                           <label for="validationCustom123" class="col-xl-4 col-md-4">Name</label>
-                          <input class="form-control col-xl-8 col-md-7" formControlName="subCategoryName"
+                          <input class="form-control col-xl-8 col-md-7 catInput inputTxt" formControlName="subCategoryName"
                                  id="validationCustom123"
                                  type="text" required="">
+                          <div class="col" style="margin-left: 30%">
+                            <span id="subNameError" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Please provide a sub category name</span>
+                          </div>
                         </div>
                       </div>
                       <div class="col-md-6"></div>
                       <div class="col-md-6">
                         <div class="form-group row">
                           <label for="validationCustom2443" class="col-xl-4 col-md-4">Description</label>
-                          <input class="form-control col-xl-8 col-md-7" formControlName="subDescription"
+                          <input class="form-control col-xl-8 col-md-7 catInput inputTxt" formControlName="subDescription"
                                  id="validationCustom2443"
                                  type="text" required="">
+                          <div class="col" style="margin-left: 30%">
+                            <span id="subDescError" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Description must consists of characters less than 200</span>
+                          </div>
                         </div>
                       </div>
                       <div class="col-md-6"></div>
                       <div class="col-md-6">
                         <div class="form-group row">
                           <label for="txt_sub_price_rate" class="col-xl-4 col-md-4">Price Rate</label>
-                          <input class="form-control col-xl-7 col-md-7" formControlName="subPricerate"
+                          <input class="form-control col-xl-7 col-md-7 catInput inputTxt" formControlName="subPricerate"
                                  id="txt_sub_price_rate"
                                  type="text" required="">
                           <label for="txt_sub_price_rate" class="col-xl-1 col-md-1"
                                  style="font-weight: bold; position: relative;margin-left: -5%;"> %</label>
+                          <div class="col" style="margin-left: 30%">
+                            <span id="subPriceError" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Please provide a price rate</span>
+                          </div>
                         </div>
                       </div>
                       <div class="col-md-6"></div>
                       <div class="col-md-6">
                         <div class="form-group row" style="float: right;margin-right: 6%">
                           <div class="pull-left">
-                            <button type="submit" id="subSave" class="btn btn-primary">Save</button>
+                            <button type="submit" id="subSave" class="btn btn-primary" >save</button>
                           </div>
                         </div>
                         <input hidden formControlName="subCatCode"
@@ -186,7 +215,7 @@
 
 
             <!--++++++++++++++++++++++form Sub-Sub Category Details++++++++++++++++++++-->
-            <ngb-tab title="Sub-Sub Category">
+            <ngb-tab title="Sub-Sub Category" [id]="2">
               <ng-template ngbTabContent>
                 <div class="tab-pane fade active show col-md-12" id="account1" role="tabpanel"
                      aria-labelledby="account-tab">
@@ -194,10 +223,10 @@
                         novalida>
                     <h4>Sub-Sub Category Details</h4>
                     <div class="row">
-                      <div class="col-md-6">
+                      <div class="col-md-6 hiddenFields">
                         <div class="form-group row">
                           <label class="col-xl-4 col-md-4">Category</label>
-                          <select class="custom-select col-xl-8 col-md-7" id="category_ids"
+                          <select class="custom-select col-xl-8 col-md-7 catInput" id="category_ids"
                                   formControlName="mainCategoryMain" (change)="getSubcategory()">
                             <option value="">-- Select Category --</option>
                             <option *ngFor="let productCategor of productCategoryArray"
@@ -205,11 +234,14 @@
                               {{productCategor['name']}}
                             </option>
                           </select>
+                          <div class="col" style="margin-left: 30%">
+                            <span id="categoryError2" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Please select a Category</span>
+                          </div>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label style="display: none" id="lblMainCat" class="col-xl-4 col-md-4">Old Category</label>
+                          <label style="display: none" id="lblMainCat" class="col-xl-4 col-md-4">Category</label>
                           <input disabled
                                  style="display: none"
                                  class="form-control col-xl-8 col-md-7"
@@ -224,78 +256,92 @@
                                  required="">
                         </div>
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-6 hiddenFields">
                         <div class="form-group row">
                           <label class="col-xl-4 col-md-4">Sub Category</label>
-                          <select class="custom-select col-xl-8 col-md-7" formControlName="subCategorynameCt">
+                          <select class="custom-select col-xl-8 col-md-7 catInput" formControlName="subCategorynameCt" id="subCategorySelect">
                             <option value="">-- Select Sub Category --</option>
                             <option *ngFor="let productSubCategory of productSubCategoryArray"
                                     value="{{productSubCategory['code']}}">{{productSubCategory['name']}}
                             </option>
                           </select>
+
+                          <div class="col" style="margin-left: 30%">
+                            <span id="subCategoryError2" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Please select a Sub Category</span>
+                          </div>
                         </div>
                       </div>
-                      <div class="col-md-6">
-                        <div class="form-group row">
-                          <label for="validationCustom1"
-                                 style="display: none"
-                                 disabled=""
-                                 id="lblOldSubCat"
-                                 class="col-xl-4 col-md-4">Old Sub Category</label>
-                          <input formControlName="subCategoryName"
-                                 disabled
-                                 style="display: none"
-                                 class="form-control col-xl-8 col-md-7"
-                                 id="subCategoryName"
-                                 type="text" required="">
-                          <input formControlName="subCategoryCode"
-                                 hidden
-                                 class="form-control col-xl-8 col-md-7"
-                                 id="subCategoryCode"
-                                 type="text" required="">
-                          <input formControlName="subSubCategoryCode"
-                                 hidden
-                                 class="form-control col-xl-8 col-md-7"
-                                 id="subSubCategoryCode"
-                                 type="text"
-                                 required="">
+                        <div class="col-md-6">
+                          <div class="form-group row">
+                            <label for="validationCustom1"
+                                   style="display: none"
+                                   disabled=""
+                                   id="lblOldSubCat"
+                                   class="col-xl-4 col-md-4">Sub Category</label>
+                            <input formControlName="subCategoryName"
+                                   disabled
+                                   style="display: none"
+                                   class="form-control col-xl-8 col-md-7"
+                                   id="subCategoryName"
+                                   type="text" required="">
+                            <input formControlName="subCategoryCode"
+                                   hidden
+                                   class="form-control col-xl-8 col-md-7"
+                                   id="subCategoryCode"
+                                   type="text" required="">
+                            <input formControlName="subSubCategoryCode"
+                                   hidden
+                                   class="form-control col-xl-8 col-md-7"
+                                   id="subSubCategoryCode"
+                                   type="text"
+                                   required="">
+                          </div>
                         </div>
-                      </div>
+
                       <div class="col-md-6">
                         <div class="form-group row">
                           <label for="validationCustom1" class="col-xl-4 col-md-4">Name</label>
-                          <input formControlName="subSubCategoryName" class="form-control col-xl-8 col-md-7"
+                          <input formControlName="subSubCategoryName" class="form-control col-xl-8 col-md-7 catInput inputTxt"
                                  id="validationCustom1"
                                  type="text" required="">
+                          <div class="col" style="margin-left: 30%">
+                            <span id="subSubNameError" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Please provide a Sub Sub Category Name</span>
+                          </div>
                         </div>
                       </div>
                       <div class="col-md-6"></div>
                       <div class="col-md-6">
                         <div class="form-group row">
-                          <label for="validationCustom2" class="col-xl-4 col-md-4">Description</label>
+                          <label for="validationCustom2" class="col-xl-4 col-md-4 catInput inputTxt">Description</label>
                           <input formControlName="subSubCategoryDescription"
-                                 class="form-control col-xl-8 col-md-7"
+                                 class="form-control col-xl-8 col-md-7 catInput"
                                  id="validationCustom2"
                                  type="text"
                                  required="">
+                          <div class="col" style="margin-left: 30%">
+                            <span id="subSubDescError" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Description must consist of fewer than 200 characters</span>
+                          </div>
                         </div>
                       </div>
                       <div class="col-md-6"></div>
                       <div class="col-md-6">
                         <div class="form-group row">
                           <label for="txt_subs_price_rate" class="col-xl-4 col-md-4">Price Rate</label>
-                          <input class="form-control col-xl-7 col-md-7" formControlName="subsubPricerate"
+                          <input class="form-control col-xl-7 col-md-7 catInput inputTxt" formControlName="subsubPricerate"
                                  id="txt_subs_price_rate"
                                  type="text" required="">
                           <label for="txt_subs_price_rate" class="col-xl-1 col-md-1"
                                  style="font-weight: bold; position: relative;margin-left: -5%;"> %</label>
+                          <div class="col" style="margin-left: 30%">
+                            <span id="subSubPriceError" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Please provide a Price Rate</span>
+                          </div>
                         </div>
                       </div>
                       <div class="col-md-6"></div>
                       <div class="col-md-6">
                         <div class="form-group row" id="subSubSave" style="float: right;margin-right: 6%">
                           <div class="pull-left">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary" (click)="btnValue=0">Save</button>
                           </div>
                         </div>
                         <div class="form-group row" id="subSubEdit"
@@ -337,7 +383,7 @@
             </ngb-tab>
 
 
-            <ngb-tab title="Sub-Sub-Sub Category">
+            <ngb-tab title="Sub-Sub-Sub Category" [id]="3">
               <ng-template ngbTabContent>
                 <div class="tab-pane fade active show col-md-12" id="account1" role="tabpanel"
                      aria-labelledby="account-tab">
@@ -345,10 +391,10 @@
                         (ngSubmit)="saveSubSubSubcategory()">
                     <h4>Sub-Sub-Sub Category Details</h4>
                     <div class="row">
-                      <div class="col-md-6">
+                      <div class="col-md-6 hiddenFields">
                         <div class="form-group row">
                           <label class="col-xl-4 col-md-4">Category</label>
-                          <select class="custom-select col-xl-8 col-md-7" id="category_id_sub_sub"
+                          <select class="custom-select col-xl-8 col-md-7 catInput" id="category_id_sub_sub"
                                   formControlName="catCode3" (change)="getSubcategoryForSubSubSub()">
                             <option value="">-- Select Category --</option>
                             <option *ngFor="let productCategor of productCategoryArray"
@@ -356,11 +402,14 @@
                               {{productCategor['name']}}
                             </option>
                           </select>
+                          <div class="col" style="margin-left: 30%">
+                            <span id="categoryError3" class="errorMsg" style="display:none; color: red; position: relative; font-size: 14px">Please select a category</span>
+                          </div>
                         </div>
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-6" id="oldCategoryContent">
                         <div class="form-group row">
-                          <label style="display: none" id="lblMainCatInSub3" class="col-xl-4 col-md-4">Old
+                          <label style="display: none" id="lblMainCatInSub3" class="col-xl-4 col-md-4">
                             Category</label>
                           <input disabled style="display: none" class="form-control col-xl-8 col-md-7"
                                  formControlName="mainCategoryForSubSubSub"
@@ -372,21 +421,24 @@
                                  type="text" required="">
                         </div>
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-6 hiddenFields">
                         <div class="form-group row">
                           <label class="col-xl-4 col-md-4">Sub Category</label>
-                          <select class="custom-select col-xl-8 col-md-7" id="subCategoryIdInSubSubSub"
+                          <select class="custom-select col-xl-8 col-md-7 catInput" id="subCategoryIdInSubSubSub"
                                   formControlName="SubCatCode3" (change)="getSubSubcategory()">
                             <option value="">-- Select Sub Category --</option>
                             <option *ngFor="let productSubCategory of productSubCategoryArray"
                                     value="{{productSubCategory['code']}}">{{productSubCategory['name']}}
                             </option>
                           </select>
+                          <div class="col" style="margin-left: 30%">
+                            <span id="subCategoryError3" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Please select a Sub Category</span>
+                          </div>
                         </div>
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-6" id="oldSubCategoryContent">
                         <div class="form-group row">
-                          <label style="display: none" id="lblOldSubCatInSub3" class="col-xl-4 col-md-4">Old sub
+                          <label style="display: none" id="lblOldSubCatInSub3" class="col-xl-4 col-md-4">Sub
                             Category</label>
                           <input disabled style="display: none" class="form-control col-xl-8 col-md-7"
                                  formControlName="oldSubCategoryNameForSubSubSub"
@@ -398,20 +450,23 @@
                                  type="text" required="">
                         </div>
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-6 hiddenFields">
                         <div class="form-group row">
                           <label class="col-xl-4 col-md-4">Sub Sub Category</label>
-                          <select class="custom-select col-xl-8 col-md-7" formControlName="subSubCatCode3">
+                          <select class="custom-select col-xl-8 col-md-7 catInput" formControlName="subSubCatCode3" id="subSubCatSelect">
                             <option value="">-- Select Sub Sub Category --</option>
                             <option *ngFor="let productSubSubCategory of productSubSubCategoryArray"
                                     value="{{productSubSubCategory['code']}}">{{productSubSubCategory['name']}}
                             </option>
                           </select>
+                          <div class="col" style="margin-left: 30%">
+                            <span id="subSubCategoryError2" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Please select a Sub Sub Category</span>
+                          </div>
                         </div>
                       </div>
-                      <div class="col-md-6">
+                      <div class="col-md-6" id="oldSubSubSubCatContent" >
                         <div class="form-group row">
-                          <label style="display: none" id="lblSubCatForSubSubSub" class="col-xl-4 col-md-4">Old Sub Sub
+                          <label style="display: none" id="lblSubCatForSubSubSub" class="col-xl-4 col-md-4">Sub Sub
                             Category</label>
                           <input disabled style="display: none" class="form-control col-xl-8 col-md-7"
                                  formControlName="oldSubSubCategoryNameForSubSubSub"
@@ -426,36 +481,45 @@
                       <div class="col-md-6">
                         <div class="form-group row">
                           <label for="validationCustom1" class="col-xl-4 col-md-4">Name</label>
-                          <input formControlName="subSubSubCategoryName" class="form-control col-xl-8 col-md-7"
+                          <input formControlName="subSubSubCategoryName" class="form-control col-xl-8 col-md-7 catInput inputTxt"
                                  id="validationCustom3"
                                  type="text" required="">
+                          <div class="col" style="margin-left: 30%">
+                            <span id="subSubSubNameError" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Please provide a Sub Sub Sub Category name</span>
+                          </div>
                         </div>
                       </div>
                       <div class="col-md-6"></div>
                       <div class="col-md-6">
                         <div class="form-group row">
                           <label for="validationCustom2" class="col-xl-4 col-md-4">Description</label>
-                          <input formControlName="subSubSubCategoryDescription" class="form-control col-xl-8 col-md-7"
-                                 id="validationCustom3"
+                          <input formControlName="subSubSubCategoryDescription" class="form-control col-xl-8 col-md-7 catInput inputTxt"
+                                 id="descValidationCustom3"
                                  type="text" required="">
+                          <div class="col" style="margin-left: 30%">
+                            <span id="subSubSubDescError" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Description must consist of fewer than 200 characters</span>
+                          </div>
                         </div>
                       </div>
                       <div class="col-md-6"></div>
                       <div class="col-md-6">
                         <div class="form-group row">
                           <label for="txt_subsub_price_rate" class="col-xl-4 col-md-4">Price Rate</label>
-                          <input class="form-control col-xl-7 col-md-8" formControlName="subsubsubPricerate"
+                          <input class="form-control col-xl-7 col-md-8 catInput inputTxt" formControlName="subsubsubPricerate"
                                  id="txt_subsub_price_rate"
                                  type="text" required="">
                           <label for="txt_subsub_price_rate" class="col-xl-1 col-md-0"
                                  style="font-weight: bold; position: relative;margin-left: -5%;"> %</label>
+                          <div class="col" style="margin-left: 30%">
+                            <span id="subSubSubPriceError" class="errorMsg" style="display:none; color: red; position: relative;font-size: 14px">Please provide a Price Rate</span>
+                          </div>
                         </div>
                       </div>
                       <div class="col-md-6"></div>
                       <div class="col-md-6">
                         <div class="form-group row" id="subSubSubSave" style="float: right;margin-right: 6%">
                           <div class="pull-right">
-                            <button type="submit" class="btn btn-primary">Save</button>
+                            <button type="submit" class="btn btn-primary" (click)="btnValue=0">Save</button>
                           </div>
                         </div>
                         <div class="form-group row" id="subSubSubEdit"
