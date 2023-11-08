@@ -153,7 +153,7 @@ export class DigitalListComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.stopLoading();
-    }, 12000);
+    }, 16000);
   }
 
   stopLoading() {
@@ -167,9 +167,12 @@ export class DigitalListComponent implements OnInit {
       this.EnableStockEdit = true;
     } else if (sessionStorage.getItem('userRole') === 'ROLE_QA') {
       this.qaTables = false;
-    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' ) {
       this.qaTables = true;
       this.EnableStockEdit = true;
+    }else if (sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
+        this.qaTables = true;
+        this.EnableStockEdit = true;
     } else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER') {
       this.qaTables = true;
     } else if (sessionStorage.getItem('userRole') === 'ROLE_STORES_MANAGER') {

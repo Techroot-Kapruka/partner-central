@@ -22,28 +22,41 @@ export class HeaderComponent implements OnInit {
   @Output() rightSidebarEvent = new EventEmitter<boolean>();
 
   constructor(public navServices: NavService, private authService: AuthService, private router: Router) {
-    if (this.userRole === 'ROLE_ADMIN') {
-      this.userRoleType = 'ADMIN';
-      this.imageName = 'man.png';
-    } else if (this.userRole === 'ROLE_PARTNER') {
-      this.userRoleType = 'PARTNER';
-      this.getPartnerImage();
-    } else if (this.userRole === 'ROLE_QA') {
-      this.userRoleType = 'QUALITY ASSURANCE';
-      this.imageName = 'qa_user.jpeg';
-    } else if (this.userRole === 'ROLE_GUEST') {
-      this.userRoleType = 'GUEST';
-      this.imageName = 'man.png';
-    } else if (this.userRole === 'ROLE_CATEGORY_MANAGER') {
-      this.userRoleType = 'CATEGORY MANAGER';
-      this.imageName = 'man.png';
-    } else if (this.userRole === 'ROLE_STORES_MANAGER') {
-      this.userRoleType = 'STORES_MANAGER';
-      this.imageName = 'man.png';
-    } else {
-      this.userRoleType = 'USER';
-      this.imageName = 'man.png';
+    switch (this.userRole) {
+      case 'ROLE_ADMIN':
+        this.userRoleType = 'ADMIN';
+        this.imageName = 'man.png';
+        break;
+      case 'ROLE_PARTNER':
+        this.userRoleType = 'PARTNER';
+        this.getPartnerImage();
+        break;
+      case 'ROLE_QA':
+        this.userRoleType = 'QUALITY ASSURANCE';
+        this.imageName = 'qa_user.jpeg';
+        break;
+      case 'ROLE_GUEST':
+        this.userRoleType = 'GUEST';
+        this.imageName = 'man.png';
+        break;
+      case 'ROLE_SUPER_ADMIN':
+        this.userRoleType = 'SUPER ADMIN';
+        this.imageName = 'man.png';
+        break;
+      case 'ROLE_CATEGORY_MANAGER':
+        this.userRoleType = 'CATEGORY MANAGER';
+        this.imageName = 'man.png';
+        break;
+      case 'ROLE_STORES_MANAGER':
+        this.userRoleType = 'STORES_MANAGER';
+        this.imageName = 'man.png';
+        break;
+      default:
+        this.userRoleType = 'USER';
+        this.imageName = 'man.png';
+        break;
     }
+
   }
 
   collapseSidebar() {
