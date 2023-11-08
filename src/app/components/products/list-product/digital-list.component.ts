@@ -254,76 +254,13 @@ export class DigitalListComponent implements OnInit {
     this.productService.getPendingStockAllocationList(busName, categoryID).subscribe(
       data => this.getPendingStockAllocationList(data),
     );
-    // if (userRole === 'ROLE_ADMIN') {
-    //   // this.productService.getAllProducts().subscribe(
-    //   //   data => this.LoadAllProduct(data),
-    //   // );
-    //
-    // } else if (userRole === 'ROLE_CATEGORY_MANAGER') {
-    //   // const payLoard = {
-    //   //   user_u_id: sessionStorage.getItem('userId')
-    //   // };
-    //   // this.productService.getAllProductsByCatManager(payLoard).subscribe(
-    //   //   data => this.LoadAllProduct(data),
-    //   // );
-    //   this.productService.getProductByBussiness(busName, categoryID).subscribe(
-    //     data => this.getSelectedProductManage(data),
-    //   );
-    // } else if (userRole === 'ROLE_PARTNER' || userRole === 'ROLE_USER') {
-    //   this.productService.getProductByBussiness(busName, categoryID).subscribe(
-    //     data => this.getSelectedProductManage(data),
-    //   );
-    // }
+
   }
 
-  LoadAllProduct(data) {
-    this.startIndex = 0;
-    this.list_pages = [];
 
-    if (data.data == null) {
-    } else {
-      const lengthRes = data.data.length;
-      for (let i = 0; i < lengthRes; i++) {
-        const or = {
-          image: (data.data[i].productImage && data.data[i].productImage.image1 ? data.data[i].productImage.image1.split('/product')[1] : '') || '',
-          title: data.data[i].title,
-          productCode: data.data[i].product_code,
-          price: (data.data[i].productVariation && data.data[i].productVariation[0] ? data.data[i].productVariation[0].selling_price : 0),
-          in_stock: data.data[i].in_stock,
-          createDate: data.data[i].create_date,
-          vendor: data.data[i].vendor,
-          categoryPath: data.data[i].categoryPath,
-          action: ''
-        };
-        this.list_pages.push(or);
-      }
-      this.totalPages = Math.ceil(this.list_pages.length / this.list_pages2);
-    }
-  }
 
-  getSelectedPartnerAllocationProduct() {
-    const name = (document.getElementById('select_pro') as HTMLInputElement).value;
-    this.productService.getAllActiveProductList(name, this.categoryUID).subscribe(
-      data => this.getSelectedPartnerAllocationProductManage(data),
-      error => this.errorOrderManage(error)
-    );
-  }
 
-  getSelectedPartnerSuspendedProduct(){
-    const name = (document.getElementById('select_pro') as HTMLInputElement).value;
-    this.productService.getSuspendedProofVendor(name, this.categoryUID).subscribe(
-      data => this.LoadSuspendedProofVendor(data),
-      error => this.errorOrderManage(error)
-    );
-  }
 
-  getSelectedPartnerOutProduct(){
-    const name = (document.getElementById('select_pro') as HTMLInputElement).value;
-    this.productService.getOutofStockofVendor(name, this.categoryUID).subscribe(
-      data => this.LoadOutofStockofVendor(data),
-      error => this.errorOrderManage(error)
-    );
-  }
 
   getPendingStockAllocationList(data){
     this.pending_stock_allocation = [];
@@ -815,11 +752,6 @@ export class DigitalListComponent implements OnInit {
   }
 
 
-  checkForTheQa(value) {
-
-    const url = 'products/digital/qa-approve-product/' + this.aqnonCheckProduct[value].productCode;
-    this.router.navigate([url]);
-  }
 
   manageApproveProduct(data) {
     Swal.fire(
@@ -830,19 +762,7 @@ export class DigitalListComponent implements OnInit {
     this.getNonActiveProdcut();
   }
 
-  editGetProduct(index) {
 
-    if (this.filteredPendingQC.length > 0) {
-      const productCode = this.filteredPendingQC[this.startIndex + index].productCode;
-      const url = 'products/digital/digital-edit-product/' + productCode;
-      this.router.navigate([url]);
-    } else {
-      const productCode = this.approvalPartnerProductList[this.startIndex + index].productCode;
-      const url = 'products/digital/digital-edit-product/' + productCode;
-      this.router.navigate([url]);
-    }
-
-  }
 
   editGetProductOS(index) {
     /*const productCode = this.list_outof_stock[index].productCode;
