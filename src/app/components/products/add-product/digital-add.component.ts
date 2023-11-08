@@ -59,11 +59,13 @@ export class DigitalAddComponent implements OnInit {
 
   public keyArrays = [];
   attributesKeyArr = [];
+  defaultAndVariationOptions = [];
   public isSelect = false;
   public isAvailableVariation = false;
   public isDivDisabled = true;
   public isAttrDisabled = true;
   public sellerSku = '';
+  public selectedValue = 'Choose Color';
   public emptyHashMap = true;
   selectedVariationKey = null;
   addProductClicked = false;
@@ -1649,7 +1651,6 @@ export class DigitalAddComponent implements OnInit {
     this.sizeArrayForClothes = [];
     this.sizeString = SizeType;
     this.selectedType = SizeType;
-
   }
 
   loadMore() {
@@ -1668,7 +1669,6 @@ export class DigitalAddComponent implements OnInit {
 
 
   AddToTable() {
-
     if (this.colorArrayForClothes.length === 0) {
       Swal.fire(
         'Oops',
@@ -1688,6 +1688,52 @@ export class DigitalAddComponent implements OnInit {
     let tableData = {};
     this.matchCountOfSizeAndColorsArrays = true;
 
+    switch (this.selectedType) {
+      case 'FREE SIZE':
+        console.log('good to go')
+        break;
+
+      case '':
+        Swal.fire(
+          'Oops',
+          'Please Select Size Type',
+          'warning'
+        );
+        return;
+        break;
+
+      default:
+        if (this.sizeArrayForClothes.length === 0){
+          Swal.fire(
+            'Oops',
+            'Please Select Size',
+            'warning'
+          );
+          return;
+        }
+    }
+
+    if (!this.selectedType){
+      Swal.fire(
+        'Oops',
+        'Please Select Size Type',
+        'warning'
+      );
+      return;
+    }
+
+      if (this.clothesArray.length > 0 && this.clothesArray[0].type_ !== this.selectedType){
+        Swal.fire(
+          'Oops',
+          'Please Select Same Size Type',
+          'warning'
+        );
+        const size = document.getElementById('clothesSizeUk') as HTMLSelectElement;
+        size.value = '';
+        this.sizeArrayForClothes=[]
+        return;
+      }
+
     if (this.isClothing) {
       for (let i = 0; i < this.colorArrayForClothes.length; i++) {
         if (this.sizeArrayForClothes.length === 0) {
@@ -1701,7 +1747,6 @@ export class DigitalAddComponent implements OnInit {
           this.clothesArray.push(tableData);
         }
         for (let j = 0; j < this.sizeArrayForClothes.length; j++) {
-
           tableData = {
             type_: type,
             gender_: gender,
@@ -1710,7 +1755,6 @@ export class DigitalAddComponent implements OnInit {
             sku_: `${this.sellerSku}-${this.getColorWord(this.colorArrayForClothes[i])}-${type}-${this.sizeArrayForClothes[j]}`
           };
           this.clothesArray.push(tableData);
-
         }
       }
     } else {
@@ -1727,6 +1771,10 @@ export class DigitalAddComponent implements OnInit {
 
     this.colorArrayForClothes = [];
     this.sizeArrayForClothes = [];
+    const colorSelect = document.getElementById('colorSelect') as HTMLSelectElement;
+    const clothesSizeUk = document.getElementById('clothesSizeUk') as HTMLSelectElement;
+    colorSelect.value = '';
+    clothesSizeUk.value = '';
   }
 
   deleteClothsRow(index) {
@@ -1736,6 +1784,10 @@ export class DigitalAddComponent implements OnInit {
 
   removeColorForClothes(i) {
     this.colorArrayForClothes.splice(i, 1);
+    if (this.colorArrayForClothes.length === 0) {
+      const colorSelect = document.getElementById('colorSelect') as HTMLSelectElement;
+      colorSelect.value = '';
+    }
   }
 
   removeSizeForClothes(i) {
@@ -1753,7 +1805,23 @@ export class DigitalAddComponent implements OnInit {
     }
   }
 
+  selectColor(event){
+    const selectedVariation = event.target.value;
+    if(selectedVariation){
+      console.log('true')
+      this.selectColorErrorStyle = '';
+      if (!this.colorArrayForClothes.includes(selectedVariation)) {
+        this.colorArrayForClothes.push(selectedVariation);
+        this.colorArrayForClothesJob = this.colorArrayForClothes;
+      } else {
+        // Handle the case when the color already exists (e.g., show an error message)
+      }
+    }
+  }
+
   onChange($event) {
+    console.log('select color')
+    console.log($event.value)
     const selectedVariation = $event.value;
     this.selectColorErrorStyle = '';
 
@@ -1869,6 +1937,8 @@ export class DigitalAddComponent implements OnInit {
   }
 
   private manageAttributes(data) {
+    console.log('data!!!!!!!!!!!')
+    console.log(data)
 
     if (data.data.attribute_object != null) {
       this.attributesArray = Object.keys(data.data.attribute_object);
@@ -1890,12 +1960,15 @@ export class DigitalAddComponent implements OnInit {
         this.variationvalueArrayForNonObject.push(key);
 
       } else {
-        this.keyArrays = Object.keys(obj);
+        this.keyArrays = Object.keys(obj).sort();
         for (let i = 0; i < this.keyArrays.length; i++) {
           this.hashmapForVariationsObj[this.keyArrays[i]] = obj[this.keyArrays[i]];
         }
         this.variationvalueSizeTypeObjArray.push(obj);
         this.variationvalueArrayObject.push(key);
+
+        console.log('keyARray')
+        console.log(this.keyArrays)
       }
     }
     // Creating a hash map
@@ -2086,7 +2159,8 @@ export class DigitalAddComponent implements OnInit {
         }
       }
     );
-
+    // this.variationOptions.push({value: 'default', label: 'Choose Color'})
+    // console.log(this.defaultAndVariationOptions)
   }
 
   onColorChange($event) {
