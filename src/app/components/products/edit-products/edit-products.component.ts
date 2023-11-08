@@ -758,15 +758,36 @@ export class EditProductsComponent implements OnInit {
             code: ''
         };
 
-        if (data.data != null) {
-            for (let i = 0; i < data.data.length; i++) {
-                cr = {
-                    name: data.data[i].name,
-                    code: data.data[i].code
-                };
-                this.productCategoryArray.push(cr);
-            }
-        }
+        this.productSubSubCategoryArray.push(cr);
+      }
+    }
+  }
+
+  selectSubcategory(event, x: number) {
+
+    
+    switch (x) {
+      case 1:
+        const tex = (document.getElementById('category_ids') as HTMLInputElement).value;
+        this.filteredSubCategory = this.productSubCategoryArray.filter((item) => (item as any).name === tex);
+
+        this.category.get('Category2').setValue(tex);
+        this.category.get('Category3').setValue('');
+        event.target.value = ''
+        this.filteredSubSubCategory = [];
+        this.activeUpdate = true;
+
+        this.getSubcategoryForSubSub(this.filteredSubCategory[0].code);
+        break;
+      case 2:
+        const sub = (document.getElementById('category_sub_subids') as HTMLInputElement).value;
+        this.filteredSubSubCategory = this.productSubSubCategoryArray.filter((item) => (item as any).name === sub);
+
+        this.category.get('Category3').setValue(sub);
+        event.target.value = ''
+        break;
+      default:
+
     }
 
     getSubcategoryForSubSub(code) {
