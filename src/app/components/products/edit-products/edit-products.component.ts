@@ -10,6 +10,7 @@ import {environment} from '../../../../environments/environment.prod';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
 import {CategoryService} from "../../../shared/service/category.service";
 import {addWarning} from "@angular-devkit/build-angular/src/utils/webpack-diagnostics";
+import {ImageService} from "../../../shared/service/image.service";
 
 
 @Component({
@@ -142,7 +143,16 @@ export class EditProductsComponent implements OnInit {
     }
   }
 
+    constructor(private categoryService: CategoryService, private router: Router, private _Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService, private imageService: ImageService) {
+        this.ids = '';
+        this.getAllCategory();
+        this._Activatedroute.paramMap.subscribe(params => {
+            this.getProductByEdit(params.get('id'));
+            this.ids = params.get('id');
+        });
+
   getImages() {
+
 
     let payloard = {
       product_code: this.ids
@@ -345,9 +355,93 @@ export class EditProductsComponent implements OnInit {
       (document.getElementById('imageOneO') as HTMLInputElement).src = reader.result.toString();
       (document.getElementById('mainImage') as HTMLInputElement).src = reader.result.toString();
 
-    };
 
-    // ========================================================
+    /*
+    calculte price using Amount
+     */
+
+
+    /*
+    calculte price using rate
+     */
+
+
+    imageControlMethord() {
+        this.imageCliant = new FormGroup({
+            imageOne: new FormControl(''),
+            imageOne2: new FormControl(''),
+            imageOne3: new FormControl(''),
+            imageOne4: new FormControl(''),
+            imageOne5: new FormControl(''),
+            fileSource: new FormControl(''),
+            fileSource2: new FormControl(''),
+            fileSource3: new FormControl(''),
+            fileSource4: new FormControl(''),
+            fileSource5: new FormControl(''),
+        });
+        this.checkBoxCon = new FormGroup({
+            productGroup: new FormControl(''),
+        });
+
+        this.maintainStock = new FormGroup({
+            maintainStockController: new FormControl(true),
+        });
+
+        this.productGroupCon = new FormGroup({
+            proGAmount: new FormControl(''),
+            proGRate: new FormControl(''),
+            proGCostPrice: new FormControl(''),
+            qty: new FormControl(''),
+            proGSellingPrice: new FormControl(''),
+        });
+    }
+
+    removeimg(x: number) {
+        switch (x) {
+            case 1:
+
+                this.imageCliant.patchValue({
+                    fileSource: '',
+                    imageOne: '',
+                });
+                (document.getElementById('imageOneO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+                break;
+            case 2:
+                this.imageCliant.patchValue({
+                    fileSource2: '',
+                    imageOne2: '',
+                });
+                (document.getElementById('imageTwoO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+                break;
+            case 3:
+                this.imageCliant.patchValue({
+                    fileSource3: '',
+                    imageOne3: '',
+                });
+                (document.getElementById('imageTreeE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+                break;
+            case 4:
+                this.imageCliant.patchValue({
+                    fileSource4: '',
+                    imageOne4: '',
+                });
+                (document.getElementById('imageFourR') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+                break;
+            case 5:
+                this.imageCliant.patchValue({
+                    fileSource5: '',
+                    imageOne5: '',
+                });
+                (document.getElementById('imageFiveE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+                break;
+        }
+    }
+
+    loadimg(x: number) {
+        switch (x) {
+            case 1:
+                this.selectedimg = this.imageOne
+                break;
 
     if (event.target.files.length > 0) {
       const file = event.target.files[0];
@@ -384,181 +478,396 @@ export class EditProductsComponent implements OnInit {
         } else {
           resolve(); // Resolve the promise to continue with further actions
         }
+
+        // Image upload validation
+        const mimeType = event.target.files[0].type;
+
+        if (!mimeType.match(/^image\/jpeg$/i)) {
+            Swal.fire(
+                'Error',
+                'Please select a JPEG (jpg) image.',
+                'warning'
+            );
+            return; // Stop further actions if the image is not a JPEG
+        }
+
+        // Check the image resolution
+        let image = new Image();
+        image.src = URL.createObjectURL(event.target.files[0]);
+
+        // Create a promise to hold the async operation
+        const checkImageResolution = new Promise<void>((resolve, reject) => {
+            image.onload = () => {
+                if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+                    Swal.fire(
+                        'Error',
+                        'The maximum resolution supported for images is 5000x5000 pixels.',
+                        'error'
+                    );
+                    reject('Invalid image resolution'); // Reject the promise to stop further actions
+                } else {
+                    resolve(); // Resolve the promise to continue with further actions
+                }
+            };
+        });
+
+        try {
+            // Wait for the image resolution check to complete
+            await checkImageResolution;
+
+
+            // Display the image
+            const reader = new FileReader();
+            reader.readAsDataURL(event.target.files[0]);
+
+
+            reader.onload = (_event) => {
+                (document.getElementById('imageOneO') as HTMLInputElement).src = reader.result.toString();
+                (document.getElementById('mainImage') as HTMLInputElement).src = reader.result.toString();
+            };
+
+            // Upload and handle the image
+            if (event.target.files.length > 0) {
+                const file = event.target.files[0];
+                this.imageService.resizeImage(file)
+                    .then((resizedFile) => {
+                        this.imageCliant.patchValue({
+                            fileSource: resizedFile
+                        });
+                    })
+                    .catch((error) => {
+                        Swal.fire(
+                            'error',
+                            'Image upload error: ' + error,
+                            'error'
+                        );
+                    });
+            }
+        } catch (error) {
+            Swal.fire(
+                'Error',
+                'The maximum resolution supported for images is 5000x5000 pixels.',
+                'error'
+            );
+        }
+    }
+
+    async changeValue2(event) {
+        if (event.target.files.length === 0) {
+            return;
+        }
+        // Image upload validation
+        const mimeType = event.target.files[0].type;
+
+        if (!mimeType.match(/^image\/jpeg$/i)) {
+            Swal.fire(
+                'Error',
+                'Please select a JPEG (jpg) image.',
+                'warning'
+            );
+            return;
+        }
+        // Check the image resolution
+        let image = new Image();
+        image.src = URL.createObjectURL(event.target.files[0]);
+
+        // Create a promise to hold the async operation
+        const checkImageResolution = new Promise<void>((resolve, reject) => {
+            image.onload = () => {
+                if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+                    Swal.fire(
+                        'Error',
+                        'The maximum resolution supported for images is 5000x5000 pixels.',
+                        'error'
+                    );
+                    this.removeimg(2);
+                    reject('Invalid image resolution'); // Reject the promise to stop further actions
+                } else {
+                    resolve(); // Resolve the promise to continue with further actions
+                }
+            };
+        });
+
+        try {
+            // Wait for the image resolution check to complete
+            await checkImageResolution;
+
+            // Continue with further actions here because the image is valid
+
+
+            // Display the image
+            const reader = new FileReader();
+            reader.readAsDataURL(event.target.files[0]);
+
+            reader.onload = (_event) => {
+                (document.getElementById('imageTwoO') as HTMLInputElement).src = reader.result.toString();
+            };
+
+            // Upload and handle the image
+            if (event.target.files.length > 0) {
+                const file = event.target.files[0];
+                this.imageService.resizeImage(file)
+                    .then((resizedFile) => {
+                        this.imageCliant.patchValue({
+                            fileSource2: resizedFile
+                        });
+                    })
+                    .catch((error) => {
+                        this.removeimg(2);
+                        Swal.fire(
+                            'error',
+                            'Image upload error: ' + error,
+                            'error'
+                        );
+                    });
+            }
+        } catch (error) {
+            Swal.fire(
+                'Error',
+                'The maximum resolution supported for images is 5000x5000 pixels.',
+                'error'
+            );
+        }
+    }
+
+    async changeValue3(event) {
+
+        if (event.target.files.length === 0) {
+            return;
+        }
+        // Image upload validation
+        // Image upload validation
+        const mimeType = event.target.files[0].type;
+
+        if (!mimeType.match(/^image\/jpeg$/i)) {
+            Swal.fire(
+                'Error',
+                'Please select a JPEG (jpg) image.',
+                'warning'
+            );
+            return;
+        }
+        // Check the image resolution
+        let image = new Image();
+        image.src = URL.createObjectURL(event.target.files[0]);
+
+        // Create a promise to hold the async operation
+        const checkImageResolution = new Promise<void>((resolve, reject) => {
+            image.onload = () => {
+                if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+                    Swal.fire(
+                        'Error',
+                        'The maximum resolution supported for images is 5000x5000 pixels.',
+                        'error'
+                    );
+                    this.removeimg(3);
+                    reject('Invalid image resolution'); // Reject the promise to stop further actions
+                } else {
+                    resolve(); // Resolve the promise to continue with further actions
+                }
+            };
+        });
+
+        try {
+            // Wait for the image resolution check to complete
+            await checkImageResolution;
+
+            // Continue with further actions here because the image is valid
+
+
+            // Display the image
+            const reader = new FileReader();
+            reader.readAsDataURL(event.target.files[0]);
+
+            reader.onload = (_event) => {
+                (document.getElementById('imageTreeE') as HTMLInputElement).src = reader.result.toString();
+            };
+
+            // Upload and handle the image
+            if (event.target.files.length > 0) {
+                const file = event.target.files[0];
+                this.imageService.resizeImage(file)
+                    .then((resizedFile) => {
+                        this.imageCliant.patchValue({
+                            fileSource3: resizedFile
+                        });
+                    })
+                    .catch((error) => {
+                        this.removeimg(3);
+                        Swal.fire(
+                            'error',
+                            'Image upload error: ' + error,
+                            'error'
+                        );
+                    });
+            }
+        } catch (error) {
+            Swal.fire(
+                'Error',
+                'The maximum resolution supported for images is 5000x5000 pixels.',
+                'error'
+            );
+        }
       };
     });
 
-    await checkImageResolution;
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
+    async changeValue4(event) {
 
-    // tslint:disable-next-line:variable-name
-    reader.onload = (_event) => {
-      (document.getElementById('imageTwoO') as HTMLInputElement).src = reader.result.toString();
+        if (event.target.files.length === 0) {
+            return;
+        }
+        // Image upload validation
+        const mimeType = event.target.files[0].type;
 
-    };
+        if (!mimeType.match(/^image\/jpeg$/i)) {
+            Swal.fire(
+                'Error',
+                'Please select a JPEG (jpg) image.',
+                'warning'
+            );
+            return;
+        }
+        // Check the image resolution
+        let image = new Image();
+        image.src = URL.createObjectURL(event.target.files[0]);
 
-    // ========================================================
+        // Create a promise to hold the async operation
+        const checkImageResolution = new Promise<void>((resolve, reject) => {
+            image.onload = () => {
+                if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+                    Swal.fire(
+                        'Error',
+                        'The maximum resolution supported for images is 5000x5000 pixels.',
+                        'error'
+                    );
+                    this.removeimg(4);
+                    reject('Invalid image resolution'); // Reject the promise to stop further actions
+                } else {
+                    resolve(); // Resolve the promise to continue with further actions
+                }
+            };
+        });
 
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource2: file
-      });
-    }
-  }
+        try {
+            // Wait for the image resolution check to complete
+            await checkImageResolution;
 
-  async changeValue3(event) {
-    if (event.target.files.length === 0) {
-      return;
+
+            // Display the image
+            const reader = new FileReader();
+            reader.readAsDataURL(event.target.files[0]);
+
+            reader.onload = (_event) => {
+                (document.getElementById('imageFourR') as HTMLInputElement).src = reader.result.toString();
+            };
+
+            // Upload and handle the image
+            if (event.target.files.length > 0) {
+                const file = event.target.files[0];
+                this.imageService.resizeImage(file)
+                    .then((resizedFile) => {
+                        this.imageCliant.patchValue({
+                            fileSource4: resizedFile
+                        });
+                    })
+                    .catch((error) => {
+                        this.removeimg(4);
+                        Swal.fire(
+                            'error',
+                            'Image upload error: ' + error,
+                            'error'
+                        );
+                    });
+            }
+        } catch (error) {
+            Swal.fire(
+                'Error',
+                'The maximum resolution supported for images is 5000x5000 pixels.',
+                'error'
+            );
+        }
+
     }
 
     // Image upload validation
     const mimeType = event.target.files[0].type;
 
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
-
-    let image = new Image();
-    image.src = URL.createObjectURL(event.target.files[0]);
-
-    const checkImageResolution = new Promise<void>((resolve, reject) => {
-      image.onload = () => {
-        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
-          Swal.fire(
-            'Error',
-            'The maximum resolution supported for images is 5000x5000 pixels.',
-            'error'
-          );
-          reject('Invalid image resolution'); // Reject the promise to stop further actions
-        } else {
-          resolve(); // Resolve the promise to continue with further actions
+        if (event.target.files.length === 0) {
+            return;
         }
-      };
-    });
+// Image upload validation
+        const mimeType = event.target.files[0].type;
 
-    await checkImageResolution;
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-
-    // tslint:disable-next-line:variable-name
-    reader.onload = (_event) => {
-      (document.getElementById('imageTreeE') as HTMLInputElement).src = reader.result.toString();
-
-    };
-
-    // ========================================================
-
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource3: file
-      });
-    }
-  }
-
-  async changeValue4(event) {
-    if (event.target.files.length === 0) {
-      return;
-    }
-
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
-
-    let image = new Image();
-    image.src = URL.createObjectURL(event.target.files[0]);
-
-    const checkImageResolution = new Promise<void>((resolve, reject) => {
-      image.onload = () => {
-        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
-          Swal.fire(
-            'Error',
-            'The maximum resolution supported for images is 5000x5000 pixels.',
-            'error'
-          );
-          reject('Invalid image resolution'); // Reject the promise to stop further actions
-        } else {
-          resolve(); // Resolve the promise to continue with further actions
+        if (!mimeType.match(/^image\/jpeg$/i)) {
+            Swal.fire(
+                'Error',
+                'Please select a JPEG (jpg) image.',
+                'warning'
+            );
+            return;
         }
-      };
-    });
+        // Check the image resolution
+        let image = new Image();
+        image.src = URL.createObjectURL(event.target.files[0]);
 
-    await checkImageResolution;
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
+        // Create a promise to hold the async operation
+        const checkImageResolution = new Promise<void>((resolve, reject) => {
+            image.onload = () => {
+                if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+                    Swal.fire(
+                        'Error',
+                        'The maximum resolution supported for images is 5000x5000 pixels.',
+                        'error'
+                    );
+                    this.removeimg(5);
+                    reject('Invalid image resolution'); // Reject the promise to stop further actions
+                } else {
+                    resolve(); // Resolve the promise to continue with further actions
+                }
+            };
+        });
 
-    // tslint:disable-next-line:variable-name
-    reader.onload = (_event) => {
-      (document.getElementById('imageFourR') as HTMLInputElement).src = reader.result.toString();
+        try {
+            // Wait for the image resolution check to complete
+            await checkImageResolution;
 
-    };
+            // Continue with further actions here because the image is valid
 
-    // ========================================================
 
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource4: file
-      });
-    }
-  }
+            // Display the image
+            const reader = new FileReader();
+            reader.readAsDataURL(event.target.files[0]);
 
-  async changeValue5(event) {
+            reader.onload = (_event) => {
+                (document.getElementById('imageFiveE') as HTMLInputElement).src = reader.result.toString();
+            };
 
-    if (event.target.files.length === 0) {
-      return;
-    }
-
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
-
-    let image = new Image();
-    image.src = URL.createObjectURL(event.target.files[0]);
-
-    const checkImageResolution = new Promise<void>((resolve, reject) => {
-      image.onload = () => {
-        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
-          Swal.fire(
-            'Error',
-            'The maximum resolution supported for images is 5000x5000 pixels.',
-            'error'
-          );
-          reject('Invalid image resolution'); // Reject the promise to stop further actions
-        } else {
-          resolve(); // Resolve the promise to continue with further actions
+            // Upload and handle the image
+            if (event.target.files.length > 0) {
+                const file = event.target.files[0];
+                this.imageService.resizeImage(file)
+                    .then((resizedFile) => {
+                        this.imageCliant.patchValue({
+                            fileSource4: resizedFile
+                        });
+                    })
+                    .catch((error) => {
+                        this.removeimg(5);
+                        Swal.fire(
+                            'Error',
+                            'Image upload error: ' + error,
+                            'error'
+                        );
+                    });
+            }
+        } catch (error) {
+            Swal.fire(
+                'Error',
+                'The maximum resolution supported for images is 5000x5000 pixels.',
+                'error'
+            );
         }
-      };
-    });
 
-    await checkImageResolution;
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-
-    // tslint:disable-next-line:variable-name
-    reader.onload = (_event) => {
-      (document.getElementById('imageFiveE') as HTMLInputElement).src = reader.result.toString();
-
-    };
-
-    // ========================================================
-
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource5: file
-      });
     }
 
   }

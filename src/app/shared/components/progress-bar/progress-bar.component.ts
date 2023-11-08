@@ -45,7 +45,7 @@ export class ProgressBarComponent implements OnInit {
   }
 
   async checkIsAdmin() {
-    if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
+    if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
       this.display = false;
     }
   }

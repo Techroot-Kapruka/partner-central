@@ -195,7 +195,7 @@ export class PoListComponent implements OnInit {
   getPaginateOrderList(page) {
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       this.businessName = sessionStorage.getItem('partnerId');
-    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
       let id = (document.getElementById('select_od') as HTMLInputElement).value;
 
       this.businessName = id;

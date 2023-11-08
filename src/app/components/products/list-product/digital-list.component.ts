@@ -158,7 +158,7 @@ export class DigitalListComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.stopLoading();
-    }, 12000);
+    }, 16000);
   }
 
   stopLoading() {
@@ -172,9 +172,12 @@ export class DigitalListComponent implements OnInit {
       this.EnableStockEdit = true;
     } else if (sessionStorage.getItem('userRole') === 'ROLE_QA') {
       this.qaTables = false;
-    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' ) {
       this.qaTables = true;
       this.EnableStockEdit = true;
+    }else if (sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
+        this.qaTables = true;
+        this.EnableStockEdit = true;
     } else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER') {
       this.qaTables = true;
     } else if (sessionStorage.getItem('userRole') === 'ROLE_STORES_MANAGER') {
@@ -185,7 +188,7 @@ export class DigitalListComponent implements OnInit {
   hideElement(): void {
     const role = sessionStorage.getItem('userRole');
 
-    if (role === 'ROLE_ADMIN' || role === 'ROLE_CATEGORY_MANAGER' || role === 'ROLE_STORES_MANAGER') {
+    if (role === 'ROLE_ADMIN' || role === 'ROLE_SUPER_ADMIN' || role === 'ROLE_CATEGORY_MANAGER' || role === 'ROLE_STORES_MANAGER') {
       this.isAdmin = true;
     } else {
       this.isAdmin = false;
@@ -569,7 +572,7 @@ export class DigitalListComponent implements OnInit {
 
   getPartner(): void {
     const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER') {
+    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER' || sessionUser === 'ROLE_SUPER_ADMIN') {
       this.productService.getPartnerAll().subscribe(
         data => this.manageBussinessPartner(data),
       );
@@ -974,7 +977,7 @@ export class DigitalListComponent implements OnInit {
   viewProduct(index) {
     let namezz = '';
     const userRole = sessionStorage.getItem('userRole');
-    if (userRole === 'ROLE_ADMIN') {
+    if (userRole === 'ROLE_ADMIN' || userRole === 'ROLE_SUPER_ADMIN') {
       namezz = (document.getElementById('select_pro3') as HTMLInputElement).value;
       for (let i = 0; i < this.partnerArray.length; i++) {
         if (this.partnerArray[i].partner_u_id === namezz) {
@@ -1065,7 +1068,7 @@ export class DigitalListComponent implements OnInit {
     let businessName = '';
     const names = '';
     const sessionUser2 = sessionStorage.getItem('userRole');
-    if (sessionUser2 === 'ROLE_ADMIN') {
+    if (sessionUser2 === 'ROLE_ADMIN' || sessionUser2 === 'ROLE_SUPER_ADMIN') {
       businessName = (document.getElementById('select_pro3') as HTMLInputElement).value;
     } else if (sessionUser2 === 'ROLE_PARTNER') {
       businessName = sessionStorage.getItem('partnerId');
@@ -1112,7 +1115,7 @@ export class DigitalListComponent implements OnInit {
 
   getSelectedRowss(page) {
     const sessionUser2 = sessionStorage.getItem('userRole');
-    if (sessionUser2 === 'ROLE_ADMIN') {
+    if (sessionUser2 === 'ROLE_ADMIN' || sessionUser2 === 'ROLE_SUPER_ADMIN') {
       const businessName = (document.getElementById('select_pro3') as HTMLInputElement).value;
       if (businessName == 'none') {
       } else {
