@@ -277,7 +277,7 @@
                       <div class="">
 
                       </div>
-                      <input class="form-control" formControlName="Category2" id="txt_subcategory" type="text" required="" style="width: 30%;">
+                      <input class="form-control" formControlName="Category2" id="txt_subcategory" type="text" required="" style="width: 30%;" disabled>
 
                       <div>
                         <select class="custom-select" id="category_ids"
@@ -291,13 +291,13 @@
                       </div>
 
 
-                      <button class="btn btn-primary" style="position: absolute; top: 190px;margin-left: 51%;" (click)="saveFieldCategory(1)">UPDATE</button>
+                      <!--<button class="btn btn-primary" style="position: absolute; top: 190px;margin-left: 51%;" (click)="saveFieldCategory(1)">UPDATE</button>-->
                     </div>
                     <div class="form-group">
                       <label for="txt_subsubcategory" class="col-form-label">Sub Sub Category</label>
                       <input class="form-control" formControlName="Category3" id="txt_subsubcategory" type="text"
-                             required="" style="width: 30%;">
-                      <div>
+                             required="" style="width: 30%;" disabled>
+                      <div *ngIf="productSubSubCategoryArray.length > 0">
                         <select class="custom-select" id="category_sub_subids"
                                 (change)="selectSubcategory($event,2)" style="width: 19%; position: absolute; top: 279px; left: 33%;">
                           <option value="">-Select Sub Sub Category-</option>
@@ -307,8 +307,9 @@
                           </option>
                         </select>
                       </div>
-                      <button class="btn btn-primary" style="position: absolute; top: 279px;margin-left: 51%;" (click)="saveFieldCategory(2)">UPDATE</button>
+
                     </div>
+                    <button class="btn btn-primary" (click)="saveFieldCategory()" *ngIf="activeUpdate">UPDATE CATEGORY</button>
                   </div>
                 </form>
 

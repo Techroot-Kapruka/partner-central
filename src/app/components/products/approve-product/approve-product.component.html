@@ -764,14 +764,22 @@
           <div class="row">
             <div class="col-md-4"></div>
             <div class="col-md-3"></div>
-            <div class="col-md-5">
+            <div class="col-md-12" style="text-align: center">
               <button type="submit" id="saveId" [disabled]="approveButtonClicked" (click)="approveProduct()" class="btn btn-lg btn-primary"
-                      style="margin-bottom: 14%;">{{approveButtonClicked ? 'PROCESSING' : 'APPROVE PRODUCTS'}}
+                      style=" margin-right: 10px;
+                              text-align: center;
+                              font-size: 12px;
+                              margin-bottom: 2%;">
+                {{approveButtonClicked ? 'PROCESSING' : 'APPROVE PRODUCTS'}}
               </button>
               <div class="loading" *ngIf="approveButtonClicked">
                 <div id="preloader"></div>
               </div>
-              <button type="button" class="btn btn-lg btn-danger" style="margin-bottom: 14%;"
+              <button type="button" class="btn btn-lg btn-danger"
+                      style=" margin-right: 5px;
+                              text-align: center;
+                              font-size: 12px;
+                              margin-bottom: 2%;"
                       (click)="goToDeclinedMessageFormForProduct()">DECLINE PRODUCTS
               </button>
             </div>

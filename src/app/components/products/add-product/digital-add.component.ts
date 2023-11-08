@@ -641,6 +641,7 @@ export class DigitalAddComponent implements OnInit {
     let isListingPrice = false;
 
     const partner_uid = sessionStorage.getItem('partnerId');
+    const partnerBusinessName = sessionStorage.getItem('businessName');
     const price = Number((document.getElementById('price') as HTMLInputElement).value);
     const sellerSKU = (document.getElementById('Seller_SKU') as HTMLInputElement).value;
     const product_name = (document.getElementById('product_name') as HTMLInputElement).value;
@@ -698,7 +699,7 @@ export class DigitalAddComponent implements OnInit {
           };
           productVariation.push(pp);
           const brandHtml = (document.getElementById('Brand') as HTMLInputElement);
-          let brand_ = 'none';
+          let brand_ = partnerBusinessName;
           if (brandHtml) {
             brand_ = (document.getElementById('Brand') as HTMLInputElement).value;
           }
@@ -761,7 +762,7 @@ export class DigitalAddComponent implements OnInit {
             productVariation.push(pp);
           }
           const brandHtml = (document.getElementById('Brand') as HTMLInputElement);
-          let brand_ = 'none';
+          let brand_ = partnerBusinessName;
           if (brandHtml) {
             brand_ = (document.getElementById('Brand') as HTMLInputElement).value;
           }
