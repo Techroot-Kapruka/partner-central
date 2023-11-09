@@ -59,11 +59,13 @@ export class DigitalAddComponent implements OnInit {
 
   public keyArrays = [];
   attributesKeyArr = [];
+  defaultAndVariationOptions = [];
   public isSelect = false;
   public isAvailableVariation = false;
   public isDivDisabled = true;
   public isAttrDisabled = true;
   public sellerSku = '';
+  public selectedValue = 'Choose Color';
   public emptyHashMap = true;
   selectedVariationKey = null;
   addProductClicked = false;
@@ -300,7 +302,7 @@ export class DigitalAddComponent implements OnInit {
       (document.getElementById('Seller_SKU_2') as HTMLInputElement).value = (document.getElementById('Seller_SKU') as HTMLInputElement).value;
       (document.getElementById('Seller_SKU') as HTMLInputElement).disabled = false;
     } else {
-      (document.getElementById('Seller_SKU') as HTMLInputElement).disabled = true;
+      (document.getElementById('Seller_SKU') as HTMLInputElement).disabled = false;
     }
   }
 
@@ -641,6 +643,7 @@ export class DigitalAddComponent implements OnInit {
     let isListingPrice = false;
 
     const partner_uid = sessionStorage.getItem('partnerId');
+    const partnerBusinessName = sessionStorage.getItem('businessName');
     const price = Number((document.getElementById('price') as HTMLInputElement).value);
     const sellerSKU = (document.getElementById('Seller_SKU') as HTMLInputElement).value;
     const product_name = (document.getElementById('product_name') as HTMLInputElement).value;
@@ -698,7 +701,7 @@ export class DigitalAddComponent implements OnInit {
           };
           productVariation.push(pp);
           const brandHtml = (document.getElementById('Brand') as HTMLInputElement);
-          let brand_ = 'none';
+          let brand_ = partnerBusinessName;
           if (brandHtml) {
             brand_ = (document.getElementById('Brand') as HTMLInputElement).value;
           }
@@ -761,7 +764,7 @@ export class DigitalAddComponent implements OnInit {
             productVariation.push(pp);
           }
           const brandHtml = (document.getElementById('Brand') as HTMLInputElement);
-          let brand_ = 'none';
+          let brand_ = partnerBusinessName;
           if (brandHtml) {
             brand_ = (document.getElementById('Brand') as HTMLInputElement).value;
           }
@@ -815,7 +818,8 @@ export class DigitalAddComponent implements OnInit {
     let isVEmpty = true; // Assume all fields are filled initially
 
     const listing_price = ((document.getElementById('price') as HTMLInputElement).value);
-    // const sellerSKU = (document.getElementById('Seller_SKU') as HTMLInputElement).value;
+    const sellerSKU = (document.getElementById('Seller_SKU') as HTMLInputElement).value;
+    // const sellerSKU2 = (document.getElementById('Seller_SKU_2') as HTMLInputElement).value;
     const product_name = (document.getElementById('product_name') as HTMLInputElement).value;
     const product_description = (document.getElementById('product_description') as HTMLInputElement).value;
     const productBrandHtml = (document.getElementById('Brand') as HTMLInputElement);
@@ -824,11 +828,11 @@ export class DigitalAddComponent implements OnInit {
     }
 
     // Check if any of the fields are empty, and update isVEmpty accordingly
-    if (product_name === '' || listing_price === '' || product_description === '' || this.categoryPath === '') {
+    if (product_name === '' || sellerSKU === '' || listing_price === '' || product_description === '' || this.categoryPath === '') {
       isVEmpty = false;
     }
     document.getElementById('product_name').style.borderColor = product_name ? 'green' : 'red';
-    // document.getElementById('Seller_SKU').style.borderColor = sellerSKU ? 'green' : 'red';
+    document.getElementById('Seller_SKU').style.borderColor = sellerSKU ? 'green' : 'red';
     document.getElementById('price').style.borderColor = listing_price ? 'green' : 'red';
     // document.getElementById('Brand').style.borderColor = productBrand ? 'green' : 'red';
     document.getElementById('product_description').style.borderColor = product_description ? 'green' : 'red';
@@ -859,208 +863,9 @@ export class DigitalAddComponent implements OnInit {
   }
 
 
-  /*
-  calculte price using Amount
-   */
-
-  calculatePriceForAmount() {
-    const price = (document.getElementById('txt_price') as HTMLInputElement).value;
-    (document.getElementById('txt_price_rate') as HTMLInputElement).style.borderColor = '#ced4da';
-    if (price != '') {
-      (document.getElementById('txt_price') as HTMLInputElement).style.borderColor = '#ced4da';
-      let priceString = '';
-      const amount = (document.getElementById('txt_amount') as HTMLInputElement).value;
-      const newPrice = Number(price);
-      const newamount = Number(amount);
-      const newSellingPrice = newPrice + newamount;
-      const firstAmount = Number((document.getElementById('txt_hidden_amount') as HTMLInputElement).value);
-      if (firstAmount <= newSellingPrice) {
-        (document.getElementById('txt_amount') as HTMLInputElement).style.borderColor = '#e9ecef';
-        document.getElementById('condition2').style.display = 'none';
-      } else {
-        document.getElementById('condition2').style.display = 'block';
-        (document.getElementById('txt_amount') as HTMLInputElement).style.borderColor = 'red';
-      }
-
-      if (amount === '') {
-        (document.getElementById('txt_price_rate') as HTMLInputElement).disabled = false;
-
-      } else {
-        (document.getElementById('txt_price_rate') as HTMLInputElement).disabled = true;
-
-      }
-      priceString = '' + newSellingPrice;
-      (document.getElementById('txt_selling_price') as HTMLInputElement).value = priceString;
-    } else {
-      Swal.fire(
-        'Whoops...!',
-        'Price cant be empty....',
-        'error'
-      );
-      (document.getElementById('txt_price') as HTMLInputElement).style.borderColor = 'red';
-      (document.getElementById('txt_price_rate') as HTMLInputElement).disabled = true;
-    }
-
-  }
-
-  calculateRateForProduct() {
-    let priceString = '';
-    const rate = Number((document.getElementById('txt_price_rate') as HTMLInputElement).value);
-    const price = Number((document.getElementById('txt_price') as HTMLInputElement).value);
-    const rateAmount = price * rate / 100;
-    const newSellingPrice = price + rateAmount;
-
-    priceString = '' + newSellingPrice;
-    (document.getElementById('txt_selling_price') as HTMLInputElement).value = priceString;
-    (document.getElementById('txt_hidden_amount') as HTMLInputElement).value = priceString;
-    this.amountBefor = priceString;
-  }
-
-  calculatePriceForAmount2() {
-
-    let priceString = '';
-    const price = this.productGroupCon.value.proGCostPrice;
-    const amount = this.productGroupCon.value.proGAmount;
-    const newPrice = Number(price);
-    const newamount = Number(amount);
-    const newSellingPrice = newPrice + newamount;
-
-    if (amount === '') {
-      (document.getElementById('proGRate') as HTMLInputElement).disabled = false;
-
-    } else {
-      (document.getElementById('proGRate') as HTMLInputElement).disabled = true;
-
-    }
-    priceString = '' + newSellingPrice;
-    // (document.getElementById('proGSellingPrice') as HTMLInputElement).value = priceString;
-    this.productGroupCon = new FormGroup({
-      proGAmount: new FormControl(amount),
-      proGRate: new FormControl(''),
-      proGCostPrice: new FormControl(price),
-      qty: new FormControl('0'),
-      proGSellingPrice: new FormControl(priceString),
-    });
-  }
-
-  /*
-  calculte price using rate
-   */
-
-
-  calculatePriceForPriceRate() {
-    const price = (document.getElementById('txt_price') as HTMLInputElement).value;
-    (document.getElementById('txt_amount') as HTMLInputElement).style.borderColor = '#ced4da';
-    if (price != '') {
-
-      (document.getElementById('txt_price') as HTMLInputElement).style.borderColor = '#ced4da';
-      let priceString = '';
-      const priceRate = (document.getElementById('txt_price_rate') as HTMLInputElement).value;
-
-      const price = (document.getElementById('txt_price') as HTMLInputElement).value;
-      const newPrice = Number(price);
-      const priceRateNew = Number(priceRate);
-
-      const newSellingPrice = newPrice * priceRateNew / 100;
-      const sellPricee = newSellingPrice + newPrice;
-
-      const firstAmount = Number((document.getElementById('txt_hidden_amount') as HTMLInputElement).value);
-      if (firstAmount <= sellPricee) {
-        (document.getElementById('txt_price_rate') as HTMLInputElement).style.borderColor = '#e9ecef';
-        document.getElementById('condition2').style.display = 'none';
-      } else {
-        document.getElementById('condition2').style.display = 'block';
-        (document.getElementById('txt_price_rate') as HTMLInputElement).style.borderColor = 'red';
-      }
-
-
-      if (priceRate === '') {
-        (document.getElementById('txt_amount') as HTMLInputElement).disabled = false;
-      } else {
-        (document.getElementById('txt_amount') as HTMLInputElement).disabled = true;
-      }
-      priceString = '' + sellPricee;
-      (document.getElementById('txt_selling_price') as HTMLInputElement).value = priceString;
-    } else {
-      Swal.fire(
-        'Whoops...!',
-        'Price cant be empty....',
-        'error'
-      );
-      (document.getElementById('txt_price') as HTMLInputElement).style.borderColor = 'red';
-      (document.getElementById('txt_amount') as HTMLInputElement).disabled = true;
-    }
-
-
-  }
-
-  calculatePriceForPriceRate2() {
-    let priceString = '';
-    const priceRate = this.productGroupCon.value.proGRate;
-
-    const price = this.productGroupCon.value.proGCostPrice;
-    const newPrice = Number(price);
-    const priceRateNew = Number(priceRate);
-
-    const newSellingPrice = newPrice * priceRateNew / 100;
-    const sellPricee = newSellingPrice + newPrice;
-
-    if (priceRate === '') {
-      (document.getElementById('proGAmount') as HTMLInputElement).disabled = false;
-    } else {
-      (document.getElementById('proGAmount') as HTMLInputElement).disabled = true;
-    }
-    priceString = '' + sellPricee;
-    // (document.getElementById('proGSellingPrice') as HTMLInputElement).value = priceString;
-    this.productGroupCon = new FormGroup({
-      proGAmount: new FormControl(''),
-      proGRate: new FormControl(priceRate),
-      proGCostPrice: new FormControl(price),
-      qty: new FormControl(0),
-      proGSellingPrice: new FormControl(priceString),
-    });
-  }
-
-  manageProductResult(datas) {
-    this.oneTimeClicked = true;
-    if (datas.status_code === 200) {
-      let one = this.imageCliant.get('fileSource').value;
-      let one2 = this.imageCliant.get('fileSource2').value;
-      let one3 = this.imageCliant.get('fileSource3').value;
-      let one4 = this.imageCliant.get('fileSource4').value;
-      let one5 = this.imageCliant.get('fileSource5').value;
-      const pricecc = new File([''], '');
-      if (one === '') {
-
-        one = pricecc;
-      }
-
-      if (one2 === '') {
-        one2 = pricecc;
-      }
-
-      if (one3 === '') {
-        one3 = pricecc;
-      }
-
-      if (one4 === '') {
-        one4 = pricecc;
-      }
-
-      if (one5 === '') {
-        one5 = pricecc;
-      }
-
-      this.productService.insertProductWithImages(one, one2, one3, one4, one5, datas.data.product_code).subscribe(
-        data => this.successAlert(data),
-        error => this.mnageErrorProduct(error)
-      );
-    }
-  }
-
   mnageErrorProduct(error) {
     this.addProductClicked = false;
-    switch (error.status){
+    switch (error.status) {
       case 200: {
         Swal.fire(
           'Oops...',
@@ -1072,7 +877,7 @@ export class DigitalAddComponent implements OnInit {
       case 401: {
         Swal.fire(
           'Oops...',
-          "Unauthorized! Please login agin",
+          'Unauthorized! Please login agin',
           'error'
         );
         break;
@@ -1189,7 +994,7 @@ export class DigitalAddComponent implements OnInit {
         // Convert the canvas content to a File
         canvas.toBlob((blob) => {
           if (blob) {
-            const resizedFile = new File([blob], file.name, { type: file.type });
+            const resizedFile = new File([blob], file.name, {type: file.type});
             resolve(resizedFile);
           } else {
             reject('Canvas toBlob Error');
@@ -1659,6 +1464,7 @@ export class DigitalAddComponent implements OnInit {
   }
 
   successAlert(data) {
+    this.addProductClicked = false;
     if (data.message_status === 'Success') {
       Swal.fire(
         'New Product Added Successfully...!',
@@ -1683,484 +1489,14 @@ export class DigitalAddComponent implements OnInit {
       // this.router.navigate([url]);
     } else {
       Swal.fire(
-        "Failed",
+        'Failed',
         data.message,
         'warning'
-      )
-    }
-
-  }
-
-  clearAllFeilds() {
-    this.checkBoxCon = new FormGroup({
-      productGroup: new FormControl(false),
-    });
-    (document.getElementById('category_code') as HTMLInputElement).value = '';
-    (document.getElementById('themeVar') as HTMLInputElement).value = '';
-    (document.getElementById('txt_title') as HTMLInputElement).value = '';
-    (document.getElementById('txt_brand') as HTMLInputElement).value = '';
-    (document.getElementById('txt_manufacture') as HTMLInputElement).value = '';
-    (document.getElementById('txt_description') as HTMLInputElement).value = '';
-    (document.getElementById('special_notes') as HTMLInputElement).value = '';
-    (document.getElementById('availability') as HTMLInputElement).value = '';
-    (document.getElementById('txt_seller_sku') as HTMLInputElement).value = '';
-    (document.getElementById('txt_price') as HTMLInputElement).value = '';
-    (document.getElementById('txt_quantity') as HTMLInputElement).value = '';
-    (document.getElementById('condition') as HTMLInputElement).value = '';
-    (document.getElementById('txt_amount') as HTMLInputElement).value = '';
-    (document.getElementById('txt_price_rate') as HTMLInputElement).value = '';
-    (document.getElementById('category_code') as HTMLInputElement).value = '';
-    (document.getElementById('breadcrum') as HTMLInputElement).innerHTML = '';
-    this.categoryArray = [];
-    this.isColor = false;
-    this.isSize = false;
-    this.colorsAndSize = false;
-    this.colorArray = [];
-    this.sizeArray = [];
-    this.keyWordArray = [];
-    this.keyWordArray2 = [];
-    this.isDisplay = 'none';
-    this.sizeAndColorArray = [];
-    this.colorNameArray = [];
-    this.colorCodeArray = [];
-    this.sizeNameArray = [];
-    this.colorAndSizeArray = [];
-    this.imageArr = [];
-    this.nonGroupArray = [];
-    this.productGroupTabel = [];
-    const urlImg = 'assets/images/user.png';
-    (document.getElementById('mainImage') as HTMLInputElement).src = 'assets/images/1.jpg';
-    // (document.getElementById('imageOneO') as HTMLInputElement).src = urlImg;
-    (document.getElementById('imageTwoO') as HTMLInputElement).src = urlImg;
-    (document.getElementById('imageTreeE') as HTMLInputElement).src = urlImg;
-    (document.getElementById('imageFourR') as HTMLInputElement).src = urlImg;
-    (document.getElementById('imageFiveE') as HTMLInputElement).src = urlImg;
-    // document.getElementById('groupPrice').style.display = 'none';
-
-  }
-
-  addingProductGroups() {
-    if (this.checkBoxCon.value.productGroup == true) {
-      document.getElementById('groupPrice').style.display = 'none';
-      document.getElementById('CostPriceGroup').style.display = 'block';
-      document.getElementById('treePriceCol').style.display = 'none';
-      document.getElementById('amountGroup').style.display = 'block';
-      document.getElementById('rateGroup').style.display = 'block';
-      document.getElementById('sellingPrice').style.display = 'block';
-      document.getElementById('TbaleTT').style.display = 'block';
-      document.getElementById('TbaleTT2').style.display = 'none';
-
-      document.getElementById('btnTwo').style.display = 'block';
-      document.getElementById('btnOne').style.display = 'none';
-      document.getElementById('btnEditTwo').style.display = 'none';
-    } else {
-      document.getElementById('groupPrice').style.display = 'block';
-      document.getElementById('treePriceCol').style.display = 'block';
-      document.getElementById('CostPriceGroup').style.display = 'none';
-      document.getElementById('amountGroup').style.display = 'none';
-      document.getElementById('rateGroup').style.display = 'none';
-      document.getElementById('sellingPrice').style.display = 'none';
-      document.getElementById('TbaleTT').style.display = 'none';
-      document.getElementById('TbaleTT2').style.display = 'block';
-      document.getElementById('btnOne').style.display = 'block';
-      document.getElementById('btnTwo').style.display = 'none';
-      document.getElementById('btnEditTwo').style.display = 'none';
-    }
-  }
-
-  addToTbaleProductGroup() {
-
-    const theme = (document.getElementById('themeVar') as HTMLInputElement).value;
-    const quantity = (document.getElementById('txt_quantity') as HTMLInputElement).value;
-
-    if (quantity == '') {
-      Swal.fire(
-        'Oops...',
-        'First you enterd quantity....',
-        'error'
       );
-      document.getElementById('txt_quantity').style.borderColor = 'red';
-    } else {
-      let rate: string = this.productGroupCon.value.proGRate;
-      if (rate == '') {
-        rate = '0.0';
-      }
-      let amount: string = this.productGroupCon.value.proGAmount;
-
-      if (amount == '') {
-        amount = '0.0';
-      }
-
-      const payData = {
-        theme,
-        value: this.variationValue,
-        cost: this.productGroupCon.value.proGCostPrice,
-        amount,
-        rate,
-        qty: this.productGroupCon.value.qty,
-        selling: this.productGroupCon.value.proGSellingPrice
-      };
-
-      this.productGroupTabel.push(payData);
-      this.productGroupCon = new FormGroup({
-        proGAmount: new FormControl(''),
-        proGRate: new FormControl(''),
-        proGCostPrice: new FormControl(''),
-        qty: new FormControl(0),
-        proGSellingPrice: new FormControl(''),
-      });
-
-      (document.getElementById('proGRate') as HTMLInputElement).disabled = false;
-      (document.getElementById('txt_amount') as HTMLInputElement).disabled = false;
-      this.sizeArray = [];
-      this.colorArray = [];
-
-      document.getElementById('txt_quantity').style.borderColor = 'green';
-
-    }
-  }
-
-  addToTbaleProductNone() {
-    const theme = (document.getElementById('themeVar') as HTMLInputElement).value;
-
-    const payData = {
-      theme,
-      value: this.variationValue,
-      qty: this.productGroupCon.value.qty
-    };
-    this.nonGroupArray.push(payData);
-
-    this.productGroupCon = new FormGroup({
-      proGAmount: new FormControl(''),
-      proGRate: new FormControl(''),
-      proGCostPrice: new FormControl(''),
-      qty: new FormControl(0),
-      proGSellingPrice: new FormControl(''),
-    });
-
-
-    this.colorNameArray = [];
-    this.colorCodeArray = [];
-    this.sizeNameArray = [];
-    this.colorArray = [];
-    this.sizeArray = [];
-    this.weightValue = '';
-  }
-
-  addWeight() {
-    const weigth = (document.getElementById('select_weight') as HTMLInputElement).value;
-    this.weightValue = weigth;
-    this.variationValue = weigth;
-    this.weightBool = true;
-  }
-
-  removeWeight() {
-    this.weightValue = '';
-    this.weightBool = false;
-  }
-
-  addStorage() {
-    const storage = (document.getElementById('txt_storage') as HTMLInputElement).value;
-    this.storageValue = storage;
-    this.variationValue = storage;
-    this.weightBool = true;
-  }
-
-  removeStorage() {
-    this.storageValue = '';
-    this.weightBool = false;
-  }
-
-  addCapacity() {
-    const capacity = (document.getElementById('txt_capacity') as HTMLInputElement).value;
-    this.capacityValue = capacity;
-    this.variationValue = capacity;
-    this.weightBool = true;
-  }
-
-  removeCapacity() {
-    this.capacityValue = '';
-    this.weightBool = false;
-  }
-
-  editRow(index) {
-
-    const row = this.nonGroupArray[index];
-    if (row.theme == 'color') {
-
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="color">Color Name</option><option value="none">None</option><option value="size">Size Name</option><option value="weight">Weight</option><option value="storage">Storage</option><option value="capacity">Capacity</option>';
-
-      this.isColor = true;
-
-      let value = '';
-      const ccc = row.value;
-      if (ccc === 'White') {
-        value = '#ffffff';
-
-      } else if (ccc === 'Red') {
-        value = '#ff0000';
-
-      } else if (ccc === 'Blue') {
-        value = '#0000ff';
-
-      } else if (ccc === 'Yellow') {
-
-        value = '#ffff00';
-      } else if (value === 'Green') {
-
-        value = '#00ff00';
-      } else if (ccc === 'Gray') {
-        value = '#808080';
-      } else if (ccc === 'Purple') {
-
-        value = '#800080';
-      } else if (ccc === 'Orange') {
-
-        value = '#ffa500';
-      } else if (ccc === 'Maroon') {
-
-        value = '#800000';
-      } else if (ccc === 'Black') {
-        value = '#000000';
-
-      } else {
-        value = '#000000';
-      }
-      const ob = {
-        colorV: value,
-        colors: ccc
-      };
-      this.colorArray.push(ob);
-      this.colorNameArray.push(ccc);
-      this.colorCodeArray.push(value);
-      this.variationValue = ccc;
-
-    } else if (row.theme == 'size') {
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option><option value="weight">Weight</option><option value="storage">Storage</option><option value="capacity">Capacity</option>';
-      this.isSize = true;
-      this.variationValue = '';
-      let size = '';
-      const name = row.value;
-      if (name === 'XS') {
-        size = '1';
-      } else if (name === 'S') {
-        size = '2';
-      } else if (name === 'M') {
-        size = '3';
-      } else if (name === 'L') {
-        size = '4';
-      } else if (name === 'XL') {
-        size = '5';
-      } else if (name === 'XXL') {
-        size = '6';
-      }
-      const sizeValue = {
-        sizeS: name,
-        sizeValue: size
-      };
-      this.sizeArray.push(sizeValue);
-      this.sizeNameArray.push(name);
-      this.variationValue = name;
-
-    } else if (row.theme == 'weight') {
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="weight">Weight</option><option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option><option value="storage">Storage</option><option value="capacity">Capacity</option>';
-
-      const weigth = row.value;
-      this.weightValue = weigth;
-      this.variationValue = weigth;
-      this.weightBool = true;
-
-    } else if (row.theme == 'storage') {
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="storage">Storage</option><option value="weight">Weight</option><option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option><option value="capacity">Capacity</option>';
-
-      const storage = row.value;
-      this.storageValue = storage;
-      this.variationValue = storage;
-      this.weightBool = true;
-
-    } else if (row.theme == 'capacity') {
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="capacity">Capacity</option><option value="storage">Storage</option><option value="weight">Weight</option><option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option>';
-      const capacity = row.value;
-      this.capacityValue = capacity;
-      this.variationValue = capacity;
-      this.weightBool = true;
     }
 
-
-    this.productGroupCon = new FormGroup({
-      proGAmount: new FormControl(''),
-      proGRate: new FormControl(''),
-      proGCostPrice: new FormControl(''),
-      qty: new FormControl(row.qty),
-      proGSellingPrice: new FormControl(''),
-    });
-
-    this.nonGroupArray.splice(index, 1);
   }
 
-  deleteRow(index) {
-    this.nonGroupArray.splice(index, 1);
-  }
-
-  editGroupRow(index) {
-    this.globleIndex = index;
-    document.getElementById('btnEditTwo').style.display = 'block';
-    document.getElementById('btnTwo').style.display = 'none';
-    document.getElementById('btnOne').style.display = 'none';
-
-    this.productGroupCon = new FormGroup({
-      proGAmount: new FormControl(this.productGroupTabel[index].amount),
-      proGRate: new FormControl(this.productGroupTabel[index].rate),
-      proGCostPrice: new FormControl(this.productGroupTabel[index].cost),
-      qty: new FormControl(this.productGroupTabel[index].qty),
-      proGSellingPrice: new FormControl(this.productGroupTabel[index].selling),
-    });
-
-    if (this.productGroupTabel[index].theme === 'color') {
-
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="color">Color Name</option><option value="size">Size Name</option><option value="none">None</option><option value="weight">Weight</option><option value="storage">Storage</option><option value="capacity">Capacity</option>';
-
-      this.isColor = true;
-
-      let value = '';
-      const ccc = this.productGroupTabel[index].value;
-      if (ccc === 'White') {
-        value = '#ffffff';
-
-      } else if (ccc === 'Red') {
-        value = '#ff0000';
-
-      } else if (ccc === 'Blue') {
-        value = '#0000ff';
-
-      } else if (ccc === 'Yellow') {
-
-        value = '#ffff00';
-      } else if (value === 'Green') {
-
-        value = '#00ff00';
-      } else if (ccc === 'Gray') {
-        value = '#808080';
-      } else if (ccc === 'Purple') {
-
-        value = '#800080';
-      } else if (ccc === 'Orange') {
-
-        value = '#ffa500';
-      } else if (ccc === 'Maroon') {
-
-        value = '#800000';
-      } else if (ccc === 'Black') {
-        value = '#000000';
-
-      } else {
-        value = '#000000';
-      }
-      const ob = {
-        colorV: value,
-        colors: ccc
-      };
-      this.colorArray.push(ob);
-      this.colorNameArray.push(ccc);
-      this.colorCodeArray.push(value);
-      this.variationValue = ccc;
-
-
-    } else if (this.productGroupTabel[index].theme === 'size') {
-
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option><option value="weight">Weight</option><option value="storage">Storage</option><option value="capacity">Capacity</option>';
-      this.isSize = true;
-      this.variationValue = '';
-      let size = '';
-      const name = this.productGroupTabel[index].value;
-      if (name === 'XS') {
-        size = '1';
-      } else if (name === 'S') {
-        size = '2';
-      } else if (name === 'M') {
-        size = '3';
-      } else if (name === 'L') {
-        size = '4';
-      } else if (name === 'XL') {
-        size = '5';
-      } else if (name === 'XXL') {
-        size = '6';
-      }
-      const sizeValue = {
-        sizeS: name,
-        sizeValue: size
-      };
-      this.sizeArray.push(sizeValue);
-      this.sizeNameArray.push(name);
-      this.variationValue = name;
-
-
-    } else if (this.productGroupTabel[index].theme === 'weight') {
-
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="weight">Weight</option><option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option><option value="storage">Storage</option><option value="capacity">Capacity</option>';
-
-      const weigth = this.productGroupTabel[index].value;
-      this.weightValue = weigth;
-      this.variationValue = weigth;
-      this.weightBool = true;
-
-    } else if (this.productGroupTabel[index].theme === 'storage') {
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="storage">Storage</option><option value="weight">Weight</option><option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option><option value="capacity">Capacity</option>';
-
-      const storage = this.productGroupTabel[index].value;
-      this.storageValue = storage;
-      this.variationValue = storage;
-      this.weightBool = true;
-
-    } else if (this.productGroupTabel[index].theme === 'capacity') {
-
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="capacity">Capacity</option><option value="storage">Storage</option><option value="weight">Weight</option><option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option>';
-      const capacity = this.productGroupTabel[index].value;
-      this.capacityValue = capacity;
-      this.variationValue = capacity;
-      this.weightBool = true;
-
-    } else {
-
-    }
-  }
-
-  deleteGroupRow(index) {
-    this.productGroupTabel.splice(index, 1);
-  }
-
-  editToTbaleProductGroup() {
-    const theme = (document.getElementById('themeVar') as HTMLInputElement).value;
-    this.productGroupTabel[this.globleIndex].cost = this.productGroupCon.value.proGCostPrice;
-    this.productGroupTabel[this.globleIndex].amount = this.productGroupCon.value.proGAmount;
-    this.productGroupTabel[this.globleIndex].qty = this.productGroupCon.value.qty;
-    this.productGroupTabel[this.globleIndex].rate = this.productGroupCon.value.proGRate;
-    this.productGroupTabel[this.globleIndex].selling = this.productGroupCon.value.proGSellingPrice;
-    this.productGroupTabel[this.globleIndex].theme = theme;
-    this.productGroupTabel[this.globleIndex].value = this.variationValue;
-
-
-    let priceString = '';
-    const price = this.productGroupCon.value.proGCostPrice;
-    const amount = this.productGroupCon.value.proGAmount;
-    const newPrice = Number(price);
-    const newamount = Number(amount);
-    const newSellingPrice = newPrice + newamount;
-
-    if (amount === '') {
-      (document.getElementById('proGRate') as HTMLInputElement).disabled = false;
-
-    } else {
-      (document.getElementById('proGRate') as HTMLInputElement).disabled = true;
-
-    }
-    priceString = '' + newSellingPrice;
-
-    document.getElementById('btnEditTwo').style.display = 'none';
-    document.getElementById('btnTwo').style.display = 'block';
-    document.getElementById('btnOne').style.display = 'none';
-    this.clearArrysAndVarilables();
-  }
 
   clearArrysAndVarilables() {
     this.categoryArray = [];
@@ -2189,8 +1525,6 @@ export class DigitalAddComponent implements OnInit {
     this.globleIndex = 0;
   }
 
-  maintainStockChange() {
-  }
 
   getSub_category(catCode, catName, index, catMargin) {
     this.margin = catMargin;
@@ -2313,107 +1647,12 @@ export class DigitalAddComponent implements OnInit {
     this.categoryPath = this.categoryArray[this.indexCat].path + '>' + subCatName;
   }
 
-  //
-  // onChangeCatSubs($event) {
-  //   const payload = {
-  //     keyword: $event.target.value
-  //   };
-  //   this.categoryService.searchByPath(payload).subscribe(
-  //     data => this.manageMarginRate(data)
-  //   );
-  // }
-  //
-  // manageMarginRate(data){
-  //   if (data.data)
-  // }
-
-  addCategoryBredCrums() {
-    if (this.allCategoryBreadcrumbArr.length < 1) {
-      const categoryIdValuesSpliter = ((document.getElementById('Category_') as HTMLInputElement).value).split('+');
-      const categoryId = categoryIdValuesSpliter[0];
-      const subCategoryId = (document.getElementById('sub_category_') as HTMLInputElement).value;
-      const categorySubSubId = (document.getElementById('sub_sub_category_') as HTMLInputElement).value;
-      let categoryName = '';
-      let subCategoryName = '';
-      let subSubCategoryName = '';
-
-      let categoryNameBool = true;
-      let subCategoryNameBool = true;
-      let subSubCategoryNameBool = true;
-
-      if (subCategoryId === '' && categorySubSubId === '') {
-        this.categoryRequestArr.push(categoryId);
-
-      } else if (categorySubSubId === '') {
-        this.categoryRequestArr.push(subCategoryId);
-
-      } else {
-        this.categoryRequestArr.push(categorySubSubId);
-
-      }
-
-      for (let i = 0; i < this.categoryArray.length; i++) {
-        if (categoryId === '') {
-          categoryNameBool = false;
-        }
-
-        if (subCategoryId === '') {
-          subCategoryNameBool = false;
-        }
-
-        if (categorySubSubId === '') {
-          subSubCategoryNameBool = false;
-        }
-
-        if (this.categoryArray[i].code === categoryId) {
-          categoryName = this.categoryArray[i].path;
-
-          for (let x = 0; x < this.subSubCategoryArray.length; x++) {
-            if (this.SubCategoryArray[x].code === subCategoryId) {
-              subCategoryName = this.SubCategoryArray[x].name;
-
-              for (let z = 0; z < this.subSubCategoryArray.length; z++) {
-                if (this.subSubCategoryArray[z].code === categorySubSubId) {
-                  subSubCategoryName = this.subSubCategoryArray[z].name;
-                }
-              }
-            }
-          }
-        }
-      }
-
-      const arr = {
-        categoryId,
-        categoryName,
-        subCategoryName,
-        subSubCategoryName,
-        categoryNameBool,
-        subCategoryNameBool,
-        subSubCategoryNameBool
-      };
-
-      this.allCategoryBreadcrumbArr.push(arr);
-      document.getElementById('sub_cat_dev').style.display = 'block';
-      document.getElementById('sub_sub_cat_dev').style.display = 'block';
-
-      // this.getAllCategory();
-    }
-  }
-
-  removeCategoryBreadcrum(index) {
-    for (let i = 0; i < this.allCategoryBreadcrumbArr.length; i++) {
-      if (this.allCategoryBreadcrumbArr[index] === this.allCategoryBreadcrumbArr[i]) {
-        this.allCategoryBreadcrumbArr.splice(i, 1);
-      }
-    }
-  }
 
 
   setSelectedType(SizeType) {
     this.sizeArrayForClothes = [];
     this.sizeString = SizeType;
     this.selectedType = SizeType;
-
   }
 
   loadMore() {
@@ -2432,7 +1671,6 @@ export class DigitalAddComponent implements OnInit {
 
 
   AddToTable() {
-
     if (this.colorArrayForClothes.length === 0) {
       Swal.fire(
         'Oops',
@@ -2452,6 +1690,52 @@ export class DigitalAddComponent implements OnInit {
     let tableData = {};
     this.matchCountOfSizeAndColorsArrays = true;
 
+    switch (this.selectedType) {
+      case 'FREE SIZE':
+        console.log('good to go')
+        break;
+
+      case '':
+        Swal.fire(
+          'Oops',
+          'Please Select Size Type',
+          'warning'
+        );
+        return;
+        break;
+
+      default:
+        if (this.sizeArrayForClothes.length === 0){
+          Swal.fire(
+            'Oops',
+            'Please Select Size',
+            'warning'
+          );
+          return;
+        }
+    }
+
+    if (!this.selectedType){
+      Swal.fire(
+        'Oops',
+        'Please Select Size Type',
+        'warning'
+      );
+      return;
+    }
+
+      if (this.clothesArray.length > 0 && this.clothesArray[0].type_ !== this.selectedType){
+        Swal.fire(
+          'Oops',
+          'Please Select Same Size Type',
+          'warning'
+        );
+        const size = document.getElementById('clothesSizeUk') as HTMLSelectElement;
+        size.value = '';
+        this.sizeArrayForClothes=[]
+        return;
+      }
+
     if (this.isClothing) {
       for (let i = 0; i < this.colorArrayForClothes.length; i++) {
         if (this.sizeArrayForClothes.length === 0) {
@@ -2465,7 +1749,6 @@ export class DigitalAddComponent implements OnInit {
           this.clothesArray.push(tableData);
         }
         for (let j = 0; j < this.sizeArrayForClothes.length; j++) {
-
           tableData = {
             type_: type,
             gender_: gender,
@@ -2474,7 +1757,6 @@ export class DigitalAddComponent implements OnInit {
             sku_: `${this.sellerSku}-${this.getColorWord(this.colorArrayForClothes[i])}-${type}-${this.sizeArrayForClothes[j]}`
           };
           this.clothesArray.push(tableData);
-
         }
       }
     } else {
@@ -2491,27 +1773,24 @@ export class DigitalAddComponent implements OnInit {
 
     this.colorArrayForClothes = [];
     this.sizeArrayForClothes = [];
+    const colorSelect = document.getElementById('colorSelect') as HTMLSelectElement;
+    const clothesSizeUk = document.getElementById('clothesSizeUk') as HTMLSelectElement;
+    colorSelect.value = '';
+    clothesSizeUk.value = '';
+
   }
 
   deleteClothsRow(index) {
     this.clothesArray.splice(index, 1);
   }
 
-  setColorArray() {
-    const newColor = (document.getElementById('colorInput1') as HTMLInputElement).value;
-
-    // Check if the color already exists in the array
-    if (!this.colorArrayForClothes.includes(newColor)) {
-      this.colorArrayForClothes.push(newColor);
-      this.colorArrayForClothesJob = this.colorArrayForClothes;
-    } else {
-      // Handle the case when the color already exists (e.g., show an error message)
-    }
-  }
-
 
   removeColorForClothes(i) {
     this.colorArrayForClothes.splice(i, 1);
+    if (this.colorArrayForClothes.length === 0) {
+      const colorSelect = document.getElementById('colorSelect') as HTMLSelectElement;
+      colorSelect.value = '';
+    }
   }
 
   removeSizeForClothes(i) {
@@ -2529,7 +1808,23 @@ export class DigitalAddComponent implements OnInit {
     }
   }
 
+  selectColor(event){
+    const selectedVariation = event.target.value;
+    if(selectedVariation){
+      console.log('true')
+      this.selectColorErrorStyle = '';
+      if (!this.colorArrayForClothes.includes(selectedVariation)) {
+        this.colorArrayForClothes.push(selectedVariation);
+        this.colorArrayForClothesJob = this.colorArrayForClothes;
+      } else {
+        // Handle the case when the color already exists (e.g., show an error message)
+      }
+    }
+  }
+
   onChange($event) {
+    console.log('select color')
+    console.log($event.value)
     const selectedVariation = $event.value;
     this.selectColorErrorStyle = '';
 
@@ -2622,7 +1917,7 @@ export class DigitalAddComponent implements OnInit {
     this.categoryPath = this.categoryArray[this.indexCat].path + '>' + this.SubCategoryArray[this.indexSubCat].name + '>' + this.subSubCategoryArray[this.indexSubSubCat].name + '>' + subSubSubCatName;
   }
 
-  getAttribytes(code) {
+  getVariations(code) {
     this.attributesArray = [];
     for (const key in this.hashMap) {
       delete this.hashMap[key];
@@ -2631,8 +1926,22 @@ export class DigitalAddComponent implements OnInit {
       category_code: code
     };
     this.productService.getAttributes(payLoard).subscribe(
-      data => this.manageAttributes(data),
+      data => this.manageVariations(data),
       error => this.manageError(error)
+    );
+  }
+
+  getAttributes(code) {
+    this.attributesArray = [];
+    for (const key in this.hashMap) {
+      delete this.hashMap[key];
+    }
+    const payLoard = {
+      category_code: code
+    };
+    this.productService.getAttributes(payLoard).subscribe(
+        data => this.manageAttributes(data),
+        error => this.manageError(error)
     );
   }
 
@@ -2644,8 +1953,9 @@ export class DigitalAddComponent implements OnInit {
     return value.length === 0;
   }
 
-  private manageAttributes(data) {
 
+  private manageVariations(data) {
+    console.log(data)
     if (data.data.attribute_object != null) {
       this.attributesArray = Object.keys(data.data.attribute_object);
     }
@@ -2666,12 +1976,15 @@ export class DigitalAddComponent implements OnInit {
         this.variationvalueArrayForNonObject.push(key);
 
       } else {
-        this.keyArrays = Object.keys(obj);
+        this.keyArrays = Object.keys(obj).sort();
         for (let i = 0; i < this.keyArrays.length; i++) {
           this.hashmapForVariationsObj[this.keyArrays[i]] = obj[this.keyArrays[i]];
         }
         this.variationvalueSizeTypeObjArray.push(obj);
         this.variationvalueArrayObject.push(key);
+
+        console.log('keyARray')
+        console.log(this.keyArrays)
       }
     }
     // Creating a hash map
@@ -2723,6 +2036,33 @@ export class DigitalAddComponent implements OnInit {
     }
 
     this.attributeArr = this.attributesArray;
+  }
+
+  private manageAttributes(data) {
+    console.log(data)
+    if (data.data.attribute_object != null) {
+      this.attributesArray = Object.keys(data.data.attribute_object);
+    }
+// Converting object to hash map
+    for (const key in data.data.attribute_object) {
+      this.hashMap[key] = data.data.attribute_object[key];
+    }
+
+
+    // attributes
+    for (let i = 0; i < this.attributesArray.length; i++) {
+      const key = this.attributesArray[i];
+
+      // Creating a hash map
+
+// Converting object to hash map
+      for (const key in data.data.attribute_object) {
+        this.hashMap[key] = data.data.attribute_object[key];
+      }
+
+
+      this.attributeArr = this.attributesArray;
+    }
   }
 
   formatCurrency(event: any) {
@@ -2862,7 +2202,8 @@ export class DigitalAddComponent implements OnInit {
         }
       }
     );
-
+    // this.variationOptions.push({value: 'default', label: 'Choose Color'})
+    // console.log(this.defaultAndVariationOptions)
   }
 
   onColorChange($event) {

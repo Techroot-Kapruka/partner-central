@@ -6,6 +6,7 @@ import {colorSets} from '@swimlane/ngx-charts';
 import {ChartOptions} from 'chart.js';
 import Swal from 'sweetalert2';
 import {AnalyticsProductService} from "../../shared/service/analytics-product.service";
+import {ProductService} from "../../shared/service/product.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -46,6 +47,8 @@ export class DashboardComponent implements OnInit {
   public isPendingShipmentShow = false;
   public qaApprovalProductTable = false;
   public qaApprovalCount = 0;
+  public activeCount = 0;
+  public pendingCount = 0;
   public analyticsProductViewTotal = 0;
   public analyticsProductCartTotal = 0;
   public analyticsProductOrderTotal = 0;
@@ -59,7 +62,7 @@ export class DashboardComponent implements OnInit {
   public isColumnChart = false;
   showViewShopButton = false;
 
-  constructor(private dashboardService: DashboardService, private router: Router, private _Activatedroute: ActivatedRoute,
+  constructor(private productService: ProductService ,private dashboardService: DashboardService, private router: Router, private _Activatedroute: ActivatedRoute,
               private analyticsService: AnalyticsProductService) {
     this._Activatedroute.paramMap.subscribe(params => {
       this.partnerId = params.get('partnerId');
@@ -69,7 +72,7 @@ export class DashboardComponent implements OnInit {
     });
 
     const roleLog = sessionStorage.getItem('userRole');
-    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_CATEGORY_MANAGER') {
+    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_CATEGORY_MANAGER'|| roleLog === 'ROLE_SUPER_ADMIN') {
       this.isAdmin = true;
     } else if (roleLog === 'ROLE_GUEST') {
       this.isGuest = true;
@@ -78,13 +81,14 @@ export class DashboardComponent implements OnInit {
     if (sessionStorage.getItem('userRole') === 'ROLE_GUEST') {
 
     } else {
+      this.getCount();
       this.setPendingShipmentCount();
       this.approvalPendingUserCount();
       this.setReceivedShipmentCount();
       this.orderCountByBusinessName();
       this.approvelPendingProduct();
       this.partnerCount();
-      this.specialGiftCount();
+      // this.specialGiftCount();
       this.getLatestOrder();
       this.latestProducts();
       // this.getLatestInvoice();
@@ -172,7 +176,29 @@ export class DashboardComponent implements OnInit {
   ];
 
   /* End Doughnut Chart */
+  getCount(){
+    const busName = sessionStorage.getItem('businessName');
+    const userRole = sessionStorage.getItem('userRole');
+    const categoryID = sessionStorage.getItem('userId');
 
+    this.productService.getAllActiveProductList(busName, categoryID).subscribe(
+      data => this.activeProductCount(data),
+    );
+
+    this.productService.getnonActiveProduct(busName, categoryID).subscribe(
+      data => this.pendingProductCount(data),
+    );
+  }
+
+  pendingProductCount(data){
+    console.log(sessionStorage.getItem('userRole'))
+    console.log(this.pendingCount=data.data.length)
+    this.pendingCount=data.data.length
+  }
+
+  activeProductCount(data){
+    this.activeCount=data.data.length
+  }
   showElerments() {
 
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
@@ -188,7 +214,7 @@ export class DashboardComponent implements OnInit {
       this.isOrderShow = false;
       this.qaTables = false;
       this.qaApprovalProductTable = true;
-    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
       this.isLoginUser = false;
       this.isLoginPartner = true;
       this.isOrderShow = true;
