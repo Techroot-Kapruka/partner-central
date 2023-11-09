@@ -302,7 +302,7 @@ export class DigitalAddComponent implements OnInit {
       (document.getElementById('Seller_SKU_2') as HTMLInputElement).value = (document.getElementById('Seller_SKU') as HTMLInputElement).value;
       (document.getElementById('Seller_SKU') as HTMLInputElement).disabled = false;
     } else {
-      (document.getElementById('Seller_SKU') as HTMLInputElement).disabled = true;
+      (document.getElementById('Seller_SKU') as HTMLInputElement).disabled = false;
     }
   }
 
@@ -643,6 +643,7 @@ export class DigitalAddComponent implements OnInit {
     let isListingPrice = false;
 
     const partner_uid = sessionStorage.getItem('partnerId');
+    const partnerBusinessName = sessionStorage.getItem('businessName');
     const price = Number((document.getElementById('price') as HTMLInputElement).value);
     const sellerSKU = (document.getElementById('Seller_SKU') as HTMLInputElement).value;
     const product_name = (document.getElementById('product_name') as HTMLInputElement).value;
@@ -700,7 +701,7 @@ export class DigitalAddComponent implements OnInit {
           };
           productVariation.push(pp);
           const brandHtml = (document.getElementById('Brand') as HTMLInputElement);
-          let brand_ = 'none';
+          let brand_ = partnerBusinessName;
           if (brandHtml) {
             brand_ = (document.getElementById('Brand') as HTMLInputElement).value;
           }
@@ -763,7 +764,7 @@ export class DigitalAddComponent implements OnInit {
             productVariation.push(pp);
           }
           const brandHtml = (document.getElementById('Brand') as HTMLInputElement);
-          let brand_ = 'none';
+          let brand_ = partnerBusinessName;
           if (brandHtml) {
             brand_ = (document.getElementById('Brand') as HTMLInputElement).value;
           }
@@ -1463,6 +1464,7 @@ export class DigitalAddComponent implements OnInit {
   }
 
   successAlert(data) {
+    this.addProductClicked = false;
     if (data.message_status === 'Success') {
       Swal.fire(
         'New Product Added Successfully...!',
@@ -1722,17 +1724,17 @@ export class DigitalAddComponent implements OnInit {
       return;
     }
 
-      if (this.clothesArray.length > 0 && this.clothesArray[0].type_ !== this.selectedType){
-        Swal.fire(
-          'Oops',
-          'Please Select Same Size Type',
-          'warning'
-        );
-        const size = document.getElementById('clothesSizeUk') as HTMLSelectElement;
-        size.value = '';
-        this.sizeArrayForClothes=[]
-        return;
-      }
+    if (this.clothesArray.length > 0 && this.clothesArray[0].type_ !== this.selectedType){
+      Swal.fire(
+        'Oops',
+        'Please Select Same Size Type',
+        'warning'
+      );
+      const size = document.getElementById('clothesSizeUk') as HTMLSelectElement;
+      size.value = '';
+      this.sizeArrayForClothes=[]
+      return;
+    }
 
     if (this.isClothing) {
       for (let i = 0; i < this.colorArrayForClothes.length; i++) {
@@ -1775,6 +1777,7 @@ export class DigitalAddComponent implements OnInit {
     const clothesSizeUk = document.getElementById('clothesSizeUk') as HTMLSelectElement;
     colorSelect.value = '';
     clothesSizeUk.value = '';
+
   }
 
   deleteClothsRow(index) {
@@ -1914,7 +1917,21 @@ export class DigitalAddComponent implements OnInit {
     this.categoryPath = this.categoryArray[this.indexCat].path + '>' + this.SubCategoryArray[this.indexSubCat].name + '>' + this.subSubCategoryArray[this.indexSubSubCat].name + '>' + subSubSubCatName;
   }
 
-  getAttribytes(code) {
+  getVariations(code) {
+    this.attributesArray = [];
+    for (const key in this.hashMap) {
+      delete this.hashMap[key];
+    }
+    const payLoard = {
+      category_code: code
+    };
+    this.productService.getAttributes(payLoard).subscribe(
+      data => this.manageVariations(data),
+      error => this.manageError(error)
+    );
+  }
+
+  getAttributes(code) {
     this.attributesArray = [];
     for (const key in this.hashMap) {
       delete this.hashMap[key];
@@ -1936,10 +1953,9 @@ export class DigitalAddComponent implements OnInit {
     return value.length === 0;
   }
 
-  private manageAttributes(data) {
-    console.log('data!!!!!!!!!!!')
-    console.log(data)
 
+  private manageVariations(data) {
+    console.log(data)
     if (data.data.attribute_object != null) {
       this.attributesArray = Object.keys(data.data.attribute_object);
     }
@@ -2020,6 +2036,33 @@ export class DigitalAddComponent implements OnInit {
     }
 
     this.attributeArr = this.attributesArray;
+  }
+
+  private manageAttributes(data) {
+    console.log(data)
+    if (data.data.attribute_object != null) {
+      this.attributesArray = Object.keys(data.data.attribute_object);
+    }
+// Converting object to hash map
+    for (const key in data.data.attribute_object) {
+      this.hashMap[key] = data.data.attribute_object[key];
+    }
+
+
+    // attributes
+    for (let i = 0; i < this.attributesArray.length; i++) {
+      const key = this.attributesArray[i];
+
+      // Creating a hash map
+
+// Converting object to hash map
+      for (const key in data.data.attribute_object) {
+        this.hashMap[key] = data.data.attribute_object[key];
+      }
+
+
+      this.attributeArr = this.attributesArray;
+    }
   }
 
   formatCurrency(event: any) {
