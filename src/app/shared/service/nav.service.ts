@@ -67,9 +67,9 @@ export class NavService {
         {path: '/filess/file', title: 'Bulk upload', type: 'link'},
 
         // new Added thingsss
-        // {path: '/products/digital/pending-product-approval', title: 'Pending Approval Products', type: 'link'},
-        // {path: '/products/digital/pending-stock-allocation', title: 'Pending Stock Allocation', type: 'link'},
-        // {path: '/products/digital/edit-product-approval', title: 'Edit Product Approval', type: 'link'},
+        {path: '/products/digital/new-additions', title: 'New Additions', type: 'link'},
+        {path: '/products/digital/change-requests', title: 'Change Requests', type: 'link'},
+        {path: '/products/digital/product-search', title: 'Product Search', type: 'link'},
         // {path: '/products/digital/edit-image-approval', title: 'Edit Image Approval', type: 'link'},
         // {path: '/products/digital/out-of-stock', title: 'Out Of Stock', type: 'link'},
         // {path: '/products/digital/suspended', title: 'Suspended', type: 'link'},
@@ -427,6 +427,10 @@ export class NavService {
       this.items.value[1].children[2].path = '';
       this.items.value[1].children[2].title = '';
       this.items.value[1].children[2].type = '';
+
+      this.items.value[1].children[4].path = '';
+      this.items.value[1].children[4].title = '';
+      this.items.value[1].children[4].type = '';
 
       if (data.data === null) {
         this.items.value.splice(0, 7);
