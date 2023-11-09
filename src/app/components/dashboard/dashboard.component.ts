@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit {
     });
 
     const roleLog = sessionStorage.getItem('userRole');
-    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_CATEGORY_MANAGER') {
+    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_CATEGORY_MANAGER'|| roleLog === 'ROLE_SUPER_ADMIN') {
       this.isAdmin = true;
     } else if (roleLog === 'ROLE_GUEST') {
       this.isGuest = true;
@@ -214,7 +214,7 @@ export class DashboardComponent implements OnInit {
       this.isOrderShow = false;
       this.qaTables = false;
       this.qaApprovalProductTable = true;
-    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
       this.isLoginUser = false;
       this.isLoginPartner = true;
       this.isOrderShow = true;
