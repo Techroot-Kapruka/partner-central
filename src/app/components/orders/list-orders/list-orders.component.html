@@ -102,8 +102,10 @@
                 <b style="margin-left: 20px"> {{paginateDatass['orderRef']}} </b>
                 <br>
                 <span style="color: green" *ngIf="paginateDatass['statusStyleTwo']">&#10003;&nbsp; </span>
-                <span style="color: red; "
+                <span style="color: red;"
                       *ngIf="paginateDatass['statusStyleOne']">&#8226;&nbsp; </span>
+                <span style="color: black; text-decoration: line-through;"
+                      *ngIf="paginateDatass['statusStyleThree']">&#0000;&nbsp; </span>
                 <span>{{paginateDatass['status']}}</span>
               </td>
               <td>{{paginateDatass['orderDate']}}</td>
