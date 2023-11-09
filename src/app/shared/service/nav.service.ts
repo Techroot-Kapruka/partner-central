@@ -65,6 +65,16 @@ export class NavService {
         {path: '/products/digital/digital-product-list', title: 'Product List', type: 'link'},
         {path: '/products/digital/digital-add-product', title: 'Add Product', type: 'link'},
         {path: '/filess/file', title: 'Bulk upload', type: 'link'},
+
+        // new Added thingsss
+        // {path: '/products/digital/pending-product-approval', title: 'Pending Approval Products', type: 'link'},
+        // {path: '/products/digital/pending-stock-allocation', title: 'Pending Stock Allocation', type: 'link'},
+        // {path: '/products/digital/edit-product-approval', title: 'Edit Product Approval', type: 'link'},
+        // {path: '/products/digital/edit-image-approval', title: 'Edit Image Approval', type: 'link'},
+        // {path: '/products/digital/out-of-stock', title: 'Out Of Stock', type: 'link'},
+        // {path: '/products/digital/suspended', title: 'Suspended', type: 'link'},
+        // {path: '/products/digital/on-demand', title: 'On Demand', type: 'link'},
+
       ]
     },
     {
@@ -352,6 +362,7 @@ export class NavService {
 
   manageAdmin() {
 
+    console.log(this.items.value)
     this.items.value[2].children[1].path = '';
     this.items.value[2].children[1].title = '';
     this.items.value[2].children[1].type = '';
@@ -359,6 +370,10 @@ export class NavService {
     this.items.value[2].children[2].path = '';
     this.items.value[2].children[2].title = '';
     this.items.value[2].children[2].type = '';
+
+    // this.items.value[2].children[9].path = '';
+    // this.items.value[2].children[9].title = '';
+    // this.items.value[2].children[9].type = '';
 
     this.items.value[4].path = '';
     this.items.value[4].title = '';

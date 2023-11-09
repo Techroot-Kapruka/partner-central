@@ -81,14 +81,14 @@ export class DashboardComponent implements OnInit {
     if (sessionStorage.getItem('userRole') === 'ROLE_GUEST') {
 
     } else {
-      this.getCount();
+      // this.getCount();
       this.setPendingShipmentCount();
       this.approvalPendingUserCount();
       this.setReceivedShipmentCount();
       this.orderCountByBusinessName();
       this.approvelPendingProduct();
       this.partnerCount();
-      // this.specialGiftCount();
+      this.specialGiftCount();
       this.getLatestOrder();
       this.latestProducts();
       // this.getLatestInvoice();
@@ -191,13 +191,11 @@ export class DashboardComponent implements OnInit {
   }
 
   pendingProductCount(data){
-    console.log(sessionStorage.getItem('userRole'))
-    console.log(this.pendingCount=data.data.length)
-    this.pendingCount=data.data.length
+    this.pendingCount = data.data.length
   }
 
   activeProductCount(data){
-    this.activeCount=data.data.length
+    this.activeCount = data.data.length
   }
   showElerments() {
 
@@ -318,27 +316,28 @@ export class DashboardComponent implements OnInit {
   }
 
   specialGiftCount() {
-    const roleLog = sessionStorage.getItem('userRole');
-    if (roleLog === 'ROLE_ADMIN') {
-      this.dashboardService.getSpecialGiftCount().subscribe(
-        data => this.managespecialGiftCount(data)
-      );
-
-    } else if (roleLog === 'ROLE_CATEGORY_MANAGER') {
-      const payLoad = {
-        user_u_id: sessionStorage.getItem('userId')
-      };
-      this.dashboardService.getSpecialGiftCountByCatManager(payLoad).subscribe(
-        data => this.managespecialGiftCount(data)
-      );
-    } else {
-      const payLoad = {
-        partner_u_id: sessionStorage.getItem('partnerId')
-      };
-      this.dashboardService.getSpecialGiftCountByPartner(payLoad).subscribe(
-        data => this.managespecialGiftCount(data)
-      );
-    }
+    this.getCount();
+    // const roleLog = sessionStorage.getItem('userRole');
+    // if (roleLog === 'ROLE_ADMIN') {
+    //   this.dashboardService.getSpecialGiftCount().subscribe(
+    //     data => this.managespecialGiftCount(data)
+    //   );
+    //
+    // } else if (roleLog === 'ROLE_CATEGORY_MANAGER') {
+    //   const payLoad = {
+    //     user_u_id: sessionStorage.getItem('userId')
+    //   };
+    //   this.dashboardService.getSpecialGiftCountByCatManager(payLoad).subscribe(
+    //     data => this.managespecialGiftCount(data)
+    //   );
+    // } else {
+    //   const payLoad = {
+    //     partner_u_id: sessionStorage.getItem('partnerId')
+    //   };
+    //   this.dashboardService.getSpecialGiftCountByPartner(payLoad).subscribe(
+    //     data => this.managespecialGiftCount(data)
+    //   );
+    // }
   }
 
   approvelPendingProduct() {

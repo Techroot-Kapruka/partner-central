@@ -625,7 +625,6 @@ export class EditProductsComponent implements OnInit {
 
   selectSubcategory(event, x: number) {
 
-    
     switch (x) {
       case 1:
         const tex = (document.getElementById('category_ids') as HTMLInputElement).value;
@@ -651,6 +650,8 @@ export class EditProductsComponent implements OnInit {
   }
 
   getSubcategory(cate) {
+
+
     for (let i = 0; i < this.productCategoryArray.length; i++) {
       if (this.productCategoryArray[i].name === cate) {
         const senDdata = {
@@ -664,6 +665,8 @@ export class EditProductsComponent implements OnInit {
   }
 
   manageAllSubCategory(data) {
+
+
     this.productSubCategoryArray = [];
     let cr = {};
     cr = {
