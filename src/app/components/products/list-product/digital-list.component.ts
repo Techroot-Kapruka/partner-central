@@ -1,11 +1,12 @@
 import {Component, ElementRef, AfterViewInit, Input, OnInit, ViewChild, Output, EventEmitter} from '@angular/core';
 import {ProductService} from '../../../shared/service/product.service';
 import Swal from 'sweetalert2';
-import {Router} from '@angular/router';
+import {ActivatedRoute, NavigationExtras, Router} from '@angular/router';
 import {error} from 'protractor';
 import {environment} from '../../../../environments/environment.prod';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal, NgbTabset} from '@ng-bootstrap/ng-bootstrap';
 import {AuthService} from '../../../shared/auth/auth.service';
+import {PendingStockAllocationShareService} from "../../../shared/service/pending-stock-allocation-share.service";
 
 @Component({
   selector: 'app-digital-list',
@@ -50,6 +51,7 @@ export class DigitalListComponent implements OnInit {
   public paginatedOnDemand = [];
   public paginatedPendingStockAllow = [];
   public filterededitProductApproval = [];
+  public filtereDpendingStockByOnDemand = [];
 
   public isAdmin = false;
   public isPartner = false;
@@ -68,6 +70,7 @@ export class DigitalListComponent implements OnInit {
   public imagedefaultPathURI = '';
   vstock: number[] = [];
   dataLoaded: boolean = false;
+  stockUpdate: boolean = false;
 
   public imagePathURI = environment.imageURIENV;
 
@@ -111,7 +114,9 @@ export class DigitalListComponent implements OnInit {
 
   @ViewChild('imagePopup') imagePopup: ElementRef;
   @ViewChild('pricePopup') pricePopup: ElementRef;
-  constructor(private productService: ProductService, private router: Router, private modal: NgbModal, private authService: AuthService) {
+  @ViewChild('ondemandTab', { static: true }) onDemandTab: NgbTabset;
+
+  constructor(private route: ActivatedRoute, private productService: ProductService, private router: Router, private modal: NgbModal, private authService: AuthService, private pendingStockShare: PendingStockAllocationShareService) {
     this.getFieldEditData();
     this.getAllProduct();
     this.hideElement();
@@ -153,7 +158,7 @@ export class DigitalListComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.stopLoading();
-    }, 12000);
+    }, 16000);
   }
 
   stopLoading() {
@@ -167,9 +172,12 @@ export class DigitalListComponent implements OnInit {
       this.EnableStockEdit = true;
     } else if (sessionStorage.getItem('userRole') === 'ROLE_QA') {
       this.qaTables = false;
-    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' ) {
       this.qaTables = true;
       this.EnableStockEdit = true;
+    }else if (sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
+        this.qaTables = true;
+        this.EnableStockEdit = true;
     } else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER') {
       this.qaTables = true;
     } else if (sessionStorage.getItem('userRole') === 'ROLE_STORES_MANAGER') {
@@ -180,7 +188,7 @@ export class DigitalListComponent implements OnInit {
   hideElement(): void {
     const role = sessionStorage.getItem('userRole');
 
-    if (role === 'ROLE_ADMIN' || role === 'ROLE_CATEGORY_MANAGER' || role === 'ROLE_STORES_MANAGER') {
+    if (role === 'ROLE_ADMIN' || role === 'ROLE_SUPER_ADMIN' || role === 'ROLE_CATEGORY_MANAGER' || role === 'ROLE_STORES_MANAGER') {
       this.isAdmin = true;
     } else {
       this.isAdmin = false;
@@ -249,76 +257,13 @@ export class DigitalListComponent implements OnInit {
     this.productService.getPendingStockAllocationList(busName, categoryID).subscribe(
       data => this.getPendingStockAllocationList(data),
     );
-    // if (userRole === 'ROLE_ADMIN') {
-    //   // this.productService.getAllProducts().subscribe(
-    //   //   data => this.LoadAllProduct(data),
-    //   // );
-    //
-    // } else if (userRole === 'ROLE_CATEGORY_MANAGER') {
-    //   // const payLoard = {
-    //   //   user_u_id: sessionStorage.getItem('userId')
-    //   // };
-    //   // this.productService.getAllProductsByCatManager(payLoard).subscribe(
-    //   //   data => this.LoadAllProduct(data),
-    //   // );
-    //   this.productService.getProductByBussiness(busName, categoryID).subscribe(
-    //     data => this.getSelectedProductManage(data),
-    //   );
-    // } else if (userRole === 'ROLE_PARTNER' || userRole === 'ROLE_USER') {
-    //   this.productService.getProductByBussiness(busName, categoryID).subscribe(
-    //     data => this.getSelectedProductManage(data),
-    //   );
-    // }
+
   }
 
-  LoadAllProduct(data) {
-    this.startIndex = 0;
-    this.list_pages = [];
 
-    if (data.data == null) {
-    } else {
-      const lengthRes = data.data.length;
-      for (let i = 0; i < lengthRes; i++) {
-        const or = {
-          image: (data.data[i].productImage && data.data[i].productImage.image1 ? data.data[i].productImage.image1.split('/product')[1] : '') || '',
-          title: data.data[i].title,
-          productCode: data.data[i].product_code,
-          price: (data.data[i].productVariation && data.data[i].productVariation[0] ? data.data[i].productVariation[0].selling_price : 0),
-          in_stock: data.data[i].in_stock,
-          createDate: data.data[i].create_date,
-          vendor: data.data[i].vendor,
-          categoryPath: data.data[i].categoryPath,
-          action: ''
-        };
-        this.list_pages.push(or);
-      }
-      this.totalPages = Math.ceil(this.list_pages.length / this.list_pages2);
-    }
-  }
 
-  getSelectedPartnerAllocationProduct() {
-    const name = (document.getElementById('select_pro') as HTMLInputElement).value;
-    this.productService.getAllActiveProductList(name, this.categoryUID).subscribe(
-      data => this.getSelectedPartnerAllocationProductManage(data),
-      error => this.errorOrderManage(error)
-    );
-  }
 
-  getSelectedPartnerSuspendedProduct(){
-    const name = (document.getElementById('select_pro') as HTMLInputElement).value;
-    this.productService.getSuspendedProofVendor(name, this.categoryUID).subscribe(
-      data => this.LoadSuspendedProofVendor(data),
-      error => this.errorOrderManage(error)
-    );
-  }
 
-  getSelectedPartnerOutProduct(){
-    const name = (document.getElementById('select_pro') as HTMLInputElement).value;
-    this.productService.getOutofStockofVendor(name, this.categoryUID).subscribe(
-      data => this.LoadOutofStockofVendor(data),
-      error => this.errorOrderManage(error)
-    );
-  }
 
   getPendingStockAllocationList(data){
     this.pending_stock_allocation = [];
@@ -508,7 +453,7 @@ export class DigitalListComponent implements OnInit {
   editGetProduct2(index) {
 
     if (this.filteredProducts.length > 0) {
-      const productCode = this.list_pages[this.startIndex + index].productCode;
+      const productCode = this.filteredProducts[this.startIndex + index].productCode;
       const url = 'products/digital/digital-edit-product/' + productCode;
       this.router.navigate([url]);
     } else {
@@ -571,7 +516,6 @@ export class DigitalListComponent implements OnInit {
   }
 
   popUpImagePendingAllocation(index: number) {
-
     if (this.filterdPendingAllocation.length > 0) {
       this.imageUrl = this.imagePathURI + this.filterdPendingAllocation[this.startIndex + index].image;
       this.modalRef = this.modal.open(this.imagePopup, {centered: true});
@@ -628,7 +572,7 @@ export class DigitalListComponent implements OnInit {
 
   getPartner(): void {
     const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER') {
+    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER' || sessionUser === 'ROLE_SUPER_ADMIN') {
       this.productService.getPartnerAll().subscribe(
         data => this.manageBussinessPartner(data),
       );
@@ -680,6 +624,8 @@ export class DigitalListComponent implements OnInit {
     const busName = sessionStorage.getItem('businessName');
     const userRole = sessionStorage.getItem('userRole');
     const categoryID = sessionStorage.getItem('userId');
+    console.log('AA : '+ busName);
+    console.log('AA : '+ categoryID);
 
     this.productService.getnonActiveProduct(busName, categoryID).subscribe(
       data => this.manageNonActiveProduct(data),
@@ -809,11 +755,6 @@ export class DigitalListComponent implements OnInit {
   }
 
 
-  checkForTheQa(value) {
-
-    const url = 'products/digital/qa-approve-product/' + this.aqnonCheckProduct[value].productCode;
-    this.router.navigate([url]);
-  }
 
   manageApproveProduct(data) {
     Swal.fire(
@@ -824,19 +765,7 @@ export class DigitalListComponent implements OnInit {
     this.getNonActiveProdcut();
   }
 
-  editGetProduct(index) {
 
-    if (this.filteredPendingQC.length > 0) {
-      const productCode = this.filteredPendingQC[this.startIndex + index].productCode;
-      const url = 'products/digital/digital-edit-product/' + productCode;
-      this.router.navigate([url]);
-    } else {
-      const productCode = this.approvalPartnerProductList[this.startIndex + index].productCode;
-      const url = 'products/digital/digital-edit-product/' + productCode;
-      this.router.navigate([url]);
-    }
-
-  }
 
   editGetProductOS(index) {
     /*const productCode = this.list_outof_stock[index].productCode;
@@ -851,11 +780,22 @@ export class DigitalListComponent implements OnInit {
   }
 
   nonActiveProductsByCompanyName() {
-    const payloard = {
-      businessName: sessionStorage.getItem('businessName')
-    };
-    this.productService.nonActiveProductsByCompanyName(payloard).subscribe(
+    // const payloard = {
+    //   businessName: sessionStorage.getItem('businessName')
+    // };
+    // console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+    // this.productService.nonActiveProductsByCompanyName(payloard).subscribe(
+    //   data => this.manegeMonActiveProductsByCompanyName(data),
+    // );
+
+    const busName = sessionStorage.getItem('businessName');
+    const categoryID = sessionStorage.getItem('userId');
+    console.log('AA : '+ busName);
+    console.log('AA : '+ categoryID);
+
+    this.productService.getnonActiveProduct(busName, categoryID).subscribe(
       data => this.manegeMonActiveProductsByCompanyName(data),
+      error => this.errorOrderManage(error)
     );
   }
 
@@ -888,30 +828,45 @@ export class DigitalListComponent implements OnInit {
           };
           this.consignmentProducts.push(or);
         }
+
         this.totalPagesOnDemand = Math.ceil(this.consignmentProducts.length / this.list_pages2);
         this.onPageChange(1,'PendingOnDemand');
       }
     }
   }
 
+  pendingStockAllocationAction(productDetail : any){
+    this.filtereDpendingStockByOnDemand = this.consignmentProducts.filter((item) => (item as any).productCode === productDetail.productCode);
+    if (this.filtereDpendingStockByOnDemand.length === 0){
+      this.filtereDpendingStockByOnDemand[0]=productDetail
+      this.pendingStockShare.setDataArray(this.filtereDpendingStockByOnDemand);
+      const url = 'shipment/add-shipment';
+      this.router.navigate([url]);
+        }else{
+      this.onDemandTab.select('ondemandTab');
+        }
+  }
+
   UpdateVirtualStocks(row: any) {
-    if (this.vstock[this.startIndex + row] === null || this.vstock[this.startIndex + row] === undefined || isNaN(this.vstock[this.startIndex + row]) || this.vstock[this.startIndex + row] < 0) {
+    if (this.vstock[this.startIndex + row] === null || this.vstock[this.startIndex + row] === undefined || isNaN(this.vstock[this.startIndex + row]) || this.stockUpdate) {
       Swal.fire(
         'error!',
         'Invalid stock value. Please enter a valid number.',
         'error'
       );
+      this.vstock[this.startIndex+ row]=null
       return;
     }
 
-    const payloard = {
-      product_code: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].productCode : this.consignmentProducts[this.startIndex + row].productCode,
-      vendor: sessionStorage.getItem('partnerId'),
-      in_stock: this.vstock[this.startIndex + row]
-    };
-    this.productService.updateStock(payloard).subscribe(
-      data => this.manageUpdateStock(data),
-    );
+      const payloard = {
+        product_code: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].productCode : this.consignmentProducts[this.startIndex + row].productCode,
+        vendor: sessionStorage.getItem('partnerId'),
+        in_stock: this.vstock[this.startIndex + row]
+      };
+      this.productService.updateStock(payloard).subscribe(
+        data => this.manageUpdateStock(data),
+      );
+
   }
 
   manageUpdateStock(data) {
@@ -1022,7 +977,7 @@ export class DigitalListComponent implements OnInit {
   viewProduct(index) {
     let namezz = '';
     const userRole = sessionStorage.getItem('userRole');
-    if (userRole === 'ROLE_ADMIN') {
+    if (userRole === 'ROLE_ADMIN' || userRole === 'ROLE_SUPER_ADMIN') {
       namezz = (document.getElementById('select_pro3') as HTMLInputElement).value;
       for (let i = 0; i < this.partnerArray.length; i++) {
         if (this.partnerArray[i].partner_u_id === namezz) {
@@ -1113,7 +1068,7 @@ export class DigitalListComponent implements OnInit {
     let businessName = '';
     const names = '';
     const sessionUser2 = sessionStorage.getItem('userRole');
-    if (sessionUser2 === 'ROLE_ADMIN') {
+    if (sessionUser2 === 'ROLE_ADMIN' || sessionUser2 === 'ROLE_SUPER_ADMIN') {
       businessName = (document.getElementById('select_pro3') as HTMLInputElement).value;
     } else if (sessionUser2 === 'ROLE_PARTNER') {
       businessName = sessionStorage.getItem('partnerId');
@@ -1160,7 +1115,7 @@ export class DigitalListComponent implements OnInit {
 
   getSelectedRowss(page) {
     const sessionUser2 = sessionStorage.getItem('userRole');
-    if (sessionUser2 === 'ROLE_ADMIN') {
+    if (sessionUser2 === 'ROLE_ADMIN' || sessionUser2 === 'ROLE_SUPER_ADMIN') {
       const businessName = (document.getElementById('select_pro3') as HTMLInputElement).value;
       if (businessName == 'none') {
       } else {
@@ -1313,8 +1268,8 @@ export class DigitalListComponent implements OnInit {
       this.router.navigate([url], {
         queryParams: {
           product_code: this.product_code,
-          unique_code: this.nonActiveEditedImageProductsArray[this.startIndex+rowIndex].editId,
-          requested_by: this.nonActiveEditedImageProductsArray[this.startIndex+rowIndex].requestBy
+          unique_code: this.filterdEditImgApproval[this.startIndex+rowIndex].editId,
+          requested_by: this.filterdEditImgApproval[this.startIndex+rowIndex].requestBy
         }
       });
     }else{
@@ -1516,7 +1471,7 @@ export class DigitalListComponent implements OnInit {
     }else if (Descrip === 'PendingStockAllocation'){
       const startIndex = (this.currentPagePendingAllo - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;
-
+      this.startIndex = startIndex
       if (this.filterdPendingAllocation.length > 0){
         this.paginatedPendingStockAllow = this.filterdPendingAllocation.slice(startIndex, endIndex);
       }else{
@@ -1547,6 +1502,7 @@ export class DigitalListComponent implements OnInit {
       const startIndex = (this.currentPageOnDemand - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;
       this.startIndex = startIndex;
+
       if (this.filteredOnDemandProduct.length > 0){
         this.paginatedOnDemand = this.filteredOnDemandProduct.slice(startIndex, endIndex);
       }else{
@@ -1593,16 +1549,30 @@ export class DigitalListComponent implements OnInit {
   }
 
   onVstockChange(row: number) {
-    if (this.vstock[this.startIndex + row] < 0) {
-      Swal.fire({
-        title: 'Stock Cannot be a negative value',
-        text: 'Please enter a valid stock value.',
-        icon: 'warning',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.vstock[this.startIndex + row] = null;
-        }
-      });
+    if (this.filteredOnDemandProduct.length > 0){
+      if (this.vstock[this.startIndex + row] + this.filteredOnDemandProduct[this.startIndex + row].inStock < 0){
+        Swal.fire({
+              title: 'Add Stock Must Be More Than In Stock',
+              text: 'Please enter a valid stock value.',
+              icon: 'warning',
+            });
+        this.vstock[this.startIndex + row] = null;
+        this.stockUpdate = true;
+      }else{
+        this.stockUpdate = false;
+      }
+    }else{
+      if (this.consignmentProducts[this.startIndex + row].inStock + this.vstock[this.startIndex + row] < 0){
+        Swal.fire({
+          title: 'Add Stock Must Be More Than In Stock',
+          text: 'Please enter a valid stock value.',
+          icon: 'warning',
+        });
+        this.vstock[this.startIndex + row] = null;
+        this.stockUpdate = true;
+      }else{
+        this.stockUpdate = false;
+      }
     }
   }
 }

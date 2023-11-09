@@ -55,6 +55,7 @@ export class DigitalAddComponent implements OnInit {
   selectedType = '';
   showMoreMode = true;
   isColorVariation = false;
+  showImageCropper = false;
 
   public keyArrays = [];
   attributesKeyArr = [];
@@ -84,11 +85,11 @@ export class DigitalAddComponent implements OnInit {
   visibleElementCount = 6;
   totalElementCount: number;
   loadMoreElements = 30;
-  imgUploaded1:boolean=false;
-  imgUploaded2:boolean=false;
-  imgUploaded3:boolean=false;
-  imgUploaded4:boolean=false;
-  imgUploaded5:boolean=false;
+  imgUploaded1: boolean = false;
+  imgUploaded2: boolean = false;
+  imgUploaded3: boolean = false;
+  imgUploaded4: boolean = false;
+  imgUploaded5: boolean = false;
 
 
   editorConfig: AngularEditorConfig = {
@@ -299,7 +300,7 @@ export class DigitalAddComponent implements OnInit {
       (document.getElementById('Seller_SKU_2') as HTMLInputElement).value = (document.getElementById('Seller_SKU') as HTMLInputElement).value;
       (document.getElementById('Seller_SKU') as HTMLInputElement).disabled = false;
     } else {
-      (document.getElementById('Seller_SKU') as HTMLInputElement).disabled = true;
+      (document.getElementById('Seller_SKU') as HTMLInputElement).disabled = false;
     }
   }
 
@@ -640,6 +641,7 @@ export class DigitalAddComponent implements OnInit {
     let isListingPrice = false;
 
     const partner_uid = sessionStorage.getItem('partnerId');
+    const partnerBusinessName = sessionStorage.getItem('businessName');
     const price = Number((document.getElementById('price') as HTMLInputElement).value);
     const sellerSKU = (document.getElementById('Seller_SKU') as HTMLInputElement).value;
     const product_name = (document.getElementById('product_name') as HTMLInputElement).value;
@@ -697,7 +699,7 @@ export class DigitalAddComponent implements OnInit {
           };
           productVariation.push(pp);
           const brandHtml = (document.getElementById('Brand') as HTMLInputElement);
-          let brand_ = 'none';
+          let brand_ = partnerBusinessName;
           if (brandHtml) {
             brand_ = (document.getElementById('Brand') as HTMLInputElement).value;
           }
@@ -760,7 +762,7 @@ export class DigitalAddComponent implements OnInit {
             productVariation.push(pp);
           }
           const brandHtml = (document.getElementById('Brand') as HTMLInputElement);
-          let brand_ = 'none';
+          let brand_ = partnerBusinessName;
           if (brandHtml) {
             brand_ = (document.getElementById('Brand') as HTMLInputElement).value;
           }
@@ -777,7 +779,7 @@ export class DigitalAddComponent implements OnInit {
             productDescription: {
               description: product_description,
               special_notes: ' ',
-              availability: 'yes'
+              availability: 'no'
             },
             productOffer: {
               seller_sku: sellerSKU,
@@ -794,7 +796,7 @@ export class DigitalAddComponent implements OnInit {
             productAttributes: this.attributeArr
           };
           this.productService.insertProductWithImages(one, one2, one3, one4, one5, payload).subscribe(
-            data => this.manageProductResult(data),
+            data => this.successAlert(data),
             error => this.mnageErrorProduct(error)
           );
 
@@ -815,6 +817,7 @@ export class DigitalAddComponent implements OnInit {
 
     const listing_price = ((document.getElementById('price') as HTMLInputElement).value);
     const sellerSKU = (document.getElementById('Seller_SKU') as HTMLInputElement).value;
+    // const sellerSKU2 = (document.getElementById('Seller_SKU_2') as HTMLInputElement).value;
     const product_name = (document.getElementById('product_name') as HTMLInputElement).value;
     const product_description = (document.getElementById('product_description') as HTMLInputElement).value;
     const productBrandHtml = (document.getElementById('Brand') as HTMLInputElement);
@@ -858,212 +861,43 @@ export class DigitalAddComponent implements OnInit {
   }
 
 
-  /*
-  calculte price using Amount
-   */
-
-  calculatePriceForAmount() {
-    const price = (document.getElementById('txt_price') as HTMLInputElement).value;
-    (document.getElementById('txt_price_rate') as HTMLInputElement).style.borderColor = '#ced4da';
-    if (price != '') {
-      (document.getElementById('txt_price') as HTMLInputElement).style.borderColor = '#ced4da';
-      let priceString = '';
-      const amount = (document.getElementById('txt_amount') as HTMLInputElement).value;
-      const newPrice = Number(price);
-      const newamount = Number(amount);
-      const newSellingPrice = newPrice + newamount;
-      const firstAmount = Number((document.getElementById('txt_hidden_amount') as HTMLInputElement).value);
-      if (firstAmount <= newSellingPrice) {
-        (document.getElementById('txt_amount') as HTMLInputElement).style.borderColor = '#e9ecef';
-        document.getElementById('condition2').style.display = 'none';
-      } else {
-        document.getElementById('condition2').style.display = 'block';
-        (document.getElementById('txt_amount') as HTMLInputElement).style.borderColor = 'red';
-      }
-
-      if (amount === '') {
-        (document.getElementById('txt_price_rate') as HTMLInputElement).disabled = false;
-
-      } else {
-        (document.getElementById('txt_price_rate') as HTMLInputElement).disabled = true;
-
-      }
-      priceString = '' + newSellingPrice;
-      (document.getElementById('txt_selling_price') as HTMLInputElement).value = priceString;
-    } else {
-      Swal.fire(
-        'Whoops...!',
-        'Price cant be empty....',
-        'error'
-      );
-      (document.getElementById('txt_price') as HTMLInputElement).style.borderColor = 'red';
-      (document.getElementById('txt_price_rate') as HTMLInputElement).disabled = true;
-    }
-
-  }
-
-  calculateRateForProduct() {
-    let priceString = '';
-    const rate = Number((document.getElementById('txt_price_rate') as HTMLInputElement).value);
-    const price = Number((document.getElementById('txt_price') as HTMLInputElement).value);
-    const rateAmount = price * rate / 100;
-    const newSellingPrice = price + rateAmount;
-
-    priceString = '' + newSellingPrice;
-    (document.getElementById('txt_selling_price') as HTMLInputElement).value = priceString;
-    (document.getElementById('txt_hidden_amount') as HTMLInputElement).value = priceString;
-    this.amountBefor = priceString;
-  }
-
-  calculatePriceForAmount2() {
-
-    let priceString = '';
-    const price = this.productGroupCon.value.proGCostPrice;
-    const amount = this.productGroupCon.value.proGAmount;
-    const newPrice = Number(price);
-    const newamount = Number(amount);
-    const newSellingPrice = newPrice + newamount;
-
-    if (amount === '') {
-      (document.getElementById('proGRate') as HTMLInputElement).disabled = false;
-
-    } else {
-      (document.getElementById('proGRate') as HTMLInputElement).disabled = true;
-
-    }
-    priceString = '' + newSellingPrice;
-    // (document.getElementById('proGSellingPrice') as HTMLInputElement).value = priceString;
-    this.productGroupCon = new FormGroup({
-      proGAmount: new FormControl(amount),
-      proGRate: new FormControl(''),
-      proGCostPrice: new FormControl(price),
-      qty: new FormControl('0'),
-      proGSellingPrice: new FormControl(priceString),
-    });
-  }
-
-  /*
-  calculte price using rate
-   */
-
-
-  calculatePriceForPriceRate() {
-    const price = (document.getElementById('txt_price') as HTMLInputElement).value;
-    (document.getElementById('txt_amount') as HTMLInputElement).style.borderColor = '#ced4da';
-    if (price != '') {
-
-      (document.getElementById('txt_price') as HTMLInputElement).style.borderColor = '#ced4da';
-      let priceString = '';
-      const priceRate = (document.getElementById('txt_price_rate') as HTMLInputElement).value;
-
-      const price = (document.getElementById('txt_price') as HTMLInputElement).value;
-      const newPrice = Number(price);
-      const priceRateNew = Number(priceRate);
-
-      const newSellingPrice = newPrice * priceRateNew / 100;
-      const sellPricee = newSellingPrice + newPrice;
-
-      const firstAmount = Number((document.getElementById('txt_hidden_amount') as HTMLInputElement).value);
-      if (firstAmount <= sellPricee) {
-        (document.getElementById('txt_price_rate') as HTMLInputElement).style.borderColor = '#e9ecef';
-        document.getElementById('condition2').style.display = 'none';
-      } else {
-        document.getElementById('condition2').style.display = 'block';
-        (document.getElementById('txt_price_rate') as HTMLInputElement).style.borderColor = 'red';
-      }
-
-
-      if (priceRate === '') {
-        (document.getElementById('txt_amount') as HTMLInputElement).disabled = false;
-      } else {
-        (document.getElementById('txt_amount') as HTMLInputElement).disabled = true;
-      }
-      priceString = '' + sellPricee;
-      (document.getElementById('txt_selling_price') as HTMLInputElement).value = priceString;
-    } else {
-      Swal.fire(
-        'Whoops...!',
-        'Price cant be empty....',
-        'error'
-      );
-      (document.getElementById('txt_price') as HTMLInputElement).style.borderColor = 'red';
-      (document.getElementById('txt_amount') as HTMLInputElement).disabled = true;
-    }
-
-
-  }
-
-  calculatePriceForPriceRate2() {
-    let priceString = '';
-    const priceRate = this.productGroupCon.value.proGRate;
-
-    const price = this.productGroupCon.value.proGCostPrice;
-    const newPrice = Number(price);
-    const priceRateNew = Number(priceRate);
-
-    const newSellingPrice = newPrice * priceRateNew / 100;
-    const sellPricee = newSellingPrice + newPrice;
-
-    if (priceRate === '') {
-      (document.getElementById('proGAmount') as HTMLInputElement).disabled = false;
-    } else {
-      (document.getElementById('proGAmount') as HTMLInputElement).disabled = true;
-    }
-    priceString = '' + sellPricee;
-    // (document.getElementById('proGSellingPrice') as HTMLInputElement).value = priceString;
-    this.productGroupCon = new FormGroup({
-      proGAmount: new FormControl(''),
-      proGRate: new FormControl(priceRate),
-      proGCostPrice: new FormControl(price),
-      qty: new FormControl(0),
-      proGSellingPrice: new FormControl(priceString),
-    });
-  }
-
-  manageProductResult(datas) {
-    this.oneTimeClicked = true;
-    if (datas.status_code === 200) {
-      let one = this.imageCliant.get('fileSource').value;
-      let one2 = this.imageCliant.get('fileSource2').value;
-      let one3 = this.imageCliant.get('fileSource3').value;
-      let one4 = this.imageCliant.get('fileSource4').value;
-      let one5 = this.imageCliant.get('fileSource5').value;
-      const pricecc = new File([''], '');
-      if (one === '') {
-
-        one = pricecc;
-      }
-
-      if (one2 === '') {
-        one2 = pricecc;
-      }
-
-      if (one3 === '') {
-        one3 = pricecc;
-      }
-
-      if (one4 === '') {
-        one4 = pricecc;
-      }
-
-      if (one5 === '') {
-        one5 = pricecc;
-      }
-
-      this.productService.insertProductImage(one, one2, one3, one4, one5, datas.data.product_code).subscribe(
-        data => this.successAlert(data),
-        error => this.mnageErrorProduct(error)
-      );
-    }
-  }
-
   mnageErrorProduct(error) {
     this.addProductClicked = false;
-    Swal.fire(
-      'Oops...',
-      error.message,
-      'error'
-    );
+    switch (error.status) {
+      case 200: {
+        Swal.fire(
+          'Oops...',
+          error.message,
+          'error'
+        );
+        break;
+      }
+      case 401: {
+        Swal.fire(
+          'Oops...',
+          'Unauthorized! Please login agin',
+          'error'
+        );
+        break;
+      }
+      case 400: {
+        Swal.fire(
+          'Oops...',
+          'Invalid Request! Please check your values',
+          'error'
+        );
+        break;
+      }
+      case 500: {
+        Swal.fire(
+          'Oops...',
+          'Something Went Wrong! Please contact the administrator.',
+          'error'
+        );
+        break;
+      }
+    }
+
   }
 
   imageControlMethord() {
@@ -1096,9 +930,6 @@ export class DigitalAddComponent implements OnInit {
     });
   }
 
-
-
-
   onSelectAttribute($event) {
     const key = $event.target.id;
     const value = $event.target.value;
@@ -1124,87 +955,143 @@ export class DigitalAddComponent implements OnInit {
     return new Promise((resolve, reject) => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
+      canvas.width = 700;
+      canvas.height = 700;
 
       const image = new Image();
       image.src = URL.createObjectURL(file);
 
       image.onload = () => {
-        // Calculate the new width and height for reduced resolution
-        let newWidth, newHeight;
-        const maxDimension = 400; // Set your desired maximum dimension
-
+        // Calculate the new image dimensions, maintaining aspect ratio
+        let width, height;
         if (image.width > image.height) {
-          newWidth = maxDimension;
-          newHeight = (maxDimension / image.width) * image.height;
+          width = canvas.width;
+          height = image.height * (canvas.width / image.width);
         } else {
-          newHeight = maxDimension;
-          newWidth = (maxDimension / image.height) * image.width;
+          height = canvas.height;
+          width = image.width * (canvas.height / image.height);
         }
 
-        // Set the canvas size to the reduced resolution
-        canvas.width = newWidth;
-        canvas.height = newHeight;
+        // Calculate position to center the image
+        const offsetX = (canvas.width - width) / 2;
+        const offsetY = (canvas.height - height) / 2;
+
 
         // Create a white background
         ctx.fillStyle = '#fff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Draw the reduced-resolution image onto the canvas
-        ctx.drawImage(image, 0, 0, newWidth, newHeight);
+        // Draw the centered and resized image onto the canvas
+        try {
+          ctx.drawImage(image, offsetX, offsetY, width, height);
+        } catch (e) {
+          reject('Image Drawing Error');
+          return;
+        }
 
         // Convert the canvas content to a File
         canvas.toBlob((blob) => {
-          const resizedFile = new File([blob], file.name, { type: file.type });
-          resolve(resizedFile);
+          if (blob) {
+            const resizedFile = new File([blob], file.name, {type: file.type});
+            resolve(resizedFile);
+          } else {
+            reject('Canvas toBlob Error');
+          }
         }, file.type);
+      };
+
+      image.onerror = () => {
+        reject('Image Loading Error');
       };
     });
   }
 
 
-
-  changeValue(event: any, i) {
-
+  async changeValue(event: any, i) {
     if (event.target.files.length === 0) {
       return;
     }
+
     // Image upload validation
     const mimeType = event.target.files[0].type;
 
     if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
-        'error',
+        'Error',
         'Please select a JPEG (jpg) image.',
         'warning'
       );
-      return;
+      return; // Stop further actions if the image is not a JPEG
     }
 
+    // Check the image resolution
+    let image = new Image();
+    image.src = URL.createObjectURL(event.target.files[0]);
 
-    this.mainImageAdded = true;
-    this.imgUploaded1 = true;
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
+    // Create a promise to hold the async operation
+    const checkImageResolution = new Promise<void>((resolve, reject) => {
+      image.onload = () => {
+        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+          Swal.fire(
+            'Error',
+            'The maximum resolution supported for images is 5000x5000 pixels.',
+            'error'
+          );
+          this.removeimg(0);
+          reject('Invalid image resolution'); // Reject the promise to stop further actions
+        } else {
+          resolve(); // Resolve the promise to continue with further actions
+        }
+      };
+    });
 
-    reader.onload = (_event) => {
-      (document.getElementById('imageOneO') as HTMLInputElement).src = reader.result.toString();
-      (document.getElementById('mainImage') as HTMLInputElement).src = reader.result.toString();
-    };
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
 
-    // ========================================================
-    if (event.target.files.length > 0) {
+      // Continue with further actions here because the image is valid
+      this.showImageCropper = true;
+      this.mainImageAdded = true;
+      this.imgUploaded1 = true;
 
-      const file = event.target.files[0];
-      this.resizeImage(file).then((resizedFile) => {
-        this.imageCliant.patchValue({
-          fileSource: resizedFile
-        });
-      });
+      // Display the image
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+
+      reader.onload = (_event) => {
+        (document.getElementById('imageOneO') as HTMLInputElement).src = reader.result.toString();
+        (document.getElementById('mainImage') as HTMLInputElement).src = reader.result.toString();
+      };
+
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource: resizedFile
+            });
+          })
+          .catch((error) => {
+            this.removeimg(1);
+            Swal.fire(
+              'error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
     }
   }
 
-  removeimg(x: number){
+
+  removeimg(x: number) {
     switch (x) {
       case 1:
         this.imgUploaded1 = false;
@@ -1219,7 +1106,7 @@ export class DigitalAddComponent implements OnInit {
         this.imgUploaded2 = false;
         this.imageCliant.patchValue({
           fileSource2: '',
-          imageOne2:'',
+          imageOne2: '',
         });
         (document.getElementById('imageTwoO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
         break;
@@ -1227,7 +1114,7 @@ export class DigitalAddComponent implements OnInit {
         this.imgUploaded3 = false;
         this.imageCliant.patchValue({
           fileSource3: '',
-          imageOne3:'',
+          imageOne3: '',
         });
         (document.getElementById('imageTreeE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
         break;
@@ -1235,7 +1122,7 @@ export class DigitalAddComponent implements OnInit {
         this.imgUploaded4 = false;
         this.imageCliant.patchValue({
           fileSource4: '',
-          imageOne4:'',
+          imageOne4: '',
         });
         (document.getElementById('imageFourR') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
         break;
@@ -1243,14 +1130,14 @@ export class DigitalAddComponent implements OnInit {
         this.imgUploaded5 = false;
         this.imageCliant.patchValue({
           fileSource5: '',
-          imageOne5:'',
+          imageOne5: '',
         });
         (document.getElementById('imageFiveE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
         break;
     }
   }
 
-  changeValue2(event) {
+  async changeValue2(event) {
     if (event.target.files.length === 0) {
       return;
     }
@@ -1259,33 +1146,78 @@ export class DigitalAddComponent implements OnInit {
 
     if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
-        'error',
+        'Error',
         'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
     }
-    // Image upload
-    this.imgUploaded2 = true;
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
+    // Check the image resolution
+    let image = new Image();
+    image.src = URL.createObjectURL(event.target.files[0]);
 
-    reader.onload = (_event) => {
-      (document.getElementById('imageTwoO') as HTMLInputElement).src = reader.result.toString();
-    };
+    // Create a promise to hold the async operation
+    const checkImageResolution = new Promise<void>((resolve, reject) => {
+      image.onload = () => {
+        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+          Swal.fire(
+            'Error',
+            'The maximum resolution supported for images is 5000x5000 pixels.',
+            'error'
+          );
+          this.removeimg(2);
+          reject('Invalid image resolution'); // Reject the promise to stop further actions
+        } else {
+          resolve(); // Resolve the promise to continue with further actions
+        }
+      };
+    });
 
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
 
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.resizeImage(file).then((resizedFile) => {
-        this.imageCliant.patchValue({
-          fileSource2: resizedFile
-        });
-      });
+      // Continue with further actions here because the image is valid
+      this.showImageCropper = true;
+      this.mainImageAdded = true;
+      this.imgUploaded2 = true;
+
+      // Display the image
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+
+      reader.onload = (_event) => {
+        (document.getElementById('imageTwoO') as HTMLInputElement).src = reader.result.toString();
+      };
+
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource2: resizedFile
+            });
+          })
+          .catch((error) => {
+            this.removeimg(2);
+            Swal.fire(
+              'error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
     }
   }
 
-  changeValue3(event) {
+  async changeValue3(event) {
 
     if (event.target.files.length === 0) {
       return;
@@ -1296,32 +1228,78 @@ export class DigitalAddComponent implements OnInit {
 
     if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
-        'error',
+        'Error',
         'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
     }
-    // Image upload
-    this.imgUploaded3 = true;
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
+    // Check the image resolution
+    let image = new Image();
+    image.src = URL.createObjectURL(event.target.files[0]);
 
-    reader.onload = (_event) => {
-      (document.getElementById('imageTreeE') as HTMLInputElement).src = reader.result.toString();
-    };
+    // Create a promise to hold the async operation
+    const checkImageResolution = new Promise<void>((resolve, reject) => {
+      image.onload = () => {
+        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+          Swal.fire(
+            'Error',
+            'The maximum resolution supported for images is 5000x5000 pixels.',
+            'error'
+          );
+          this.removeimg(3);
+          reject('Invalid image resolution'); // Reject the promise to stop further actions
+        } else {
+          resolve(); // Resolve the promise to continue with further actions
+        }
+      };
+    });
 
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.resizeImage(file).then((resizedFile) => {
-        this.imageCliant.patchValue({
-          fileSource3: resizedFile
-        });
-      });
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
+
+      // Continue with further actions here because the image is valid
+      this.showImageCropper = true;
+      this.mainImageAdded = true;
+      this.imgUploaded3 = true;
+
+      // Display the image
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+
+      reader.onload = (_event) => {
+        (document.getElementById('imageTreeE') as HTMLInputElement).src = reader.result.toString();
+      };
+
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource3: resizedFile
+            });
+          })
+          .catch((error) => {
+            this.removeimg(3);
+            Swal.fire(
+              'error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
     }
   }
 
-  changeValue4(event) {
+  async changeValue4(event) {
 
     if (event.target.files.length === 0) {
       return;
@@ -1331,32 +1309,78 @@ export class DigitalAddComponent implements OnInit {
 
     if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
-        'error',
+        'Error',
         'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
     }
-    // Image upload
-    this.imgUploaded4 = true;
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
+    // Check the image resolution
+    let image = new Image();
+    image.src = URL.createObjectURL(event.target.files[0]);
 
-    reader.onload = (_event) => {
-      (document.getElementById('imageFourR') as HTMLInputElement).src = reader.result.toString();
-    };
+    // Create a promise to hold the async operation
+    const checkImageResolution = new Promise<void>((resolve, reject) => {
+      image.onload = () => {
+        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+          Swal.fire(
+            'Error',
+            'The maximum resolution supported for images is 5000x5000 pixels.',
+            'error'
+          );
+          this.removeimg(4);
+          reject('Invalid image resolution'); // Reject the promise to stop further actions
+        } else {
+          resolve(); // Resolve the promise to continue with further actions
+        }
+      };
+    });
 
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.resizeImage(file).then((resizedFile) => {
-        this.imageCliant.patchValue({
-          fileSource4: resizedFile
-        });
-      });
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
+
+      // Continue with further actions here because the image is valid
+      this.showImageCropper = true;
+      this.mainImageAdded = true;
+      this.imgUploaded4 = true;
+
+      // Display the image
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+
+      reader.onload = (_event) => {
+        (document.getElementById('imageFourR') as HTMLInputElement).src = reader.result.toString();
+      };
+
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource4: resizedFile
+            });
+          })
+          .catch((error) => {
+            this.removeimg(4);
+            Swal.fire(
+              'error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
     }
   }
 
-  changeValue5(event) {
+  async changeValue5(event) {
 
     if (event.target.files.length === 0) {
       return;
@@ -1366,32 +1390,79 @@ export class DigitalAddComponent implements OnInit {
 
     if (!mimeType.match(/^image\/jpeg$/i)) {
       Swal.fire(
-        'error',
+        'Error',
         'Please select a JPEG (jpg) image.',
         'warning'
       );
       return;
     }
-    // Image upload
-    this.imgUploaded5 = true;
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
+    // Check the image resolution
+    let image = new Image();
+    image.src = URL.createObjectURL(event.target.files[0]);
 
-    reader.onload = (_event) => {
-      (document.getElementById('imageFiveE') as HTMLInputElement).src = reader.result.toString();
-    };
+    // Create a promise to hold the async operation
+    const checkImageResolution = new Promise<void>((resolve, reject) => {
+      image.onload = () => {
+        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
+          Swal.fire(
+            'Error',
+            'The maximum resolution supported for images is 5000x5000 pixels.',
+            'error'
+          );
+          this.removeimg(5);
+          reject('Invalid image resolution'); // Reject the promise to stop further actions
+        } else {
+          resolve(); // Resolve the promise to continue with further actions
+        }
+      };
+    });
 
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.resizeImage(file).then((resizedFile) => {
-        this.imageCliant.patchValue({
-          fileSource5: resizedFile
-        });
-      });
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
+
+      // Continue with further actions here because the image is valid
+      this.showImageCropper = true;
+      this.mainImageAdded = true;
+      this.imgUploaded5 = true;
+
+      // Display the image
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
+
+      reader.onload = (_event) => {
+        (document.getElementById('imageFiveE') as HTMLInputElement).src = reader.result.toString();
+      };
+
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource4: resizedFile
+            });
+          })
+          .catch((error) => {
+            this.removeimg(5);
+            Swal.fire(
+              'Error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
     }
   }
 
   successAlert(data) {
+    this.addProductClicked = false;
     if (data.message_status === 'Success') {
       Swal.fire(
         'New Product Added Successfully...!',
@@ -1416,484 +1487,14 @@ export class DigitalAddComponent implements OnInit {
       // this.router.navigate([url]);
     } else {
       Swal.fire(
-        "Failed",
+        'Failed',
         data.message,
         'warning'
-      )
-    }
-
-  }
-
-  clearAllFeilds() {
-    this.checkBoxCon = new FormGroup({
-      productGroup: new FormControl(false),
-    });
-    (document.getElementById('category_code') as HTMLInputElement).value = '';
-    (document.getElementById('themeVar') as HTMLInputElement).value = '';
-    (document.getElementById('txt_title') as HTMLInputElement).value = '';
-    (document.getElementById('txt_brand') as HTMLInputElement).value = '';
-    (document.getElementById('txt_manufacture') as HTMLInputElement).value = '';
-    (document.getElementById('txt_description') as HTMLInputElement).value = '';
-    (document.getElementById('special_notes') as HTMLInputElement).value = '';
-    (document.getElementById('availability') as HTMLInputElement).value = '';
-    (document.getElementById('txt_seller_sku') as HTMLInputElement).value = '';
-    (document.getElementById('txt_price') as HTMLInputElement).value = '';
-    (document.getElementById('txt_quantity') as HTMLInputElement).value = '';
-    (document.getElementById('condition') as HTMLInputElement).value = '';
-    (document.getElementById('txt_amount') as HTMLInputElement).value = '';
-    (document.getElementById('txt_price_rate') as HTMLInputElement).value = '';
-    (document.getElementById('category_code') as HTMLInputElement).value = '';
-    (document.getElementById('breadcrum') as HTMLInputElement).innerHTML = '';
-    this.categoryArray = [];
-    this.isColor = false;
-    this.isSize = false;
-    this.colorsAndSize = false;
-    this.colorArray = [];
-    this.sizeArray = [];
-    this.keyWordArray = [];
-    this.keyWordArray2 = [];
-    this.isDisplay = 'none';
-    this.sizeAndColorArray = [];
-    this.colorNameArray = [];
-    this.colorCodeArray = [];
-    this.sizeNameArray = [];
-    this.colorAndSizeArray = [];
-    this.imageArr = [];
-    this.nonGroupArray = [];
-    this.productGroupTabel = [];
-    const urlImg = 'assets/images/user.png';
-    (document.getElementById('mainImage') as HTMLInputElement).src = 'assets/images/1.jpg';
-    // (document.getElementById('imageOneO') as HTMLInputElement).src = urlImg;
-    (document.getElementById('imageTwoO') as HTMLInputElement).src = urlImg;
-    (document.getElementById('imageTreeE') as HTMLInputElement).src = urlImg;
-    (document.getElementById('imageFourR') as HTMLInputElement).src = urlImg;
-    (document.getElementById('imageFiveE') as HTMLInputElement).src = urlImg;
-    // document.getElementById('groupPrice').style.display = 'none';
-
-  }
-
-  addingProductGroups() {
-    if (this.checkBoxCon.value.productGroup == true) {
-      document.getElementById('groupPrice').style.display = 'none';
-      document.getElementById('CostPriceGroup').style.display = 'block';
-      document.getElementById('treePriceCol').style.display = 'none';
-      document.getElementById('amountGroup').style.display = 'block';
-      document.getElementById('rateGroup').style.display = 'block';
-      document.getElementById('sellingPrice').style.display = 'block';
-      document.getElementById('TbaleTT').style.display = 'block';
-      document.getElementById('TbaleTT2').style.display = 'none';
-
-      document.getElementById('btnTwo').style.display = 'block';
-      document.getElementById('btnOne').style.display = 'none';
-      document.getElementById('btnEditTwo').style.display = 'none';
-    } else {
-      document.getElementById('groupPrice').style.display = 'block';
-      document.getElementById('treePriceCol').style.display = 'block';
-      document.getElementById('CostPriceGroup').style.display = 'none';
-      document.getElementById('amountGroup').style.display = 'none';
-      document.getElementById('rateGroup').style.display = 'none';
-      document.getElementById('sellingPrice').style.display = 'none';
-      document.getElementById('TbaleTT').style.display = 'none';
-      document.getElementById('TbaleTT2').style.display = 'block';
-      document.getElementById('btnOne').style.display = 'block';
-      document.getElementById('btnTwo').style.display = 'none';
-      document.getElementById('btnEditTwo').style.display = 'none';
-    }
-  }
-
-  addToTbaleProductGroup() {
-
-    const theme = (document.getElementById('themeVar') as HTMLInputElement).value;
-    const quantity = (document.getElementById('txt_quantity') as HTMLInputElement).value;
-
-    if (quantity == '') {
-      Swal.fire(
-        'Oops...',
-        'First you enterd quantity....',
-        'error'
       );
-      document.getElementById('txt_quantity').style.borderColor = 'red';
-    } else {
-      let rate: string = this.productGroupCon.value.proGRate;
-      if (rate == '') {
-        rate = '0.0';
-      }
-      let amount: string = this.productGroupCon.value.proGAmount;
-
-      if (amount == '') {
-        amount = '0.0';
-      }
-
-      const payData = {
-        theme,
-        value: this.variationValue,
-        cost: this.productGroupCon.value.proGCostPrice,
-        amount,
-        rate,
-        qty: this.productGroupCon.value.qty,
-        selling: this.productGroupCon.value.proGSellingPrice
-      };
-
-      this.productGroupTabel.push(payData);
-      this.productGroupCon = new FormGroup({
-        proGAmount: new FormControl(''),
-        proGRate: new FormControl(''),
-        proGCostPrice: new FormControl(''),
-        qty: new FormControl(0),
-        proGSellingPrice: new FormControl(''),
-      });
-
-      (document.getElementById('proGRate') as HTMLInputElement).disabled = false;
-      (document.getElementById('txt_amount') as HTMLInputElement).disabled = false;
-      this.sizeArray = [];
-      this.colorArray = [];
-
-      document.getElementById('txt_quantity').style.borderColor = 'green';
-
-    }
-  }
-
-  addToTbaleProductNone() {
-    const theme = (document.getElementById('themeVar') as HTMLInputElement).value;
-
-    const payData = {
-      theme,
-      value: this.variationValue,
-      qty: this.productGroupCon.value.qty
-    };
-    this.nonGroupArray.push(payData);
-
-    this.productGroupCon = new FormGroup({
-      proGAmount: new FormControl(''),
-      proGRate: new FormControl(''),
-      proGCostPrice: new FormControl(''),
-      qty: new FormControl(0),
-      proGSellingPrice: new FormControl(''),
-    });
-
-
-    this.colorNameArray = [];
-    this.colorCodeArray = [];
-    this.sizeNameArray = [];
-    this.colorArray = [];
-    this.sizeArray = [];
-    this.weightValue = '';
-  }
-
-  addWeight() {
-    const weigth = (document.getElementById('select_weight') as HTMLInputElement).value;
-    this.weightValue = weigth;
-    this.variationValue = weigth;
-    this.weightBool = true;
-  }
-
-  removeWeight() {
-    this.weightValue = '';
-    this.weightBool = false;
-  }
-
-  addStorage() {
-    const storage = (document.getElementById('txt_storage') as HTMLInputElement).value;
-    this.storageValue = storage;
-    this.variationValue = storage;
-    this.weightBool = true;
-  }
-
-  removeStorage() {
-    this.storageValue = '';
-    this.weightBool = false;
-  }
-
-  addCapacity() {
-    const capacity = (document.getElementById('txt_capacity') as HTMLInputElement).value;
-    this.capacityValue = capacity;
-    this.variationValue = capacity;
-    this.weightBool = true;
-  }
-
-  removeCapacity() {
-    this.capacityValue = '';
-    this.weightBool = false;
-  }
-
-  editRow(index) {
-
-    const row = this.nonGroupArray[index];
-    if (row.theme == 'color') {
-
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="color">Color Name</option><option value="none">None</option><option value="size">Size Name</option><option value="weight">Weight</option><option value="storage">Storage</option><option value="capacity">Capacity</option>';
-
-      this.isColor = true;
-
-      let value = '';
-      const ccc = row.value;
-      if (ccc === 'White') {
-        value = '#ffffff';
-
-      } else if (ccc === 'Red') {
-        value = '#ff0000';
-
-      } else if (ccc === 'Blue') {
-        value = '#0000ff';
-
-      } else if (ccc === 'Yellow') {
-
-        value = '#ffff00';
-      } else if (value === 'Green') {
-
-        value = '#00ff00';
-      } else if (ccc === 'Gray') {
-        value = '#808080';
-      } else if (ccc === 'Purple') {
-
-        value = '#800080';
-      } else if (ccc === 'Orange') {
-
-        value = '#ffa500';
-      } else if (ccc === 'Maroon') {
-
-        value = '#800000';
-      } else if (ccc === 'Black') {
-        value = '#000000';
-
-      } else {
-        value = '#000000';
-      }
-      const ob = {
-        colorV: value,
-        colors: ccc
-      };
-      this.colorArray.push(ob);
-      this.colorNameArray.push(ccc);
-      this.colorCodeArray.push(value);
-      this.variationValue = ccc;
-
-    } else if (row.theme == 'size') {
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option><option value="weight">Weight</option><option value="storage">Storage</option><option value="capacity">Capacity</option>';
-      this.isSize = true;
-      this.variationValue = '';
-      let size = '';
-      const name = row.value;
-      if (name === 'XS') {
-        size = '1';
-      } else if (name === 'S') {
-        size = '2';
-      } else if (name === 'M') {
-        size = '3';
-      } else if (name === 'L') {
-        size = '4';
-      } else if (name === 'XL') {
-        size = '5';
-      } else if (name === 'XXL') {
-        size = '6';
-      }
-      const sizeValue = {
-        sizeS: name,
-        sizeValue: size
-      };
-      this.sizeArray.push(sizeValue);
-      this.sizeNameArray.push(name);
-      this.variationValue = name;
-
-    } else if (row.theme == 'weight') {
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="weight">Weight</option><option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option><option value="storage">Storage</option><option value="capacity">Capacity</option>';
-
-      const weigth = row.value;
-      this.weightValue = weigth;
-      this.variationValue = weigth;
-      this.weightBool = true;
-
-    } else if (row.theme == 'storage') {
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="storage">Storage</option><option value="weight">Weight</option><option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option><option value="capacity">Capacity</option>';
-
-      const storage = row.value;
-      this.storageValue = storage;
-      this.variationValue = storage;
-      this.weightBool = true;
-
-    } else if (row.theme == 'capacity') {
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="capacity">Capacity</option><option value="storage">Storage</option><option value="weight">Weight</option><option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option>';
-      const capacity = row.value;
-      this.capacityValue = capacity;
-      this.variationValue = capacity;
-      this.weightBool = true;
     }
 
-
-    this.productGroupCon = new FormGroup({
-      proGAmount: new FormControl(''),
-      proGRate: new FormControl(''),
-      proGCostPrice: new FormControl(''),
-      qty: new FormControl(row.qty),
-      proGSellingPrice: new FormControl(''),
-    });
-
-    this.nonGroupArray.splice(index, 1);
   }
 
-  deleteRow(index) {
-    this.nonGroupArray.splice(index, 1);
-  }
-
-  editGroupRow(index) {
-    this.globleIndex = index;
-    document.getElementById('btnEditTwo').style.display = 'block';
-    document.getElementById('btnTwo').style.display = 'none';
-    document.getElementById('btnOne').style.display = 'none';
-
-    this.productGroupCon = new FormGroup({
-      proGAmount: new FormControl(this.productGroupTabel[index].amount),
-      proGRate: new FormControl(this.productGroupTabel[index].rate),
-      proGCostPrice: new FormControl(this.productGroupTabel[index].cost),
-      qty: new FormControl(this.productGroupTabel[index].qty),
-      proGSellingPrice: new FormControl(this.productGroupTabel[index].selling),
-    });
-
-    if (this.productGroupTabel[index].theme === 'color') {
-
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="color">Color Name</option><option value="size">Size Name</option><option value="none">None</option><option value="weight">Weight</option><option value="storage">Storage</option><option value="capacity">Capacity</option>';
-
-      this.isColor = true;
-
-      let value = '';
-      const ccc = this.productGroupTabel[index].value;
-      if (ccc === 'White') {
-        value = '#ffffff';
-
-      } else if (ccc === 'Red') {
-        value = '#ff0000';
-
-      } else if (ccc === 'Blue') {
-        value = '#0000ff';
-
-      } else if (ccc === 'Yellow') {
-
-        value = '#ffff00';
-      } else if (value === 'Green') {
-
-        value = '#00ff00';
-      } else if (ccc === 'Gray') {
-        value = '#808080';
-      } else if (ccc === 'Purple') {
-
-        value = '#800080';
-      } else if (ccc === 'Orange') {
-
-        value = '#ffa500';
-      } else if (ccc === 'Maroon') {
-
-        value = '#800000';
-      } else if (ccc === 'Black') {
-        value = '#000000';
-
-      } else {
-        value = '#000000';
-      }
-      const ob = {
-        colorV: value,
-        colors: ccc
-      };
-      this.colorArray.push(ob);
-      this.colorNameArray.push(ccc);
-      this.colorCodeArray.push(value);
-      this.variationValue = ccc;
-
-
-    } else if (this.productGroupTabel[index].theme === 'size') {
-
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option><option value="weight">Weight</option><option value="storage">Storage</option><option value="capacity">Capacity</option>';
-      this.isSize = true;
-      this.variationValue = '';
-      let size = '';
-      const name = this.productGroupTabel[index].value;
-      if (name === 'XS') {
-        size = '1';
-      } else if (name === 'S') {
-        size = '2';
-      } else if (name === 'M') {
-        size = '3';
-      } else if (name === 'L') {
-        size = '4';
-      } else if (name === 'XL') {
-        size = '5';
-      } else if (name === 'XXL') {
-        size = '6';
-      }
-      const sizeValue = {
-        sizeS: name,
-        sizeValue: size
-      };
-      this.sizeArray.push(sizeValue);
-      this.sizeNameArray.push(name);
-      this.variationValue = name;
-
-
-    } else if (this.productGroupTabel[index].theme === 'weight') {
-
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="weight">Weight</option><option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option><option value="storage">Storage</option><option value="capacity">Capacity</option>';
-
-      const weigth = this.productGroupTabel[index].value;
-      this.weightValue = weigth;
-      this.variationValue = weigth;
-      this.weightBool = true;
-
-    } else if (this.productGroupTabel[index].theme === 'storage') {
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="storage">Storage</option><option value="weight">Weight</option><option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option><option value="capacity">Capacity</option>';
-
-      const storage = this.productGroupTabel[index].value;
-      this.storageValue = storage;
-      this.variationValue = storage;
-      this.weightBool = true;
-
-    } else if (this.productGroupTabel[index].theme === 'capacity') {
-
-      (document.getElementById('themeVar') as HTMLInputElement).innerHTML = '<option value="capacity">Capacity</option><option value="storage">Storage</option><option value="weight">Weight</option><option value="size">Size Name</option><option value="color">Color Name</option><option value="none">None</option>';
-      const capacity = this.productGroupTabel[index].value;
-      this.capacityValue = capacity;
-      this.variationValue = capacity;
-      this.weightBool = true;
-
-    } else {
-
-    }
-  }
-
-  deleteGroupRow(index) {
-    this.productGroupTabel.splice(index, 1);
-  }
-
-  editToTbaleProductGroup() {
-    const theme = (document.getElementById('themeVar') as HTMLInputElement).value;
-    this.productGroupTabel[this.globleIndex].cost = this.productGroupCon.value.proGCostPrice;
-    this.productGroupTabel[this.globleIndex].amount = this.productGroupCon.value.proGAmount;
-    this.productGroupTabel[this.globleIndex].qty = this.productGroupCon.value.qty;
-    this.productGroupTabel[this.globleIndex].rate = this.productGroupCon.value.proGRate;
-    this.productGroupTabel[this.globleIndex].selling = this.productGroupCon.value.proGSellingPrice;
-    this.productGroupTabel[this.globleIndex].theme = theme;
-    this.productGroupTabel[this.globleIndex].value = this.variationValue;
-
-
-    let priceString = '';
-    const price = this.productGroupCon.value.proGCostPrice;
-    const amount = this.productGroupCon.value.proGAmount;
-    const newPrice = Number(price);
-    const newamount = Number(amount);
-    const newSellingPrice = newPrice + newamount;
-
-    if (amount === '') {
-      (document.getElementById('proGRate') as HTMLInputElement).disabled = false;
-
-    } else {
-      (document.getElementById('proGRate') as HTMLInputElement).disabled = true;
-
-    }
-    priceString = '' + newSellingPrice;
-
-    document.getElementById('btnEditTwo').style.display = 'none';
-    document.getElementById('btnTwo').style.display = 'block';
-    document.getElementById('btnOne').style.display = 'none';
-    this.clearArrysAndVarilables();
-  }
 
   clearArrysAndVarilables() {
     this.categoryArray = [];
@@ -1922,8 +1523,6 @@ export class DigitalAddComponent implements OnInit {
     this.globleIndex = 0;
   }
 
-  maintainStockChange() {
-  }
 
   getSub_category(catCode, catName, index, catMargin) {
     this.margin = catMargin;
@@ -2046,100 +1645,6 @@ export class DigitalAddComponent implements OnInit {
     this.categoryPath = this.categoryArray[this.indexCat].path + '>' + subCatName;
   }
 
-  //
-  // onChangeCatSubs($event) {
-  //   const payload = {
-  //     keyword: $event.target.value
-  //   };
-  //   this.categoryService.searchByPath(payload).subscribe(
-  //     data => this.manageMarginRate(data)
-  //   );
-  // }
-  //
-  // manageMarginRate(data){
-  //   if (data.data)
-  // }
-
-  addCategoryBredCrums() {
-    if (this.allCategoryBreadcrumbArr.length < 1) {
-      const categoryIdValuesSpliter = ((document.getElementById('Category_') as HTMLInputElement).value).split('+');
-      const categoryId = categoryIdValuesSpliter[0];
-      const subCategoryId = (document.getElementById('sub_category_') as HTMLInputElement).value;
-      const categorySubSubId = (document.getElementById('sub_sub_category_') as HTMLInputElement).value;
-      let categoryName = '';
-      let subCategoryName = '';
-      let subSubCategoryName = '';
-
-      let categoryNameBool = true;
-      let subCategoryNameBool = true;
-      let subSubCategoryNameBool = true;
-
-      if (subCategoryId === '' && categorySubSubId === '') {
-        this.categoryRequestArr.push(categoryId);
-
-      } else if (categorySubSubId === '') {
-        this.categoryRequestArr.push(subCategoryId);
-
-      } else {
-        this.categoryRequestArr.push(categorySubSubId);
-
-      }
-
-      for (let i = 0; i < this.categoryArray.length; i++) {
-        if (categoryId === '') {
-          categoryNameBool = false;
-        }
-
-        if (subCategoryId === '') {
-          subCategoryNameBool = false;
-        }
-
-        if (categorySubSubId === '') {
-          subSubCategoryNameBool = false;
-        }
-
-        if (this.categoryArray[i].code === categoryId) {
-          categoryName = this.categoryArray[i].path;
-
-          for (let x = 0; x < this.subSubCategoryArray.length; x++) {
-            if (this.SubCategoryArray[x].code === subCategoryId) {
-              subCategoryName = this.SubCategoryArray[x].name;
-
-              for (let z = 0; z < this.subSubCategoryArray.length; z++) {
-                if (this.subSubCategoryArray[z].code === categorySubSubId) {
-                  subSubCategoryName = this.subSubCategoryArray[z].name;
-                }
-              }
-            }
-          }
-        }
-      }
-
-      const arr = {
-        categoryId,
-        categoryName,
-        subCategoryName,
-        subSubCategoryName,
-        categoryNameBool,
-        subCategoryNameBool,
-        subSubCategoryNameBool
-      };
-
-      this.allCategoryBreadcrumbArr.push(arr);
-      document.getElementById('sub_cat_dev').style.display = 'block';
-      document.getElementById('sub_sub_cat_dev').style.display = 'block';
-
-      // this.getAllCategory();
-    }
-  }
-
-  removeCategoryBreadcrum(index) {
-    for (let i = 0; i < this.allCategoryBreadcrumbArr.length; i++) {
-      if (this.allCategoryBreadcrumbArr[index] === this.allCategoryBreadcrumbArr[i]) {
-        this.allCategoryBreadcrumbArr.splice(i, 1);
-      }
-    }
-  }
 
 
   setSelectedType(SizeType) {
@@ -2224,22 +1729,12 @@ export class DigitalAddComponent implements OnInit {
 
     this.colorArrayForClothes = [];
     this.sizeArrayForClothes = [];
+    this.sizeString = '';
+    this.selectedType = '';
   }
 
   deleteClothsRow(index) {
     this.clothesArray.splice(index, 1);
-  }
-
-  setColorArray() {
-    const newColor = (document.getElementById('colorInput1') as HTMLInputElement).value;
-
-    // Check if the color already exists in the array
-    if (!this.colorArrayForClothes.includes(newColor)) {
-      this.colorArrayForClothes.push(newColor);
-      this.colorArrayForClothesJob = this.colorArrayForClothes;
-    } else {
-      // Handle the case when the color already exists (e.g., show an error message)
-    }
   }
 
 
@@ -2355,7 +1850,7 @@ export class DigitalAddComponent implements OnInit {
     this.categoryPath = this.categoryArray[this.indexCat].path + '>' + this.SubCategoryArray[this.indexSubCat].name + '>' + this.subSubCategoryArray[this.indexSubSubCat].name + '>' + subSubSubCatName;
   }
 
-  getAttribytes(code) {
+  getVariations(code) {
     this.attributesArray = [];
     for (const key in this.hashMap) {
       delete this.hashMap[key];
@@ -2364,8 +1859,22 @@ export class DigitalAddComponent implements OnInit {
       category_code: code
     };
     this.productService.getAttributes(payLoard).subscribe(
-      data => this.manageAttributes(data),
+      data => this.manageVariations(data),
       error => this.manageError(error)
+    );
+  }
+
+  getAttributes(code) {
+    this.attributesArray = [];
+    for (const key in this.hashMap) {
+      delete this.hashMap[key];
+    }
+    const payLoard = {
+      category_code: code
+    };
+    this.productService.getAttributes(payLoard).subscribe(
+        data => this.manageAttributes(data),
+        error => this.manageError(error)
     );
   }
 
@@ -2377,8 +1886,8 @@ export class DigitalAddComponent implements OnInit {
     return value.length === 0;
   }
 
-  private manageAttributes(data) {
-
+  private manageVariations(data) {
+    console.log(data)
     if (data.data.attribute_object != null) {
       this.attributesArray = Object.keys(data.data.attribute_object);
     }
@@ -2458,6 +1967,33 @@ export class DigitalAddComponent implements OnInit {
     this.attributeArr = this.attributesArray;
   }
 
+  private manageAttributes(data) {
+    console.log(data)
+    if (data.data.attribute_object != null) {
+      this.attributesArray = Object.keys(data.data.attribute_object);
+    }
+// Converting object to hash map
+    for (const key in data.data.attribute_object) {
+      this.hashMap[key] = data.data.attribute_object[key];
+    }
+
+
+    // attributes
+    for (let i = 0; i < this.attributesArray.length; i++) {
+      const key = this.attributesArray[i];
+
+      // Creating a hash map
+
+// Converting object to hash map
+      for (const key in data.data.attribute_object) {
+        this.hashMap[key] = data.data.attribute_object[key];
+      }
+
+
+      this.attributeArr = this.attributesArray;
+    }
+  }
+
   formatCurrency(event: any) {
     let value = event.target.value.replace(/[^\d]/g, '').replace(/^0+/, '');
 
@@ -2474,7 +2010,7 @@ export class DigitalAddComponent implements OnInit {
   setSellingPrice() {
     if ((document.getElementById('categoryPathInput') as HTMLInputElement).value === '') {
       Swal.fire(
-        'error',
+        'Error',
         'category path should not be empty..!',
         'warning'
       );
