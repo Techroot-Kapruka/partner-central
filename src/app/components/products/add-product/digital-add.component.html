@@ -12,14 +12,14 @@
                      title="Upload Image Help">
               </span>
               <span class="hproductImage-hint" [hidden]="!showHint">
-                * Acceptable File Formats: JPEG, PNG and BMP<br>
-                * Resolution Guidelines: Minimum Resolution: 600 x 600 Pixels,  Maximum Resolution: 2000 x 2000 Pixels<br>
+                * Acceptable File Format: JPG<br>
+                * Resolution Guidelines: Minimum Resolution: 600 x 600 Pixels,  Maximum Resolution: 5000 x 5000 Pixels<br>
                 <!-- * Maximum File Size: [size] -->
               </span>
             </strong></h5>
           </div>
           <div>
-            <span class="span" id="help01">Upload Images 3 to 5</span>
+            <span class="span" id="help01">Upload Images 1 to 5</span>
           </div>
           <div class="card-body" style="padding-top: 10px;">
             <div class="digital-add needs-validation"
@@ -146,7 +146,7 @@
 
               </span>
               <div class="col-md-4" id="help02">
-                                <span class="span"  style="padding: 15px; padding-left: 35px; color: #000; font-weight: 400">Select Category Path :</span>
+                <span class="span"  style="padding: 15px; padding-left: 35px; color: #000; font-weight: 400">Select Category Path :</span>
                 <span class="SCPInfo" style="margin-left: 5px" (click)="toggleHintSCP()">
                 <img style="text-align: right" src="assets/images/Help.png" height="20px" weight="20px"
                      title="Upload Image Help">
@@ -171,7 +171,7 @@
                       <div *ngFor="let category of categoryArray; let i = index"
                            [attr.data-index]="i" class="tiles">
                         <li class="li" id="{{i}}"
-                            (click)="getSub_category(category['code'] , category['path'] , i ,category['pricemargin']); getAttribytes(category['code']);"
+                            (click)="getSub_category(category['code'] , category['path'] , i ,category['pricemargin']); getVariations(category['code']);"
                             value="">{{category['path']}}
                         </li>
                       </div>
@@ -185,7 +185,7 @@
                            [attr.data-index]="i"
                            class="tiles">
                         <li class="li" id="sub{{i}}"
-                            (click)="getSub_sub_category(subCategory['code'],subCategory['name'],i,subCategory['pricemargin']) ;"
+                            (click)="getSub_sub_category(subCategory['code'],subCategory['name'],i,subCategory['pricemargin']); getAttributes(subCategory['code'])"
                             value="">{{subCategory['name']}}
                         </li>
                       </div>
@@ -199,7 +199,7 @@
                            [attr.data-index]="i"
                            class="tiles ">
                         <li class="li" id="subSub{{i}}"
-                            (click)="getsub_sub_sub_category(subsubCategory['code'],subsubCategory['name'],i,subsubCategory['pricemargin']); "
+                            (click)="getsub_sub_sub_category(subsubCategory['code'],subsubCategory['name'],i,subsubCategory['pricemargin']);getAttributes(subsubCategory['code']) "
                             value="">{{subsubCategory['name']}}
                         </li>
                       </div>
@@ -213,7 +213,7 @@
                            [attr.data-index]="i"
                            class="tiles">
                         <li class="li" id="subSubSub{{i}}"
-                            (click)="finalArrayCreater(subSubSubCategory['name'],i,subSubSubCategory['pricemargin'])"
+                            (click)="finalArrayCreater(subSubSubCategory['name'],i,subSubSubCategory['pricemargin']); getAttributes(subSubSubCategory['code'])"
                             value="">{{subSubSubCategory['name']}}
                         </li>
                       </div>
@@ -390,7 +390,7 @@
               </div>
               <div hidden class="col-md-6">
                 <input class="form-control input" style="cursor: pointer;" type="text"
-                       (click)="isAttributesCollapsed = !isAttributesCollapsed; getAttribytes(categoryCode);"
+                       (click)="isAttributesCollapsed = !isAttributesCollapsed; getVariations(categoryCode);"
                        [attr.aria-expanded]="!isAttributesCollapsed">
               </div>
             </div>
@@ -513,7 +513,7 @@
                   <!--                            style="color: black">-->
                   <!--                  </datalist>-->
                   <!--<ng-select [options]="variationOptions" style="width: 200px; float: left; {{selectColorErrorStyle}}"-->
-                             <!--[(ngModel)]="selectedValue" (selected)="onChange($event)"></ng-select>-->
+                  <!--[(ngModel)]="selectedValue" (selected)="onChange($event)"></ng-select>-->
 
                   <select class="custom-select" id="colorSelect"
                           (click)="selectColor($event)"  style="width: 200px; float: left; {{selectColorErrorStyle}}">

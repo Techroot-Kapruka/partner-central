@@ -371,7 +371,7 @@ export class NavService {
     this.items.value[6].children[0].path = '';
     this.items.value[6].children[0].title = '';
     this.items.value[6].children[0].type = '';
-    
+
     this.items.value[2].children[1].path = '';
     this.items.value[2].children[1].title = '';
     this.items.value[2].children[1].type = '';
@@ -423,6 +423,7 @@ export class NavService {
     this.items.value[2].children[2].path = '';
     this.items.value[2].children[2].title = '';
     this.items.value[2].children[2].type = '';
+>>>>>>>>> Temporary merge branch 2
 
     this.items.value[4].path = '';
     this.items.value[4].title = '';
@@ -473,9 +474,16 @@ export class NavService {
   partnerPrivilegeItem(data) {
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       //hide bulk upload
-      // this.items.value[1].children[2].path = '';
-      // this.items.value[1].children[2].title = '';
-      // this.items.value[1].children[2].type = '';
+      this.items.value[1].children[2].path = '';
+      this.items.value[1].children[2].title = '';
+      this.items.value[1].children[2].type = '';
+<<<<<<<<< Temporary merge branch 1
+
+      this.items.value[1].children[4].path = '';
+      this.items.value[1].children[4].title = '';
+      this.items.value[1].children[4].type = '';
+=========
+>>>>>>>>> Temporary merge branch 2
 
       if (data.data === null) {
         this.items.value.splice(0, 7);
