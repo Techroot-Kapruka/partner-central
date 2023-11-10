@@ -6,126 +6,57 @@
           <ngb-tabset class="tab-coupon">
             <ngb-tab title="Shipment List">
               <ng-template ngbTabContent>
-                <div *ngIf="shipmentErrorMsg">
-                  <h4>You have no Shipments yet</h4>
-                </div>
-                <div *ngIf="isShipmentValid" >
-                <div class="tab-pane fade active show" id="account" role="tabpanel" aria-labelledby="account-tab">
-                  <div class="custom-datatable">
-                    <!--<div *ngIf="isAdmin" class="btn-popup pull-right">-->
-                    <!--<select (change)="getSelectedPartnerProduct()" id="select_pro" class="form-control">-->
-                    <!--<option selected>Default select</option>-->
-                    <!--<option *ngFor="let partnerArrays of partnerArray" value="{{partnerArrays['value']}}">-->
-                    <!--{{partnerArrays['name']}}-->
-                    <!--</option>-->
-
-                    <!--</select>-->
-                    <!--</div>-->
-<!--                    <div class="col-md-10">-->
-<!--                      <input autofocus type="text" class="form-control" placeholder="Search By Shipment Code..."-->
-<!--                            />-->
-<!--                    </div>-->
-                    <div class="clearfix"></div>
-                    <ngx-datatable class="bootstrap expandable" [rows]="allShipmentArr" [columnMode]="'force'"
-                                   [headerHeight]="50"
-                                   [footerHeight]="50" [rowHeight]="'auto'" [limit]="shipmentRowCount"
-                                   [selected]="selected"
-                                   [selectionType]="false" [selectAllRowsOnPage]="false" (select)='onSelect($event)'>
-
-                      <ngx-datatable-column name="Shipment Id" [width]="30"></ngx-datatable-column>
-                      <ngx-datatable-column name="Business Name" [width]="30"></ngx-datatable-column>
-                      <ngx-datatable-column name="Create Date" [width]="30"></ngx-datatable-column>
-                      <ngx-datatable-column name="Total Quantity" [width]="30"></ngx-datatable-column>
-                      <ngx-datatable-column name="Gross Amount" [width]="30"></ngx-datatable-column>
-
-                      <ngx-datatable-column name="Received" prop="name" [width]="10">
-                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                     let-row="row">
-                          <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
-                          <button type="button"
-                                  style="width: 55px;height: 23px;font-size: 10px; background-color: red;color: white;font-weight: bold;text-align: center;border: none;border-radius: 3px; ">
-                            NO
-                          </button>
-                        </ng-template>
-                      </ngx-datatable-column>
-
-                      <ngx-datatable-column name="Action" prop="name" [width]="10">
-                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                     let-row="row">
-                          <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
-                          <button type="button" *ngIf="isAdmin" (click)='viewShippedShipment(rowIndex)'
-                                  style="width: 96px;height: 28px;font-size: 10px;"
-                                  class="btn btn-outline-success"
-                          >Receive
-                          </button>
-
-                          <button *ngIf="!isAdmin" type="button" (click)='viewShippedShipment(rowIndex)'
-                                  style="width: 96px;height: 28px;font-size: 10px;"
-                                  class="btn btn-outline-success"
-                          >View
-                          </button>
-
-                        </ng-template>
-                      </ngx-datatable-column>
-                    </ngx-datatable>
-                  </div>
-                </div>
-                </div>
-              </ng-template>
-            </ngb-tab>
-            <ngb-tab title="Shipment Received List">
-              <ng-template ngbTabContent>
-<!--                <div *ngIf="recievedShipmentErrorMsg">-->
-<!--                  <h4>You have no Recieved Shipments yet</h4>-->
-<!--                </div>-->
+                <!--                <div *ngIf="recievedShipmentErrorMsg">-->
+                <!--                  <h4>You have no Recieved Shipments yet</h4>-->
+                <!--                </div>-->
                 <div>
-                <div class="tab-pane fade active show" id="account1" role="tabpanel" aria-labelledby="account-tab">
-                  <div class="custom-datatable">
-                    <div *ngIf="isAdmin" class="btn-popup pull-right">
-                      <select (change)="getSelectedPartnerRecivedShipment()" id="select_pro2" class="form-control">
-                        <option selected>-- Select Vendor --</option>
-                        <option *ngFor="let partnerArrays of partnerArray" value="{{partnerArrays['value']}}">
-                          {{partnerArrays['name']}}
-                        </option>
-                      </select>
+                  <div class="tab-pane fade active show" id="account1" role="tabpanel" aria-labelledby="account-tab">
+                    <div class="custom-datatable">
+                      <div *ngIf="isAdmin" class="btn-popup pull-right">
+                        <select (change)="getSelectedPartnerRecivedShipment()" id="select_pro2" class="form-control">
+                          <option selected>-- Select Vendor --</option>
+                          <option *ngFor="let partnerArrays of partnerArray" value="{{partnerArrays['value']}}">
+                            {{partnerArrays['name']}}
+                          </option>
+                        </select>
+                      </div>
+                      <div class="clearfix"></div>
+                      <ngx-datatable class="bootstrap expandable" [rows]="recivedShipmentArray" [columnMode]="'force'"
+                                     [headerHeight]="50"
+                                     [footerHeight]="50" [rowHeight]="'auto'" [limit]="shipmentRowCount"
+                                     [selected]="selected"
+                                     [selectionType]="false" [selectAllRowsOnPage]="false">
+                        <ngx-datatable-column name="Shipment Id" [width]="25"></ngx-datatable-column>
+                        <ngx-datatable-column name="Create Date" [width]="40"></ngx-datatable-column>
+                        <ngx-datatable-column name="Total Quantity" [width]="25"></ngx-datatable-column>
+                        <ngx-datatable-column name="Approved Quantity" [width]="55"></ngx-datatable-column>
+                        <ngx-datatable-column name="Approved Amount" [width]="50"></ngx-datatable-column>
+                        <!--<ngx-datatable-column name="Gross Amount" [width]="30"></ngx-datatable-column>-->
+                        <ngx-datatable-column name="Received" prop="name" [width]="10">
+                          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                       let-row="row">
+                            <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
+                            <button type="button"
+                                    style="width: 55px;height: 23px;font-size: 10px; background-color: green; color: white;font-weight: bold;text-align: center;">
+                              YES
+                            </button>
+                          </ng-template>
+                        </ngx-datatable-column>
+                        <!--<ngx-datatable-column name="Approved"></ngx-datatable-column>-->
+                        <ngx-datatable-column name="Action" prop="name" [width]="10">
+                          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                       let-row="row">
+                            <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
+                            <button type="button" (click)='viewRecivedShipment(rowIndex)'
+                                    style="width: 96px;height: 28px;font-size: 10px;"
+                                    class="btn btn-outline-success"
+                            >View
+                            </button>
+                          </ng-template>
+                        </ngx-datatable-column>
+                      </ngx-datatable>
                     </div>
-                    <div class="clearfix"></div>
-                    <ngx-datatable class="bootstrap expandable" [rows]="recivedShipmentArray" [columnMode]="'force'"
-                                   [headerHeight]="50"
-                                   [footerHeight]="50" [rowHeight]="'auto'" [limit]="shipmentRowCount"
-                                   [selected]="selected"
-                                   [selectionType]="false" [selectAllRowsOnPage]="false">
-                      <ngx-datatable-column name="Shipment Id" [width]="25"></ngx-datatable-column>
-                      <ngx-datatable-column name="Create Date" [width]="40"></ngx-datatable-column>
-                      <ngx-datatable-column name="Total Quantity" [width]="25"></ngx-datatable-column>
-                      <ngx-datatable-column name="Approved Quantity" [width]="55"></ngx-datatable-column>
-                      <ngx-datatable-column name="Approved Amount" [width]="50"></ngx-datatable-column>
-                      <!--<ngx-datatable-column name="Gross Amount" [width]="30"></ngx-datatable-column>-->
-                      <ngx-datatable-column name="Received" prop="name" [width]="10">
-                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                     let-row="row">
-                          <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
-                          <button type="button"
-                                  style="width: 55px;height: 23px;font-size: 10px; background-color: green; color: white;font-weight: bold;text-align: center;">
-                            YES
-                          </button>
-                        </ng-template>
-                      </ngx-datatable-column>
-                      <!--<ngx-datatable-column name="Approved"></ngx-datatable-column>-->
-                      <ngx-datatable-column name="Action" prop="name" [width]="10">
-                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                     let-row="row">
-                          <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
-                          <button type="button" (click)='viewRecivedShipment(rowIndex)'
-                                  style="width: 96px;height: 28px;font-size: 10px;"
-                                  class="btn btn-outline-success"
-                          >View
-                          </button>
-                        </ng-template>
-                      </ngx-datatable-column>
-                    </ngx-datatable>
                   </div>
-                </div>
                 </div>
               </ng-template>
             </ngb-tab>

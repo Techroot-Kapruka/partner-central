@@ -13,10 +13,11 @@ import { UnHoldShipmentComponent } from './un-hold-shipment/un-hold-shipment.com
 import { MakeReservedComponent } from './make-reserved/make-reserved.component';
 import { ListShipmentReservedComponent } from './list-shipment-reserved/list-shipment-reserved.component';
 import { RecievedShipmentComponent } from './recieved-shipment/recieved-shipment.component';
+import { ListPendingShipmentComponent } from './list-pending-shipment/list-pending-shipment.component';
 
 
 @NgModule({
-  declarations: [ListShipmentComponent, AddShipmentComponent, EditShipmentComponent, UnHoldShipmentComponent, MakeReservedComponent, ListShipmentReservedComponent, RecievedShipmentComponent],
+  declarations: [ListShipmentComponent, AddShipmentComponent, EditShipmentComponent, UnHoldShipmentComponent, MakeReservedComponent, ListShipmentReservedComponent, RecievedShipmentComponent, ListPendingShipmentComponent],
   imports: [
     CommonModule,
     FormsModule,
