@@ -1,8 +1,8 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, ViewChild, ElementRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import {DropzoneConfigInterface} from 'ngx-dropzone-wrapper';
-import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ModalDismissReasons, NgbModal, NgbTabset} from '@ng-bootstrap/ng-bootstrap';
 import {ProductService} from '../../../shared/service/product.service';
 import Swal from 'sweetalert2';
 import {FormControl, FormGroup} from '@angular/forms';
@@ -33,6 +33,7 @@ export class EditProductsComponent implements OnInit {
     public isSize = false;
     public colorsAndSize = false;
     public closeResult: string;
+    modalRef: any;
     public colorArray = [];
     public sizeArray = [];
     public productGroupTabel = [];
@@ -70,7 +71,7 @@ export class EditProductsComponent implements OnInit {
     showmsg = false;
     showmsg1 = false;
     public activeUpdate = false;
-
+    imageUrl: any;
     filteredSubCategory = [];
     filteredSubSubCategory = [];
 
@@ -87,6 +88,7 @@ export class EditProductsComponent implements OnInit {
     public old_availability = '';
     public old_txt_listning_price = '';
     public old_txt_price_rate = '';
+    public productCode='';
     descriptionContent;
 
     editorConfig: AngularEditorConfig = {
@@ -116,7 +118,7 @@ export class EditProductsComponent implements OnInit {
             ['html'],
         ],
     };
-
+  @ViewChild('imagePopup') imagePopup: ElementRef;
 
     constructor(private categoryService: CategoryService, private router: Router, private _Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService, private imageService: ImageService) {
         this.ids = '';
@@ -281,7 +283,17 @@ export class EditProductsComponent implements OnInit {
             proGSellingPrice: new FormControl(''),
         });
     }
-
+    testfk(){
+      console.log("yoooo");
+    }
+  testFunc(){
+    this.imageUrl = this.imagePathURI+this.selectedimg;
+    this.modalRef = this.modalService.open(this.imagePopup, {centered: true});
+  }
+  closePopup() {
+    this.modalRef.close();
+    this.imageUrl = undefined;
+  }
     removeimg(x: number) {
         switch (x) {
             case 1:
@@ -326,23 +338,30 @@ export class EditProductsComponent implements OnInit {
     loadimg(x: number) {
         switch (x) {
             case 1:
-                this.selectedimg = this.imageOne
+                this.selectedimg = this.imageOne;
+                console.log("***********");
+                console.log(this.imageCliant.get('fileSource').value);
+                this.testFunc();
                 break;
 
             case 2:
-                this.selectedimg = this.imageOne2
+                this.selectedimg = this.imageOne2;
+                this.testFunc();
                 break;
 
             case 3:
-                this.selectedimg = this.imageOne3
+                this.selectedimg = this.imageOne3;
+                this.testFunc();
                 break;
 
             case 4:
-                this.selectedimg = this.imageOne4
+                this.selectedimg = this.imageOne4;
+                this.testFunc();
                 break;
 
             case 5:
-                this.selectedimg = this.imageOne5
+                this.selectedimg = this.imageOne5;
+                this.testFunc();
                 break;
         }
     }
@@ -903,9 +922,9 @@ export class EditProductsComponent implements OnInit {
 
     managetSelecedProductByEdit(data, proCodeImg) {
         this.getSubcategory(data.data.product.item_group);
-
         // base info
         this.baseInfo.get('Title').setValue(data.data.product.title);
+        this.productCode = data.data.product.product_code;
         this.baseInfo.get('Brand').setValue(data.data.product.brand);
         this.baseInfo.get('Manufacture').setValue(data.data.product.manufacture);
         this.oldTitle = data.data.product.title;
@@ -1156,6 +1175,7 @@ export class EditProductsComponent implements OnInit {
         this.baseInfo = new FormGroup({
             Title: new FormControl(''),
             Brand: new FormControl(''),
+            ProductCode: new FormControl(''),
             Manufacture: new FormControl(''),
         });
         // ----------- Description ---------------
@@ -1341,27 +1361,38 @@ export class EditProductsComponent implements OnInit {
         let one5 = this.imageCliant.get('fileSource5').value;
         const pricecc = new File([''], '');
         if (one === '') {
-
+            console.log(one);
             one = pricecc;
         }
 
         if (one2 === '') {
+          console.log(one2);
             one2 = pricecc;
         }
 
         if (one3 === '') {
+          console.log(one3);
             one3 = pricecc;
         }
 
         if (one4 === '') {
+          console.log(one4);
             one4 = pricecc;
         }
 
         if (one5 === '') {
+          console.log(one5);
             one5 = pricecc;
         }
+      console.log("===================");
+      console.log(one);
+      console.log(one2);
+      console.log(one3);
+      console.log(one4);
+      console.log(one5);
+      console.log("===================");
 
-        this.productService.editFieldImageSave(one, one2, one3, one4, one5, this.ids).subscribe(
+      this.productService.editFieldImageSave(one, one2, one3, one4, one5, this.ids).subscribe(
             data => this.successAlert(data),
             error => this.mnageErrorProduct(error)
         );
