@@ -1063,6 +1063,8 @@
                               <th>In Stock</th>
                               <th>Add Stock</th>
                               <th>Action</th>
+                              <th hidden>Theme</th>
+                              <th hidden>variationId</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -1079,6 +1081,8 @@
                                   <p style="margin: 0px;font-size: 16px; color: #000">{{
                                     nonActiveProduct.productCode }}</p>
                                   <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.path}}</p>
+                                  <div style="margin-left: 10px;width:10%; background-color: {{nonActiveProduct.categoryColor}}"> &nbsp; &nbsp;</div>
+                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.categorySizes}}</p>
                                 </td>
                                 <td>{{nonActiveProduct.create_date}}</td>
                                 <td>
@@ -1094,9 +1098,11 @@
                                   <button type="button"
                                           style="width: 96px;height: 28px;font-size: 10px;"
                                           (click)="UpdateVirtualStocks(j)"
-                                          class="btn btn-outline-success">Save Stock
+                                          class="btn btn-outline-success">Add Stock
                                   </button>
                                 </td>
+                                <td hidden>{{nonActiveProduct.variationTheme}}</td>
+                                <td hidden>{{nonActiveProduct.variationId}}</td>
                               </tr>
                             </ng-container>
                             <ng-template #paginatedData_OnDemand>
@@ -1110,6 +1116,8 @@
                                   <p style="margin: 0px;font-size: 16px; color: #000">{{
                                     nonActiveProduct.productCode }}</p>
                                   <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.path}}</p>
+                                  <div style="margin-left: 10px;width:10%; background-color: {{nonActiveProduct.categoryColor}}"> &nbsp; &nbsp;</div>
+                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.categorySizes}}</p>
                                 </td>
                                 <td>{{nonActiveProduct.create_date}}</td>
                                 <td>
@@ -1125,9 +1133,11 @@
                                   <button type="button"
                                           style="width: 96px;height: 28px;font-size: 10px;"
                                           (click)="UpdateVirtualStocks(j)"
-                                          class="btn btn-outline-success">Save Stock
+                                          class="btn btn-outline-success">Add Stock
                                   </button>
                                 </td>
+                                <td hidden>{{nonActiveProduct.variationTheme}}</td>
+                                <td hidden>{{nonActiveProduct.variationId}}</td>
                               </tr>
                             </ng-template>
                             </tbody>
