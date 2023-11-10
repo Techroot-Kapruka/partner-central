@@ -30,6 +30,10 @@ import {PaginationComponent} from './pagination/pagination.component';
 import {AngularEditorModule} from '@kolkov/angular-editor';
 import {SelectModule} from 'ng-select';
 import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
+import { ChangeRequestsComponent } from './product-list/change-requests/change-requests.component';
+import { NewAdditionsComponent } from './product-list/new-additions/new-additions.component';
+import { ProductListComponent } from './product-list/product-list/product-list.component';
+import { ProductSearchComponent } from './product-list/product-search/product-search.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     maxFilesize: 50,
@@ -38,7 +42,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
 
 @NgModule({
     declarations: [
-        DigitalListComponent, DigitalAddComponent, EditProductsComponent, ViewProductComponent, ApproveProductComponent, QaApprovalViewComponent, QaNormalViewComponent, DeclinedProductComponent, ProductViewComponent, ApproveEditProductComponent, ApproveEditImageComponentComponent, PaginationComponent],
+        DigitalListComponent, DigitalAddComponent, EditProductsComponent, ViewProductComponent, ApproveProductComponent, QaApprovalViewComponent, QaNormalViewComponent, DeclinedProductComponent, ProductViewComponent, ApproveEditProductComponent, ApproveEditImageComponentComponent, PaginationComponent, ChangeRequestsComponent, NewAdditionsComponent, ProductListComponent, ProductSearchComponent],
   imports: [
     CommonModule,
     FormsModule,

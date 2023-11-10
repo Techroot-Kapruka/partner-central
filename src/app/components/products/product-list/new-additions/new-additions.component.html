@@ -1,0 +1,379 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card tab2-card">
+        <div class="card-body tab2-card">
+          <ngb-tabset class="tab-coupon">
+
+            <ngb-tab [title]="getPendingApprovalList()" *ngIf="isAdmin">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show" id="account1" role="tabpanel" aria-labelledby="account-tab">
+                  <div class="custom-datatable">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <input autofocus type="text" class="form-control" placeholder="Search By Product Name..."
+                               (input)="PendingProductFilter($event.target.value)" style="width: 60%"/>
+                      </div>
+                      <div class="col-md-6">
+                        <input autofocus type="text" class="form-control" placeholder="Search By Business Name..."
+                               (input)="PendingProductFilterByBusinessName($event.target.value)" style="width: 60%"/>
+                      </div>
+                    </div>
+
+                    <div class="clearfix"></div>
+                    <div class="row">
+                      <div class="col-md-9">
+                        <div class="row table-responsive"
+                             style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
+                          <table class="table table-sm table-bordered">
+                            <thead class="table-primary">
+                            <tr>
+                              <th>Product Image</th>
+                              <th>Title</th>
+                              <th>Price</th>
+                              <th>Stock in hand</th>
+                              <th>Create Date</th>
+                              <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <ng-template #imagePopup let-modal>
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h4 class="modal-title">Image Preview</h4>
+                                  <button type="button" class="close" (click)="closePopup()">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <img [src]="imageUrl" alt="Image" class="img-fluid">
+                                </div>
+                              </div>
+                            </ng-template>
+
+                            <ng-container *ngIf="filteredPendingProducts.length > 0; else paginatedData_PA">
+                              <!-- Display filtered products -->
+                              <tr *ngFor="let nonActiveProduct of (paginatedPendingItems.length > 0 ? paginatedPendingItems : filteredPendingProducts); let j = index;">
+                                <td align="center"><img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"
+                                                        width="60px"
+                                                        (error)="onImageError($event)" (click)="popUpImage(j)"/></td>
+                                <!--<td>{{ nonActiveProduct.title }}<br>{{ nonActiveProduct.productCode }}<br>{{ nonActiveProduct.vendor }} <br>{{ nonActiveProduct.categoryPath }}</td>-->
+                                <td><p style="margin: 0px; font-size: 16px; color: #000">{{
+                                  nonActiveProduct.title}}</p>
+                                  <p style="margin: 0px;font-size: 16px; color: #000">{{
+                                    nonActiveProduct.productCode }}</p>
+                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;">&nbsp; &nbsp;{{nonActiveProduct.vendor}}</p>
+                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.categoryPath}}</p>
+                                </td>
+                                <td>
+                                  <input type="text" disabled style="width:100px; height: 30px; border: none;"
+                                         [value]="nonActiveProduct.price" autofocus/>
+                                </td>
+                                <td>
+                                  <input type="text" disabled style="width:100px; height: 30px; border: none;"
+                                         [value]="nonActiveProduct.in_stock"/>
+                                </td>
+                                <td>{{ nonActiveProduct.createDate }}</td>
+                                <td>
+                                  <button type="button" (click)='ApproveProductNon(j)'
+                                          style="width: 96px;height: 28px;font-size: 10px;"
+                                          class="btn btn-outline-success">Review
+                                  </button>
+                                </td>
+                              </tr>
+                            </ng-container>
+
+                            <!-----------------------------default View------------------------------------------>
+                            <ng-template #paginatedData_PA>
+                              <!-- Display paginated items if filteredProducts is empty -->
+                              <tr
+                                *ngFor="let nonActiveProduct of (paginatedPendingItems.length > 0 ? paginatedPendingItems : nonActiveProductsArray); let j = index;">
+                                <td align="center"><img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"
+                                                        width="60px"
+                                                        (error)="onImageError($event)" (click)="popUpImage(j)"/></td>
+                                <!--<td>{{ nonActiveProduct.title }}<br>{{ nonActiveProduct.productCode }}<br>{{ nonActiveProduct.vendor }}<br>{{ nonActiveProduct.categoryPath }}</td>-->
+                                <td><p style="margin: 0px; font-size: 16px; color: #000">{{
+                                  nonActiveProduct.title}}</p>
+                                  <p style="margin: 0px;font-size: 16px; color: #000">{{
+                                    nonActiveProduct.productCode }}</p>
+                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;">&nbsp; &nbsp;{{nonActiveProduct.vendor}}</p>
+                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.categoryPath}}</p>
+                                </td>
+                                <td>
+                                  <input type="text" disabled style="width:100px; height: 30px; border: none;"
+                                         [value]="nonActiveProduct.price" autofocus/>
+                                </td>
+                                <td>
+                                  <input type="text" disabled style="width:100px; height: 30px; border: none;"
+                                         [value]="nonActiveProduct.in_stock"/>
+                                </td>
+                                <td>{{ nonActiveProduct.createDate }}</td>
+                                <td>
+                                  <button type="button" (click)='ApproveProductNon(j)'
+                                          style="width: 96px;height: 28px;font-size: 10px;"
+                                          class="btn btn-outline-success">Review
+                                  </button>
+                                </td>
+                              </tr>
+                            </ng-template>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="pull-right" style="margin-top: 15px">
+                      <app-pagination
+                        [currentPage]="currentPagePA"
+                        [totalPages]="totalPagesPA"
+                        (pageChange)="onPageChange($event,'PendingPro')"
+                      ></app-pagination>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+            <ngb-tab [title]="getPendingQC()" *ngIf="isPartner">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show" id="account4" role="tabpanel" aria-labelledby="account-tab">
+                  <div class="custom-datatable">
+                    <div class="col-md-9">
+                      <input autofocus type="text" class="form-control" placeholder="Search By Product Name..."
+                             (input)="PendingQCFilter($event.target.value)"/>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                      <div class="col-md-9">
+                        <div class="row table-responsive"
+                             style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
+                          <table class="table table-sm table-bordered">
+                            <thead class="table-primary">
+                            <tr>
+                              <th>Product Image</th>
+                              <th>Title</th>
+                              <th>Create Date</th>
+                              <th>Brand</th>
+                              <!--                              <th>Action</th>-->
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <ng-container *ngIf="filteredPendingQC.length > 0; else paginatedData_PQC">
+                              <!-- Display filtered products -->
+                              <tr *ngFor="let pendingQC of (paginatedPendingQC.length > 0 ? paginatedPendingQC :filteredPendingQC); let x = index;">
+                                <td align="center"><img src="{{ imagePathURI + pendingQC.image }}" height="60px"
+                                                        width="60px"
+                                                        (error)="onImageError($event)" (click)="popUpImagePending(x)"/>
+                                  <!--<td class="productData">{{ pendingQC.title }} <br> {{ pendingQC.productCode }} <br>{{ pendingQC.categoryPath }} </td>-->
+
+                                <td><p style="margin: 0px; font-size: 16px; color: #000">{{
+                                  pendingQC.title}}</p>
+                                  <p style="margin: 0px;font-size: 16px; color: #000">{{
+                                    pendingQC.productCode }}</p>
+                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{pendingQC.categoryPath}}</p>
+                                </td>
+                                <td>{{ pendingQC.createDate }}</td>
+                                <td>{{ pendingQC.brand }}</td>
+                                <!--                                <td>-->
+                                <!--                                  <button type="button" (click)='editGetProduct(x)'-->
+                                <!--                                          style="width: 96px;height: 28px;font-size: 10px;"-->
+                                <!--                                          class="btn btn-outline-success">Edit-->
+                                <!--                                  </button>-->
+                                <!--                                </td>-->
+                              </tr>
+                            </ng-container>
+                            <ng-template #paginatedData_PQC>
+                              <!-- Display paginated items if filteredProducts is empty -->
+                              <tr
+                                *ngFor="let pendingQC of (paginatedPendingQC.length > 0 ? paginatedPendingQC : approvalPartnerProductList); let x = index;">
+                                <td align="center"><img src="{{ imagePathURI + pendingQC.image }}" height="60px"
+                                                        width="60px"
+                                                        (error)="onImageError($event)" (click)="popUpImagePending(x)"/>
+                                  <!--<td class="productData">{{ pendingQC.title }} <br> {{ pendingQC.productCode }} <br>{{ pendingQC.categoryPath }} </td>-->
+                                <td><p style="margin: 0px; font-size: 16px; color: #000">{{
+                                  pendingQC.title}}</p>
+                                  <p style="margin: 0px;font-size: 16px; color: #000">{{
+                                    pendingQC.productCode }}</p>
+                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{pendingQC.categoryPath}}</p>
+                                </td>
+                                <td>{{ pendingQC.createDate }}</td>
+                                <td>{{ pendingQC.brand }}</td>
+                                <!--                                <td>-->
+                                <!--                                  <button type="button" (click)='editGetProduct(x)'-->
+                                <!--                                          style="width: 96px;height: 28px;font-size: 10px;"-->
+                                <!--                                          class="btn btn-outline-success">Edit-->
+                                <!--                                  </button>-->
+                                <!--                                </td>-->
+                              </tr>
+                            </ng-template>
+                            <ng-template #imagePopup let-modal>
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h4 class="modal-title">Image Preview</h4>
+                                  <button type="button" class="close" (click)="closePopup()">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <img [src]="imageUrl" alt="Image" class="img-fluid">
+                                </div>
+                              </div>
+                            </ng-template>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="pull-right" style="margin-top: 15px">
+                      <app-pagination
+                        [currentPage]="currentPagePQC"
+                        [totalPages]="totalPagesPQC"
+                        (pageChange)="onPageChange($event,'PendingQC')"
+                      ></app-pagination>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+            <ngb-tab [title]="PendingStockAllocation()">
+              <ng-template ngbTabContent>
+                <div class="tab-pane fade active show" id="account" role="tabpanel" aria-labelledby="account-tab">
+                  <div class="custom-datatable">
+
+                    <div class="row">
+                      <div class="col-md-6">
+                        <input autofocus type="text" class="form-control" placeholder="Search By Product Name..."
+                               (input)="PendingStockAllocationFilter($event.target.value)" style="width: 60%"/>
+                      </div>
+                      <div class="col-md-6" *ngIf="isAdmin">
+                        <input autofocus type="text" class="form-control" placeholder="Search By Business Name..."
+                               (input)="filterPendingStockAllocationByBusinessName($event.target.value)"
+                               style="width: 60%"/>
+                      </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                      <div class="col-md-9">
+                        <div class="row table-responsive"
+                             style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
+                          <table class="table table-sm table-bordered">
+                            <thead class="table-primary">
+                            <tr>
+                              <th>Product Image</th>
+                              <th>Title</th>
+                              <th>Price</th>
+                              <th>Stock in hand</th>
+                              <th>Create Date</th>
+                              <th *ngIf="!isAdmin">Action</th>
+                            </tr>
+                            <!--*ngIf="isPartner"-->
+                            </thead>
+                            <tbody>
+                            <ng-container *ngIf="filterdPendingAllocation.length > 0; else paginatedData">
+                              <!-- Display filtered products -->
+                              <tr *ngFor="let productDetail of (paginatedPendingStockAllow.length > 0 ? paginatedPendingStockAllow : filterdPendingAllocation); let i = index;">
+                                <td align="center"><img src="{{ imagePathURI + productDetail.image }}" height="60px"
+                                                        width="60px"
+                                                        (error)="onImageError($event)" (click)="popUpImagePendingAllocation(i)"/>
+                                </td>
+                                <td><p style="margin: 0px; font-size: 16px; color: #000;">{{
+                                  productDetail.title}}</p>
+                                  <p style="margin: 0px;font-size: 16px; color: #000">{{
+                                    productDetail.productCode }}</p>
+                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;">&nbsp; &nbsp;{{productDetail.vendor}}</p>
+                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{productDetail.categoryPath}}</p>
+                                </td>
+                                <td>
+                                  <input type="text" disabled style="width:100px; height: 30px; border: none;"
+                                         [value]="productDetail.price" autofocus/>
+                                  <img [hidden]="true" style="text-align: right" mat-button
+                                       (click)="EditPricePopup(i,1)"
+                                       *ngIf="EnablePriceEdit"
+                                       src="assets/images/EditImage.png" height="20px" weight="20px" title="Edit Price">
+                                </td>
+                                <td>
+                                  <input type="text" disabled style="width:70px; height: 30px; border: none;"
+                                         [value]="productDetail.in_stock"/>
+                                  <img style="text-align: right" mat-button (click)="EditStockPopup(i,1,0)"
+                                       *ngIf="EnableStockEdit"
+                                       src="assets/images/EditImage.png" height="20px" weight="20px" title="Edit Stock">
+                                </td>
+                                <td>{{ productDetail.createDate }}</td>
+                                <td *ngIf="!isAdmin"><button class="btn btn-success" (click)="pendingStockAllocationAction(productDetail)">Add Stock</button></td>
+                              </tr>
+                            </ng-container>
+                            <ng-template #paginatedData>
+                              <tr
+                                *ngFor="let productDetail of (paginatedPendingStockAllow.length > 0 ? paginatedPendingStockAllow : pending_stock_allocation); let i = index;">
+                                <td align="center">{{stopLoading()}}<img src="{{ imagePathURI + productDetail.image }}"
+                                                                         (click)="popUpImagePendingAllocation(i)" height="60px"
+                                                                         width="60px"
+                                                                         (error)="onImageError($event)"/></td>
+                                <td><p style="margin: 0px; font-size: 16px; color: #000;">{{
+                                  productDetail.title}}</p>
+                                  <p style="margin: 0px;font-size: 16px; color: #000">{{
+                                    productDetail.productCode }}</p>
+                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;">&nbsp; &nbsp;{{productDetail.vendor}}</p>
+                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{productDetail.categoryPath}}</p>
+                                </td>
+                                <td>
+                                  <input type="text" disabled style="width:100px; height: 30px; border: none;"
+                                         [value]="productDetail.price" autofocus/>
+                                  <!--[hidden]="true"-->
+                                  <img [hidden]="true" style="text-align: right" mat-button
+                                       (click)="EditPricePopup(i, 1)"
+                                       *ngIf="EnablePriceEdit"
+                                       src="assets/images/EditImage.png" height="20px" weight="20px" title="Edit Price">
+
+                                  <button [hidden]="true" *ngIf="EnablePriceEdit" type="button" class="btn btn-primary"
+                                          style="text-align: right"
+                                          (click)="popup(productDetail.price,productDetail.productCode)"><i
+                                    class="fa fa-edit"></i></button>
+                                </td>
+                                <td>
+                                  <input type="text" disabled style="width:70px; height: 30px; border: none;"
+                                         [value]="productDetail.in_stock"/>
+                                </td>
+                                <td>{{ productDetail.createDate }}</td>
+                                <td *ngIf="!isAdmin"><button class="btn btn-success" (click)="pendingStockAllocationAction(productDetail)">Add Stock</button></td>
+                              </tr>
+                            </ng-template>
+                            <ng-template #imagePopup let-modal>
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h4 class="modal-title">Image Preview</h4>
+                                  <button type="button" class="close" (click)="closePopup()">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                </div>
+                                <div class="modal-body">
+                                  <img [src]="imageUrl" alt="Image" class="img-fluid">
+                                </div>
+                              </div>
+                            </ng-template>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="pull-right" style="margin-top: 15px">
+                      <app-pagination
+                        [currentPage]="currentPagePendingAllo"
+                        [totalPages]="totalPagesPendingAllow"
+                        (pageChange)="onPageChange($event,'PendingStockAllocation')"
+                      ></app-pagination>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
+            </ngb-tab>
+
+          </ngb-tabset>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->
+

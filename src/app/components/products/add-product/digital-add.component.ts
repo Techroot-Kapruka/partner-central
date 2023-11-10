@@ -1724,17 +1724,17 @@ export class DigitalAddComponent implements OnInit {
       return;
     }
 
-      if (this.clothesArray.length > 0 && this.clothesArray[0].type_ !== this.selectedType){
-        Swal.fire(
-          'Oops',
-          'Please Select Same Size Type',
-          'warning'
-        );
-        const size = document.getElementById('clothesSizeUk') as HTMLSelectElement;
-        size.value = '';
-        this.sizeArrayForClothes=[]
-        return;
-      }
+    if (this.clothesArray.length > 0 && this.clothesArray[0].type_ !== this.selectedType){
+      Swal.fire(
+        'Oops',
+        'Please Select Same Size Type',
+        'warning'
+      );
+      const size = document.getElementById('clothesSizeUk') as HTMLSelectElement;
+      size.value = '';
+      this.sizeArrayForClothes=[]
+      return;
+    }
 
     if (this.isClothing) {
       for (let i = 0; i < this.colorArrayForClothes.length; i++) {
@@ -1940,8 +1940,8 @@ export class DigitalAddComponent implements OnInit {
       category_code: code
     };
     this.productService.getAttributes(payLoard).subscribe(
-        data => this.manageAttributes(data),
-        error => this.manageError(error)
+      data => this.manageAttributes(data),
+      error => this.manageError(error)
     );
   }
 
