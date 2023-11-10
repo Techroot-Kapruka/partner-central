@@ -69,7 +69,7 @@ export class NavService {
         // new Added thingsss
         {path: '/products/digital/new-additions', title: 'New Additions', type: 'link'},
         {path: '/products/digital/change-requests', title: 'Change Requests', type: 'link'},
-        {path: '/products/digital/product-search', title: 'Product Search', type: 'link'},
+        // {path: '/products/digital/product-search', title: 'Product Search', type: 'link'},
         // {path: '/products/digital/edit-image-approval', title: 'Edit Image Approval', type: 'link'},
         // {path: '/products/digital/out-of-stock', title: 'Out Of Stock', type: 'link'},
         // {path: '/products/digital/suspended', title: 'Suspended', type: 'link'},
