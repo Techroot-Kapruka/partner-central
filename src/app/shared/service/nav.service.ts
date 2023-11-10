@@ -362,7 +362,16 @@ export class NavService {
 
   manageAdmin() {
 
-    console.log(this.items.value)
+    //category
+    this.items.value[1].path = '';
+    this.items.value[1].title = '';
+    this.items.value[1].type = '';
+
+    //create user hide
+    this.items.value[6].children[0].path = '';
+    this.items.value[6].children[0].title = '';
+    this.items.value[6].children[0].type = '';
+
     this.items.value[2].children[1].path = '';
     this.items.value[2].children[1].title = '';
     this.items.value[2].children[1].type = '';
@@ -371,10 +380,51 @@ export class NavService {
     this.items.value[2].children[2].title = '';
     this.items.value[2].children[2].type = '';
 
-    // this.items.value[2].children[9].path = '';
-    // this.items.value[2].children[9].title = '';
-    // this.items.value[2].children[9].type = '';
 
+    this.items.value[4].path = '';
+    this.items.value[4].title = '';
+    this.items.value[4].type = '';
+
+    this.items.value[5].children[1].path = '';
+    this.items.value[5].children[1].title = '';
+    this.items.value[5].children[1].type = '';
+
+    this.items.value[5].children[2].path = '';
+    this.items.value[5].children[2].title = '';
+    this.items.value[5].children[2].type = '';
+
+    this.items.value[7].icon = '';
+    this.items.value[7].title = '';
+    this.items.value[7].type = '';
+
+    this.items.value[8].icon = '';
+    this.items.value[8].title = '';
+    this.items.value[8].type = '';
+
+    this.items.value[9].icon = '';
+    this.items.value[9].title = '';
+    this.items.value[9].type = '';
+
+    // this.items.value[12].icon = '';
+    // this.items.value[12].title = '';
+    // this.items.value[12].type = '';
+
+    // this.items.value[13].icon = '';
+    // this.items.value[13].title = '';
+    // this.items.value[13].type = '';
+
+  }
+
+  manageSuperAdmin() {
+
+    console.log(this.items);
+    this.items.value[2].children[1].path = '';
+    this.items.value[2].children[1].title = '';
+    this.items.value[2].children[1].type = '';
+
+    this.items.value[2].children[2].path = '';
+    this.items.value[2].children[2].title = '';
+    this.items.value[2].children[2].type = '';
     this.items.value[4].path = '';
     this.items.value[4].title = '';
     this.items.value[4].type = '';

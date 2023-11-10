@@ -35,9 +35,9 @@ export class ListOrdersComponent implements OnInit {
     this.hideElement();
     const page = 0;
     const sessionUser2 = sessionStorage.getItem('userRole');
-    console.log('user : ' + sessionUser2)
+    console.log('user : ' + sessionUser2);
     if (sessionUser2 === 'ROLE_PARTNER') {
-// Simulate data loading from an array
+      // Simulate data loading from an array
       setTimeout(() => {
         this.getPaginateOrderList(page);
         this.stillLoading = false; // Set loading to false when data is loaded
@@ -261,6 +261,7 @@ export class ListOrdersComponent implements OnInit {
       for (let z = 0; z < data.data.content.length; z++) {
         let statusStyleOne = false;
         let statusStyleTwo = false;
+        let statusStyleThree = false;
         if (data.data.content[z].status === 'IN PROCESS') {
           statusStyleOne = true;
         } else {
@@ -271,6 +272,12 @@ export class ListOrdersComponent implements OnInit {
           statusStyleTwo = true;
         } else {
           statusStyleTwo = false;
+        }
+
+        if (data.data.content[z].status === 'CANCELED') {
+          statusStyleThree = true;
+        } else {
+          statusStyleThree = false;
         }
         // const proCode = data.data.content[z].cartsnapshot[0].productID;
         let isOnDemand = false;
@@ -291,6 +298,7 @@ export class ListOrdersComponent implements OnInit {
           orderDate: data.data.content[z].order_date,
           statusStyleOne,
           statusStyleTwo,
+          statusStyleThree,
           cartsnapshot: data.data.content[z].cartsnapshot[0].name,
           shipmentStatus: this.status,
           isOnDemand,

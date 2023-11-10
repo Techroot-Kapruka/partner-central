@@ -281,9 +281,14 @@ export class ProductService {
   //   return this.httpClient.post<any>(this.SERVER + 'product/getAllProductsByCatManager', payLoard, {headers});
   // }
 
-  getConsignmentProducts(payLoard) {
+  // getConsignmentProducts(payLoard) {
+  //   const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+  //   return this.httpClient.post<any>(this.SERVER + 'product/getConsignmentProductsByVendor', payLoard, {headers});
+  // }
+
+  getOnDemandProduct(payLoard) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.post<any>(this.SERVER + 'product/getConsignmentProductsByVendor', payLoard, {headers});
+    return this.httpClient.post<any>(this.SERVER + 'product/getOnDemandProduct', payLoard, {headers});
   }
 
   updateStock(payload) {
