@@ -60,7 +60,7 @@
 
                     <div class="form-group">
                       <label class="col-form-label">Description</label>
-                      <!--                      <textarea formControlName="txt_description" id="txt_description" rows="4" cols="12"></textarea>-->
+<!--                      <textarea formControlName="txt_description" id="txt_description" rows="4" cols="12"></textarea>-->
                       <ng-container *ngTemplateOutlet="myComponentTemplate"
                       ></ng-container>
                       <textarea hidden class="form-control" formControlName="txt_description" id="txt_description"
@@ -248,7 +248,7 @@
 
                       <div>
                         <select class="custom-select" id="category_ids"
-                                (change)="selectSubcategory($event,1)" style="width: 19%; position: absolute; top: 192px; left: 33%;">
+                                 (change)="selectSubcategory($event,1)" style="width: 19%; position: absolute; top: 192px; left: 33%;">
                           <option value="">-Select Sub Category-</option>
                           <option *ngFor="let productSubCategoryArray of productSubCategoryArray; let i = index"
                                   value="{{productSubCategoryArray['name']}}">

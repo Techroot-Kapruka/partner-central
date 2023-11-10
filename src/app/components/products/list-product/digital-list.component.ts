@@ -6,7 +6,7 @@ import {error} from 'protractor';
 import {environment} from '../../../../environments/environment.prod';
 import {NgbModal, NgbTabset} from '@ng-bootstrap/ng-bootstrap';
 import {AuthService} from '../../../shared/auth/auth.service';
-import {PendingStockAllocationShareService} from "../../../shared/service/pending-stock-allocation-share.service";
+import {PendingStockAllocationShareService} from '../../../shared/service/pending-stock-allocation-share.service';
 
 @Component({
   selector: 'app-digital-list',
@@ -69,8 +69,8 @@ export class DigitalListComponent implements OnInit {
   public sub_type = '';
   public imagedefaultPathURI = '';
   vstock: number[] = [];
-  dataLoaded: boolean = false;
-  stockUpdate: boolean = false;
+  dataLoaded = false;
+  stockUpdate = false;
 
   public imagePathURI = environment.imageURIENV;
 
@@ -158,7 +158,7 @@ export class DigitalListComponent implements OnInit {
   ngOnInit() {
     setTimeout(() => {
       this.stopLoading();
-    }, 16000);
+    }, 12000);
   }
 
   stopLoading() {
@@ -172,12 +172,9 @@ export class DigitalListComponent implements OnInit {
       this.EnableStockEdit = true;
     } else if (sessionStorage.getItem('userRole') === 'ROLE_QA') {
       this.qaTables = false;
-    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' ) {
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
       this.qaTables = true;
       this.EnableStockEdit = true;
-    }else if (sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
-        this.qaTables = true;
-        this.EnableStockEdit = true;
     } else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER') {
       this.qaTables = true;
     } else if (sessionStorage.getItem('userRole') === 'ROLE_STORES_MANAGER') {
@@ -188,7 +185,7 @@ export class DigitalListComponent implements OnInit {
   hideElement(): void {
     const role = sessionStorage.getItem('userRole');
 
-    if (role === 'ROLE_ADMIN' || role === 'ROLE_SUPER_ADMIN' || role === 'ROLE_CATEGORY_MANAGER' || role === 'ROLE_STORES_MANAGER') {
+    if (role === 'ROLE_ADMIN' || role === 'ROLE_CATEGORY_MANAGER' || role === 'ROLE_STORES_MANAGER') {
       this.isAdmin = true;
     } else {
       this.isAdmin = false;
@@ -285,7 +282,7 @@ export class DigitalListComponent implements OnInit {
       this.pending_stock_allocation.push(or);
     }
     this.totalPagesPendingAllow = Math.ceil(this.pending_stock_allocation.length / this.list_pages2);
-    this.onPageChange(1,'PendingStockAllocation')
+    this.onPageChange(1, 'PendingStockAllocation');
 
   }
   getSelectedPartnerAllocationProductManage(data){
@@ -312,7 +309,7 @@ export class DigitalListComponent implements OnInit {
         this.pending_stock_allocation.push(or);
       }
       this.totalPagesPendingAllow = Math.ceil(this.pending_stock_allocation.length / this.list_pages2);
-      this.onPageChange(1,'PendingStockAllocation')
+      this.onPageChange(1, 'PendingStockAllocation');
     }
   }
 
@@ -339,7 +336,7 @@ export class DigitalListComponent implements OnInit {
         this.list_pages.push(or);
       }
       this.totalPages = Math.ceil(this.list_pages.length / this.list_pages2);
-      this.onPageChange(1,'ActivePro')
+      this.onPageChange(1, 'ActivePro');
     }
   }
 
@@ -349,7 +346,7 @@ export class DigitalListComponent implements OnInit {
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     this.totalPages = Math.ceil(this.filteredProducts.length / this.list_pages2);
-    this.onPageChange(1,'ActivePro')
+    this.onPageChange(1, 'ActivePro');
   }
 
   PendingStockAllocationFilter(searchTerm: String): void{
@@ -358,7 +355,7 @@ export class DigitalListComponent implements OnInit {
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     this.totalPagesPendingAllow = Math.ceil(this.filterdPendingAllocation.length / this.list_pages2);
-    this.onPageChange(1,'PendingStockAllocation')
+    this.onPageChange(1, 'PendingStockAllocation');
   }
 
   /*  AP = Active Products
@@ -488,7 +485,7 @@ export class DigitalListComponent implements OnInit {
         }
       }
 
-    })
+    });
     if (text) {
       Swal.fire({
         title: 'Do you want to save the changes?',
@@ -572,7 +569,7 @@ export class DigitalListComponent implements OnInit {
 
   getPartner(): void {
     const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER' || sessionUser === 'ROLE_SUPER_ADMIN') {
+    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER') {
       this.productService.getPartnerAll().subscribe(
         data => this.manageBussinessPartner(data),
       );
@@ -624,8 +621,8 @@ export class DigitalListComponent implements OnInit {
     const busName = sessionStorage.getItem('businessName');
     const userRole = sessionStorage.getItem('userRole');
     const categoryID = sessionStorage.getItem('userId');
-    console.log('AA : '+ busName);
-    console.log('AA : '+ categoryID);
+    console.log('AA : ' + busName);
+    console.log('AA : ' + categoryID);
 
     this.productService.getnonActiveProduct(busName, categoryID).subscribe(
       data => this.manageNonActiveProduct(data),
@@ -658,7 +655,7 @@ export class DigitalListComponent implements OnInit {
         }
 
         this.totalPagesPA = Math.ceil(this.nonActiveProductsArray.length / this.list_pages2);
-        this.onPageChange(1,'PendingPro');
+        this.onPageChange(1, 'PendingPro');
       }
     }
     if (this.nonActiveProductsArray.length === 0) {
@@ -673,7 +670,7 @@ export class DigitalListComponent implements OnInit {
     );
 
     this.totalPagesPA = Math.ceil(this.filteredPendingProducts.length / this.list_pages2);
-    this.onPageChange(1,'PendingPro');
+    this.onPageChange(1, 'PendingPro');
   }
 
   editProductApprovalFilter(searchTerm: string): void {
@@ -682,7 +679,7 @@ export class DigitalListComponent implements OnInit {
     );
 
     this.totalPagesEditProApproval = Math.ceil(this.filterededitProductApproval.length / this.list_pages2);
-    this.onPageChange(1,'EditProApproval');
+    this.onPageChange(1, 'EditProApproval');
   }
 
   PendingProductFilterByBusinessName(searchTerm: string): void {
@@ -691,7 +688,7 @@ export class DigitalListComponent implements OnInit {
     );
 
     this.totalPagesPA = Math.ceil(this.filteredPendingProducts.length / this.list_pages2);
-    this.onPageChange(1,'PendingPro');
+    this.onPageChange(1, 'PendingPro');
   }
 
   PendingQCFilter(searchTerm: string): void {
@@ -699,7 +696,7 @@ export class DigitalListComponent implements OnInit {
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     this.totalPagesPQC = Math.ceil(this.filteredPendingQC.length / this.list_pages2);
-    this.onPageChange(1,'PendingQC');
+    this.onPageChange(1, 'PendingQC');
   }
 
   OutofStockFilter(searchTerm: string): void {
@@ -707,7 +704,7 @@ export class DigitalListComponent implements OnInit {
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     this.totalPagesOS = Math.ceil(this.filteredoutOfStock.length / this.list_pages2);
-    this.onPageChange(1,'OutofStock');
+    this.onPageChange(1, 'OutofStock');
   }
 
   filterOutofStockByBusinessName(searchTerm: string): void {
@@ -715,7 +712,7 @@ export class DigitalListComponent implements OnInit {
       product.vendor.toLowerCase().includes(searchTerm.toLowerCase())
     );
     this.totalPagesOS = Math.ceil(this.filteredoutOfStock.length / this.list_pages2);
-    this.onPageChange(1,'OutofStock');
+    this.onPageChange(1, 'OutofStock');
   }
 
 
@@ -724,7 +721,7 @@ export class DigitalListComponent implements OnInit {
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     this.totalPagesSus = Math.ceil(this.filteredSuspendProduct.length / this.list_pages2);
-    this.onPageChange(1,'Suspend');
+    this.onPageChange(1, 'Suspend');
   }
 
   SuspendProductFilterByBusinessName(searchTerm: string): void {
@@ -732,7 +729,7 @@ export class DigitalListComponent implements OnInit {
       product.vendor.toLowerCase().includes(searchTerm.toLowerCase())
     );
     this.totalPagesSus = Math.ceil(this.filteredSuspendProduct.length / this.list_pages2);
-    this.onPageChange(1,'Suspend');
+    this.onPageChange(1, 'Suspend');
   }
 
   OnDemandProductFilter(searchTerm: string): void {
@@ -740,7 +737,7 @@ export class DigitalListComponent implements OnInit {
       product.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
     this.totalPagesOnDemand = Math.ceil(this.filteredOnDemandProduct.length / this.list_pages2);
-    this.onPageChange(1,'PendingOnDemand');
+    this.onPageChange(1, 'PendingOnDemand');
   }
 
   ApproveProductNon(value) {
@@ -790,8 +787,8 @@ export class DigitalListComponent implements OnInit {
 
     const busName = sessionStorage.getItem('businessName');
     const categoryID = sessionStorage.getItem('userId');
-    console.log('AA : '+ busName);
-    console.log('AA : '+ categoryID);
+    console.log('AA : ' + busName);
+    console.log('AA : ' + categoryID);
 
     this.productService.getnonActiveProduct(busName, categoryID).subscribe(
       data => this.manegeMonActiveProductsByCompanyName(data),
@@ -804,12 +801,13 @@ export class DigitalListComponent implements OnInit {
     const payloard = {
       vendor: sessionStorage.getItem('partnerId')
     };
-    this.productService.getConsignmentProducts(payloard).subscribe(
+    this.productService.getOnDemandProduct(payloard).subscribe(
       data => this.manageConsignmentProducts(data),
     );
   }
 
   manageConsignmentProducts(data) {
+    console.log(data);
     this.consignmentProducts = [];
     this.filteredOnDemandProduct = [];
     this.OnDemandsearchInput = '';
@@ -818,10 +816,14 @@ export class DigitalListComponent implements OnInit {
         for (let i = 0; i < data.data.length; i++) {
           this.vstock[i] = null;
           const or = {
-            productCode: data.data[i].onDemand_products.product_code,
+            productCode: data.data[i].onDemand_products.variationCode,
             title: data.data[i].onDemand_products.title,
-            inStock: data.data[i].onDemand_products.in_Stock,
-            create_date: data.data[i].onDemand_products.create_date,
+            inStock: data.data[i].onDemand_products.quantity,
+            create_date: data.data[i].onDemand_products.createDate,
+            variationTheme: data.data[i].onDemand_products.variationTheme,
+            variationId: data.data[i].onDemand_products.variationId,
+            categoryColor: data.data[i].onDemand_products.color,
+            categorySizes: data.data[i].onDemand_products.sizes,
             path: data.data[i].category_path,
             image: data.data[i].product_img.split('/product')[1],
             Action: ''
@@ -830,15 +832,15 @@ export class DigitalListComponent implements OnInit {
         }
 
         this.totalPagesOnDemand = Math.ceil(this.consignmentProducts.length / this.list_pages2);
-        this.onPageChange(1,'PendingOnDemand');
+        this.onPageChange(1, 'PendingOnDemand');
       }
     }
   }
 
-  pendingStockAllocationAction(productDetail : any){
+  pendingStockAllocationAction(productDetail: any){
     this.filtereDpendingStockByOnDemand = this.consignmentProducts.filter((item) => (item as any).productCode === productDetail.productCode);
     if (this.filtereDpendingStockByOnDemand.length === 0){
-      this.filtereDpendingStockByOnDemand[0]=productDetail
+      this.filtereDpendingStockByOnDemand[0] = productDetail;
       this.pendingStockShare.setDataArray(this.filtereDpendingStockByOnDemand);
       const url = 'shipment/add-shipment';
       this.router.navigate([url]);
@@ -847,6 +849,7 @@ export class DigitalListComponent implements OnInit {
         }
   }
 
+  // asitha
   UpdateVirtualStocks(row: any) {
     if (this.vstock[this.startIndex + row] === null || this.vstock[this.startIndex + row] === undefined || isNaN(this.vstock[this.startIndex + row]) || this.stockUpdate) {
       Swal.fire(
@@ -854,16 +857,18 @@ export class DigitalListComponent implements OnInit {
         'Invalid stock value. Please enter a valid number.',
         'error'
       );
-      this.vstock[this.startIndex+ row]=null
+      this.vstock[this.startIndex + row] = null;
       return;
     }
 
-      const payloard = {
-        product_code: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].productCode : this.consignmentProducts[this.startIndex + row].productCode,
+    const payloard = {
+        productCode: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].productCode : this.consignmentProducts[this.startIndex + row].productCode,
         vendor: sessionStorage.getItem('partnerId'),
-        in_stock: this.vstock[this.startIndex + row]
+        quantity: this.vstock[this.startIndex + row],
+        variationTheme: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].variationTheme : this.consignmentProducts[this.startIndex + row].variationTheme,
+        variationId: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].variationId : this.consignmentProducts[this.startIndex + row].variationId
       };
-      this.productService.updateStock(payloard).subscribe(
+    this.productService.updateStock(payloard).subscribe(
         data => this.manageUpdateStock(data),
       );
 
@@ -951,7 +956,7 @@ export class DigitalListComponent implements OnInit {
         }
 
         this.totalPagesPQC = Math.ceil(this.approvalPartnerProductList.length / this.list_pages2);
-        this.onPageChange(1,'PendingQC');
+        this.onPageChange(1, 'PendingQC');
       }
     }
   }
@@ -977,7 +982,7 @@ export class DigitalListComponent implements OnInit {
   viewProduct(index) {
     let namezz = '';
     const userRole = sessionStorage.getItem('userRole');
-    if (userRole === 'ROLE_ADMIN' || userRole === 'ROLE_SUPER_ADMIN') {
+    if (userRole === 'ROLE_ADMIN') {
       namezz = (document.getElementById('select_pro3') as HTMLInputElement).value;
       for (let i = 0; i < this.partnerArray.length; i++) {
         if (this.partnerArray[i].partner_u_id === namezz) {
@@ -1068,7 +1073,7 @@ export class DigitalListComponent implements OnInit {
     let businessName = '';
     const names = '';
     const sessionUser2 = sessionStorage.getItem('userRole');
-    if (sessionUser2 === 'ROLE_ADMIN' || sessionUser2 === 'ROLE_SUPER_ADMIN') {
+    if (sessionUser2 === 'ROLE_ADMIN') {
       businessName = (document.getElementById('select_pro3') as HTMLInputElement).value;
     } else if (sessionUser2 === 'ROLE_PARTNER') {
       businessName = sessionStorage.getItem('partnerId');
@@ -1115,7 +1120,7 @@ export class DigitalListComponent implements OnInit {
 
   getSelectedRowss(page) {
     const sessionUser2 = sessionStorage.getItem('userRole');
-    if (sessionUser2 === 'ROLE_ADMIN' || sessionUser2 === 'ROLE_SUPER_ADMIN') {
+    if (sessionUser2 === 'ROLE_ADMIN') {
       const businessName = (document.getElementById('select_pro3') as HTMLInputElement).value;
       if (businessName == 'none') {
       } else {
@@ -1240,7 +1245,7 @@ export class DigitalListComponent implements OnInit {
       this.nonActiveEditedProductsArray.push(payloard);
     }
     this.totalPagesEditProApproval = Math.ceil(this.nonActiveEditedProductsArray.length / this.list_pages2);
-    this.onPageChange(1,'EditProApproval');
+    this.onPageChange(1, 'EditProApproval');
   }
 
   ApproveEditProduct(i) {
@@ -1252,9 +1257,9 @@ export class DigitalListComponent implements OnInit {
       const ProDetails = product_code + '-' + unique_code + '-' + sub_type;
       this.router.navigate(['products/digital/edited-approve-product/' + ProDetails]);
     } else {
-      const product_code = this.nonActiveEditedProductsArray[this.startIndex+i].productCode;
-      const unique_code = this.nonActiveEditedProductsArray[this.startIndex+i].unique_code;
-      const sub_type = this.nonActiveEditedProductsArray[this.startIndex+i].subType;
+      const product_code = this.nonActiveEditedProductsArray[this.startIndex + i].productCode;
+      const unique_code = this.nonActiveEditedProductsArray[this.startIndex + i].unique_code;
+      const sub_type = this.nonActiveEditedProductsArray[this.startIndex + i].subType;
       const ProDetails = product_code + '-' + unique_code + '-' + sub_type;
       this.router.navigate(['products/digital/edited-approve-product/' + ProDetails]);
     }
@@ -1263,22 +1268,22 @@ export class DigitalListComponent implements OnInit {
   }
 
   ApproveEditImageProduct(rowIndex) {
-    if(this.filterdEditImgApproval.length > 0){
+    if (this.filterdEditImgApproval.length > 0){
       const url = 'products/digital/edited-image-approve-product/' + this.filterdEditImgApproval[this.startIndex + rowIndex].productCode;
       this.router.navigate([url], {
         queryParams: {
           product_code: this.product_code,
-          unique_code: this.filterdEditImgApproval[this.startIndex+rowIndex].editId,
-          requested_by: this.filterdEditImgApproval[this.startIndex+rowIndex].requestBy
+          unique_code: this.filterdEditImgApproval[this.startIndex + rowIndex].editId,
+          requested_by: this.filterdEditImgApproval[this.startIndex + rowIndex].requestBy
         }
       });
     }else{
-      const url = 'products/digital/edited-image-approve-product/' + this.nonActiveEditedImageProductsArray[this.startIndex+rowIndex].productCode;
+      const url = 'products/digital/edited-image-approve-product/' + this.nonActiveEditedImageProductsArray[this.startIndex + rowIndex].productCode;
       this.router.navigate([url], {
         queryParams: {
           product_code: this.product_code,
-          unique_code: this.nonActiveEditedImageProductsArray[this.startIndex+rowIndex].editId,
-          requested_by: this.nonActiveEditedImageProductsArray[this.startIndex+rowIndex].requestBy
+          unique_code: this.nonActiveEditedImageProductsArray[this.startIndex + rowIndex].editId,
+          requested_by: this.nonActiveEditedImageProductsArray[this.startIndex + rowIndex].requestBy
         }
       });
     }
@@ -1305,7 +1310,7 @@ export class DigitalListComponent implements OnInit {
       this.nonActiveEditedImageProductsArray.push(payloard);
     }
     this.totalPagesEditImgApproval = Math.ceil(this.nonActiveEditedImageProductsArray.length / this.list_pages2);
-    this.onPageChange(1,'EditImgApproval');
+    this.onPageChange(1, 'EditImgApproval');
   }
 
   onImageError(event: any): void {
@@ -1343,7 +1348,7 @@ export class DigitalListComponent implements OnInit {
         this.list_outof_stock.push(or);
       }
       this.totalPagesOS = Math.ceil(this.list_outof_stock.length / this.list_pages2);
-      this.onPageChange(1,'OutofStock');
+      this.onPageChange(1, 'OutofStock');
     }
   }
 
@@ -1452,7 +1457,7 @@ export class DigitalListComponent implements OnInit {
       const startIndex = (this.currentPageOS - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;
       this.startIndex = startIndex;
-      if(this.filteredoutOfStock.length > 0 ){
+      if (this.filteredoutOfStock.length > 0 ){
         this.paginatedOutofStock = this.filteredoutOfStock.slice(startIndex, endIndex);
       }else{
         this.paginatedOutofStock = this.list_outof_stock.slice(startIndex, endIndex);
@@ -1460,9 +1465,9 @@ export class DigitalListComponent implements OnInit {
     } else if (Descrip === 'Suspend') {
       const startIndex = (this.currentPageSus - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;
-      this.startIndex = startIndex
+      this.startIndex = startIndex;
 
-      if(this.filteredSuspendProduct.length > 0){
+      if (this.filteredSuspendProduct.length > 0){
         this.paginatedSuspend = this.filteredSuspendProduct.slice(startIndex, endIndex);
       }else{
         this.paginatedSuspend = this.list_suspend.slice(startIndex, endIndex);
@@ -1471,7 +1476,7 @@ export class DigitalListComponent implements OnInit {
     }else if (Descrip === 'PendingStockAllocation'){
       const startIndex = (this.currentPagePendingAllo - 1) * this.list_pages2;
       const endIndex = startIndex + this.list_pages2;
-      this.startIndex = startIndex
+      this.startIndex = startIndex;
       if (this.filterdPendingAllocation.length > 0){
         this.paginatedPendingStockAllow = this.filterdPendingAllocation.slice(startIndex, endIndex);
       }else{
@@ -1482,7 +1487,7 @@ export class DigitalListComponent implements OnInit {
       const endIndex = startIndex + this.list_pages2;
       this.startIndex = startIndex;
 
-      if(this.filterededitProductApproval.length > 0){
+      if (this.filterededitProductApproval.length > 0){
         this.paginatedEditProApproval = this.filterededitProductApproval.slice(startIndex, endIndex);
       }else{
         this.paginatedEditProApproval = this.nonActiveEditedProductsArray.slice(startIndex, endIndex);
@@ -1492,7 +1497,7 @@ export class DigitalListComponent implements OnInit {
       const endIndex = startIndex + this.list_pages2;
       this.startIndex = startIndex;
 
-      if(this.filterdEditImgApproval.length > 0){
+      if (this.filterdEditImgApproval.length > 0){
         this.paginatedEditImgApproval = this.filterdEditImgApproval.slice(startIndex, endIndex);
       }else{
         this.paginatedEditImgApproval = this.nonActiveEditedImageProductsArray.slice(startIndex, endIndex);
@@ -1517,7 +1522,7 @@ export class DigitalListComponent implements OnInit {
       product.vendor.toLowerCase().includes(searchTerm.toLowerCase())
     );
     this.totalPages = Math.ceil(this.filteredProducts.length / this.list_pages2);
-    this.onPageChange(1,'ActivePro')
+    this.onPageChange(1, 'ActivePro');
   }
 
   filterPendingStockAllocationByBusinessName(searchTerm: string): void {
@@ -1526,7 +1531,7 @@ export class DigitalListComponent implements OnInit {
     );
 
     this.totalPagesPendingAllow = Math.ceil(this.filterdPendingAllocation.length / this.list_pages2);
-    this.onPageChange(1,'PendingStockAllocation');
+    this.onPageChange(1, 'PendingStockAllocation');
   }
 
   editImgApprovalFilter(searchTerm: string): void {
@@ -1535,10 +1540,10 @@ export class DigitalListComponent implements OnInit {
     );
 
     this.totalPagesEditImgApproval = Math.ceil(this.filterdEditImgApproval.length / this.list_pages2);
-    this.onPageChange(1,'EditImgApproval');
+    this.onPageChange(1, 'EditImgApproval');
   }
 
-  getSelectedPartnerProduct(businessName :any) {
+  getSelectedPartnerProduct(businessName: any) {
     this.userInput = businessName;
     this.filteredSuggestions = [];
     // const name = (document.getElementById('select_pro') as HTMLInputElement).value;

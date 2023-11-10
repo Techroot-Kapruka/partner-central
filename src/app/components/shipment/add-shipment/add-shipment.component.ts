@@ -86,6 +86,7 @@ export class AddShipmentComponent implements OnInit {
 
     this.pendingStockShare.dataArray$.subscribe(data => {
       this.productDetails = data;
+      console.log(this.productDetails)
     });
 
     if (isNotNullOrUndefined(this.proCode)) {
