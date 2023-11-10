@@ -359,6 +359,11 @@ export class NavService {
     this.items.value[1].title = '';
     this.items.value[1].type = '';
 
+    //create user hide
+    this.items.value[6].children[0].path = '';
+    this.items.value[6].children[0].title = '';
+    this.items.value[6].children[0].type = '';
+
     this.items.value[2].children[1].path = '';
     this.items.value[2].children[1].title = '';
     this.items.value[2].children[1].type = '';
@@ -403,6 +408,7 @@ export class NavService {
 
   manageSuperAdmin() {
 
+    console.log(this.items);
     this.items.value[2].children[1].path = '';
     this.items.value[2].children[1].title = '';
     this.items.value[2].children[1].type = '';
