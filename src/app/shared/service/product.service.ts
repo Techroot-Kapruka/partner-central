@@ -121,6 +121,11 @@ export class ProductService {
   //   const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
   //   return this.httpClient.post<any>(this.SERVER + 'product/getAllActiveProductList', formData, {headers});
   // }
+  getConsignmentProducts(payLoard) {
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'product/getConsignmentProductsByVendor', payLoard, {headers});
+  }
+
 
   getnonActiveImageProduct() {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
