@@ -17,14 +17,14 @@
                                      [headerHeight]="50"
                                      [footerHeight]="50" [rowHeight]="'auto'" [limit]="shipmentRowCount"
                                      [selected]="selected"
-                                     [selectionType]="false" [selectAllRowsOnPage]="false" (select)='onSelect($event)'>
-
+                                     [selectionType]="false" [selectAllRowsOnPage]="false"
+                                     (select)='onSelect($event)'>
                         <ngx-datatable-column name="Shipment Id" [width]="30"></ngx-datatable-column>
-                        <ngx-datatable-column name="Business Name" [width]="30"></ngx-datatable-column>
+                        <ngx-datatable-column *ngIf="isAdmin" name="Business Name" [width]="30"></ngx-datatable-column>
                         <ngx-datatable-column name="Create Date" [width]="30"></ngx-datatable-column>
                         <ngx-datatable-column name="Total Quantity" [width]="30"></ngx-datatable-column>
                         <ngx-datatable-column name="Gross Amount" [width]="30"></ngx-datatable-column>
-                        <ngx-datatable-column name="Received" prop="name" [width]="10">
+                        <ngx-datatable-column *ngIf="isAdmin" name="Received" prop="name" [width]="10">
                           <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
                                        let-row="row">
                             <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
@@ -34,19 +34,22 @@
                             </button>
                           </ng-template>
                         </ngx-datatable-column>
+                        <ngx-datatable-column *ngIf="!isAdmin" name="Received" prop="name" [width]="10">
+                          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                       let-row="row">
+                            <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
+                            <button type="button"
+                                    style="width: 55px;height: 23px;font-size: 10px; background-color: green"
+                                    class="btn btn-outline-success"></button>
+                          </ng-template>
+                        </ngx-datatable-column>
                         <ngx-datatable-column name="Action" prop="name" [width]="10">
                           <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
                                        let-row="row">
                             <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
-                            <button type="button" *ngIf="isAdmin" (click)='viewShippedShipment(rowIndex)'
-                                    style="width: 96px;height: 28px;font-size: 10px;"
-                                    class="btn btn-outline-success"
-                            >Receive
-                            </button>
-                            <button *ngIf="!isAdmin" type="button" (click)='viewShippedShipment(rowIndex)'
-                                    style="width: 96px;height: 28px;font-size: 10px;"
-                                    class="btn btn-outline-success"
-                            >View
+                            <button type="button" (click)='viewShippedShipment(rowIndex,isAdmin)'
+                                    style="width: 96px;height: 28px;font-size: 10px;" class="btn btn-outline-success">
+                              Receive
                             </button>
                           </ng-template>
                         </ngx-datatable-column>

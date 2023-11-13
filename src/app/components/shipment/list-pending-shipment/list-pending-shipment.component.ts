@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
 
 export class ListPendingShipmentComponent implements OnInit {
   public allShipmentArr = [];
-  public shipmentRowCount = 100;
+  public shipmentRowCount = 20;
   public selected = [];
   public isAdmin = false;
   public isShipmentValid = false;
@@ -18,7 +18,7 @@ export class ListPendingShipmentComponent implements OnInit {
 
   constructor(private shipmentNewService: ShipmentNewService, private router: Router) {
     const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER') {
+    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER') {
       this.isAdmin = true;
     }
     this.getTakeShippedShipment();
@@ -37,7 +37,7 @@ export class ListPendingShipmentComponent implements OnInit {
       this.shipmentNewService.getAllTakeShippedShipment().subscribe(
         data => this.ManageShippedShipment(data),
       );
-    } else if (!this.isAdmin) {
+    } else {
       const payload = {
         vendor_code: sessionStorage.getItem('partnerId')
       };
@@ -70,13 +70,18 @@ export class ListPendingShipmentComponent implements OnInit {
     } else {
       this.isShipmentValid = false;
       this.shipmentErrorMsg = true;
-
     }
   }
 
-  viewShippedShipment(index) {
+  viewShippedShipment(index, isAdmin) {
     let tempCode = this.allShipmentArr[index].shipmentId;
-    let url = '/shipment/receive-shipment-make/' + tempCode;
+    let url = '';
+
+    if (isAdmin) {
+      url = '/shipment/receive-shipment-make/' + tempCode;
+    } else {
+      url = '/shipment/view-shipment/' + tempCode;
+    }
     this.router.navigate([url]);
   }
 }
