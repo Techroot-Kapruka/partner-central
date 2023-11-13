@@ -57,7 +57,7 @@ export class ChangeRequestsComponent implements OnInit {
 
   private getFieldEditData() {
     const role = sessionStorage.getItem('userRole');
-    if (role === 'ROLE_CATEGORY_MANAGER') {
+    if (role === 'ROLE_PARTNER') {
       const payLoard = {
         user_u_id: sessionStorage.getItem('userId')
       };
