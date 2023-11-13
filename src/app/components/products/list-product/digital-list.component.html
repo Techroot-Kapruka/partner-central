@@ -503,7 +503,6 @@
                             </tr>
                             </thead>
                             <tbody>
-
                             <ng-container *ngIf="filteredOnDemandProduct.length > 0; else paginatedData_OnDemand">
                               <!-- Display filtered products -->
                               <tr *ngFor="let nonActiveProduct of (paginatedOnDemand.length > 0 ? paginatedOnDemand : filteredOnDemandProduct); let j = index;">
@@ -516,6 +515,8 @@
                                   <p style="margin: 0px;font-size: 16px; color: #000">{{
                                     nonActiveProduct.productCode }}</p>
                                   <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.path}}</p>
+                                  <div style="margin-left: 10px;width:10%; background-color: {{nonActiveProduct.categoryColor}}"> &nbsp; &nbsp;</div>
+                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.categorySizes}}</p>
                                 </td>
                                 <td>{{nonActiveProduct.create_date}}</td>
                                 <td>
@@ -531,9 +532,11 @@
                                   <button type="button"
                                           style="width: 96px;height: 28px;font-size: 10px;"
                                           (click)="UpdateVirtualStocks(j)"
-                                          class="btn btn-outline-success">Save Stock
+                                          class="btn btn-outline-success">Add Stock
                                   </button>
                                 </td>
+                                <td hidden>{{nonActiveProduct.variationTheme}}</td>
+                                <td hidden>{{nonActiveProduct.variationId}}</td>
                               </tr>
                             </ng-container>
                             <ng-template #paginatedData_OnDemand>
@@ -547,6 +550,8 @@
                                   <p style="margin: 0px;font-size: 16px; color: #000">{{
                                     nonActiveProduct.productCode }}</p>
                                   <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.path}}</p>
+                                  <div style="margin-left: 10px;width:10%; background-color: {{nonActiveProduct.categoryColor}}"> &nbsp; &nbsp;</div>
+                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.categorySizes}}</p>
                                 </td>
                                 <td>{{nonActiveProduct.create_date}}</td>
                                 <td>
@@ -562,11 +567,77 @@
                                   <button type="button"
                                           style="width: 96px;height: 28px;font-size: 10px;"
                                           (click)="UpdateVirtualStocks(j)"
-                                          class="btn btn-outline-success">Save Stock
+                                          class="btn btn-outline-success">Add Stock
                                   </button>
                                 </td>
+                                <td hidden>{{nonActiveProduct.variationTheme}}</td>
+                                <td hidden>{{nonActiveProduct.variationId}}</td>
                               </tr>
                             </ng-template>
+
+<!--                            <ng-container *ngIf="filteredOnDemandProduct.length > 0; else paginatedData_OnDemand">-->
+<!--                              &lt;!&ndash; Display filtered products &ndash;&gt;-->
+<!--                              <tr *ngFor="let nonActiveProduct of (paginatedOnDemand.length > 0 ? paginatedOnDemand : filteredOnDemandProduct); let j = index;">-->
+<!--                                <td align="center"><img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"-->
+<!--                                                        width="60px"-->
+<!--                                                        (error)="onImageError($event)" (click)="popUpImage(j)"/></td>-->
+<!--                                &lt;!&ndash;<td>{{ nonActiveProduct.title }}<br>{{ nonActiveProduct.productCode }}<br>{{ nonActiveProduct.vendor }} <br>{{ nonActiveProduct.categoryPath }}</td>&ndash;&gt;-->
+<!--                                <td><p style="margin: 0px; font-size: 16px; color: #000">{{-->
+<!--                                  nonActiveProduct.title}}</p>-->
+<!--                                  <p style="margin: 0px;font-size: 16px; color: #000">{{-->
+<!--                                    nonActiveProduct.productCode }}</p>-->
+<!--                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.path}}</p>-->
+<!--                                </td>-->
+<!--                                <td>{{nonActiveProduct.create_date}}</td>-->
+<!--                                <td>-->
+<!--                                  {{nonActiveProduct.inStock}}-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                  <input class="form-control" name="vstock" id="vstock" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"-->
+<!--                                         type = "number"-->
+<!--                                         maxlength = "5"-->
+<!--                                         pattern="[0-9]*" [(ngModel)]="vstock[startIndex+j]" (ngModelChange)="onVstockChange(j)"  maxlength="5" style="width: 70%;">-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                  <button type="button"-->
+<!--                                          style="width: 96px;height: 28px;font-size: 10px;"-->
+<!--                                          (click)="UpdateVirtualStocks(j)"-->
+<!--                                          class="btn btn-outline-success">Save Stock-->
+<!--                                  </button>-->
+<!--                                </td>-->
+<!--                              </tr>-->
+<!--                            </ng-container>-->
+<!--                            <ng-template #paginatedData_OnDemand>-->
+<!--                              <tr *ngFor="let nonActiveProduct of (paginatedOnDemand.length > 0 ? paginatedOnDemand : consignmentProducts); let j = index;">-->
+<!--                                <td align="center"><img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"-->
+<!--                                                        width="60px"-->
+<!--                                                        (error)="onImageError($event)" (click)="popUpImage(j)"/></td>-->
+<!--                                &lt;!&ndash;<td>{{ nonActiveProduct.title }}<br>{{ nonActiveProduct.productCode }}<br>{{ nonActiveProduct.vendor }} <br>{{ nonActiveProduct.categoryPath }}</td>&ndash;&gt;-->
+<!--                                <td><p style="margin: 0px; font-size: 16px; color: #000">{{-->
+<!--                                  nonActiveProduct.title}}</p>-->
+<!--                                  <p style="margin: 0px;font-size: 16px; color: #000">{{-->
+<!--                                    nonActiveProduct.productCode }}</p>-->
+<!--                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.path}}</p>-->
+<!--                                </td>-->
+<!--                                <td>{{nonActiveProduct.create_date}}</td>-->
+<!--                                <td>-->
+<!--                                  {{nonActiveProduct.inStock}}-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                  <input class="form-control" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"-->
+<!--                                         type = "number"-->
+<!--                                         maxlength = "5" name="vstock" id="vstock"-->
+<!--                                         pattern="[0-9]*" [(ngModel)]="vstock[startIndex+j]" (ngModelChange)="onVstockChange(j)" style="width: 70%;">-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                  <button type="button"-->
+<!--                                          style="width: 96px;height: 28px;font-size: 10px;"-->
+<!--                                          (click)="UpdateVirtualStocks(j)"-->
+<!--                                          class="btn btn-outline-success">Save Stock-->
+<!--                                  </button>-->
+<!--                                </td>-->
+<!--                              </tr>-->
+<!--                            </ng-template>-->
                             </tbody>
                           </table>
                         </div>
