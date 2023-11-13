@@ -80,7 +80,7 @@
           </div>
 
           <h3 id="noOrderMsg" style="display: none">You have no orders yet.</h3>
-          <table class="table table-striped table-hover" id="orderDetailsTbl" style="cursor: pointer; font-size: 13px; display: table!important;">
+          <table class="table table-striped table-hover table-sm" id="orderDetailsTbl" style="cursor: pointer; font-size: 13px">
             <thead style="font-size: 15px">
             <tr>
               <th scope="col">Order Ref</th>
@@ -102,8 +102,10 @@
                 <b style="margin-left: 20px"> {{paginateDatass['orderRef']}} </b>
                 <br>
                 <span style="color: green" *ngIf="paginateDatass['statusStyleTwo']">&#10003;&nbsp; </span>
-                <span style="color: red; "
+                <span style="color: red;"
                       *ngIf="paginateDatass['statusStyleOne']">&#8226;&nbsp; </span>
+                <span style="color: black; text-decoration: line-through;"
+                      *ngIf="paginateDatass['statusStyleThree']">&#0000;&nbsp; </span>
                 <span>{{paginateDatass['status']}}</span>
               </td>
               <td>{{paginateDatass['orderDate']}}</td>

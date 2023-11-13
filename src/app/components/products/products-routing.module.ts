@@ -14,6 +14,9 @@ import {
 } from "./approve-edit-image-component/approve-edit-image-component.component";
 import {AnalyticsProductService} from "../../shared/service/analytics-product.service";
 import {AnalyticsProductViewComponent} from "./analytics-product-view/analytics-product-view.component";
+import {ChangeRequestsComponent} from "./product-list/change-requests/change-requests.component";
+import {ProductSearchComponent} from "./product-list/product-search/product-search.component";
+import {NewAdditionsComponent} from "./product-list/new-additions/new-additions.component";
 
 const routes: Routes = [
   {
@@ -107,6 +110,29 @@ const routes: Routes = [
           breadcrumb: 'Analytics Product View List'
         }
       },
+      {path: 'digital/change-requests',
+      component: ChangeRequestsComponent,
+      data: {
+        title: 'Change Requests',
+        breadcrumb: 'Approve image Edited Product'
+        }
+      },
+      {
+        path: 'digital/new-additions',
+        component: NewAdditionsComponent,
+        data: {
+          title: 'New Additions',
+          breadcrumb: 'Approve image Edited Product'
+        }
+      },
+      {
+        path: 'digital/product-search',
+        component: ProductSearchComponent,
+        data: {
+          title: 'Product Search',
+          breadcrumb: 'Approve image Edited Product'
+        }
+      }
     ]
   }
 ];

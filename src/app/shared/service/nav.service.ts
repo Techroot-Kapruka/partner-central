@@ -66,6 +66,16 @@ export class NavService {
         {path: '/products/digital/digital-add-product', title: 'Add Product', type: 'link'},
 
         {path: '/filess/file', title: 'Bulk upload', type: 'link'},
+
+        // new Added thingsss
+        {path: '/products/digital/new-additions', title: 'New Additions', type: 'link'},
+        {path: '/products/digital/change-requests', title: 'Change Requests', type: 'link'},
+        // {path: '/products/digital/product-search', title: 'Product Search', type: 'link'},
+        // {path: '/products/digital/edit-image-approval', title: 'Edit Image Approval', type: 'link'},
+        // {path: '/products/digital/out-of-stock', title: 'Out Of Stock', type: 'link'},
+        // {path: '/products/digital/suspended', title: 'Suspended', type: 'link'},
+        // {path: '/products/digital/on-demand', title: 'On Demand', type: 'link'},
+
       ]
     },
     {
@@ -220,8 +230,6 @@ export class NavService {
     } else if (sessionStorage.getItem('userRole') === 'ROLE_FINANCE_USER') {
       console.log('finance user');
       this.manageFinanceUser();
-    }else if (sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
-      this.manageSuperAdmin();
     }
   }
 
@@ -362,6 +370,11 @@ export class NavService {
     this.items.value[1].title = '';
     this.items.value[1].type = '';
 
+    //create user hide
+    this.items.value[6].children[0].path = '';
+    this.items.value[6].children[0].title = '';
+    this.items.value[6].children[0].type = '';
+
     this.items.value[2].children[1].path = '';
     this.items.value[2].children[1].title = '';
     this.items.value[2].children[1].type = '';
@@ -369,6 +382,7 @@ export class NavService {
     this.items.value[2].children[2].path = '';
     this.items.value[2].children[2].title = '';
     this.items.value[2].children[2].type = '';
+
 
     this.items.value[4].path = '';
     this.items.value[4].title = '';
@@ -411,6 +425,7 @@ export class NavService {
 
   manageSuperAdmin() {
 
+    console.log(this.items);
     this.items.value[2].children[1].path = '';
     this.items.value[2].children[1].title = '';
     this.items.value[2].children[1].type = '';
@@ -418,7 +433,6 @@ export class NavService {
     this.items.value[2].children[2].path = '';
     this.items.value[2].children[2].title = '';
     this.items.value[2].children[2].type = '';
-
     this.items.value[4].path = '';
     this.items.value[4].title = '';
     this.items.value[4].type = '';
@@ -468,9 +482,9 @@ export class NavService {
   partnerPrivilegeItem(data) {
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       //hide bulk upload
-      // this.items.value[1].children[2].path = '';
-      // this.items.value[1].children[2].title = '';
-      // this.items.value[1].children[2].type = '';
+      this.items.value[1].children[2].path = '';
+      this.items.value[1].children[2].title = '';
+      this.items.value[1].children[2].type = '';
 
       if (data.data === null) {
         this.items.value.splice(0, 7);
