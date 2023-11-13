@@ -40,6 +40,9 @@ export class DigitalListComponent implements OnInit {
   public paginatedOutofStock = [];
   public paginatedSuspend = [];
   public paginatedOnDemand = [];
+  public headActive = [];
+  public headOut = [];
+  public headOnDemand = [];
 
   public isAdmin = false;
   public isPartner = false;
@@ -85,6 +88,9 @@ export class DigitalListComponent implements OnInit {
   totalPagesEditProApproval = 0; // Total number of pages
   totalPagesEditImgApproval = 0; // Total number of pages
 
+  active: boolean = false;
+  suspend: boolean = false;
+  onDemand: boolean = false;
 
   protected readonly print = print;
 
@@ -183,6 +189,7 @@ export class DigitalListComponent implements OnInit {
   /***  Get the count  ***/
   getActiveTabTitle() {
     const count = this.list_pages.length;
+    this.active=true;
     return `Active (${count})`;
   }
 
@@ -191,28 +198,23 @@ export class DigitalListComponent implements OnInit {
     return `Pending Stock Allocation (${count})`;
   }
 
-  // getPendingApprovalList() {
-  //   const count = this.nonActiveProductsArray.length;
-  //   return `Pending Approval Product List (${count})`;
-  // }
-  //
-  // getPendingQC() {
-  //   const count = this.approvalPartnerProductList.length;
-  //   return `Pending Approval (${count})`;
-  // }
 
   getOutofStock() {
     const count = this.list_outof_stock.length;
+    // this.active=false;
+    // this.outOfStock = true;
     return `Out Of Stock (${count})`;
   }
 
   getSuspendedPro() {
     const count = this.list_suspend.length;
+    this.suspend=true
     return `Suspended (${count})`;
   }
 
   getOnDemandPro() {
     const count = this.consignmentProducts.length;
+    this.onDemand=true;
     return `On Demand Product (${count})`;
   }
 
@@ -227,57 +229,6 @@ export class DigitalListComponent implements OnInit {
       data => this.getSelectedProductManage(data),
     );
   }
-
-  // getPendingStockAllocationList(data){
-  //   this.pending_stock_allocation = [];
-  //
-  //   for (let i = 0; i < data.data.length; i++) {
-  //
-  //     const or = {
-  //       image: (data.data[i].productImage && data.data[i].productImage.image1 ? data.data[i].productImage.image1.split('/product')[1] : '') || '',
-  //       title: data.data[i].title,
-  //       productCode: data.data[i].product_code,
-  //       price: data.data[i].selling_price,
-  //       in_stock: data.data[i].in_stock,
-  //       vendor: data.data[i].vendor,
-  //       createDate: data.data[i].create_date,
-  //       categoryPath: data.data[i].categoryPath,
-  //       action: '',
-  //
-  //     };
-  //     this.pending_stock_allocation.push(or);
-  //   }
-  //   this.totalPagesPendingAllow = Math.ceil(this.pending_stock_allocation.length / this.list_pages2);
-  //   this.onPageChange(1, 'PendingStockAllocation');
-  //
-  // }
-  // getSelectedPartnerAllocationProductManage(data){
-  //   this.startIndex = 0;
-  //   this.pending_stock_allocation = [];
-  //
-  //   if (data.data == null) {
-  //   } else {
-  //     const lengthRes = data.data.length;
-  //     for (let i = 0; i < lengthRes; i++) {
-  //
-  //       const or = {
-  //         image: (data.data[i].productImage && data.data[i].productImage.image1 ? data.data[i].productImage.image1.split('/product')[1] : '') || '',
-  //         title: data.data[i].title,
-  //         productCode: data.data[i].product_code,
-  //         price: data.data[i].selling_price,
-  //         in_stock: data.data[i].in_stock,
-  //         vendor: data.data[i].vendor,
-  //         createDate: data.data[i].create_date,
-  //         categoryPath: data.data[i].categoryPath,
-  //         action: '',
-  //
-  //       };
-  //       this.pending_stock_allocation.push(or);
-  //     }
-  //     this.totalPagesPendingAllow = Math.ceil(this.pending_stock_allocation.length / this.list_pages2);
-  //     this.onPageChange(1, 'PendingStockAllocation');
-  //   }
-  // }
 
   getSelectedProductManage(data) {
     this.startIndex = 0;
@@ -301,10 +252,113 @@ export class DigitalListComponent implements OnInit {
         };
         this.list_pages.push(or);
       }
+      this.headActive = [
+        {'Head': 'Image', 'FieldName' : 'image' },
+        {'Head': 'Title',  'FieldName' : 'title' },
+        {'Head': 'Selling Price', 'FieldName':'price' },
+        {'Head': 'Stock In Hand', 'FieldName':'in_stock' },
+        {'Head': 'Create Date', 'FieldName':'createDate' },
+        {'Head': 'Action',  'FieldName':'' },
+      ];
+
       this.totalPages = Math.ceil(this.list_pages.length / this.list_pages2);
       this.onPageChange(1, 'ActivePro');
     }
   }
+  clickSusEditProduct(event: any){
+    console.log('suspend Edit clicked!!!!!!!!')
+  }
+  async clickProduct(event: any){
+    const productCode = event.data.productCode;
+    switch (event.x) {
+      case 1:
+       // view
+        const url1 = 'products/digital/view-product/' + productCode;
+        this.router.navigate([url1]);
+        break;
+      case 2:
+        // edit
+        const url2 = 'products/digital/digital-edit-product/' + productCode;
+        this.router.navigate([url2]);
+        break;
+      case 3:
+        // delete
+        const {value: text} = await Swal.fire({
+          title: 'Enter a comment',
+          input: 'text',
+          inputPlaceholder: 'Enter your comment here',
+          inputValidator: (value) => {
+            if (!value) {
+              return 'You need to write something!';
+            }
+          }
+
+        });
+        if (text) {
+          Swal.fire({
+            title: 'Do you want to save the changes?',
+            showCancelButton: true,
+            confirmButtonText: 'Save',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              const payLoad = {
+                product_code: productCode,
+                rejecteddBy: sessionStorage.getItem('userId'),
+                rejectReason: text
+              };
+
+              this.productService.deleteProduct(payLoad).subscribe(
+                  data => this.getAllProduct(),
+                  error => (error.status)
+              );
+
+              Swal.fire('Saved!', '', 'success');
+            } else if (result.isDenied) {
+              Swal.fire('Changes are not saved', '', 'info');
+            }
+          });
+        }
+        break;
+      case 4:
+        // out
+        Swal.fire({
+          title: 'Are you sure?',
+          html: 'This action will make your product temporary marked Out Of Stock from the Kapruka Website.',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'No',
+        }).then((result) => {
+          let payLoad;
+          if (this.filteredProducts.length > 0) {
+            payLoad = {
+              product_code: productCode,
+              updatedBy: sessionStorage.getItem('userId')
+            };
+          } else {
+            payLoad = {
+              product_code: productCode,
+              updatedBy: sessionStorage.getItem('userId')
+            };
+          }
+          if (result.isConfirmed) {
+            this.productService.updateProductStock(payLoad).subscribe(
+                error => (error.status)
+            );
+            Swal.fire('Done!', '', 'success').then((result) => {
+              this.getAllProduct();
+            });
+          } else if (result.dismiss === Swal.DismissReason.cancel) {
+            Swal.fire('Cancelled', '', 'error');
+          }
+        });
+        break;
+      default:
+        console.log("Invalid");
+        break;
+    }
+  }
+
 
   ActiveProductFilter(searchTerm: string): void {
     this.filteredProducts = this.list_pages.filter(product =>
@@ -315,14 +369,6 @@ export class DigitalListComponent implements OnInit {
     this.onPageChange(1, 'ActivePro');
   }
 
-  // PendingStockAllocationFilter(searchTerm: String): void{
-  //   this.filterdPendingAllocation = this.pending_stock_allocation.filter(product =>
-  //     product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //     product.title.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  //   this.totalPagesPendingAllow = Math.ceil(this.filterdPendingAllocation.length / this.list_pages2);
-  //   this.onPageChange(1, 'PendingStockAllocation');
-  // }
 
   /*  AP = Active Products
   * */
@@ -351,33 +397,6 @@ export class DigitalListComponent implements OnInit {
       }
     });
   }
-
-  // EditStockPopup(index: number, AP: number, OS: number) {
-  //   Swal.fire({
-  //     title: 'Are You Sure?',
-  //     inputPlaceholder: 'Enter new stock quantity',
-  //     showCancelButton: true,
-  //     confirmButtonText: 'Save',
-  //     cancelButtonText: 'Cancel',
-  //     inputValidator: (value) => {
-  //       if (!value || value === '0') {
-  //         return 'You need to enter a stock quantity!';
-  //       }
-  //     },
-  //   }).then((result) => {
-  //     if (result.isConfirmed) {
-  //       // Handle saving the edited stQty here
-  //       const newQuantity = result.value;
-  //       let productCode = '';
-  //
-  //       if (AP === 1) {
-  //         productCode = this.list_pages[index].productCode;
-  //       } else if (OS === 1) {
-  //         productCode = this.list_outof_stock[index].productCode;
-  //       }
-  //     }
-  //   });
-  // }
 
   outButton(index: number, AP: number, OS: number) {
     Swal.fire({
@@ -413,81 +432,6 @@ export class DigitalListComponent implements OnInit {
     });
   }
 
-  editGetProduct2(index) {
-
-    if (this.filteredProducts.length > 0) {
-      const productCode = this.filteredProducts[this.startIndex + index].productCode;
-      const url = 'products/digital/digital-edit-product/' + productCode;
-      this.router.navigate([url]);
-    } else {
-      const productCode = this.list_pages[this.startIndex + index].productCode;
-      const url = 'products/digital/digital-edit-product/' + productCode;
-      this.router.navigate([url]);
-    }
-  }
-
-  editGetProduct3(index) {
-
-    if (this.filteredProducts.length > 0) {
-      const productCode = this.filteredProducts[this.startIndex + index].productCode;
-      const url = 'products/digital/view-product/' + productCode;
-      this.router.navigate([url]);
-    } else {
-      const productCode = this.list_pages[this.startIndex + index].productCode;
-      const url = 'products/digital/view-product/' + productCode;
-      this.router.navigate([url]);
-    }
-  }
-
-  async deleteActiveProduct(productCode) {
-
-    const {value: text} = await Swal.fire({
-      title: 'Enter a comment',
-      input: 'text',
-      inputPlaceholder: 'Enter your comment here',
-      inputValidator: (value) => {
-        if (!value) {
-          return 'You need to write something!';
-        }
-      }
-
-    });
-    if (text) {
-      Swal.fire({
-        title: 'Do you want to save the changes?',
-        showCancelButton: true,
-        confirmButtonText: 'Save',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const payLoad = {
-            product_code: productCode,
-            rejecteddBy: sessionStorage.getItem('userId'),
-            rejectReason: text
-          };
-
-          this.productService.deleteProduct(payLoad).subscribe(
-            data => this.getAllProduct(),
-            error => (error.status)
-          );
-
-          Swal.fire('Saved!', '', 'success');
-        } else if (result.isDenied) {
-          Swal.fire('Changes are not saved', '', 'info');
-        }
-      });
-    }
-  }
-
-  // popUpImagePendingAllocation(index: number) {
-  //   if (this.filterdPendingAllocation.length > 0) {
-  //     this.imageUrl = this.imagePathURI + this.filterdPendingAllocation[this.startIndex + index].image;
-  //     this.modalRef = this.modal.open(this.imagePopup, {centered: true});
-  //   } else {
-  //     this.imageUrl = this.imagePathURI + this.pending_stock_allocation[this.startIndex + index].image;
-  //     this.modalRef = this.modal.open(this.imagePopup, {centered: true});
-  //   }
-  // }
-
   popUpImageActive(index: number) {
 
     if (this.filteredProducts.length > 0) {
@@ -507,16 +451,6 @@ export class DigitalListComponent implements OnInit {
     this.modalRef = this.modal.open(this.pricePopup, {centered: true});
   }
 
-  // popUpImagePending(index: number) {
-  //
-  //   if (this.filteredPendingQC.length > 0) {
-  //     this.imageUrl = this.imagePathURI + this.filteredPendingQC[index].image;
-  //     this.modalRef = this.modal.open(this.imagePopup, {centered: true});
-  //   } else {
-  //     this.imageUrl = this.imagePathURI + this.approvalPartnerProductList[index].image;
-  //     this.modalRef = this.modal.open(this.imagePopup, {centered: true});
-  //   }
-  // }
 
   popUpImage(index: number) {
     if (this.filteredPendingProducts.length !== 0) {
@@ -583,18 +517,6 @@ export class DigitalListComponent implements OnInit {
     }
   }
 
-  getNonActiveProdcut() {
-    const busName = sessionStorage.getItem('businessName');
-    const userRole = sessionStorage.getItem('userRole');
-    const categoryID = sessionStorage.getItem('userId');
-
-    this.productService.getnonActiveProduct(busName, categoryID).subscribe(
-      data => this.manageNonActiveProduct(data),
-      error => this.errorOrderManage(error)
-    );
-
-  }
-
 
   manageNonActiveProduct(data) {
     this.nonActiveProductsArray = [];
@@ -627,41 +549,6 @@ export class DigitalListComponent implements OnInit {
     }
   }
 
-  // PendingProductFilter(searchTerm: string): void {
-  //
-  //   this.filteredPendingProducts = this.nonActiveProductsArray.filter(product =>
-  //     product.title.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  //
-  //   this.totalPagesPA = Math.ceil(this.filteredPendingProducts.length / this.list_pages2);
-  //   this.onPageChange(1, 'PendingPro');
-  // }
-
-  // editProductApprovalFilter(searchTerm: string): void {
-  //   this.filterededitProductApproval = this.nonActiveEditedProductsArray.filter(product =>
-  //     product.requestBy.toLowerCase().includes(searchTerm.toLowerCase()) || product.title.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  //
-  //   this.totalPagesEditProApproval = Math.ceil(this.filterededitProductApproval.length / this.list_pages2);
-  //   this.onPageChange(1, 'EditProApproval');
-  // }
-  //
-  // PendingProductFilterByBusinessName(searchTerm: string): void {
-  //   this.filteredPendingProducts = this.nonActiveProductsArray.filter(product =>
-  //     product.vendor.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  //
-  //   this.totalPagesPA = Math.ceil(this.filteredPendingProducts.length / this.list_pages2);
-  //   this.onPageChange(1, 'PendingPro');
-  // }
-  //
-  // PendingQCFilter(searchTerm: string): void {
-  //   this.filteredPendingQC = this.approvalPartnerProductList.filter(product =>
-  //     product.title.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  //   this.totalPagesPQC = Math.ceil(this.filteredPendingQC.length / this.list_pages2);
-  //   this.onPageChange(1, 'PendingQC');
-  // }
 
   OutofStockFilter(searchTerm: string): void {
     this.filteredoutOfStock = this.list_outof_stock.filter(product =>
@@ -704,61 +591,6 @@ export class DigitalListComponent implements OnInit {
     this.onPageChange(1, 'PendingOnDemand');
   }
 
-  // ApproveProductNon(value) {
-  //
-  //   if (this.filteredPendingProducts.length !== 0) {
-  //     const url = 'products/digital/digital-approve-product/' + this.filteredPendingProducts[this.startIndex + value].productCode;
-  //     this.router.navigate([url]);
-  //   } else {
-  //     const url = 'products/digital/digital-approve-product/' + this.nonActiveProductsArray[this.startIndex + value].productCode;
-  //     this.router.navigate([url]);
-  //   }
-  // }
-
-
-
-  // manageApproveProduct(data) {
-  //   Swal.fire(
-  //     'Good job!',
-  //     data.message,
-  //     'success'
-  //   );
-  //   this.getNonActiveProdcut();
-  // }
-  //
-  //
-  //
-  // editGetProductOS(index) {
-  //   /*const productCode = this.list_outof_stock[index].productCode;
-  //   const url = 'products/digital/digital-edit-product/' + productCode;
-  //   this.router.navigate([url]);*/
-  // }
-
-  editGetProductSP(index) {
-    /*const productCode = this.list_suspend[index].productCode;
-    const url = 'products/digital/digital-edit-product/' + productCode;
-    this.router.navigate([url]);*/
-  }
-
-  // nonActiveProductsByCompanyName() {
-  //   // const payloard = {
-  //   //   businessName: sessionStorage.getItem('businessName')
-  //   // };
-  //   // console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
-  //   // this.productService.nonActiveProductsByCompanyName(payloard).subscribe(
-  //   //   data => this.manegeMonActiveProductsByCompanyName(data),
-  //   // );
-  //
-  //   const busName = sessionStorage.getItem('businessName');
-  //   const categoryID = sessionStorage.getItem('userId');
-  //   console.log('AA : ' + busName);
-  //   console.log('AA : ' + categoryID);
-  //
-  //   this.productService.getnonActiveProduct(busName, categoryID).subscribe(
-  //     data => this.manegeMonActiveProductsByCompanyName(data),
-  //     error => this.errorOrderManage(error)
-  //   );
-  // }
 
   // onDemand
   getConsignmentProducts() {
@@ -781,19 +613,27 @@ export class DigitalListComponent implements OnInit {
           const or = {
             productCode: data.data[i].onDemand_products.variationCode,
             title: data.data[i].onDemand_products.title,
-            inStock: data.data[i].onDemand_products.quantity,
-            create_date: data.data[i].onDemand_products.createDate,
+            in_stock: data.data[i].onDemand_products.quantity,
+            createDate: data.data[i].onDemand_products.createDate,
             variationTheme: data.data[i].onDemand_products.variationTheme,
             variationId: data.data[i].onDemand_products.variationId,
             categoryColor: data.data[i].onDemand_products.color,
             categorySizes: data.data[i].onDemand_products.sizes,
-            path: data.data[i].category_path,
+            categoryPath: data.data[i].category_path,
             image: data.data[i].product_img.split('/product')[1],
             Action: ''
           };
           this.consignmentProducts.push(or);
         }
-
+        this.headOnDemand= [
+          // 'Image', 'Title', 'Create Date', 'In Stock', 'Add Stock',
+          {'Head': 'Image', 'FieldName' : 'image' },
+          {'Head': 'Title',  'FieldName' : 'title' },
+          {'Head': 'In Stock', 'FieldName':'in_stock' },
+          {'Head': 'Add Stock', 'FieldName':'createDate' },
+          {'Head': 'Create Date', 'FieldName':'price' },
+          {'Head': 'Action',  'FieldName':'' },
+        ];
         this.totalPagesOnDemand = Math.ceil(this.consignmentProducts.length / this.list_pages2);
         this.onPageChange(1, 'PendingOnDemand');
       }
@@ -814,26 +654,28 @@ export class DigitalListComponent implements OnInit {
 
   // asitha
   UpdateVirtualStocks(row: any) {
+    console.log('input Value!!!')
+    console.log(this.vstock[this.startIndex + row])
     if (this.vstock[this.startIndex + row] === null || this.vstock[this.startIndex + row] === undefined || isNaN(this.vstock[this.startIndex + row]) || this.stockUpdate) {
       Swal.fire(
-        'error!',
-        'Invalid stock value. Please enter a valid number.',
-        'error'
+          'error!',
+          'Invalid stock value. Please enter a valid number.',
+          'error'
       );
       this.vstock[this.startIndex + row] = null;
       return;
     }
 
     const payloard = {
-        productCode: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].productCode : this.consignmentProducts[this.startIndex + row].productCode,
-        vendor: sessionStorage.getItem('partnerId'),
-        quantity: this.vstock[this.startIndex + row],
-        variationTheme: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].variationTheme : this.consignmentProducts[this.startIndex + row].variationTheme,
-        variationId: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].variationId : this.consignmentProducts[this.startIndex + row].variationId
-      };
+      productCode: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].productCode : this.consignmentProducts[this.startIndex + row].productCode,
+      vendor: sessionStorage.getItem('partnerId'),
+      quantity: this.vstock[this.startIndex + row],
+      variationTheme: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].variationTheme : this.consignmentProducts[this.startIndex + row].variationTheme,
+      variationId: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].variationId : this.consignmentProducts[this.startIndex + row].variationId
+    };
     this.productService.updateStock(payloard).subscribe(
         data => this.manageUpdateStock(data),
-      );
+    );
 
   }
 
@@ -848,15 +690,15 @@ export class DigitalListComponent implements OnInit {
     // this.getNonActiveProdcut();
   }
 
-  // getPartnersQrImage() {
-  //   const payloard = {
-  //     vendorCode: sessionStorage.getItem('partnerId')
-  //
-  //   };
-  //   this.productService.getPartnersQrImage(payloard).subscribe(
-  //     data => this.managePartnerQrImages(data),
-  //   );
-  // }
+  getPartnersQrImage() {
+    const payloard = {
+      vendorCode: sessionStorage.getItem('partnerId')
+
+    };
+    this.productService.getPartnersQrImage(payloard).subscribe(
+      data => this.managePartnerQrImages(data),
+    );
+  }
 
   managePartnerQrImages(data) {
     this.getPartnersQrList = [];
@@ -876,90 +718,6 @@ export class DigitalListComponent implements OnInit {
       }
     }
   }
-
-  // manegeMonActiveProductsByCompanyName(data) {
-  //   this.startIndex = 0;
-  //   this.approvalPartnerProductList = [];
-  //   if (data.data == null) {
-  //   } else {
-  //     if (data.status_code === 200) {
-  //       for (let i = 0; i < data.data.length; i++) {
-  //         if (data.data[i].productImage !== null) {
-  //
-  //           const or = {
-  //             productCode: data.data[i].product_code,
-  //             title: data.data[i].title,
-  //             createDate: data.data[i].create_date,
-  //             brand: data.data[i].brand,
-  //             categoryCode: data.data[i].category_code,
-  //             vendor: data.data[i].vendor,
-  //             categoryPath: data.data[i].categoryPath,
-  //
-  //             image: data.data[i].productImage.image1.slice(data.data[i].productImage.image1.indexOf('/product') + 8),
-  //             approved: 'Non Active',
-  //             Action: '',
-  //             // ,
-  //           };
-  //           this.approvalPartnerProductList.push(or);
-  //         } else {
-  //           const or = {
-  //             productCode: data.data[i].product_code,
-  //             title: data.data[i].title,
-  //             createDate: data.data[i].create_date,
-  //             brand: data.data[i].brand,
-  //             categoryCode: data.data[i].category_code,
-  //             categoryPath: data.data[i].categoryPath,
-  //             vendor: data.data[i].vendor,
-  //             image: '',
-  //             approved: 'Non Active',
-  //             Action: '',
-  //           };
-  //           this.approvalPartnerProductList.push(or);
-  //         }
-  //       }
-  //
-  //       this.totalPagesPQC = Math.ceil(this.approvalPartnerProductList.length / this.list_pages2);
-  //       this.onPageChange(1, 'PendingQC');
-  //     }
-  //   }
-  // }
-
-  // printImage(rowIndex) {
-  //   const printWindow = window.open('', '_blank');
-  //   if (printWindow) {
-  //     const image = new Image();
-  //     image.onload = () => {
-  //       printWindow.document.write(`<img src="${this.getPartnersQrList[rowIndex].qrImage}" style="max-width: 100%;">`);
-  //       printWindow.document.close();
-  //       printWindow.print();
-  //       printWindow.addEventListener('afterprint', () => {
-  //         printWindow.close();
-  //         window.location.reload(); // Refresh the page after printing is done
-  //       });
-  //     };
-  //     image.src = this.getPartnersQrList[rowIndex].qrImage;
-  //   } else {
-  //   }
-  // }
-  //
-  // viewProduct(index) {
-  //   let namezz = '';
-  //   const userRole = sessionStorage.getItem('userRole');
-  //   if (userRole === 'ROLE_ADMIN') {
-  //     namezz = (document.getElementById('select_pro3') as HTMLInputElement).value;
-  //     for (let i = 0; i < this.partnerArray.length; i++) {
-  //       if (this.partnerArray[i].partner_u_id === namezz) {
-  //         namezz = this.partnerArray[i].businessName;
-  //       }
-  //     }
-  //
-  //   } else {
-  //     namezz = sessionStorage.getItem('businessName');
-  //   }
-  //
-  //   const url = 'products/digital/digital-view-product/' + index + '/' + namezz;
-  //   this.router.navigate([url]);
-  // }
 
   getSpecialGiftsByPrefix() {
     const pro_pr = sessionStorage.getItem('productPrefix');
@@ -1009,22 +767,6 @@ export class DigitalListComponent implements OnInit {
     }
   }
 
-
-  // getSelectedPartnerProductByPaginate() {
-  //   this.page = 0;
-  //   this.getSpecialGiftsByPrefixInPage(this.page);
-  //   this.specialGiftsByPrefixArray = [];
-  //   const name = (document.getElementById('select_pro3') as HTMLInputElement).value;
-  //   for (let i = 0; i < this.partnerMainArr.length; i++) {
-  //     if (name === this.partnerMainArr[i].partner_u_id) {
-  //       for (let z = 0; z < this.partnerMainArr[i].productPrefix.length; z++) {
-  //         this.proPrifix.push(this.partnerMainArr[i].productPrefix[z]);
-  //         sessionStorage.setItem('productPrefix', '');
-  //         sessionStorage.setItem('productPrefix', JSON.stringify(this.proPrifix));
-  //       }
-  //     }
-  //   }
-  // }
 
 
   getPartnerByPrefix() {
@@ -1081,18 +823,6 @@ export class DigitalListComponent implements OnInit {
   }
 
 
-  // getSelectedRowss(page) {
-  //   const sessionUser2 = sessionStorage.getItem('userRole');
-  //   if (sessionUser2 === 'ROLE_ADMIN') {
-  //     const businessName = (document.getElementById('select_pro3') as HTMLInputElement).value;
-  //     if (businessName == 'none') {
-  //     } else {
-  //       this.getSpecialGiftsByPrefixInPage(page - 1);
-  //     }
-  //   } else if (sessionUser2 === 'ROLE_PARTNER') {
-  //     this.getSpecialGiftsByPrefixInPage(page - 1);
-  //   }
-  // }
 
   getaqnonCheckProduct() {
     const role = sessionStorage.getItem('userRole');
@@ -1106,11 +836,6 @@ export class DigitalListComponent implements OnInit {
     }
   }
 
-  // getaqnonCheckProduct() {
-  //   this.productService.getQaProducts().subscribe(
-  //     data => this.manageGetQaProducts(data),
-  //   );
-  // }
 
   manageGetQaProducts(data) {
     this.aqnonCheckProduct = [];
@@ -1154,37 +879,8 @@ export class DigitalListComponent implements OnInit {
     }
   }
 
-  // navigateQaView(index) {
-  //   const productCode = this.qaApprovedAllProducts[index].productCode;
-  //   const url = 'products/digital/qa-approve-view-product/' + productCode;
-  //   this.router.navigate([url]);
-  // }
-
-  // private getFieldEditData() {
-  //   const role = sessionStorage.getItem('userRole');
-  //   if (role === 'ROLE_CATEGORY_MANAGER') {
-  //     const payLoard = {
-  //       user_u_id: sessionStorage.getItem('userId')
-  //     };
-  //   } else {
-  //     this.productService.getEditFieldsDataAll().subscribe(
-  //       data => this.manageFieldEditData(data),
-  //       // tslint:disable-next-line:no-shadowed-variable
-  //     );
-  //     this.productService.getnonActiveImageProduct().subscribe(
-  //       data => this.manageFieldImageEditData(data),
-  //       // tslint:disable-next-line:no-shadowed-variable
-  //     );
-  //   }
-  // }
-
-  loadPage(index: number) {
-    if (this.filteredProducts.length > 0) {
-      window.open('https://www.kapruka.com/buyonline/' + this.filteredProducts[this.startIndex + index].title.replace(/\s+/g, '-').toLowerCase() + '/kid/' + 'ef_pc_' + this.filteredProducts[this.startIndex + index].productCode, '_blank');
-    } else {
-      window.open('https://www.kapruka.com/buyonline/' + this.list_pages[this.startIndex + index].title.replace(/\s+/g, '-').toLowerCase() + '/kid/' + 'ef_pc_' + this.list_pages[this.startIndex + index].productCode, '_blank');
-   }
-
+  loadPage(event) {
+    window.open('https://www.kapruka.com/buyonline/' + event.title.replace(/\s+/g, '-').toLowerCase() + '/kid/' + 'ef_pc_' + event.productCode, '_blank');
   }
 
   private manageFieldEditData(data) {
@@ -1210,48 +906,6 @@ export class DigitalListComponent implements OnInit {
     this.totalPagesEditProApproval = Math.ceil(this.nonActiveEditedProductsArray.length / this.list_pages2);
     this.onPageChange(1, 'EditProApproval');
   }
-
-  // ApproveEditProduct(i) {
-  //
-  //   if (this.filterededitProductApproval.length > 0) {
-  //     const product_code = this.filterededitProductApproval[this.startIndex + i].productCode;
-  //     const unique_code = this.filterededitProductApproval[this.startIndex + i].unique_code;
-  //     const sub_type = this.filterededitProductApproval[this.startIndex + i].subType;
-  //     const ProDetails = product_code + '-' + unique_code + '-' + sub_type;
-  //     this.router.navigate(['products/digital/edited-approve-product/' + ProDetails]);
-  //   } else {
-  //     const product_code = this.nonActiveEditedProductsArray[this.startIndex + i].productCode;
-  //     const unique_code = this.nonActiveEditedProductsArray[this.startIndex + i].unique_code;
-  //     const sub_type = this.nonActiveEditedProductsArray[this.startIndex + i].subType;
-  //     const ProDetails = product_code + '-' + unique_code + '-' + sub_type;
-  //     this.router.navigate(['products/digital/edited-approve-product/' + ProDetails]);
-  //   }
-  //
-  //
-  // }
-
-  // ApproveEditImageProduct(rowIndex) {
-  //   if (this.filterdEditImgApproval.length > 0){
-  //     const url = 'products/digital/edited-image-approve-product/' + this.filterdEditImgApproval[this.startIndex + rowIndex].productCode;
-  //     this.router.navigate([url], {
-  //       queryParams: {
-  //         product_code: this.product_code,
-  //         unique_code: this.filterdEditImgApproval[this.startIndex + rowIndex].editId,
-  //         requested_by: this.filterdEditImgApproval[this.startIndex + rowIndex].requestBy
-  //       }
-  //     });
-  //   }else{
-  //     const url = 'products/digital/edited-image-approve-product/' + this.nonActiveEditedImageProductsArray[this.startIndex + rowIndex].productCode;
-  //     this.router.navigate([url], {
-  //       queryParams: {
-  //         product_code: this.product_code,
-  //         unique_code: this.nonActiveEditedImageProductsArray[this.startIndex + rowIndex].editId,
-  //         requested_by: this.nonActiveEditedImageProductsArray[this.startIndex + rowIndex].requestBy
-  //       }
-  //     });
-  //   }
-  //
-  // }
 
   private manageFieldImageEditData(data) {
     for (let i = 0; i < data.data.length; i++) {
@@ -1310,23 +964,19 @@ export class DigitalListComponent implements OnInit {
         };
         this.list_outof_stock.push(or);
       }
+      this.headOut = [
+        {'Head': 'Image', 'FieldName' : 'image' },
+        {'Head': 'Title',  'FieldName' : 'title' },
+        {'Head': 'Selling Price', 'FieldName':'price' },
+        {'Head': 'Stock In Hand', 'FieldName':'in_stock' },
+        {'Head': 'Create Date', 'FieldName':'createDate' },
+      ];
+
       this.totalPagesOS = Math.ceil(this.list_outof_stock.length / this.list_pages2);
       this.onPageChange(1, 'OutofStock');
     }
   }
 
-  // onClickImage(url) {
-  //   const newWindow = window.open(url, '_blank');
-  //   if (newWindow) {
-  //     newWindow.focus();
-  //   } else {
-  //     Swal.fire(
-  //       'error',
-  //       'The new window/tab was blocked by the pop-up blocker',
-  //       'error'
-  //     );
-  //   }
-  // }
 
   getSuspendedProducts() {
     const busName = sessionStorage.getItem('businessName');
@@ -1427,38 +1077,9 @@ export class DigitalListComponent implements OnInit {
     this.totalPages = Math.ceil(this.filteredProducts.length / this.list_pages2);
     this.onPageChange(1, 'ActivePro');
   }
-
-  // filterPendingStockAllocationByBusinessName(searchTerm: string): void {
-  //   this.filterdPendingAllocation = this.pending_stock_allocation.filter(product =>
-  //     product.vendor.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  //
-  //   this.totalPagesPendingAllow = Math.ceil(this.filterdPendingAllocation.length / this.list_pages2);
-  //   this.onPageChange(1, 'PendingStockAllocation');
-  // }
-  //
-  // editImgApprovalFilter(searchTerm: string): void {
-  //   this.filterdEditImgApproval = this.nonActiveEditedImageProductsArray.filter(product =>
-  //     product.requestBy.toLowerCase().includes(searchTerm.toLowerCase()) || product.title.toLowerCase().includes(searchTerm.toLowerCase())
-  //   );
-  //
-  //   this.totalPagesEditImgApproval = Math.ceil(this.filterdEditImgApproval.length / this.list_pages2);
-  //   this.onPageChange(1, 'EditImgApproval');
-  // }
-  //
-  // getSelectedPartnerProduct(businessName: any) {
-  //   this.userInput = businessName;
-  //   this.filteredSuggestions = [];
-  //   // const name = (document.getElementById('select_pro') as HTMLInputElement).value;
-  //   this.productService.getAllActiveProductList(businessName, this.categoryUID).subscribe(
-  //     data => this.getSelectedProductManage(data),
-  //     error => this.errorOrderManage(error)
-  //   );
-  // }
-
-  onVstockChange(row: number) {
+  onVstockChange(row) {
     if (this.filteredOnDemandProduct.length > 0){
-      if (this.vstock[this.startIndex + row] + this.filteredOnDemandProduct[this.startIndex + row].inStock < 0){
+      if (this.vstock[this.startIndex + row] + this.filteredOnDemandProduct[this.startIndex + row].in_stock < 0){
         Swal.fire({
               title: 'Add Stock Must Be More Than In Stock',
               text: 'Please enter a valid stock value.',
@@ -1470,7 +1091,7 @@ export class DigitalListComponent implements OnInit {
         this.stockUpdate = false;
       }
     }else{
-      if (this.consignmentProducts[this.startIndex + row].inStock + this.vstock[this.startIndex + row] < 0){
+      if (this.consignmentProducts[this.startIndex + row].in_stock + this.vstock[this.startIndex + row] < 0){
         Swal.fire({
           title: 'Add Stock Must Be More Than In Stock',
           text: 'Please enter a valid stock value.',

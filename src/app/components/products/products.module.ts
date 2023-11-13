@@ -34,6 +34,7 @@ import { ChangeRequestsComponent } from './product-list/change-requests/change-r
 import { NewAdditionsComponent } from './product-list/new-additions/new-additions.component';
 import { ProductListComponent } from './product-list/product-list/product-list.component';
 import { ProductSearchComponent } from './product-list/product-search/product-search.component';
+import {SharedModule} from "../../shared/shared.module";
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     maxFilesize: 50,
@@ -43,21 +44,22 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
 @NgModule({
     declarations: [
         DigitalListComponent, DigitalAddComponent, EditProductsComponent, ViewProductComponent, ApproveProductComponent, QaApprovalViewComponent, QaNormalViewComponent, DeclinedProductComponent, ProductViewComponent, ApproveEditProductComponent, ApproveEditImageComponentComponent, PaginationComponent, ChangeRequestsComponent, NewAdditionsComponent, ProductListComponent, ProductSearchComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    CKEditorModule,
-    ProductsRoutingModule,
-    Ng2SmartTableModule,
-    NgbModule,
-    DropzoneModule,
-    GalleryModule.forRoot(),
-    NgxDatatableModule,
-    AngularEditorModule,
-    SelectModule,
-    NgxSkeletonLoaderModule,
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        CKEditorModule,
+        ProductsRoutingModule,
+        Ng2SmartTableModule,
+        NgbModule,
+        DropzoneModule,
+        GalleryModule.forRoot(),
+        NgxDatatableModule,
+        AngularEditorModule,
+        SelectModule,
+        NgxSkeletonLoaderModule,
+        SharedModule,
+    ],
     providers: [
         {
             provide: DROPZONE_CONFIG,
