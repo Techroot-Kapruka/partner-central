@@ -29,16 +29,16 @@ import {ApproveEditImageComponentComponent} from './approve-edit-image-component
 import {PaginationComponent} from './pagination/pagination.component';
 import {AngularEditorModule} from '@kolkov/angular-editor';
 import {SelectModule} from 'ng-select';
-import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
+import {AnalyticsProductViewComponent} from './analytics-product-view/analytics-product-view.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
-    maxFilesize: 50,
-    url: 'https://httpbin.org/post',
+  maxFilesize: 50,
+  url: 'https://httpbin.org/post',
 };
 
 @NgModule({
-    declarations: [
-        DigitalListComponent, DigitalAddComponent, EditProductsComponent, ViewProductComponent, ApproveProductComponent, QaApprovalViewComponent, QaNormalViewComponent, DeclinedProductComponent, ProductViewComponent, ApproveEditProductComponent, ApproveEditImageComponentComponent, PaginationComponent],
+  declarations: [DigitalListComponent, DigitalAddComponent, EditProductsComponent, ViewProductComponent, ApproveProductComponent, QaApprovalViewComponent, QaNormalViewComponent, DeclinedProductComponent, ProductViewComponent, ApproveEditProductComponent, ApproveEditImageComponentComponent, PaginationComponent, AnalyticsProductViewComponent],
   imports: [
     CommonModule,
     FormsModule,
@@ -54,13 +54,13 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     SelectModule,
     NgxSkeletonLoaderModule,
   ],
-    providers: [
-        {
-            provide: DROPZONE_CONFIG,
-            useValue: DEFAULT_DROPZONE_CONFIG
-        },
-        NgbActiveModal
-    ]
+  providers: [
+    {
+      provide: DROPZONE_CONFIG,
+      useValue: DEFAULT_DROPZONE_CONFIG
+    },
+    NgbActiveModal
+  ]
 })
 export class ProductsModule {
 }

@@ -12,6 +12,8 @@ import {ApproveEditProductComponent} from "./approve-edit-product/approve-edit-p
 import {
   ApproveEditImageComponentComponent
 } from "./approve-edit-image-component/approve-edit-image-component.component";
+import {AnalyticsProductService} from "../../shared/service/analytics-product.service";
+import {AnalyticsProductViewComponent} from "./analytics-product-view/analytics-product-view.component";
 
 const routes: Routes = [
   {
@@ -96,7 +98,15 @@ const routes: Routes = [
           title: 'Approve-Image-Edit-Product',
           breadcrumb: 'Approve image Edited Product'
         }
-      }
+      },
+      {
+        path: 'digital/analytics-product-view',
+        component: AnalyticsProductViewComponent,
+        data: {
+          title: 'Analytics Product View List',
+          breadcrumb: 'Analytics Product View List'
+        }
+      },
     ]
   }
 ];

@@ -1,0 +1,69 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card tab2-card">
+        <div class="card-body tab2-card">
+          <table class="table table-sm table-bordered table-striped table-hover">
+            <thead class="table-primary">
+            <tr>
+              <th style="width: 15%" class="header">Product Image</th>
+              <th style="width: 35%" class="header">Title</th>
+              <th style="width: 10%" class="header">Product View Total</th>
+              <th style="width: 10%" class="header">Product Add To Cart Total</th>
+              <th style="width: 10%" class="header">Product Order Total</th>
+              <th style="width: 10%" class="header">Conversion Rate Cart (%)</th>
+              <th style="width: 10%" class="header">Conversion Rate Orders (%)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let productDetail of (paginatedItems.length > 0 ? paginatedItems : analyticsProductClickList); let i = index;">
+              <td align="center">{{stopLoading()}}<img src="{{ imagePathURI + productDetail.productImage}}"
+                                                       (click)="popUpImageActive(i)" height="60px"
+                                                       width="60px"
+                                                       (error)="onImageError($event)"/>
+              </td>
+              <td>
+                <p style="margin: 0px; font-size: 16px;color: #000; cursor: pointer;font-family: math">
+                {{ productDetail.productName}}&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" (click)="loadPage(i)">view on web</a></p>
+                <p style="margin: 0px;font-size: 16px; color: #000;font-family: math">{{productDetail.productId}}</p>
+                <p style="margin: 0px; font-size: 14px;  color: #6f6f6f;font-family: math"> &nbsp; &nbsp;{{productDetail.categoryPath}}</p>
+              </td>
+              <td class="textAlign">{{productDetail.productViewTotal}}</td>
+              <td class="textAlign">{{productDetail.productAddToCartTotal}}</td>
+              <td class="textAlign">{{productDetail.productOrderTotal}}</td>
+              <td class="textAlign">{{productDetail.rateCart}}</td>
+              <td class="textAlign">{{productDetail.rateOrder}}</td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="row" style="margin-top: 15px">
+            <div class="col-md-6" style="float: left;font-family: math;">
+              <span>{{currentPage}} of {{totalPages}} Pages</span><br>
+              <span>{{analyticsProductClickList.length}} Records</span>
+            </div>
+            <div class="col-md-6" >
+              <app-pagination
+                [currentPage]="currentPage"
+                [totalPages]="totalPages"
+                (pageChange)="onPageChange($event,'ActivePro')" style="float: right;cursor: pointer">
+              </app-pagination>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #imagePopup let-modal>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Image Preview</h4>
+        <button type="button" class="close" (click)="closePopup()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img [src]="imageUrl" alt="Image" class="img-fluid">
+      </div>
+    </div>
+  </ng-template>
+</div>
