@@ -12,6 +12,8 @@ import {ApproveEditProductComponent} from "./approve-edit-product/approve-edit-p
 import {
   ApproveEditImageComponentComponent
 } from "./approve-edit-image-component/approve-edit-image-component.component";
+import {AnalyticsProductService} from "../../shared/service/analytics-product.service";
+import {AnalyticsProductViewComponent} from "./analytics-product-view/analytics-product-view.component";
 import {ChangeRequestsComponent} from "./product-list/change-requests/change-requests.component";
 import {ProductSearchComponent} from "./product-list/product-search/product-search.component";
 import {NewAdditionsComponent} from "./product-list/new-additions/new-additions.component";
@@ -101,11 +103,18 @@ const routes: Routes = [
         }
       },
       {
-        path: 'digital/change-requests',
-        component: ChangeRequestsComponent,
+        path: 'digital/analytics-product-view',
+        component: AnalyticsProductViewComponent,
         data: {
-          title: 'Change Requests',
-          breadcrumb: 'Approve image Edited Product'
+          title: 'Analytics Product View List',
+          breadcrumb: 'Analytics Product View List'
+        }
+      },
+      {path: 'digital/change-requests',
+      component: ChangeRequestsComponent,
+      data: {
+        title: 'Change Requests',
+        breadcrumb: 'Approve image Edited Product'
         }
       },
       {
