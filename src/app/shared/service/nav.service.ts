@@ -62,6 +62,7 @@ export class NavService {
       type: 'sub',
       active: false,
       children: [
+        {path: '/products/digital/product-search', title: 'Product Search', type: 'link'},
         {path: '/products/digital/digital-product-list', title: 'Product List', type: 'link'},
         {path: '/products/digital/digital-add-product', title: 'Add Product', type: 'link'},
 
@@ -70,7 +71,7 @@ export class NavService {
         // new Added thingsss
         {path: '/products/digital/new-additions', title: 'New Additions', type: 'link'},
         {path: '/products/digital/change-requests', title: 'Change Requests', type: 'link'},
-        // {path: '/products/digital/product-search', title: 'Product Search', type: 'link'},
+
         // {path: '/products/digital/edit-image-approval', title: 'Edit Image Approval', type: 'link'},
         // {path: '/products/digital/out-of-stock', title: 'Out Of Stock', type: 'link'},
         // {path: '/products/digital/suspended', title: 'Suspended', type: 'link'},
@@ -375,9 +376,9 @@ export class NavService {
     this.items.value[6].children[0].title = '';
     this.items.value[6].children[0].type = '';
 
-    this.items.value[2].children[1].path = '';
-    this.items.value[2].children[1].title = '';
-    this.items.value[2].children[1].type = '';
+    this.items.value[2].children[3].path = '';
+    this.items.value[2].children[3].title = '';
+    this.items.value[2].children[3].type = '';
 
     this.items.value[2].children[2].path = '';
     this.items.value[2].children[2].title = '';

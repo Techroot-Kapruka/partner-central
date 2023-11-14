@@ -15,7 +15,7 @@ export class AnalyticsProductViewComponent implements OnInit {
   public list_pages2 = 10;
   public selected = [];
   currentPage = 1; // Current page
-  totalPages = 0;
+  totalPages = 0; // Total Page
   public startIndex;
   public paginatedItems = [];
   public filteredProducts: any = [];
