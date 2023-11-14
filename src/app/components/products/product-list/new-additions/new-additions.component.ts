@@ -32,14 +32,24 @@ export class NewAdditionsComponent implements OnInit {
   public paginatedPendingStockAllow = [];
   public filtereDpendingStockByOnDemand = [];
 
+  public headNonActive = [];
+  public headNonActivePartner = [];
+  public headPendingStockAdmin = [];
+  public headPendingStockPartner = [];
+
   public isAdmin = false;
   public isPartner = false;
-  public categoryUID = '';
+  nonActiveAdmin: boolean = false;
+  nonActivePartner: boolean = false;
+  onDemand: boolean = false;
+  pendingStockPartner: boolean = false;
+  pendingStockAdmin: boolean = false;
 
   public oldProductStatus = false;
 
   public EnablePriceEdit = false;
   public EnableStockEdit = false;
+
   public startIndex;
 
   public product_code = '';
@@ -226,16 +236,25 @@ export class NewAdditionsComponent implements OnInit {
 
   getPendingQC() {
     const count = this.approvalPartnerProductList.length;
+    this.nonActivePartner=true
     return `Pending New Addition (${count})`;
   }
 
   PendingStockAllocation() {
     const count = this.pending_stock_allocation.length;
+    if(this.isAdmin){
+      this.pendingStockAdmin = true;
+      this.pendingStockPartner=false;
+    }else{
+      this.pendingStockAdmin = false;
+      this.pendingStockPartner=true;
+    }
     return `Pending Shipments (${count})`;
   }
 
   getPendingApprovalList() {
     const count = this.nonActiveProductsArray.length;
+    this.nonActiveAdmin = true;
     return `Pending New Addition (${count})`;
   }
 
@@ -265,6 +284,15 @@ export class NewAdditionsComponent implements OnInit {
           };
           this.nonActiveProductsArray.push(or);
         }
+        this.headNonActive = [
+          {'Head': 'Image', 'FieldName' : 'image' },
+          {'Head': 'Title',  'FieldName' : 'title' },
+          {'Head': 'Selling Price', 'FieldName':'price' },
+          {'Head': 'Stock In Hand', 'FieldName':'in_stock' },
+          {'Head': 'Create Date', 'FieldName':'createDate' },
+          {'Head': 'Action',  'FieldName':'' },
+        ];
+
 
         this.totalPagesPA = Math.ceil(this.nonActiveProductsArray.length / this.list_pages2);
         this.onPageChange(1, 'PendingPro');
@@ -333,6 +361,12 @@ export class NewAdditionsComponent implements OnInit {
             this.approvalPartnerProductList.push(or);
           }
         }
+        this.headNonActivePartner = [
+          {'Head': 'Image', 'FieldName' : 'image' },
+          {'Head': 'Title',  'FieldName' : 'title' },
+          {'Head': 'Create Date', 'FieldName':'createDate' },
+          {'Head': 'Brand',  'FieldName':'' },
+        ];
 
         this.totalPagesPQC = Math.ceil(this.approvalPartnerProductList.length / this.list_pages2);
         this.onPageChange(1, 'PendingQC');
@@ -359,6 +393,22 @@ export class NewAdditionsComponent implements OnInit {
       };
       this.pending_stock_allocation.push(or);
     }
+
+    this.headPendingStockAdmin = [
+      {'Head': 'Image', 'FieldName' : 'image' },
+      {'Head': 'Title',  'FieldName' : 'title' },
+      {'Head': 'Selling Price', 'FieldName':'price' },
+      {'Head': 'Stock In Hand', 'FieldName':'in_stock' },
+      {'Head': 'Create Date', 'FieldName':'createDate' },
+    ];
+    this.headPendingStockPartner = [
+      {'Head': 'Image', 'FieldName' : 'image' },
+      {'Head': 'Title',  'FieldName' : 'title' },
+      {'Head': 'Selling Price', 'FieldName':'price' },
+      {'Head': 'Stock In Hand', 'FieldName':'in_stock' },
+      {'Head': 'Create Date', 'FieldName':'createDate' },
+      {'Head': 'Action',  'FieldName':'' },
+    ];
     this.totalPagesPendingAllow = Math.ceil(this.pending_stock_allocation.length / this.list_pages2);
     this.onPageChange(1, 'PendingStockAllocation')
 
@@ -376,24 +426,21 @@ export class NewAdditionsComponent implements OnInit {
     this.modalRef = this.modal.open(this.pricePopup, {centered: true});
   }
 
-  ApproveProductNon(value) {
-    if (this.filteredPendingProducts.length !== 0) {
-      const url = 'products/digital/digital-approve-product/' + this.filteredPendingProducts[this.startIndex + value].productCode;
+  ApproveProductNon(event) {
+      const url = 'products/digital/digital-approve-product/' + event.productCode;
       this.router.navigate([url]);
-    } else {
-      const url = 'products/digital/digital-approve-product/' + this.nonActiveProductsArray[this.startIndex + value].productCode;
-      this.router.navigate([url]);
-    }
   }
 
-  popUpImage(index: number) {
-    if (this.filteredPendingProducts.length !== 0) {
-      this.imageUrl = this.imagePathURI + this.filteredPendingProducts[this.startIndex + index].image;
+  popUpImage(event) {
+      this.imageUrl = this.imagePathURI + event.image;
       this.modalRef = this.modal.open(this.imagePopup, {centered: true});
-    } else {
-      this.imageUrl = this.imagePathURI + this.nonActiveProductsArray[this.startIndex + index].image;
-      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
-    }
+    // if (this.filteredPendingProducts.length !== 0) {
+    //   this.imageUrl = this.imagePathURI + this.filteredPendingProducts[this.startIndex + index].image;
+    //   this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+    // } else {
+    //   this.imageUrl = this.imagePathURI + this.nonActiveProductsArray[this.startIndex + index].image;
+    //   this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+    // }
   }
 
   popUpImagePendingAllocation(index: number) {
