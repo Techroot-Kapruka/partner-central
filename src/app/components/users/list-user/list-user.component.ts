@@ -41,7 +41,7 @@ export class ListUserComponent implements OnInit {
 
   getAllUser() {
     const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
+    if (sessionUser === 'ROLE_ADMIN') {
       this.httpClientService.getAllUsers().subscribe(
         data => this.manageAllUserList(data),
       );
@@ -74,7 +74,7 @@ export class ListUserComponent implements OnInit {
 
   getAllUsersWithoutPartner() {
     const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
+    if (sessionUser === 'ROLE_ADMIN') {
       this.httpClientService.getAllUsersWithoutPartners().subscribe(
         data => this.manageAllUserListWithoutPartners(data),
       );
@@ -206,7 +206,7 @@ export class ListUserComponent implements OnInit {
 
   getNonApprovedUsers() {
     const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
+    if (sessionUser === 'ROLE_ADMIN') {
       this.httpClientService.takeNonApprovedUsers().subscribe(
         data => this.manageNonApprovedUsers(data),
         error => this.manageError(error.status)
@@ -273,7 +273,7 @@ export class ListUserComponent implements OnInit {
 
   getPendingPartnerCategories() {
     const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
+    if (sessionUser === 'ROLE_ADMIN') {
       this.httpClientService.takePendingPartnerCategories().subscribe(
         data => this.manageTakePendingPartnerCategories(data),
         error => this.manageError(error.status)
