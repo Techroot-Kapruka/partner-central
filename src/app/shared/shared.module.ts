@@ -18,6 +18,7 @@ import {PaymentService} from './service/payment.service';
 import {ProgressBarComponent} from './components/progress-bar/progress-bar.component';
 import { TableTemplateComponent } from './table-template/table-template.component';
 import {FormsModule} from "@angular/forms";
+import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import {FormsModule} from "@angular/forms";
     imports: [
         CommonModule,
         RouterModule,
-        FormsModule
+        FormsModule,
+        NgxSkeletonLoaderModule,
     ],
   providers: [NavService, WINDOW_PROVIDERS, PaymentService],
     exports: [FeatherIconsComponent, ToggleFullscreenDirective, ProgressBarComponent, ProgressBarComponent, TableTemplateComponent]
