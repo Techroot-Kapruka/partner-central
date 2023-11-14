@@ -964,7 +964,6 @@ export class DigitalAddComponent implements OnInit {
       image.src = URL.createObjectURL(file);
 
       image.onload = () => {
-        // Calculate the new image dimensions, maintaining aspect ratio
         let width, height;
         if (image.width > image.height) {
           width = canvas.width;
@@ -974,12 +973,11 @@ export class DigitalAddComponent implements OnInit {
           width = image.width * (canvas.height / image.height);
         }
 
-        // Calculate position to center the image
         const offsetX = (canvas.width - width) / 2;
         const offsetY = (canvas.height - height) / 2;
 
 
-        // Create a white background
+        // Create white background
         ctx.fillStyle = '#fff';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -1534,6 +1532,7 @@ export class DigitalAddComponent implements OnInit {
     this.variationvalueArrayObject = [];
     this.variationvalueArrayForNonObject = [];
     this.variationvalueSizeTypeObjArray = [];
+    this.attributeArr = [];
 
 
     this.categoryCode = catCode;
@@ -1919,6 +1918,8 @@ export class DigitalAddComponent implements OnInit {
 
   getVariations(code) {
     this.attributesArray = [];
+    this.attributeArr = [];
+    this.attributesKeyArr = [];
     for (const key in this.hashMap) {
       delete this.hashMap[key];
     }
@@ -1933,6 +1934,8 @@ export class DigitalAddComponent implements OnInit {
 
   getAttributes(code) {
     this.attributesArray = [];
+    this.attributeArr = [];
+    this.attributesKeyArr = [];
     for (const key in this.hashMap) {
       delete this.hashMap[key];
     }
@@ -2043,26 +2046,33 @@ export class DigitalAddComponent implements OnInit {
     if (data.data.attribute_object != null) {
       this.attributesArray = Object.keys(data.data.attribute_object);
     }
+
+
+    // Creating a hash map
+
 // Converting object to hash map
     for (const key in data.data.attribute_object) {
       this.hashMap[key] = data.data.attribute_object[key];
     }
 
-
     // attributes
     for (let i = 0; i < this.attributesArray.length; i++) {
       const key = this.attributesArray[i];
 
-      // Creating a hash map
+      const obj = data.data.variation_object[key];
+      if (Array.isArray(obj)) {
+      } else {
+        this.keyArrays = Object.keys(obj);
+      }
+    }
+    // Creating a hash map
 
 // Converting object to hash map
-      for (const key in data.data.attribute_object) {
-        this.hashMap[key] = data.data.attribute_object[key];
-      }
-
-
-      this.attributeArr = this.attributesArray;
+    for (const key in data.data.attribute_object) {
+      this.hashMap[key] = data.data.attribute_object[key];
     }
+
+    this.attributeArr = this.attributesArray;
   }
 
   formatCurrency(event: any) {
