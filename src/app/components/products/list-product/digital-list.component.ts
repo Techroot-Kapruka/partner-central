@@ -91,6 +91,7 @@ export class DigitalListComponent implements OnInit {
   active: boolean = false;
   suspend: boolean = false;
   onDemand: boolean = false;
+  nonActivePartner: boolean = false;
 
   protected readonly print = print;
 
@@ -432,15 +433,16 @@ export class DigitalListComponent implements OnInit {
     });
   }
 
-  popUpImageActive(index: number) {
-
-    if (this.filteredProducts.length > 0) {
-      this.imageUrl = this.imagePathURI + this.filteredProducts[this.startIndex + index].image;
-      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
-    } else {
-      this.imageUrl = this.imagePathURI + this.list_pages[this.startIndex + index].image;
-      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
-    }
+  popUpImage(event) {
+    this.imageUrl = this.imagePathURI + event.image;
+    this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+    // if (this.filteredProducts.length > 0) {
+    //   this.imageUrl = this.imagePathURI + this.filteredProducts[this.startIndex + index].image;
+    //   this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+    // } else {
+    //   this.imageUrl = this.imagePathURI + this.list_pages[this.startIndex + index].image;
+    //   this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+    // }
 
   }
 
@@ -452,15 +454,15 @@ export class DigitalListComponent implements OnInit {
   }
 
 
-  popUpImage(index: number) {
-    if (this.filteredPendingProducts.length !== 0) {
-      this.imageUrl = this.imagePathURI + this.filteredPendingProducts[this.startIndex + index].image;
-      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
-    } else {
-      this.imageUrl = this.imagePathURI + this.nonActiveProductsArray[this.startIndex + index].image;
-      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
-    }
-  }
+  // popUpImage(index: number) {
+  //   if (this.filteredPendingProducts.length !== 0) {
+  //     this.imageUrl = this.imagePathURI + this.filteredPendingProducts[this.startIndex + index].image;
+  //     this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+  //   } else {
+  //     this.imageUrl = this.imagePathURI + this.nonActiveProductsArray[this.startIndex + index].image;
+  //     this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+  //   }
+  // }
 
   closePopup() {
     this.modalRef.close();

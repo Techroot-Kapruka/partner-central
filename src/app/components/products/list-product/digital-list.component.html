@@ -4,6 +4,7 @@
       <div class="card tab2-card">
         <div class="card-body tab2-card">
           <ngb-tabset class="tab-coupon">
+
             <ngb-tab [title]="getActiveTabTitle()" *ngIf="qaTables">
               <ng-template ngbTabContent>
                 <div class="tab-pane fade active show" id="account" role="tabpanel" aria-labelledby="account-tab">
@@ -25,7 +26,7 @@
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
                           <app-table-template [HeadArray]="headActive" [DataArray]="paginatedItems.length > 0 ? paginatedItems : list_pages"
-                          (onClick)="clickProduct($event)" (onLoadPage)="loadPage($event)" [active]="active"> </app-table-template>
+                          (onPopUpImg)="popUpImage($event)" (onClick)="clickProduct($event)" (onLoadPage)="loadPage($event)" [active]="active"> </app-table-template>
                         </div>
                       </div>
                     </div>
@@ -39,6 +40,7 @@
                   </div>
                 </div>
               </ng-template>
+
             </ngb-tab>
 
             <ngb-tab [title]="getOutofStock()" *ngIf="qaTables">
@@ -62,7 +64,7 @@
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
                           <app-table-template [HeadArray]="headOut" [DataArray]="paginatedOutofStock.length > 0 ? paginatedOutofStock : list_outof_stock"
-                                              (onClick)="clickProduct($event)" > </app-table-template>
+                                              (onPopUpImg)="popUpImage($event)"  (onClick)="clickProduct($event)" > </app-table-template>
                         </div>
                       </div>
                     </div>
@@ -98,7 +100,7 @@
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
                           <app-table-template [HeadArray]="headActive" [DataArray]="paginatedSuspend.length > 0 ? paginatedSuspend : list_suspend"
-                                              (onEdit)="clickSusEditProduct($event)" [suspend]="suspend"> </app-table-template>
+                                              (onPopUpImg)="popUpImage($event)"      (onEdit)="clickSusEditProduct($event)" [suspend]="suspend"> </app-table-template>
                         </div>
                       </div>
                     </div>
@@ -130,7 +132,7 @@
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
                           <app-table-template [HeadArray]="headOnDemand" [DataArray]="paginatedOnDemand.length > 0 ? paginatedOnDemand : consignmentProducts"
-                                              (onAddStock)="UpdateVirtualStocks($event)" [startIndex]="startIndex" [vStock]="vstock" (check)="onVstockChange($event)" [onDemand]="onDemand"> </app-table-template>
+                                              (onPopUpImg)="popUpImage($event)"       (onAddStock)="UpdateVirtualStocks($event)" [startIndex]="startIndex" [vStock]="vstock" (check)="onVstockChange($event)" [onDemand]="onDemand" [nonActivePartner]="nonActivePartner"> </app-table-template>
                         </div>
                       </div>
                     </div>
@@ -146,6 +148,19 @@
               </ng-template>
             </ngb-tab>
 
+            <ng-template #imagePopup let-modal>
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title">Image Preview</h4>
+                  <button type="button" class="close" (click)="closePopup()">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <img [src]="imageUrl" alt="Image" class="img-fluid">
+                </div>
+              </div>
+            </ng-template>
           </ngb-tabset>
         </div>
       </div>
