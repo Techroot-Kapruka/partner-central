@@ -10,6 +10,7 @@ import {environment} from '../../../../environments/environment.prod';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
 import {CategoryService} from "../../../shared/service/category.service";
 import {addWarning} from "@angular-devkit/build-angular/src/utils/webpack-diagnostics";
+import {ImageService} from "../../../shared/service/image.service";
 
 
 @Component({
@@ -18,108 +19,107 @@ import {addWarning} from "@angular-devkit/build-angular/src/utils/webpack-diagno
   styleUrls: ['./edit-products.component.scss']
 })
 export class EditProductsComponent implements OnInit {
-    public imageCliant: FormGroup;
-    public checkBoxCon: FormGroup;
-    public productGroupCon: FormGroup;
-    public maintainStock: FormGroup;
-    public baseInfo: FormGroup;
-    public description: FormGroup;
-    public offer: FormGroup;
-    public category: FormGroup;
-    @Input()
-    public catParth = [];
-    public isColor = false;
-    public isSize = false;
-    public colorsAndSize = false;
-    public closeResult: string;
-    modalRef: any;
-    public colorArray = [];
-    public sizeArray = [];
-    public productGroupTabel = [];
-    public keyWordArray = [];
-    public keyWordArray2 = [];
-    public isDisplay = 'block';
-    public sizeAndColorArray = [];
-    public colorNameArray = [];
-    public colorCodeArray = [];
-    public sizeNameArray = [];
-    public colorAndSizeArray = [];
-    public imageArr = [];
-    public variationValue = '';
-    public weightValue = '';
-    public weightBool = false;
-    public isAdmin = false;
-    public storageValue = '';
-    public capacityValue = '';
-    public nonGroupArray = [];
-    public productCategoryArray = [];
-    public productSubCategoryArray = [];
-    public productSubSubCategoryArray = [];
-    public parts = [];
-    public imageOne = '';
-    public imageOne2 = '';
-    public imageOne3 = '';
-    public imageOne4 = '';
-    public imageOne5 = '';
-    public selectedimg = '';
-    public ids = '';
-    public imageData = [];
-    public imagePathURI = environment.imageURIENV;
-    public title_name = 'Edit Product';
-    public amountBefor = '';
-    showmsg = false;
-    showmsg1 = false;
-    public activeUpdate = false;
-    imageUrl: any;
-    filteredSubCategory = [];
-    filteredSubSubCategory = [];
+  public imageCliant: FormGroup;
+  public checkBoxCon: FormGroup;
+  public productGroupCon: FormGroup;
+  public maintainStock: FormGroup;
+  public baseInfo: FormGroup;
+  public description: FormGroup;
+  public offer: FormGroup;
+  public category: FormGroup;
+  @Input()
+  public catParth = [];
+  public isColor = false;
+  public isSize = false;
+  public colorsAndSize = false;
+  public closeResult: string;
+  modalRef: any;
+  public colorArray = [];
+  public sizeArray = [];
+  public productGroupTabel = [];
+  public keyWordArray = [];
+  public keyWordArray2 = [];
+  public isDisplay = 'block';
+  public sizeAndColorArray = [];
+  public colorNameArray = [];
+  public colorCodeArray = [];
+  public sizeNameArray = [];
+  public colorAndSizeArray = [];
+  public imageArr = [];
+  public variationValue = '';
+  public weightValue = '';
+  public weightBool = false;
+  public isAdmin = false;
+  public storageValue = '';
+  public capacityValue = '';
+  public nonGroupArray = [];
+  public productCategoryArray = [];
+  public productSubCategoryArray = [];
+  public productSubSubCategoryArray = [];
+  public parts = [];
+  public imageOne = '';
+  public imageOne2 = '';
+  public imageOne3 = '';
+  public imageOne4 = '';
+  public imageOne5 = '';
+  public ids = '';
+  public imageData = [];
+  public imagePathURI = environment.imageURIENV;
+  public title_name = 'Edit Product';
+  public amountBefor = '';
+  showmsg = false;
+  showmsg1 = false;
+  public activeUpdate = false;
+  imageUrl: any;
+  filteredSubCategory = [];
+  filteredSubSubCategory = [];
 
-    public oldTitle = '';
-    public oldBrand = '';
-    public oldManufacture = '';
-    public old_Txt_description = '';
-    public old_special_notes = '';
-    public old_txt_amount = '';
-    public old_condition = '';
-    public old_txt_quantity = '';
-    public old_txt_price = '';
-    public old_txt_seller_sku = '';
-    public old_availability = '';
-    public old_txt_listning_price = '';
-    public old_txt_price_rate = '';
-    public productCode='';
-    descriptionContent;
+  public oldTitle = '';
+  public oldBrand = '';
+  public oldManufacture = '';
+  public old_Txt_description = '';
+  public old_special_notes = '';
+  public old_txt_amount = '';
+  public old_condition = '';
+  public old_txt_quantity = '';
+  public old_txt_price = '';
+  public old_txt_seller_sku = '';
+  public old_availability = '';
+  public old_txt_listning_price = '';
+  public old_txt_price_rate = '';
+  public productCode = '';
+  descriptionContent;
 
-    editorConfig: AngularEditorConfig = {
-        editable: true,
-        spellcheck: false,
-        height: '15rem',
-        minHeight: '5rem',
-        placeholder: 'Enter Description',
-        translate: 'no',
-        defaultParagraphSeparator: 'br',
-        defaultFontName: 'Arial',
-        uploadWithCredentials: false,
-        sanitize: true,
-        toolbarPosition: 'top',
-        rawPaste: true,
-        toolbarHiddenButtons: [
-            ['strikeThrough', 'subscript'],
-            ['backgroundColor', 'color'],
-            ['align'],
-            ['blockquote', 'code-block'],
-            ['link', 'unlink'],
-            ['insertImage', 'insertVideo'],
-            ['fontSize', 'fontFamily', 'font', 'toggleEditorMode', 'fontName'],
-            ['textColor', 'backgroundColor'],
-            ['indent', 'outdent'],
-            ['undo', 'redo'],
-            ['html'],
-        ],
-    };
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: false,
+    height: '15rem',
+    minHeight: '5rem',
+    placeholder: 'Enter Description',
+    translate: 'no',
+    defaultParagraphSeparator: 'br',
+    defaultFontName: 'Arial',
+    uploadWithCredentials: false,
+    sanitize: true,
+    toolbarPosition: 'top',
+    rawPaste: true,
+    toolbarHiddenButtons: [
+      ['strikeThrough', 'subscript'],
+      ['backgroundColor', 'color'],
+      ['align'],
+      ['blockquote', 'code-block'],
+      ['link', 'unlink'],
+      ['insertImage', 'insertVideo'],
+      ['fontSize', 'fontFamily', 'font', 'toggleEditorMode', 'fontName'],
+      ['textColor', 'backgroundColor'],
+      ['indent', 'outdent'],
+      ['undo', 'redo'],
+      ['html'],
+    ],
+  };
+  @ViewChild('imagePopup') imagePopup: ElementRef;
 
-
-  constructor(private categoryService: CategoryService, private router: Router, private _Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService) {
+  constructor(private categoryService: CategoryService, private router: Router, private _Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService, private imageService: ImageService) {
     this.ids = '';
     this.getAllCategory();
     this._Activatedroute.paramMap.subscribe(params => {
@@ -255,11 +255,11 @@ export class EditProductsComponent implements OnInit {
 
   imageControlMethord() {
     this.imageCliant = new FormGroup({
-      // imageOne: new FormControl(''),
-      // imageOne2: new FormControl(''),
-      // imageOne3: new FormControl(''),
-      // imageOne4: new FormControl(''),
-      // imageOne5: new FormControl(''),
+      imageOne: new FormControl(''),
+      imageOne2: new FormControl(''),
+      imageOne3: new FormControl(''),
+      imageOne4: new FormControl(''),
+      imageOne5: new FormControl(''),
       fileSource: new FormControl(''),
       fileSource2: new FormControl(''),
       fileSource3: new FormControl(''),
@@ -274,112 +274,116 @@ export class EditProductsComponent implements OnInit {
       maintainStockController: new FormControl(true),
     });
 
-        this.productGroupCon = new FormGroup({
-            proGAmount: new FormControl(''),
-            proGRate: new FormControl(''),
-            proGCostPrice: new FormControl(''),
-            qty: new FormControl(''),
-            proGSellingPrice: new FormControl(''),
-        });
-    }
-    testfk(){
-      console.log("yoooo");
-    }
-  testFunc(){
-    this.imageUrl = this.imagePathURI+this.selectedimg;
+    this.productGroupCon = new FormGroup({
+      proGAmount: new FormControl(''),
+      proGRate: new FormControl(''),
+      proGCostPrice: new FormControl(''),
+      qty: new FormControl(''),
+      proGSellingPrice: new FormControl(''),
+    });
+  }
+
+  popImageView(newImgSrc) {
+    this.imageUrl = newImgSrc;
     this.modalRef = this.modalService.open(this.imagePopup, {centered: true});
   }
+
   closePopup() {
     this.modalRef.close();
     this.imageUrl = undefined;
   }
-    removeimg(x: number) {
-        switch (x) {
-            case 1:
 
-                this.imageCliant.patchValue({
-                    fileSource: '',
-                    imageOne: '',
-                });
-                (document.getElementById('imageOneO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
-                break;
-            case 2:
-                this.imageCliant.patchValue({
-                    fileSource2: '',
-                    imageOne2: '',
-                });
-                (document.getElementById('imageTwoO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
-                break;
-            case 3:
-                this.imageCliant.patchValue({
-                    fileSource3: '',
-                    imageOne3: '',
-                });
-                (document.getElementById('imageTreeE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
-                break;
-            case 4:
-                this.imageCliant.patchValue({
-                    fileSource4: '',
-                    imageOne4: '',
-                });
-                (document.getElementById('imageFourR') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
-                break;
-            case 5:
-                this.imageCliant.patchValue({
-                    fileSource5: '',
-                    imageOne5: '',
-                });
-                (document.getElementById('imageFiveE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
-                break;
-        }
+  removeimg(x: number) {
+    switch (x) {
+      case 1:
+
+        this.imageCliant.patchValue({
+          fileSource: '',
+          imageOne: '',
+        });
+        (document.getElementById('imageOneO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 2:
+        this.imageCliant.patchValue({
+          fileSource2: '',
+          imageOne2: '',
+        });
+        (document.getElementById('imageTwoO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 3:
+        this.imageCliant.patchValue({
+          fileSource3: '',
+          imageOne3: '',
+        });
+        (document.getElementById('imageTreeE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 4:
+        this.imageCliant.patchValue({
+          fileSource4: '',
+          imageOne4: '',
+        });
+        (document.getElementById('imageFourR') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 5:
+        this.imageCliant.patchValue({
+          fileSource5: '',
+          imageOne5: '',
+        });
+        (document.getElementById('imageFiveE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
     }
+  }
 
-    loadimg(x: number) {
-        switch (x) {
-            case 1:
-                this.selectedimg = this.imageOne;
-                console.log("***********");
-                console.log(this.imageCliant.get('fileSource').value);
-                this.testFunc();
-                break;
+  loadimg(x: number) {
+    switch (x) {
+      case 1:
+        var newImgSrc = document.getElementById("imageOneO").getAttribute('src');
+        this.popImageView(newImgSrc);
+        break;
 
-            case 2:
-                this.selectedimg = this.imageOne2;
-                this.testFunc();
-                break;
+      case 2:
+        var newImgSrc = document.getElementById("imageTwoO").getAttribute('src');
+        this.popImageView(newImgSrc);
+        break;
 
-            case 3:
-                this.selectedimg = this.imageOne3;
-                this.testFunc();
-                break;
+      case 3:
+        var newImgSrc = document.getElementById("imageTreeE").getAttribute('src');
+        this.popImageView(newImgSrc);
+        break;
 
-            case 4:
-                this.selectedimg = this.imageOne4;
-                this.testFunc();
-                break;
+      case 4:
+        var newImgSrc = document.getElementById("imageFourR").getAttribute('src');
+        this.popImageView(newImgSrc);
+        break;
 
-            case 5:
-                this.selectedimg = this.imageOne5;
-                this.testFunc();
-                break;
-        }
+      case 5:
+        var newImgSrc = document.getElementById("imageFiveE").getAttribute('src');
+        this.popImageView(newImgSrc);
+        break;
     }
+  }
 
   async changeValue(event: any, i) {
     if (event.target.files.length === 0) {
       return;
     }
-
     // Image upload validation
     const mimeType = event.target.files[0].type;
 
-    if (mimeType.match(/image\/*/) == null) {
-      return;
+    if (!mimeType.match(/^image\/jpeg$/i)) {
+      Swal.fire(
+        'Error',
+        'Please select a JPEG (jpg) image.',
+        'warning'
+      );
+      return; // Stop further actions if the image is not a JPEG
     }
 
+    // Check the image resolution
     let image = new Image();
     image.src = URL.createObjectURL(event.target.files[0]);
 
+    // Create a promise to hold the async operation
     const checkImageResolution = new Promise<void>((resolve, reject) => {
       image.onload = () => {
         if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
@@ -395,43 +399,64 @@ export class EditProductsComponent implements OnInit {
       };
     });
 
-    await checkImageResolution;
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
 
-    // tslint:disable-next-line:variable-name
-    reader.onload = (_event) => {
-      (document.getElementById('imageOneO') as HTMLInputElement).src = reader.result.toString();
-      (document.getElementById('mainImage') as HTMLInputElement).src = reader.result.toString();
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
 
-    };
 
-    // ========================================================
+      reader.onload = (_event) => {
+        (document.getElementById('imageOneO') as HTMLInputElement).src = reader.result.toString();
+        (document.getElementById('mainImage') as HTMLInputElement).src = reader.result.toString();
+      };
 
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource: file
-      });
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.imageService.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource: resizedFile
+            });
+          })
+          .catch((error) => {
+            Swal.fire(
+              'error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
     }
   }
 
-  async changeValue2(event: any) {
+  async changeValue2(event) {
     if (event.target.files.length === 0) {
       return;
     }
-
     // Image upload validation
     const mimeType = event.target.files[0].type;
 
-    if (mimeType.match(/image\/*/) == null) {
+    if (!mimeType.match(/^image\/jpeg$/i)) {
+      Swal.fire(
+        'Error',
+        'Please select a JPEG (jpg) image.',
+        'warning'
+      );
       return;
     }
-
+    // Check the image resolution
     let image = new Image();
     image.src = URL.createObjectURL(event.target.files[0]);
-
+    // Create a promise to hold the async operation
     const checkImageResolution = new Promise<void>((resolve, reject) => {
       image.onload = () => {
         if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
@@ -440,6 +465,7 @@ export class EditProductsComponent implements OnInit {
             'The maximum resolution supported for images is 5000x5000 pixels.',
             'error'
           );
+          this.removeimg(2);
           reject('Invalid image resolution'); // Reject the promise to stop further actions
         } else {
           resolve(); // Resolve the promise to continue with further actions
@@ -447,42 +473,68 @@ export class EditProductsComponent implements OnInit {
       };
     });
 
-    await checkImageResolution;
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
 
-    // tslint:disable-next-line:variable-name
-    reader.onload = (_event) => {
-      (document.getElementById('imageTwoO') as HTMLInputElement).src = reader.result.toString();
+      // Continue with further actions here because the image is valid
+      // Display the image
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
 
-    };
+      reader.onload = (_event) => {
+        (document.getElementById('imageTwoO') as HTMLInputElement).src = reader.result.toString();
+      };
 
-    // ========================================================
-
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource2: file
-      });
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.imageService.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource2: resizedFile
+            });
+          })
+          .catch((error) => {
+            this.removeimg(2);
+            Swal.fire(
+              'error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
     }
   }
 
   async changeValue3(event) {
+
     if (event.target.files.length === 0) {
       return;
     }
-
+    // Image upload validation
     // Image upload validation
     const mimeType = event.target.files[0].type;
 
-    if (mimeType.match(/image\/*/) == null) {
+    if (!mimeType.match(/^image\/jpeg$/i)) {
+      Swal.fire(
+        'Error',
+        'Please select a JPEG (jpg) image.',
+        'warning'
+      );
       return;
     }
-
+    // Check the image resolution
     let image = new Image();
     image.src = URL.createObjectURL(event.target.files[0]);
 
+    // Create a promise to hold the async operation
     const checkImageResolution = new Promise<void>((resolve, reject) => {
       image.onload = () => {
         if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
@@ -491,6 +543,7 @@ export class EditProductsComponent implements OnInit {
             'The maximum resolution supported for images is 5000x5000 pixels.',
             'error'
           );
+          this.removeimg(3);
           reject('Invalid image resolution'); // Reject the promise to stop further actions
         } else {
           resolve(); // Resolve the promise to continue with further actions
@@ -498,42 +551,69 @@ export class EditProductsComponent implements OnInit {
       };
     });
 
-    await checkImageResolution;
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
 
-    // tslint:disable-next-line:variable-name
-    reader.onload = (_event) => {
-      (document.getElementById('imageTreeE') as HTMLInputElement).src = reader.result.toString();
+      // Continue with further actions here because the image is valid
 
-    };
 
-    // ========================================================
+      // Display the image
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
 
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource3: file
-      });
+      reader.onload = (_event) => {
+        (document.getElementById('imageTreeE') as HTMLInputElement).src = reader.result.toString();
+      };
+
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.imageService.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource3: resizedFile
+            });
+          })
+          .catch((error) => {
+            this.removeimg(3);
+            Swal.fire(
+              'error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
     }
   }
 
   async changeValue4(event) {
+
     if (event.target.files.length === 0) {
       return;
     }
-
     // Image upload validation
     const mimeType = event.target.files[0].type;
 
-    if (mimeType.match(/image\/*/) == null) {
+    if (!mimeType.match(/^image\/jpeg$/i)) {
+      Swal.fire(
+        'Error',
+        'Please select a JPEG (jpg) image.',
+        'warning'
+      );
       return;
     }
-
+    // Check the image resolution
     let image = new Image();
     image.src = URL.createObjectURL(event.target.files[0]);
 
+    // Create a promise to hold the async operation
     const checkImageResolution = new Promise<void>((resolve, reject) => {
       image.onload = () => {
         if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
@@ -542,6 +622,7 @@ export class EditProductsComponent implements OnInit {
             'The maximum resolution supported for images is 5000x5000 pixels.',
             'error'
           );
+          this.removeimg(4);
           reject('Invalid image resolution'); // Reject the promise to stop further actions
         } else {
           resolve(); // Resolve the promise to continue with further actions
@@ -549,24 +630,43 @@ export class EditProductsComponent implements OnInit {
       };
     });
 
-    await checkImageResolution;
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
 
-    // tslint:disable-next-line:variable-name
-    reader.onload = (_event) => {
-      (document.getElementById('imageFourR') as HTMLInputElement).src = reader.result.toString();
 
-    };
+      // Display the image
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
 
-    // ========================================================
+      reader.onload = (_event) => {
+        (document.getElementById('imageFourR') as HTMLInputElement).src = reader.result.toString();
+      };
 
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource4: file
-      });
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.imageService.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource4: resizedFile
+            });
+          })
+          .catch((error) => {
+            this.removeimg(4);
+            Swal.fire(
+              'error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
     }
   }
 
@@ -575,17 +675,22 @@ export class EditProductsComponent implements OnInit {
     if (event.target.files.length === 0) {
       return;
     }
-
-    // Image upload validation
+// Image upload validation
     const mimeType = event.target.files[0].type;
 
-    if (mimeType.match(/image\/*/) == null) {
+    if (!mimeType.match(/^image\/jpeg$/i)) {
+      Swal.fire(
+        'Error',
+        'Please select a JPEG (jpg) image.',
+        'warning'
+      );
       return;
     }
-
+    // Check the image resolution
     let image = new Image();
     image.src = URL.createObjectURL(event.target.files[0]);
 
+    // Create a promise to hold the async operation
     const checkImageResolution = new Promise<void>((resolve, reject) => {
       image.onload = () => {
         if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
@@ -594,6 +699,7 @@ export class EditProductsComponent implements OnInit {
             'The maximum resolution supported for images is 5000x5000 pixels.',
             'error'
           );
+          this.removeimg(5);
           reject('Invalid image resolution'); // Reject the promise to stop further actions
         } else {
           resolve(); // Resolve the promise to continue with further actions
@@ -601,26 +707,46 @@ export class EditProductsComponent implements OnInit {
       };
     });
 
-    await checkImageResolution;
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
+    try {
+      // Wait for the image resolution check to complete
+      await checkImageResolution;
 
-    // tslint:disable-next-line:variable-name
-    reader.onload = (_event) => {
-      (document.getElementById('imageFiveE') as HTMLInputElement).src = reader.result.toString();
+      // Continue with further actions here because the image is valid
 
-    };
 
-    // ========================================================
+      // Display the image
+      const reader = new FileReader();
+      reader.readAsDataURL(event.target.files[0]);
 
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource5: file
-      });
+      reader.onload = (_event) => {
+        (document.getElementById('imageFiveE') as HTMLInputElement).src = reader.result.toString();
+      };
+
+      // Upload and handle the image
+      if (event.target.files.length > 0) {
+        const file = event.target.files[0];
+        this.imageService.resizeImage(file)
+          .then((resizedFile) => {
+            this.imageCliant.patchValue({
+              fileSource4: resizedFile
+            });
+          })
+          .catch((error) => {
+            this.removeimg(5);
+            Swal.fire(
+              'Error',
+              'Image upload error: ' + error,
+              'error'
+            );
+          });
+      }
+    } catch (error) {
+      Swal.fire(
+        'Error',
+        'The maximum resolution supported for images is 5000x5000 pixels.',
+        'error'
+      );
     }
-
   }
 
 
@@ -654,6 +780,7 @@ export class EditProductsComponent implements OnInit {
       }
     }
   }
+
 
   getSubcategoryForSubSub(code) {
     // const tex = (document.getElementById('category_id_sub_sub') as HTMLInputElement).value;
@@ -709,9 +836,41 @@ export class EditProductsComponent implements OnInit {
     }
   }
 
+  updateSubSubCategory() {
+    if (this.filteredSubSubCategory.length > 0) {
+      const payload = {
+        column: 'category_code',
+        tblname: 'product_basic_info',
+        value: this.filteredSubSubCategory[0].code,
+        whereClause: 'product_code',
+        whereValue: this.ids
+      }
+      this.productService.editAdminSave(payload).subscribe(
+        data => {
+          Swal.fire(
+            'Updated!',
+            '',
+            'success'
+          ),
+            this.getProductByEdit(this.ids);
+          this.activeUpdate = false;
+          this.productSubSubCategoryArray = []
+        }
+      );
+
+    } else {
+      Swal.fire(
+        'Updated!',
+        '',
+        'success'
+      );
+      this.activeUpdate = false;
+      this.productSubSubCategoryArray = []
+      this.getProductByEdit(this.ids);
+    }
+  }
+
   getSubcategory(cate) {
-
-
     for (let i = 0; i < this.productCategoryArray.length; i++) {
       if (this.productCategoryArray[i].name === cate) {
         const senDdata = {
@@ -725,8 +884,6 @@ export class EditProductsComponent implements OnInit {
   }
 
   manageAllSubCategory(data) {
-
-
     this.productSubCategoryArray = [];
     let cr = {};
     cr = {
@@ -756,16 +913,16 @@ export class EditProductsComponent implements OnInit {
     );
   }
 
-    managetSelecedProductByEdit(data, proCodeImg) {
-        this.getSubcategory(data.data.product.item_group);
-        // base info
-        this.baseInfo.get('Title').setValue(data.data.product.title);
-        this.productCode = data.data.product.product_code;
-        this.baseInfo.get('Brand').setValue(data.data.product.brand);
-        this.baseInfo.get('Manufacture').setValue(data.data.product.manufacture);
-        this.oldTitle = data.data.product.title;
-        this.oldBrand = data.data.product.brand;
-        this.oldManufacture = data.data.product.manufacture;
+  managetSelecedProductByEdit(data, proCodeImg) {
+    this.getSubcategory(data.data.product.item_group);
+    // base info
+    this.baseInfo.get('Title').setValue(data.data.product.title);
+    this.productCode = data.data.product.product_code;
+    this.baseInfo.get('Brand').setValue(data.data.product.brand);
+    this.baseInfo.get('Manufacture').setValue(data.data.product.manufacture);
+    this.oldTitle = data.data.product.title;
+    this.oldBrand = data.data.product.brand;
+    this.oldManufacture = data.data.product.manufacture;
 
     // description
     this.description.get('txt_description').setValue(data.data.product.productDescription.description);
@@ -776,7 +933,7 @@ export class EditProductsComponent implements OnInit {
     this.old_special_notes = data.data.product.productDescription.special_notes;
     this.old_availability = data.data.product.productDescription.availability.toUpperCase();
 
-    // category
+// category
     this.parts = data.data.category_path.split('> ');
     switch (this.parts.length) {
       case 1:
@@ -792,10 +949,6 @@ export class EditProductsComponent implements OnInit {
         this.category.get('Category3').setValue(this.parts[2]);
         break;
     }
-
-    // for (let i = 2; i <= this.parts.length; i++) {
-    //   this.category.get('Category' + i).setValue(this.parts[i - 1]);
-    // }
 
     //offer
     this.offer.get('txt_seller_sku').setValue(data.data.product.productOffer.seller_sku);
@@ -968,40 +1121,6 @@ export class EditProductsComponent implements OnInit {
 
   }
 
-  updateSubSubCategory() {
-    if (this.filteredSubSubCategory.length > 0) {
-      const payload = {
-        column: 'category_code',
-        tblname: 'product_basic_info',
-        value: this.filteredSubSubCategory[0].code,
-        whereClause: 'product_code',
-        whereValue: this.ids
-      }
-      this.productService.editAdminSave(payload).subscribe(
-        data => {
-          Swal.fire(
-            'Updated!',
-            '',
-            'success'
-          ),
-            this.getProductByEdit(this.ids);
-          this.activeUpdate = false;
-          this.productSubSubCategoryArray = []
-        }
-      );
-
-    } else {
-      Swal.fire(
-        'Updated!',
-        '',
-        'success'
-      );
-      this.activeUpdate = false;
-      this.productSubSubCategoryArray = []
-      this.getProductByEdit(this.ids);
-    }
-  }
-
   saveFieldBaseInfo() {
     let partnerId = sessionStorage.getItem('partnerId');
     let title = this.baseInfo.get('Title').value;
@@ -1044,25 +1163,25 @@ export class EditProductsComponent implements OnInit {
 
   }
 
-    private editFormControlMethode() {
-        // ----------- base info ---------------
-        this.baseInfo = new FormGroup({
-            Title: new FormControl(''),
-            Brand: new FormControl(''),
-            ProductCode: new FormControl(''),
-            Manufacture: new FormControl(''),
-        });
-        // ----------- Description ---------------
-        this.description = new FormGroup({
-            txt_description: new FormControl(''),
-            special_notes: new FormControl(''),
-            availability: new FormControl(''),
-        });
-        // ----------- Offer ---------------
-        this.offer = new FormGroup({
-            txt_seller_sku: new FormControl(''),
-            condition: new FormControl(''),
-        });
+  private editFormControlMethode() {
+    // ----------- base info ---------------
+    this.baseInfo = new FormGroup({
+      Title: new FormControl(''),
+      Brand: new FormControl(''),
+      ProductCode: new FormControl(''),
+      Manufacture: new FormControl(''),
+    });
+    // ----------- Description ---------------
+    this.description = new FormGroup({
+      txt_description: new FormControl(''),
+      special_notes: new FormControl(''),
+      availability: new FormControl(''),
+    });
+    // ----------- Offer ---------------
+    this.offer = new FormGroup({
+      txt_seller_sku: new FormControl(''),
+      condition: new FormControl(''),
+    });
 
     // -------------category-----------
     this.category = new FormGroup({
@@ -1227,39 +1346,39 @@ export class EditProductsComponent implements OnInit {
     );
   }
 
-    saveEditedImage() {
-        let one = this.imageCliant.get('fileSource').value;
-        let one2 = this.imageCliant.get('fileSource2').value;
-        let one3 = this.imageCliant.get('fileSource3').value;
-        let one4 = this.imageCliant.get('fileSource4').value;
-        let one5 = this.imageCliant.get('fileSource5').value;
-        const pricecc = new File([''], '');
-        if (one === '') {
+  saveEditedImage() {
+    let one = this.imageCliant.get('fileSource').value;
+    let one2 = this.imageCliant.get('fileSource2').value;
+    let one3 = this.imageCliant.get('fileSource3').value;
+    let one4 = this.imageCliant.get('fileSource4').value;
+    let one5 = this.imageCliant.get('fileSource5').value;
+    const pricecc = new File([''], '');
+    if (one === '') {
 
-            one = pricecc;
-        }
-
-        if (one2 === '') {
-            one2 = pricecc;
-        }
-
-        if (one3 === '') {
-            one3 = pricecc;
-        }
-
-        if (one4 === '') {
-            one4 = pricecc;
-        }
-
-        if (one5 === '') {
-            one5 = pricecc;
-        }
-
-        this.productService.editFieldImageSave(one, one2, one3, one4, one5, this.ids).subscribe(
-            data => this.successAlert(data),
-            error => this.mnageErrorProduct(error)
-        );
+      one = pricecc;
     }
+
+    if (one2 === '') {
+      one2 = pricecc;
+    }
+
+    if (one3 === '') {
+      one3 = pricecc;
+    }
+
+    if (one4 === '') {
+      one4 = pricecc;
+    }
+
+    if (one5 === '') {
+      one5 = pricecc;
+    }
+
+    this.productService.editFieldImageSave(one, one2, one3, one4, one5, this.ids).subscribe(
+      data => this.successAlert(data),
+      error => this.mnageErrorProduct(error)
+    );
+  }
 
 
   mnageErrorProduct(error) {
@@ -1277,4 +1396,7 @@ export class EditProductsComponent implements OnInit {
       'success'
     );
   }
+
+  protected readonly event = event;
+  protected readonly Event = Event;
 }
