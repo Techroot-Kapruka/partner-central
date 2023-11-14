@@ -508,6 +508,7 @@ export class NavService {
       this.items.value[1].children[2].title = '';
       this.items.value[1].children[2].type = '';
 
+
       if (data.data === null) {
         this.items.value.splice(0, 7);
       } else {
