@@ -5,7 +5,7 @@
         <div class="card-body tab2-card">
           <ngb-tabset class="tab-coupon">
 
-            <ngb-tab title="Edit Product Approval">
+            <ngb-tab [title]="editTabCount(1)">
               <ng-template ngbTabContent>
                 <div class="tab-pane fade active show" id="account2" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
@@ -24,94 +24,24 @@
                       <div class="col-md-9">
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
-                          <table class="table table-sm table-bordered">
-                            <thead class="table-primary">
-                            <tr>
-                              <th>Product Image</th>
-                              <th>Title</th>
-                              <th>Requested Date</th>
-                              <th>Request By</th>
-                              <th>Action</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            <ng-container *ngIf="filterededitProductApproval.length > 0; else paginatedDataEditProduct">
-                              <tr *ngFor="let nonActiveProduct of (paginatedEditProApproval.length > 0 ? paginatedEditProApproval : filterededitProductApproval); let j = index;">
-                                <td align="center">
-                                  <img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"
-                                       width="60px"
-                                       (error)="onImageError($event)"/>
-                                </td>
-                                <td><p style="margin: 0px; font-size: 16px; color: #000">{{
-                                  nonActiveProduct.title}}</p>
-                                  <p style="margin: 0px;font-size: 16px; color: #000">{{
-                                    nonActiveProduct.productCode }}</p>
-                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.categoryPath}}</p>
-                                </td>
-                                <td>
-                                  {{nonActiveProduct.requestedDate}}
-                                </td>
-                                <td>
-                                  {{nonActiveProduct.requestBy}}
-                                </td>
-                                <td>
-                                  <button type="button" (click)='ApproveEditProduct(j)'
-                                          style="width: 96px;height: 28px;font-size: 10px;"
-                                          class="btn btn-outline-success">View
-                                  </button>
-                                </td>
-                              </tr>
-                            </ng-container>
-
-                            <ng-template #paginatedDataEditProduct>
-                              <tr
-                                *ngFor="let nonActiveProduct of (paginatedEditProApproval.length > 0 ? paginatedEditProApproval : nonActiveEditedProductsArray); let j = index;">
-                                <td align="center">
-                                  <img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"
-                                       width="60px"
-                                       (error)="onImageError($event)"/>
-                                </td>
-                                <td><p style="margin: 0px; font-size: 16px; color: #000">{{
-                                  nonActiveProduct.title}}</p>
-                                  <p style="margin: 0px;font-size: 16px; color: #000">{{
-                                    nonActiveProduct.productCode }}</p>
-                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.categoryPath}}</p>
-                                </td>
-                                <td>
-                                  {{nonActiveProduct.requestedDate}}
-                                </td>
-                                <td>
-                                  {{nonActiveProduct.requestBy}}
-                                </td>
-                                <td>
-                                  <button type="button" (click)='ApproveEditProduct(j)'
-                                          style="width: 96px;height: 28px;font-size: 10px;"
-                                          class="btn btn-outline-success">View
-                                  </button>
-                                </td>
-                              </tr>
-
-                            </ng-template>
-
-                            </tbody>
-                          </table>
+                          <app-table-template [HeadArray]="headEditProduct" [DataArray]="paginatedEditProApproval.length > 0 ? paginatedEditProApproval : nonActiveEditedProductsArray"
+                                [editTab]="editTab" (onEditProduct)="ApproveEditProduct($event)"> </app-table-template>
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="pull-right" style="margin-top: 15px">
                     <app-pagination
-                      [currentPage]="currentPageEditProApproval"
-                      [totalPages]="totalPagesEditProApproval"
-                      (pageChange)="onPageChange($event,'EditProApproval')"
+                            [currentPage]="currentPageEditProApproval"
+                            [totalPages]="totalPagesEditProApproval"
+                            (pageChange)="onPageChange($event,'EditProApproval')"
                     ></app-pagination>
                   </div>
                 </div>
               </ng-template>
             </ngb-tab>
 
-            <ngb-tab title="Edit Image Approval" >
+            <ngb-tab [title]="editTabCount(2)" >
               <ng-template ngbTabContent>
                 <div class="tab-pane fade active show" id="account2" role="tabpanel" aria-labelledby="account-tab">
                   <div class="custom-datatable">
@@ -125,84 +55,219 @@
                     <div class="col-md-9">
                       <div class="row table-responsive"
                            style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
-                        <table class="table table-sm table-bordered">
-                          <thead class="table-primary">
-                          <tr>
-                            <th>Title</th>
-                            <th>Requested Date</th>
-                            <th>Request By</th>
-                            <th>Action</th>
-                          </tr>
-                          </thead>
-                          <tbody>
-
-                          <ng-container *ngIf="filterdEditImgApproval.length > 0; else paginatedDataEditImage">
-                            <tr *ngFor="let nonActiveProduct of (paginatedEditImgApproval.length > 0 ? paginatedEditImgApproval : filterdEditImgApproval); let j = index;">
-                              <td><p
-                                style="margin: 0px; font-size: 16px; color: #000">{{
-                                nonActiveProduct.title}}</p>
-                                <p
-                                  style="margin: 0px;font-size: 16px; color: #000">{{
-                                  nonActiveProduct.productCode }}</p>
-                                <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp;
-                                  &nbsp;{{nonActiveProduct.catePath}}</p>
-                              </td>
-                              <td>
-                                {{nonActiveProduct.requestedDate}}
-                              </td>
-                              <td>
-                                {{nonActiveProduct.requestBy}}
-                              </td>
-                              <td>
-                                <button type="button" (click)='ApproveEditImageProduct(j)'
-                                        style="width: 96px;height: 28px;font-size: 10px;"
-                                        class="btn btn-outline-success">View
-                                </button>
-                              </td>
-                            </tr>
-                          </ng-container>
-
-                          <ng-template #paginatedDataEditImage>
-                            <tr
-                              *ngFor="let nonActiveProduct of (paginatedEditImgApproval.length > 0 ? paginatedEditImgApproval : nonActiveEditedImagesArray); let j = index;">
-                              <td><p
-                                style="margin: 0px; font-size: 16px; color: #000">{{
-                                nonActiveProduct.title}}</p>
-                                <p
-                                  style="margin: 0px;font-size: 16px; color: #000">{{
-                                  nonActiveProduct.productCode }}</p>
-                                <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp;
-                                  &nbsp;{{nonActiveProduct.catePath}}</p>
-                              </td>
-                              <td>
-                                {{nonActiveProduct.requestedDate}}
-                              </td>
-                              <td>
-                                {{nonActiveProduct.requestBy}}
-                              </td>
-                              <td>
-                                <button type="button" (click)='ApproveEditImageProduct(j)'
-                                        style="width: 96px;height: 28px;font-size: 10px;"
-                                        class="btn btn-outline-success">View
-                                </button>
-                              </td>
-                            </tr>
-
-                          </ng-template>
-
-                          </tbody>
-                        </table>
+                        <app-table-template [HeadArray]="headEditProduct" [DataArray]="paginatedEditImgApproval.length > 0 ? paginatedEditImgApproval : nonActiveEditedImagesArray"
+                                            [editTab]="editTab" (onEditProduct)="ApproveEditImageProduct($event)"> </app-table-template>
                       </div>
                       <app-pagination
-                        [currentPage]="currentPageEditImgApproval"
-                        [totalPages]="totalPagesEditImgApproval"
-                        (pageChange)="onPageChange($event,'EditImgApproval')"
+                              [currentPage]="currentPageEditImgApproval"
+                              [totalPages]="totalPagesEditImgApproval"
+                              (pageChange)="onPageChange($event,'EditImgApproval')"
                       ></app-pagination>
                     </div>
                   </div>
                 </div>
               </ng-template>
             </ngb-tab>
+
+<!--            old-->
+<!--            <ngb-tab title="Edit Product Approval">-->
+<!--              <ng-template ngbTabContent>-->
+<!--                <div class="tab-pane fade active show" id="account2" role="tabpanel" aria-labelledby="account-tab">-->
+<!--                  <div class="custom-datatable">-->
+<!--                    <div class="row">-->
+<!--                      <div class="col-md-6">-->
+<!--                        <input autofocus type="text" class="form-control" placeholder="Search By Product Name..."-->
+<!--                               (input)="editProductApprovalFilter($event.target.value)" style="width: 60%"/>-->
+<!--                      </div>-->
+<!--                      <div class="col-md-6">-->
+<!--                        <input autofocus type="text" class="form-control" placeholder="Search By Requested Name..."-->
+<!--                               (input)="editProductApprovalFilter($event.target.value)" style="width: 60%"/>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="clearfix"></div>-->
+<!--                    <div class="row">-->
+<!--                      <div class="col-md-9">-->
+<!--                        <div class="row table-responsive"-->
+<!--                             style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">-->
+<!--                          <table class="table table-sm table-bordered">-->
+<!--                            <thead class="table-primary">-->
+<!--                            <tr>-->
+<!--                              <th>Product Image</th>-->
+<!--                              <th>Title</th>-->
+<!--                              <th>Requested Date</th>-->
+<!--                              <th>Request By</th>-->
+<!--                              <th>Action</th>-->
+<!--                            </tr>-->
+<!--                            </thead>-->
+<!--                            <tbody>-->
+
+<!--                            <ng-container *ngIf="filterededitProductApproval.length > 0; else paginatedDataEditProduct">-->
+<!--                              <tr *ngFor="let nonActiveProduct of (paginatedEditProApproval.length > 0 ? paginatedEditProApproval : filterededitProductApproval); let j = index;">-->
+<!--                                <td align="center">-->
+<!--                                  <img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"-->
+<!--                                       width="60px"-->
+<!--                                       (error)="onImageError($event)"/>-->
+<!--                                </td>-->
+<!--                                <td><p style="margin: 0px; font-size: 16px; color: #000">{{-->
+<!--                                  nonActiveProduct.title}}</p>-->
+<!--                                  <p style="margin: 0px;font-size: 16px; color: #000">{{-->
+<!--                                    nonActiveProduct.productCode }}</p>-->
+<!--                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.categoryPath}}</p>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                  {{nonActiveProduct.requestedDate}}-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                  {{nonActiveProduct.requestBy}}-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                  <button type="button" (click)='ApproveEditProduct(j)'-->
+<!--                                          style="width: 96px;height: 28px;font-size: 10px;"-->
+<!--                                          class="btn btn-outline-success">View-->
+<!--                                  </button>-->
+<!--                                </td>-->
+<!--                              </tr>-->
+<!--                            </ng-container>-->
+
+<!--                            <ng-template #paginatedDataEditProduct>-->
+<!--                              <tr-->
+<!--                                      *ngFor="let nonActiveProduct of (paginatedEditProApproval.length > 0 ? paginatedEditProApproval : nonActiveEditedProductsArray); let j = index;">-->
+<!--                                <td align="center">-->
+<!--                                  <img src="{{ imagePathURI + nonActiveProduct.image }}" height="60px"-->
+<!--                                       width="60px"-->
+<!--                                       (error)="onImageError($event)"/>-->
+<!--                                </td>-->
+<!--                                <td><p style="margin: 0px; font-size: 16px; color: #000">{{-->
+<!--                                  nonActiveProduct.title}}</p>-->
+<!--                                  <p style="margin: 0px;font-size: 16px; color: #000">{{-->
+<!--                                    nonActiveProduct.productCode }}</p>-->
+<!--                                  <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp; &nbsp;{{nonActiveProduct.categoryPath}}</p>-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                  {{nonActiveProduct.requestedDate}}-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                  {{nonActiveProduct.requestBy}}-->
+<!--                                </td>-->
+<!--                                <td>-->
+<!--                                  <button type="button" (click)='ApproveEditProduct(j)'-->
+<!--                                          style="width: 96px;height: 28px;font-size: 10px;"-->
+<!--                                          class="btn btn-outline-success">View-->
+<!--                                  </button>-->
+<!--                                </td>-->
+<!--                              </tr>-->
+
+<!--                            </ng-template>-->
+
+<!--                            </tbody>-->
+<!--                          </table>-->
+<!--                        </div>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <div class="pull-right" style="margin-top: 15px">-->
+<!--                    <app-pagination-->
+<!--                            [currentPage]="currentPageEditProApproval"-->
+<!--                            [totalPages]="totalPagesEditProApproval"-->
+<!--                            (pageChange)="onPageChange($event,'EditProApproval')"-->
+<!--                    ></app-pagination>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </ng-template>-->
+<!--            </ngb-tab>-->
+
+<!--            <ngb-tab title="Edit Image Approval" >-->
+<!--              <ng-template ngbTabContent>-->
+<!--                <div class="tab-pane fade active show" id="account2" role="tabpanel" aria-labelledby="account-tab">-->
+<!--                  <div class="custom-datatable">-->
+<!--                    <div class="clearfix"></div>-->
+<!--                    <div class="row">-->
+<!--                      <div class="col-md-6">-->
+<!--                        <input autofocus type="text" class="form-control" placeholder="Search"-->
+<!--                               (input)="editImgApprovalFilter($event.target.value)" style="width: 60%"/>-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                    <div class="col-md-9">-->
+<!--                      <div class="row table-responsive"-->
+<!--                           style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">-->
+<!--                        <table class="table table-sm table-bordered">-->
+<!--                          <thead class="table-primary">-->
+<!--                          <tr>-->
+<!--                            <th>Title</th>-->
+<!--                            <th>Requested Date</th>-->
+<!--                            <th>Request By</th>-->
+<!--                            <th>Action</th>-->
+<!--                          </tr>-->
+<!--                          </thead>-->
+<!--                          <tbody>-->
+
+<!--                          <ng-container *ngIf="filterdEditImgApproval.length > 0; else paginatedDataEditImage">-->
+<!--                            <tr *ngFor="let nonActiveProduct of (paginatedEditImgApproval.length > 0 ? paginatedEditImgApproval : filterdEditImgApproval); let j = index;">-->
+<!--                              <td><p-->
+<!--                                      style="margin: 0px; font-size: 16px; color: #000">{{-->
+<!--                                nonActiveProduct.title}}</p>-->
+<!--                                <p-->
+<!--                                        style="margin: 0px;font-size: 16px; color: #000">{{-->
+<!--                                  nonActiveProduct.productCode }}</p>-->
+<!--                                <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp;-->
+<!--                                  &nbsp;{{nonActiveProduct.catePath}}</p>-->
+<!--                              </td>-->
+<!--                              <td>-->
+<!--                                {{nonActiveProduct.requestedDate}}-->
+<!--                              </td>-->
+<!--                              <td>-->
+<!--                                {{nonActiveProduct.requestBy}}-->
+<!--                              </td>-->
+<!--                              <td>-->
+<!--                                <button type="button" (click)='ApproveEditImageProduct(j)'-->
+<!--                                        style="width: 96px;height: 28px;font-size: 10px;"-->
+<!--                                        class="btn btn-outline-success">View-->
+<!--                                </button>-->
+<!--                              </td>-->
+<!--                            </tr>-->
+<!--                          </ng-container>-->
+
+<!--                          <ng-template #paginatedDataEditImage>-->
+<!--                            <tr-->
+<!--                                    *ngFor="let nonActiveProduct of (paginatedEditImgApproval.length > 0 ? paginatedEditImgApproval : nonActiveEditedImagesArray); let j = index;">-->
+<!--                              <td><p-->
+<!--                                      style="margin: 0px; font-size: 16px; color: #000">{{-->
+<!--                                nonActiveProduct.title}}</p>-->
+<!--                                <p-->
+<!--                                        style="margin: 0px;font-size: 16px; color: #000">{{-->
+<!--                                  nonActiveProduct.productCode }}</p>-->
+<!--                                <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp;-->
+<!--                                  &nbsp;{{nonActiveProduct.catePath}}</p>-->
+<!--                              </td>-->
+<!--                              <td>-->
+<!--                                {{nonActiveProduct.requestedDate}}-->
+<!--                              </td>-->
+<!--                              <td>-->
+<!--                                {{nonActiveProduct.requestBy}}-->
+<!--                              </td>-->
+<!--                              <td>-->
+<!--                                <button type="button" (click)='ApproveEditImageProduct(j)'-->
+<!--                                        style="width: 96px;height: 28px;font-size: 10px;"-->
+<!--                                        class="btn btn-outline-success">View-->
+<!--                                </button>-->
+<!--                              </td>-->
+<!--                            </tr>-->
+
+<!--                          </ng-template>-->
+
+<!--                          </tbody>-->
+<!--                        </table>-->
+<!--                      </div>-->
+<!--                      <app-pagination-->
+<!--                              [currentPage]="currentPageEditImgApproval"-->
+<!--                              [totalPages]="totalPagesEditImgApproval"-->
+<!--                              (pageChange)="onPageChange($event,'EditImgApproval')"-->
+<!--                      ></app-pagination>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--              </ng-template>-->
+<!--            </ngb-tab>-->
 
           </ngb-tabset>
         </div>

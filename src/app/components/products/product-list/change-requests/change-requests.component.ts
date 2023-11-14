@@ -30,14 +30,9 @@ export class ChangeRequestsComponent implements OnInit {
 
   public selected = [];
   public product = [];
-  public paginatedPendingItems = [];
-  public paginatedPendingQC = [];
   public isAdmin = false;
   public isPartner = false;
-  public categoryUID = '';
-  public qaTables = false;
-  public EnablePriceEdit = false;
-  public EnableStockEdit = false;
+  public editTab = false;
 
   public imagedefaultPathURI = '';
   imageUrl: any;
@@ -47,6 +42,8 @@ export class ChangeRequestsComponent implements OnInit {
   currentPageEditImgApproval = 1; // Current page
   totalPages = 0; // Total number of pages
 
+  public headEditProduct = [];
+  public headEditImg = [];
   constructor(private productService: ProductService, private router: Router) {
     this.getFieldEditData();
 
@@ -91,6 +88,14 @@ export class ChangeRequestsComponent implements OnInit {
       };
       this.nonActiveEditedProductsArray.push(payloard);
     }
+    this.editTab = true;
+    this.headEditProduct=[
+      {'Head': 'Image', 'FieldName' : 'image' },
+      {'Head': 'Title',  'FieldName' : 'title' },
+      {'Head': 'Requested Date', 'FieldName':'in_stock' },
+      {'Head': 'Requested By', 'FieldName':'createDate' },
+      {'Head': 'Action',  'FieldName':'' },
+    ]
     this.totalPagesEditProApproval = Math.ceil(this.nonActiveEditedProductsArray.length / this.list_pages2);
     this.onPageChange(1,'EditProApproval');
   }
@@ -104,7 +109,7 @@ export class ChangeRequestsComponent implements OnInit {
         editId: data.data[i].editId,
         requestedDate: data.data[i].requestedDate,
         title: data.data[i].title,
-        catePath: data.data[i].catePath,
+        categoryPath: data.data[i].catePath,
         action: ''
 
       };
@@ -114,8 +119,6 @@ export class ChangeRequestsComponent implements OnInit {
 
       this.nonActiveEditedImagesArray.push(payloard);
     }
-    console.log('img data!!!!!!!!!!')
-    console.log(this.nonActiveEditedImagesArray)
     this.totalPagesEditImgApproval = Math.ceil(this.nonActiveEditedImagesArray.length / this.list_pages2);
     this.onPageChange(1,'EditImgApproval');
   }
@@ -179,43 +182,38 @@ export class ChangeRequestsComponent implements OnInit {
   }
 
   // click events
-  ApproveEditProduct(i) {
-
-    if (this.filterededitProductApproval.length > 0) {
-      const product_code = this.filterededitProductApproval[this.startIndex + i].productCode;
-      const unique_code = this.filterededitProductApproval[this.startIndex + i].unique_code;
-      const sub_type = this.filterededitProductApproval[this.startIndex + i].subType;
+  ApproveEditProduct(event) {
+      const product_code = event.productCode;
+      const unique_code = event.unique_code;
+      const sub_type = event.subType;
       const ProDetails = product_code + '-' + unique_code + '-' + sub_type;
       this.router.navigate(['products/digital/edited-approve-product/' + ProDetails]);
-    } else {
-      const product_code = this.nonActiveEditedProductsArray[this.startIndex + i].productCode;
-      const unique_code = this.nonActiveEditedProductsArray[this.startIndex + i].unique_code;
-      const sub_type = this.nonActiveEditedProductsArray[this.startIndex + i].subType;
-      const ProDetails = product_code + '-' + unique_code + '-' + sub_type;
-      this.router.navigate(['products/digital/edited-approve-product/' + ProDetails]);
-    }
   }
 
-  ApproveEditImageProduct(rowIndex) {
-    if(this.filterdEditImgApproval.length > 0){
-      const url = 'products/digital/edited-image-approve-product/' + this.filterdEditImgApproval[this.startIndex + rowIndex].productCode;
+  ApproveEditImageProduct(event) {
+      const url = 'products/digital/edited-image-approve-product/' + event.productCode;
       this.router.navigate([url], {
         queryParams: {
-          product_code: this.product_code,
-          unique_code: this.filterdEditImgApproval[this.startIndex+rowIndex].editId,
-          requested_by: this.filterdEditImgApproval[this.startIndex+rowIndex].requestBy
+          product_code: event.productCode,
+          unique_code: event.editId,
+          requested_by: event.requestBy
         }
       });
-    }else{
-      const url = 'products/digital/edited-image-approve-product/' + this.nonActiveEditedImagesArray[this.startIndex+rowIndex].productCode;
-      this.router.navigate([url], {
-        queryParams: {
-          product_code: this.product_code,
-          unique_code: this.nonActiveEditedImagesArray[this.startIndex+rowIndex].editId,
-          requested_by: this.nonActiveEditedImagesArray[this.startIndex+rowIndex].requestBy
-        }
-      });
-    }
+  }
 
+  editTabCount(x){
+    let count;
+    switch (x) {
+      case 1:
+        count = this.nonActiveEditedProductsArray.length;
+        return `Edit Product Approval (${count})`;
+        break;
+      case 2:
+        count = this.nonActiveEditedImagesArray.length;
+        return `Edit Image Approval (${count})`;
+        break;
+      default:
+        console.log('Unknown input');
+    }
   }
 }
