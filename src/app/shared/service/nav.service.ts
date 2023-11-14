@@ -64,6 +64,7 @@ export class NavService {
       children: [
         {path: '/products/digital/digital-product-list', title: 'Product List', type: 'link'},
         {path: '/products/digital/digital-add-product', title: 'Add Product', type: 'link'},
+
         {path: '/filess/file', title: 'Bulk upload', type: 'link'},
 
         // new Added thingsss
@@ -159,7 +160,8 @@ export class NavService {
       children: [
         {path: '/report/category-report', title: 'Category Report', type: 'link'},
         {path: '/report/product-report', title: 'Product Report', type: 'link'},
-        {path: '/report/supplier-report', title: 'Supplier Report', type: 'link'}
+        {path: '/report/supplier-report', title: 'Supplier Report', type: 'link'},
+        {path: '/products/digital/analytics-product-view', title: 'Product Analytics', type: 'link'},
       ]
     },
 
@@ -374,6 +376,7 @@ export class NavService {
   }
 
   manageAdmin() {
+    console.log(this.items)
 
     //category
     this.items.value[1].path = '';
@@ -421,6 +424,11 @@ export class NavService {
     this.items.value[9].icon = '';
     this.items.value[9].title = '';
     this.items.value[9].type = '';
+
+    this.items.value[11].children[3].path = '';
+    this.items.value[11].children[3].title = '';
+    this.items.value[11].children[3].type = '';
+
 
     // this.items.value[12].icon = '';
     // this.items.value[12].title = '';
@@ -582,9 +590,9 @@ export class NavService {
     this.items.value[5].title = '';
     this.items.value[5].type = '';
 
-    this.items.value[9].icon = '';
-    this.items.value[9].title = '';
-    this.items.value[9].type = '';
+    // this.items.value[9].icon = '';
+    // this.items.value[9].title = '';
+    // this.items.value[9].type = '';
 
     this.items.value[9].children[0].path = '';
     this.items.value[9].children[0].title = '';
