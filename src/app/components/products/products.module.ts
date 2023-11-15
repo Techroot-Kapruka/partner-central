@@ -62,12 +62,12 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
         AngularEditorModule,
         SelectModule,
         NgxSkeletonLoaderModule,
-
+      SharedModule,
     ],
     exports: [
-        PaginationComponent
+        PaginationComponent,
 
-        SharedModule,
+
 
     ],
     providers: [
