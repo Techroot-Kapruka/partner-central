@@ -16,6 +16,9 @@ import {BreadcrumbComponent} from './components/breadcrumb/breadcrumb.component'
 import {RightSidebarComponent} from './components/right-sidebar/right-sidebar.component';
 import {PaymentService} from './service/payment.service';
 import {ProgressBarComponent} from './components/progress-bar/progress-bar.component';
+import { TableTemplateComponent } from './table-template/table-template.component';
+import {FormsModule} from "@angular/forms";
+import {NgxSkeletonLoaderModule} from "ngx-skeleton-loader";
 
 @NgModule({
   declarations: [
@@ -28,13 +31,16 @@ import {ProgressBarComponent} from './components/progress-bar/progress-bar.compo
     BreadcrumbComponent,
     RightSidebarComponent,
       ProgressBarComponent,
+      TableTemplateComponent,
   ],
-  imports: [
-    CommonModule,
-    RouterModule
-  ],
+    imports: [
+        CommonModule,
+        RouterModule,
+        FormsModule,
+        NgxSkeletonLoaderModule,
+    ],
   providers: [NavService, WINDOW_PROVIDERS, PaymentService],
-  exports: [FeatherIconsComponent, ToggleFullscreenDirective, ProgressBarComponent, ProgressBarComponent]
+    exports: [FeatherIconsComponent, ToggleFullscreenDirective, ProgressBarComponent, ProgressBarComponent, TableTemplateComponent]
 })
 export class SharedModule {
 }
