@@ -21,52 +21,9 @@
                     </div>
                     <div class="clearfix"></div>
                     <div *ngIf="isRecievedShipmentValid">
-                      <ngx-datatable class="bootstrap expandable" [rows]="recivedShipmentArray" [columnMode]="'force'"
-                                     [headerHeight]="50"
-                                     [footerHeight]="50" [rowHeight]="'auto'" [limit]="shipmentRowCount"
-                                     [selected]="selected"
-                                     [selectionType]="false" [selectAllRowsOnPage]="false">
-                        <ngx-datatable-column name="Shipment Id" [width]="25"></ngx-datatable-column>
-                        <ngx-datatable-column *ngIf="isAdmin" name="Business Name" [width]="30"></ngx-datatable-column>
-                        <ngx-datatable-column name="Create Date" [width]="40"></ngx-datatable-column>
-                        <ngx-datatable-column name="Total Quantity" [width]="25"></ngx-datatable-column>
-                        <ngx-datatable-column *ngIf="!isAdmin" name="Gross Amount" [width]="30"></ngx-datatable-column>
-                        <ngx-datatable-column *ngIf="isAdmin" name="Approved Quantity"
-                                              [width]="55"></ngx-datatable-column>
-                        <ngx-datatable-column *ngIf="isAdmin" name="Approved Amount"
-                                              [width]="50"></ngx-datatable-column>
-                        <!--<ngx-datatable-column name="Gross Amount" [width]="30"></ngx-datatable-column>-->
-                        <ngx-datatable-column *ngIf="isAdmin" name="Received" prop="name" [width]="10">
-                          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                       let-row="row">
-                            <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
-                            <button type="button"
-                                    style="width: 55px;height: 23px;font-size: 10px; background-color: green; color: white;font-weight: bold;text-align: center;">
-                              YES
-                            </button>
-                          </ng-template>
-                        </ngx-datatable-column>
-                        <ngx-datatable-column *ngIf="!isAdmin" name="Received" prop="name" [width]="10">
-                          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                       let-row="row">
-                            <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
-                            <button type="button"
-                                    style="width: 55px;height: 23px;font-size: 10px; background-color: green"
-                                    class="btn btn-outline-success"></button>
-                          </ng-template>
-                        </ngx-datatable-column>
-                        <!--<ngx-datatable-column name="Approved"></ngx-datatable-column>-->
-                        <ngx-datatable-column name="Action" prop="name" [width]="10">
-                          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                       let-row="row">
-                            <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
-                            <button type="button" (click)='viewRecivedShipment(rowIndex)'
-                                    style="width: 96px;height: 28px;font-size: 10px;" class="btn btn-outline-success">
-                              View
-                            </button>
-                          </ng-template>
-                        </ngx-datatable-column>
-                      </ngx-datatable>
+                      <app-common-table [showActionButton]="true" [tableData]="recivedShipmentArray" [lengthOfArray]="recivedShipmentArray.length"
+                                        [columnArray]="columnArray" (onEdit)="viewRecivedShipment($event)">
+                      </app-common-table>
                     </div>
                   </div>
                 </div>

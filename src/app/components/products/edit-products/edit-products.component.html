@@ -27,17 +27,16 @@
                 <form [formGroup]="baseInfo" (ngSubmit)="saveFieldBaseInfo()">
                   <div class="digital-add needs-validation">
                     <div class="form-group">
+                      <label for="txt_title" class="col-form-label pt-0"> Product Code: </label>
+                        <h3 ><span class="badge badge-primary">{{productCode}}</span></h3>
+                    </div>
+                    <div class="form-group">
                       <label for="txt_title" class="col-form-label pt-0"> Title</label>
                       <input class="form-control" formControlName="Title" id="txt_title" type="text" required="">
                     </div>
                     <div class="form-group">
                       <label for="txt_brand" class="col-form-label">Brand</label>
                       <input class="form-control" formControlName="Brand" id="txt_brand" type="text" required="">
-                    </div>
-                    <div class="form-group">
-                      <label for="txt_manufacture" class="col-form-label">Manufacture</label>
-                      <input class="form-control" formControlName="Manufacture" id="txt_manufacture" type="text"
-                             required="">
                     </div>
                     <div class="form-group" *ngIf="!isAdmin">
                       <button class="btn btn-primary pull-right" type="submit" style="margin-bottom: 30px;">Save
@@ -61,7 +60,7 @@
 
                     <div class="form-group">
                       <label class="col-form-label">Description</label>
-<!--                      <textarea formControlName="txt_description" id="txt_description" rows="4" cols="12"></textarea>-->
+                      <!--                      <textarea formControlName="txt_description" id="txt_description" rows="4" cols="12"></textarea>-->
                       <ng-container *ngTemplateOutlet="myComponentTemplate"
                       ></ng-container>
                       <textarea hidden class="form-control" formControlName="txt_description" id="txt_description"
@@ -78,16 +77,6 @@
                       <button class="btn btn-primary pull-right" type="submit" style="margin-bottom: 30px;">UPDATE
                       </button>
                     </div>
-
-                    <div class="form-group">
-                      <label class="col-form-label"> Available</label>
-                      <select class="custom-select" formControlName="availability" id="availability" required="" disabled>
-                        <option value="">--Select--</option>
-                        <option value="YES">Yes</option>
-                        <option value="NO">No</option>
-                      </select>
-                    </div>
-
 
                   </div>
                 </form>
@@ -126,52 +115,6 @@
           </ng-template>
         </ngb-tab>
 
-        <!--        Offer Tab-->
-        <ngb-tab title="Product">
-
-          <ng-template ngbTabContent>
-            <div class="tab-pane fade active show" role="tabpanel" aria-labelledby="account-tab">
-              <div class="card-body">
-                <form [formGroup]="offer" (ngSubmit)="saveOfferFields()">
-                  <div class="digital-add needs-validation">
-                    <div class="form-group">
-                      <label for="txt_seller_sku" class="col-form-label pt-0">Seller SKU</label>
-                      <input class="form-control" formControlName="txt_seller_sku" id="txt_seller_sku" type="text"
-                             required="">
-                    </div>
-                    <div class="form-group">
-                      <label class="col-form-label"> Condition</label>
-                      <select class="custom-select" style="color: #000000" formControlName="condition" id="condition">
-                        <option value="">--Select--</option>
-                        <option value="Brand New">Brand New</option>
-                        <option value="Used - Good">Used - Good</option>
-                        <option value="Used - Like New">Used - Like New</option>
-                        <option value="not damage">not damage</option>
-                      </select>
-                    </div>
-                    <div class="form-group" id="treePriceCol">
-                      <div class="row">
-                        <div class="row">
-                          <div style="display: none;" class="col" id="condition2">
-                            <h4 style="color: red;font-size: small;margin-top: 2%;margin-bottom: 2%">*
-                              Condition</h4>
-                            <p style="color: black;font-size: medium">Final selling price should be equal or greater
-                              than LKR
-                              {{amountBefor}}.</p>
-                          </div>
-                        </div>
-
-                      </div>
-                    </div>
-                  </div>
-                </form>
-
-              </div>
-            </div>
-          </ng-template>
-
-        </ngb-tab>
-
         <!--        Images Tab-->
         <ngb-tab title="Images">
           <ng-template ngbTabContent>
@@ -186,38 +129,51 @@
                             <!--=========================-->
                             <li>
                               <div class="box-input-file">
-                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
-                                <input class="upload" id="image01" type="file" formControlName="fileSource"
-                                       (change)="!isAdmin && changeValue($event, 1)" (click)="!isAdmin && loadimg(1)">
-                                <img class="imgUpload" id="imageOneO" alt="" src="{{imagePathURI+imageOne}}">
+<!--                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">-->
+                                <img class="imgUpload" id="imageOneO" alt="" src="{{imagePathURI+imageOne}}" (click)="loadimg(1)" >
+                              </div>
+                              <div style="display: flex; justify-content: center; align-items: center;margin-top: 5%" *ngIf="!isAdmin">
+                                <label for="image01" class="upload-button btn btn-light" style="text-align: center"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></label>
+                                <input id="image01" class="upload" type="file" formControlName="imageOne" accept="image/jpeg" style="display: none;" (change)="changeValue($event, 1)">
+
                               </div>
                             </li>
 
                             <li>
                               <div class="box-input-file" *ngIf="imageOne2">
-                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
-                                <input class="upload" type="file" formControlName="fileSource2"
-                                       (change)="!isAdmin && changeValue2($event)" (click)="!isAdmin && loadimg(2)">
-                                <img class="imgUpload" id="imageTwoO" alt="" src="{{imagePathURI+imageOne2}}">
+<!--                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">-->
+
+                                <img class="imgUpload" id="imageTwoO" alt="" src="{{imagePathURI+imageOne2}}" (click)="loadimg(2)">
+                              </div>
+                              <div *ngIf="imageOne2 && !isAdmin" style="display: flex; justify-content: center; align-items: center;margin-top: 5%">
+                                <label for="image02" class="upload-button btn btn-light" style="text-align: center"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></label>
+                                <input id="image02" class="upload" type="file" formControlName="imageOne2" accept="image/jpeg" style="display: none;" (change)="changeValue2($event)">
+
                               </div>
                             </li>
 
                             <li>
                               <div class="box-input-file" *ngIf="imageOne3">
-                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
-                                <input class="upload" type="file" formControlName="fileSource3"
-                                       (change)="!isAdmin && changeValue3($event)" (click)="!isAdmin && loadimg(3)">
-                                <img class="imgUpload" id="imageTreeE" alt="" src="{{imagePathURI+imageOne3}}">
+<!--                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">-->
+                                <img class="imgUpload" id="imageTreeE" alt="" src="{{imagePathURI+imageOne3}}" (click)="loadimg(3)">
+
+                              </div>
+                              <div *ngIf="imageOne3 && !isAdmin" style="display: flex; justify-content: center; align-items: center;margin-top: 5%">
+                                <label for="image03" class="upload-button btn btn-light" style="text-align: center"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></label>
+                                <input id="image03" class="upload" type="file" formControlName="imageOne3" accept="image/jpeg" style="display: none;" (change)="changeValue3($event)">
 
                               </div>
                             </li>
 
                             <li>
                               <div class="box-input-file" *ngIf="imageOne4">
-                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
-                                <input class="upload" type="file" formControlName="fileSource4"
-                                       (change)="!isAdmin && changeValue4($event)" (click)="!isAdmin && loadimg(4)">
-                                <img class="imgUpload" id="imageFourR" alt="" src="{{imagePathURI+imageOne4}}">
+<!--                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">-->
+                                <img class="imgUpload" id="imageFourR" alt="" src="{{imagePathURI+imageOne4}}" (click)="loadimg(4)">
+
+                              </div>
+                              <div *ngIf="imageOne4 && !isAdmin" style="display: flex; justify-content: center; align-items: center;margin-top: 5%">
+                                <label for="image04" class="upload-button btn btn-light" style="text-align: center"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></label>
+                                <input id="image04" class="upload" type="file" formControlName="imageOne4" accept="image/jpeg" style="display: none;" (change)="changeValue4($event)">
 
                               </div>
                             </li>
@@ -225,11 +181,13 @@
 
                             <li>
                               <div class="box-input-file" *ngIf="imageOne5">
-                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">
-                                <input class="upload" type="file" formControlName="fileSource5"
-                                       (change)="!isAdmin && changeValue5($event)" (click)="!isAdmin && loadimg(5)">
-                                <img class="imgUpload" id="imageFiveE" alt="" src="{{imagePathURI+imageOne5}}">
+<!--                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">-->
+                                <img class="imgUpload" id="imageFiveE" alt="" src="{{imagePathURI+imageOne5}}" (click)="loadimg(5)">
 
+                              </div>
+                              <div *ngIf="imageOne5 && !isAdmin" style="display: flex; justify-content: center; align-items: center;margin-top: 5%">
+                                <label for="image05" class="upload-button btn btn-light" style="text-align: center"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></label>
+                                <input id="image05" class="upload" type="file" formControlName="imageOne5" accept="image/jpeg" style="display: none;" (change)="changeValue5($event)" >
                               </div>
                             </li>
                             <!--=============================-->
@@ -238,11 +196,11 @@
                         <!--</div>-->
                       </div>
                     </div>
-                    <div class="row">
-                      <div class="col-xl-9 xl-50 col-sm-6 col-9">
-                        <img id="mainImage" src="{{imagePathURI+selectedimg}}" alt="" class="img-fluid image_zoom_1">
-                      </div>
-                    </div>
+<!--                    <div class="row">-->
+<!--                      <div class="col-xl-9 xl-50 col-sm-6 col-9">-->
+<!--                        <img id="mainImage" src="{{imagePathURI+selectedimg}}" alt="" class="img-fluid image_zoom_1">-->
+<!--                      </div>-->
+<!--                    </div>-->
                   </div>
                 </div>
               </div>
@@ -254,7 +212,21 @@
             </div>
 
           </ng-template>
+          <ng-template #imagePopup let-modal>
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title">Image Preview</h4>
+                <button type="button" class="close" (click)="closePopup()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <img src="{{imageUrl}}" alt="Image" class="img-fluid" >
+              </div>
+            </div>
+          </ng-template>
         </ngb-tab>
+
 
         <ngb-tab title="Category" *ngIf="isAdmin">
           <ng-template ngbTabContent>
@@ -276,7 +248,7 @@
 
                       <div>
                         <select class="custom-select" id="category_ids"
-                                 (change)="selectSubcategory($event,1)" style="width: 19%; position: absolute; top: 192px; left: 33%;">
+                                (change)="selectSubcategory($event,1)" style="width: 19%; position: absolute; top: 192px; left: 33%;">
                           <option value="">-Select Sub Category-</option>
                           <option *ngFor="let productSubCategoryArray of productSubCategoryArray; let i = index"
                                   value="{{productSubCategoryArray['name']}}">

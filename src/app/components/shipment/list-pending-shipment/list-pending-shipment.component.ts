@@ -10,26 +10,38 @@ import {Router} from '@angular/router';
 
 export class ListPendingShipmentComponent implements OnInit {
   public allShipmentArr = [];
-  public shipmentRowCount = 20;
-  public selected = [];
   public isAdmin = false;
   public isShipmentValid = false;
   public shipmentErrorMsg = false;
+  public columnArray = [];
 
   constructor(private shipmentNewService: ShipmentNewService, private router: Router) {
     const sessionUser = sessionStorage.getItem('userRole');
     if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER') {
       this.isAdmin = true;
+      this.columnArray = [
+        {header: 'Shipment ID', fieldName: 'shipment_id', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Business Name', fieldName: 'businessName', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Create Date', fieldName: 'create_date', dataType: 'date', bColor: '', bValue: ''},
+        {header: 'Total Quantity', fieldName: 'total_quantity', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Gross Amount', fieldName: 'gross_amount', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Received', fieldName: 'is_receive', dataType: 'string', bColor: 'red', bValue: 'No'},
+        {header: 'Action', fieldName: '', dataType: '', bColor: '', bValue: 'Receive'},
+      ];
+    } else {
+      this.columnArray = [
+        {header: 'Shipment ID', fieldName: 'shipment_id', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Create Date', fieldName: 'create_date', dataType: 'date', bColor: '', bValue: ''},
+        {header: 'Total Quantity', fieldName: 'total_quantity', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Gross Amount', fieldName: 'gross_amount', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Received', fieldName: 'is_receive', dataType: 'string', bColor: 'green', bValue: ''},
+        {header: 'Action', fieldName: '', dataType: '', bColor: '', bValue: 'View'},
+      ];
     }
     this.getTakeShippedShipment();
   }
 
   ngOnInit(): void {
-  }
-
-  onSelect({selected}) {
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
   }
 
   getTakeShippedShipment() {
@@ -52,20 +64,10 @@ export class ListPendingShipmentComponent implements OnInit {
     if (data.data != null) {
       this.isShipmentValid = true;
       this.shipmentErrorMsg = false;
-      for (let i = 0; i < data.data.length; i++) {
-        let or = {
-          shipmentId: data.data[i].shipment_id,
-          businessName: data.data[i].businessName,
-          createDate: data.data[i].create_date,
-          totalQuantity: data.data[i].total_quantity,
-          grossAmount: data.data[i].gross_amount,
-          received: data.data[i].is_receive,
-          Action: ''
-        };
-        this.allShipmentArr.push(or);
-      }
+
+      this.allShipmentArr = data.data;
       this.allShipmentArr.sort((a, b) => {
-        return new Date(b.createDate).getTime() - new Date(a.createDate).getTime();
+        return new Date(b.create_date).getTime() - new Date(a.create_date).getTime();
       });
     } else {
       this.isShipmentValid = false;
@@ -73,11 +75,9 @@ export class ListPendingShipmentComponent implements OnInit {
     }
   }
 
-  viewShippedShipment(index, isAdmin) {
-    let tempCode = this.allShipmentArr[index].shipmentId;
+  viewShippedShipment(tempCode) {
     let url = '';
-
-    if (isAdmin) {
+    if (this.isAdmin) {
       url = '/shipment/receive-shipment-make/' + tempCode;
     } else {
       url = '/shipment/view-shipment/' + tempCode;

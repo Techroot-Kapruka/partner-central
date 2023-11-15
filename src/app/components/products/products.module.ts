@@ -47,6 +47,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
     declarations: [
 
         DigitalListComponent, DigitalAddComponent, EditProductsComponent, ViewProductComponent, ApproveProductComponent, QaApprovalViewComponent, QaNormalViewComponent, DeclinedProductComponent, ProductViewComponent, ApproveEditProductComponent, ApproveEditImageComponentComponent, PaginationComponent, ChangeRequestsComponent, NewAdditionsComponent, ProductListComponent, ProductSearchComponent, AnalyticsProductViewComponent],
+
     imports: [
         CommonModule,
         FormsModule,
@@ -61,7 +62,13 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
         AngularEditorModule,
         SelectModule,
         NgxSkeletonLoaderModule,
+
+    ],
+    exports: [
+        PaginationComponent
+
         SharedModule,
+
     ],
     providers: [
         {
