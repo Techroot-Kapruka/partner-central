@@ -112,12 +112,9 @@ export class EditShipmentComponent implements OnInit {
   }
 
   backToLIst() {
-
     // if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
-
       const url = '/shipment/receive-shipment';
       this.router.navigate([url]);
-
     /*} else {
       const url = '/shipment/list-shipment';
       this.router.navigate([url]);
