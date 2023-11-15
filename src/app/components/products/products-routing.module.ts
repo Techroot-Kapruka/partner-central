@@ -12,6 +12,9 @@ import {ApproveEditProductComponent} from "./approve-edit-product/approve-edit-p
 import {
   ApproveEditImageComponentComponent
 } from "./approve-edit-image-component/approve-edit-image-component.component";
+import {ChangeRequestsComponent} from "./product-list/change-requests/change-requests.component";
+import {ProductSearchComponent} from "./product-list/product-search/product-search.component";
+import {NewAdditionsComponent} from "./product-list/new-additions/new-additions.component";
 
 const routes: Routes = [
   {
@@ -94,6 +97,30 @@ const routes: Routes = [
         component: ApproveEditImageComponentComponent,
         data: {
           title: 'Approve-Image-Edit-Product',
+          breadcrumb: 'Approve image Edited Product'
+        }
+      },
+      {
+        path: 'digital/change-requests',
+        component: ChangeRequestsComponent,
+        data: {
+          title: 'Change Requests',
+          breadcrumb: 'Approve image Edited Product'
+        }
+      },
+      {
+        path: 'digital/new-additions',
+        component: NewAdditionsComponent,
+        data: {
+          title: 'New Additions',
+          breadcrumb: 'Approve image Edited Product'
+        }
+      },
+      {
+        path: 'digital/product-search',
+        component: ProductSearchComponent,
+        data: {
+          title: 'Product Search',
           breadcrumb: 'Approve image Edited Product'
         }
       }
