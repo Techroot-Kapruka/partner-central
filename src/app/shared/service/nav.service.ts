@@ -504,9 +504,10 @@ export class NavService {
   partnerPrivilegeItem(data) {
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       //hide bulk upload
-      this.items.value[1].children[2].path = '';
-      this.items.value[1].children[2].title = '';
-      this.items.value[1].children[2].type = '';
+      this.items.value[1].children[3].path = '';
+      this.items.value[1].children[3].title = '';
+      this.items.value[1].children[3].type = '';
+
 
       if (data.data === null) {
         this.items.value.splice(0, 7);
