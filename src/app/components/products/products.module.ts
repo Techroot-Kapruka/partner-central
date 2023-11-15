@@ -43,21 +43,24 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
 @NgModule({
     declarations: [
         DigitalListComponent, DigitalAddComponent, EditProductsComponent, ViewProductComponent, ApproveProductComponent, QaApprovalViewComponent, QaNormalViewComponent, DeclinedProductComponent, ProductViewComponent, ApproveEditProductComponent, ApproveEditImageComponentComponent, PaginationComponent, ChangeRequestsComponent, NewAdditionsComponent, ProductListComponent, ProductSearchComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    CKEditorModule,
-    ProductsRoutingModule,
-    Ng2SmartTableModule,
-    NgbModule,
-    DropzoneModule,
-    GalleryModule.forRoot(),
-    NgxDatatableModule,
-    AngularEditorModule,
-    SelectModule,
-    NgxSkeletonLoaderModule,
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        CKEditorModule,
+        ProductsRoutingModule,
+        Ng2SmartTableModule,
+        NgbModule,
+        DropzoneModule,
+        GalleryModule.forRoot(),
+        NgxDatatableModule,
+        AngularEditorModule,
+        SelectModule,
+        NgxSkeletonLoaderModule,
+    ],
+    exports: [
+        PaginationComponent
+    ],
     providers: [
         {
             provide: DROPZONE_CONFIG,

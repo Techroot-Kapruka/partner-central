@@ -9,12 +9,19 @@ import {Router} from '@angular/router';
 })
 
 export class ListHoldShipmentComponent implements OnInit {
-  public shipmentRowCount = 20;
   public selected = [];
   public holdShipmentArray = [];
-  public isAdmin = false;
+  public columnArray = [];
 
   constructor(private shipmentNewService: ShipmentNewService, private router: Router) {
+    this.columnArray = [
+      {header: 'Shipment ID', fieldName: 'shipment_id', dataType: 'string', bColor: '', bValue: ''},
+      {header: 'Create Date', fieldName: 'create_date', dataType: 'date', bColor: '', bValue: ''},
+      {header: 'Total Quantity', fieldName: 'total_quantity', dataType: 'string', bColor: '', bValue: ''},
+      {header: 'Gross Amount', fieldName: 'gross_amount', dataType: 'string', bColor: '', bValue: ''},
+      {header: 'Received', fieldName: 'is_receive', dataType: 'string', bColor: 'red', bValue: ''},
+      {header: 'Action', fieldName: '', dataType: '', bColor: '', bValue: ' Edit '},
+    ];
     this.getTakeHoldShipment();
   }
 
@@ -33,22 +40,14 @@ export class ListHoldShipmentComponent implements OnInit {
   manageTakeHoldShipment(data) {
     this.holdShipmentArray = [];
     if (data.data != null) {
-      for (let i = 0; i < data.data.length; i++) {
-        let or = {
-          shipmentId: data.data[i].shipment_id,
-          createDate: data.data[i].create_date,
-          totalQuantity: data.data[i].total_quantity,
-          grossAmount: data.data[i].gross_amount,
-          received: data.data[i].is_receive,
-          Action: ''
-        };
-        this.holdShipmentArray.push(or);
-      }
+      this.holdShipmentArray = data.data;
+      this.holdShipmentArray.forEach(element => {
+        element.create_date = new Date();
+      });
     }
   }
 
-  viewHoldShipment(index) {
-    let tempCode = this.holdShipmentArray[index].shipmentId;
+  viewHoldShipment(tempCode) {
     let url = '/shipment/edit-shipment/' + tempCode;
     this.router.navigate([url]);
   }
