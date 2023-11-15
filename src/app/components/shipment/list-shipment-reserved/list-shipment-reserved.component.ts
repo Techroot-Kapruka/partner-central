@@ -13,7 +13,6 @@ import {PriceChangeService} from '../../../shared/service/price-change.service';
 
 export class ListShipmentReservedComponent implements OnInit {
   public shipment_list = [];
-  public shipmentRowCount = 20;
   public priceChangeCount = 20;
   public selected = [];
   public isAdmin = false;
@@ -23,6 +22,7 @@ export class ListShipmentReservedComponent implements OnInit {
   public partnerArray = [];
   public recivedShipmentArray = [];
   public changePriceArray = [];
+  public columnArray = [];
 
   constructor(private shipmentNewService: ShipmentNewService, private router: Router,
               private productService: ProductService, private priceChangeService: PriceChangeService) {
@@ -30,6 +30,25 @@ export class ListShipmentReservedComponent implements OnInit {
     const sessionUser = sessionStorage.getItem('userRole');
     if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER') {
       this.isAdmin = true;
+      this.columnArray = [
+        {header: 'Shipment ID', fieldName: 'shipment_id', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Business Name', fieldName: 'businessName', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Create Date', fieldName: 'create_date', dataType: 'date', bColor: '', bValue: ''},
+        {header: 'Total Quantity', fieldName: 'total_quantity', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Approved Quantity', fieldName: 'approved_all_qty', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Approved Amount', fieldName: 'approved_amount', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Received', fieldName: 'is_receive', dataType: 'string', bColor: 'green', bValue: 'Yes'},
+        {header: 'Action', fieldName: '', dataType: '', bColor: '', bValue: 'View'},
+      ];
+    } else {
+      this.columnArray = [
+        {header: 'Shipment ID', fieldName: 'shipment_id', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Create Date', fieldName: 'create_date', dataType: 'date', bColor: '', bValue: ''},
+        {header: 'Total Quantity', fieldName: 'total_quantity', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Gross Amount', fieldName: 'gross_amount', dataType: 'string', bColor: '', bValue: ''},
+        {header: 'Received', fieldName: 'is_receive', dataType: 'string', bColor: 'green', bValue: ''},
+        {header: 'Action', fieldName: '', dataType: '', bColor: '', bValue: 'View'},
+      ];
     }
 
     this.getPartner();
@@ -40,9 +59,72 @@ export class ListShipmentReservedComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSelect({selected}) {
-    this.selected.splice(0, this.selected.length);
-    this.selected.push(...selected);
+  getPartner(): void {
+    if (this.isAdmin === true) {
+      this.productService.getPartnerAll().subscribe(
+        data => this.manageBussinessPartner(data),
+      );
+    }
+  }
+
+  manageBussinessPartner(data) {
+    let pr = {};
+    const bussinessArrLangth = data.data.length;
+    const partnerValue = data.data;
+    for (let i = 0; i < bussinessArrLangth; i++) {
+      pr = {
+        name: partnerValue[i].businessName,
+        value: partnerValue[i].partner_u_id
+      };
+      this.partnerArray.push(pr);
+    }
+  }
+
+  getSelectedPartnerRecivedShipment() {
+    const name = (document.getElementById('select_pro2') as HTMLInputElement).value;
+    const bussArr = {
+      vendor_code: name
+    };
+    this.shipmentNewService.getRecivedShipmentByVendorId(bussArr).subscribe(
+      data => this.managRecivedShipmetAll(data),
+    );
+  }
+
+  getSelectedPartnerReceviedShipmentList() {
+    if (this.isAdmin) {
+      this.shipmentNewService.takeReceivedShipment().subscribe(
+        data => this.managRecivedShipmetAll(data),
+      );
+    } else {
+      const name = sessionStorage.getItem('partnerId');
+      const bussArr = {
+        vendor_code: name
+      };
+      this.shipmentNewService.getRecivedShipmentByVendorId(bussArr).subscribe(
+        data => this.managRecivedShipmetAll(data),
+      );
+    }
+  }
+
+  managRecivedShipmetAll(data) {
+    this.recivedShipmentArray = [];
+    if (data.data != null) {
+      this.isRecievedShipmentValid = true;
+      this.recievedShipmentErrorMsg = false;
+
+      this.recivedShipmentArray = data.data;
+      this.recivedShipmentArray.sort((a, b) => {
+        return new Date(b.create_date).getTime() - new Date(a.create_date).getTime();
+      });
+    } else {
+      this.isRecievedShipmentValid = false;
+      this.recievedShipmentErrorMsg = true;
+    }
+  }
+
+  viewRecivedShipment(tempCode) {
+    let url = '/shipment/view-shipment/' + tempCode;
+    this.router.navigate([url]);
   }
 
   getTakeChangePriceProduct() {
@@ -83,53 +165,6 @@ export class ListShipmentReservedComponent implements OnInit {
     }
   }
 
-  getPartner(): void {
-    if (this.isAdmin === true) {
-      this.productService.getPartnerAll().subscribe(
-        data => this.manageBussinessPartner(data),
-      );
-    }
-  }
-
-  manageBussinessPartner(data) {
-    let pr = {};
-    const bussinessArrLangth = data.data.length;
-    const partnerValue = data.data;
-    for (let i = 0; i < bussinessArrLangth; i++) {
-      pr = {
-        name: partnerValue[i].businessName,
-        value: partnerValue[i].partner_u_id
-      };
-      this.partnerArray.push(pr);
-    }
-  }
-
-  getSelectedPartnerRecivedShipment() {
-      const name = (document.getElementById('select_pro2') as HTMLInputElement).value;
-      const bussArr = {
-        vendor_code: name
-      };
-      this.shipmentNewService.getRecivedShipmentByVendorId(bussArr).subscribe(
-        data => this.managRecivedShipmetAll(data),
-      );
-  }
-
-  getSelectedPartnerReceviedShipmentList() {
-    if (this.isAdmin) {
-      this.shipmentNewService.takeReceivedShipment().subscribe(
-        data => this.managRecivedShipmetAll(data),
-      );
-    }else{
-      const name = sessionStorage.getItem('partnerId');
-      const bussArr = {
-        vendor_code: name
-      };
-      this.shipmentNewService.getRecivedShipmentByVendorId(bussArr).subscribe(
-        data => this.managRecivedShipmetAll(data),
-      );
-    }
-  }
-
   getSelectedPartnerPriceChange() {
     const name = (document.getElementById('select_pro3') as HTMLInputElement).value;
     const obj = {
@@ -138,34 +173,6 @@ export class ListShipmentReservedComponent implements OnInit {
     this.priceChangeService.getAllPendingApprovalPriceChangeListByVendor(obj).subscribe(
       data => this.managePriceChangesAll(data),
     );
-  }
-
-  managRecivedShipmetAll(data) {
-    this.recivedShipmentArray = [];
-    if (data.data != null) {
-      this.isRecievedShipmentValid = true;
-      this.recievedShipmentErrorMsg = false;
-      for (let i = 0; i < data.data.length; i++) {
-        let or = {
-          shipmentId: data.data[i].shipment_id,
-          businessName: data.data[i].businessName,
-          createDate: data.data[i].create_date,
-          totalQuantity: data.data[i].total_quantity,
-          approvedQuantity: data.data[i].approved_all_qty,
-          approvedAmount: data.data[i].approved_amount.toFixed(2),
-          grossAmount: data.data[i].gross_amount.toFixed(2),
-          received: data.data[i].is_receive,
-          Action: ''
-        };
-        this.recivedShipmentArray.push(or);
-      }
-      this.recivedShipmentArray.sort((a, b) => {
-        return new Date(b.createDate).getTime() - new Date(a.createDate).getTime();
-      });
-    } else {
-      this.isRecievedShipmentValid = false;
-      this.recievedShipmentErrorMsg = true;
-    }
   }
 
   managePriceChangesAll(data) {
@@ -186,12 +193,6 @@ export class ListShipmentReservedComponent implements OnInit {
         this.changePriceArray.push(obj);
       }
     }
-  }
-
-  viewRecivedShipment(index) {
-    let tempCode = this.recivedShipmentArray[index].shipmentId;
-    let url = '/shipment/view-shipment/' + tempCode;
-    this.router.navigate([url]);
   }
 
   approvedChangePrice(index) {
