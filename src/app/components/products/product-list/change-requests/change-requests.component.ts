@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {ProductService} from "../../../../shared/service/product.service";
 import {Router} from "@angular/router";
 import {environment} from "../../../../../environments/environment.prod";
+import {NgbTabChangeEvent} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-change-requests',
@@ -33,6 +34,8 @@ export class ChangeRequestsComponent implements OnInit {
   public isAdmin = false;
   public isPartner = false;
   public editTab = false;
+  public emptyTableImg = false;
+  public emptyTableProducts = false;
 
   public imagedefaultPathURI = '';
   imageUrl: any;
@@ -165,17 +168,38 @@ export class ChangeRequestsComponent implements OnInit {
   // search Filters
   editProductApprovalFilter(searchTerm: string): void {
     this.filterededitProductApproval = this.nonActiveEditedProductsArray.filter(product =>
-      product.requestBy.toLowerCase().includes(searchTerm.toLowerCase()) || product.title.toLowerCase().includes(searchTerm.toLowerCase())
+      product.requestBy.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.categoryPath.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     this.totalPagesEditProApproval = Math.ceil(this.filterededitProductApproval.length / this.list_pages2);
     this.onPageChange(1,'EditProApproval');
+
+
+    if (this.filterededitProductApproval.length == 0) {
+      this.emptyTableProducts = true;
+    } else {
+      this.emptyTableProducts = false;
+    }
   }
 
   editImgApprovalFilter(searchTerm: string): void {
     this.filterdEditImgApproval = this.nonActiveEditedImagesArray.filter(product =>
-      product.requestBy.toLowerCase().includes(searchTerm.toLowerCase()) || product.title.toLowerCase().includes(searchTerm.toLowerCase())
+        product.requestBy.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.categoryPath.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    if (this.filterdEditImgApproval.length == 0) {
+      this.emptyTableImg = true;
+    } else {
+      this.emptyTableImg = false;
+    }
 
     this.totalPagesEditImgApproval = Math.ceil(this.filterdEditImgApproval.length / this.list_pages2);
     this.onPageChange(1,'EditImgApproval');
@@ -201,6 +225,23 @@ export class ChangeRequestsComponent implements OnInit {
       });
   }
 
+  onTabSelect(event: NgbTabChangeEvent) {
+    const tabId = event.nextId;
+    switch (tabId) {
+      case 'ngb-tab-0':
+        // edit products
+        this.emptyTableImg = false;
+        break;
+      case 'ngb-tab-1':
+        // edit imgs
+        this.emptyTableProducts = false;
+        break;
+      default:
+        this.emptyTableImg = false;
+        this.emptyTableProducts = false;
+    }
+  }
+
   editTabCount(x){
     let count;
     switch (x) {
@@ -213,7 +254,7 @@ export class ChangeRequestsComponent implements OnInit {
         return `Edit Image Approval (${count})`;
         break;
       default:
-        console.log('Unknown input');
+        console.log('Unknown');
     }
   }
 }

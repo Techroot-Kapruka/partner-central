@@ -92,7 +92,7 @@ export class ApproveEditProductComponent implements OnInit {
       data.message,
       'success'
     );
-    this.router.navigate(['/products/digital/digital-product-list']).then( );
+    this.router.navigate(['/products/digital/change-requests']).then( );
   }
 
   private manageRejectFields(data) {
@@ -101,6 +101,6 @@ export class ApproveEditProductComponent implements OnInit {
       data.message,
       'success'
     );
-    this.router.navigate(['/products/digital/digital-product-list']).then( );
+    this.router.navigate(['/products/digital/change-requests']).then( );
   }
 }
