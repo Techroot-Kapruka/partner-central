@@ -508,6 +508,10 @@ export class NavService {
       this.items.value[1].children[3].title = '';
       this.items.value[1].children[3].type = '';
 
+      // hide change Requests
+      this.items.value[1].children[5].path = '';
+      this.items.value[1].children[5].title = '';
+      this.items.value[1].children[5].type = '';
 
       if (data.data === null) {
         this.items.value.splice(0, 7);
