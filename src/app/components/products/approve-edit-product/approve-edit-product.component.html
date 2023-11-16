@@ -30,7 +30,7 @@
         <div class="col-6 ">
           <div class="card-title"><strong>Old Fields</strong></div>
           <div class="col-12" *ngFor="let oldData of oldInputData">
-            <label class="col-form-label">{{oldData['title']}}</label>
+            <label class="col-form-label" style="font-weight: bold">{{oldData['title']}}</label>
             <input class="form-control" disabled value="{{oldData['value']}}"
                    type="text" required="" hidden>
             <div [innerHtml]="oldData['value']"></div>
@@ -40,7 +40,7 @@
         <div class="col-6">
           <div class="card-title"><strong>New Fields</strong></div>
           <div class="col-12" *ngFor="let newData of newInputData">
-            <label class="col-form-label">{{newData['title']}}</label>
+            <label class="col-form-label" style="font-weight: bold">{{newData['title']}}</label>
             <input class="form-control" id="txt_selli" type="text" required="" value="{{newData['value']}}" hidden disabled>
             <div  [innerHtml]="newData['value']"></div>
           </div>
