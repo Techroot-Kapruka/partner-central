@@ -5,3 +5,25 @@
 .style-p{
  margin-top: -5%;
 }
+.blocksB > div{
+  height: calc(100vh - 140px);
+  margin-top: -60px;
+  padding: 15px !important;
+  border:1px solid #eee !important;
+  background: #eee !important;
+  border-radius: 5px;
+}
+.blockstitle{
+  color: #0E0D39;
+  font-size: 24px;
+  line-height: 1;
+  font-weight: bold;
+}
+.blockSV{
+  margin-top: 30px;
+  font-weight: bold;
+}
+.pathTitle{
+  color: #0e4bf1;
+  font-weight: bold;
+}
