@@ -11,6 +11,7 @@ import {AngularEditorConfig} from '@kolkov/angular-editor';
 import {CategoryService} from "../../../shared/service/category.service";
 import {addWarning} from "@angular-devkit/build-angular/src/utils/webpack-diagnostics";
 import {ImageService} from "../../../shared/service/image.service";
+import {__values} from "tslib";
 
 
 @Component({
@@ -88,6 +89,15 @@ export class EditProductsComponent implements OnInit {
   public old_txt_listning_price = '';
   public old_txt_price_rate = '';
   public productCode = '';
+
+  public editPrice = false;
+  public btnUpdatePrice = false;
+
+  public vendorCode = '';
+  public oldCostPrice = '';
+  public oldChangingRate = '';
+  public oldSellingPrice = '';
+
   descriptionContent;
 
   editorConfig: AngularEditorConfig = {
@@ -125,6 +135,16 @@ export class EditProductsComponent implements OnInit {
     this._Activatedroute.paramMap.subscribe(params => {
       this.getProductByEdit(params.get('id'));
       this.ids = params.get('id');
+
+      const sessionUserRole = sessionStorage.getItem('userRole');
+      const pattern = /0V\d+POD/;
+      const isMatch = pattern.test(this.ids);// check ondemand id
+      if (isMatch && sessionUserRole === 'ROLE_PARTNER' ) {
+        this.editPrice = true;
+      }else {
+        this.editPrice = false;
+      }
+
     });
 
     this.imageControlMethord();
@@ -923,6 +943,7 @@ export class EditProductsComponent implements OnInit {
     this.oldTitle = data.data.product.title;
     this.oldBrand = data.data.product.brand;
     this.oldManufacture = data.data.product.manufacture;
+    this.vendorCode = data.data.product.vendor;
 
     // description
     this.description.get('txt_description').setValue(data.data.product.productDescription.description);
@@ -951,6 +972,7 @@ export class EditProductsComponent implements OnInit {
     }
 
     //offer
+
     this.offer.get('txt_seller_sku').setValue(data.data.product.productOffer.seller_sku);
     this.offer.get('condition').setValue(data.data.product.productOffer.condition);
     this.old_txt_seller_sku = data.data.product.productOffer.seller_sku;
@@ -968,25 +990,25 @@ export class EditProductsComponent implements OnInit {
 
     if (data.data.product.is_active == 1) {
       this.title_name = 'Edit Product';
-      // document.getElementById('saveId').style.display = 'none';
     }
-    // (document.getElementById('breadcrum') as HTMLInputElement).innerHTML = data.data.category_path;
-    // (document.getElementById('category_code') as HTMLInputElement).value = data.data.product.category_code;
+
+    // VARIATION DETAIL SET
     if (data.data.product.has_group == 0) {
       this.checkBoxCon = new FormGroup({
         productGroup: new FormControl(false),
       });
+
       this.nonGroupArray = [];
       for (let i = 0; i < data.data.product.productVariation.length; i++) {
         let payData = {
           id: data.data.product.productVariation[i].id,
           theme: data.data.product.productVariation[i].variation_theme,
           value: data.data.product.productVariation[i].variation,
-          qty: data.data.product.productVariation[i].quantity
+          qty: data.data.product.productVariation[i].quantity,
+
         };
         this.nonGroupArray.push(payData);
       }
-
 
     } else {
       this.checkBoxCon = new FormGroup({
@@ -1009,12 +1031,21 @@ export class EditProductsComponent implements OnInit {
           payData = {
             size: size_value,
             color: color_value,
+            changing_rate: data.data.product.productVariation[i].changing_rate,
+            cost_price: data.data.product.productVariation[i].cost_price,
+            selling_price: data.data.product.productVariation[i].selling_price,
 
           };
         }
         this.productGroupTabel.push(payData);
       }
 
+      // ++++++++++++++++ondemand price set values++++++++++++++++++++++++
+      if (this.editPrice){
+        this.oldSellingPrice = this.productGroupTabel[0].selling_price;
+        this.oldChangingRate = this.productGroupTabel[0].changing_rate;
+        this.oldCostPrice = this.productGroupTabel[0].cost_price;
+      }
     }
 
 
@@ -1042,6 +1073,7 @@ export class EditProductsComponent implements OnInit {
     );
     // this.disableElement(data);
   }
+
 
   manageImageForEdit(data) {
 
@@ -1177,12 +1209,12 @@ export class EditProductsComponent implements OnInit {
       special_notes: new FormControl(''),
       availability: new FormControl(''),
     });
+
     // ----------- Offer ---------------
     this.offer = new FormGroup({
       txt_seller_sku: new FormControl(''),
       condition: new FormControl(''),
     });
-
     // -------------category-----------
     this.category = new FormGroup({
       Category1: new FormControl(''),
@@ -1277,74 +1309,6 @@ export class EditProductsComponent implements OnInit {
 
   }
 
-  saveOfferFields() {
-    let partnerId = sessionStorage.getItem('partnerId');
-    let txt_seller_sku = this.offer.get('txt_seller_sku').value;
-    let txt_price = this.offer.get('txt_price').value;
-    let txt_quantity = this.offer.get('txt_quantity').value;
-    let condition = this.offer.get('condition').value;
-    let txt_amount = this.offer.get('txt_amount').value;
-    let txt_price_rate = this.offer.get('txt_price_rate').value;
-    let txt_listning_price = this.offer.get('txt_listning_price').value;
-    let productId = this.ids;
-
-    let payload = {
-      referenceId: productId,
-      type: 'PRODUCT',
-      sub_type: 'product_offer',
-      comment: 'Test',
-      requestedBy: partnerId,
-      data: [
-        {
-          column_name: 'seller_sku',
-          old_value: this.old_txt_seller_sku,
-          new_value: txt_seller_sku,
-          call_name: 'seller_sku',
-        },
-        {
-          column_name: 'price',
-          old_value: this.old_txt_price,
-          new_value: txt_price,
-          call_name: 'price',
-        },
-        {
-          column_name: 'quantity',
-          old_value: this.old_txt_quantity,
-          new_value: txt_quantity,
-          call_name: 'quantity',
-        },
-        {
-          column_name: 'condition',
-          old_value: this.old_condition,
-          new_value: condition,
-          call_name: 'condition',
-        },
-        {
-          column_name: 'amount',
-          old_value: this.old_txt_amount,
-          new_value: txt_amount,
-          call_name: 'amount',
-        },
-        {
-          column_name: 'price_rate',
-          old_value: this.old_txt_price_rate,
-          new_value: txt_price_rate,
-          call_name: 'price_rate',
-        },
-        {
-          column_name: 'listning_price',
-          old_value: this.old_txt_listning_price,
-          new_value: txt_listning_price,
-          call_name: 'listning_price',
-        }
-      ]
-    };
-
-
-    this.productService.editField(payload).subscribe(
-      data => this.manageEditField(data),
-    );
-  }
 
   saveEditedImage() {
     let one = this.imageCliant.get('fileSource').value;
@@ -1399,4 +1363,94 @@ export class EditProductsComponent implements OnInit {
 
   protected readonly event = event;
   protected readonly Event = Event;
+
+
+  calcSellerIncomeBySellingPrice(){
+    if ((document.getElementById('onDemandSellingPriceID') as HTMLInputElement).value === '' || (document.getElementById('onDemandMarginID') as HTMLInputElement).value === '') {
+      // Swal.fire(
+      //   'Error',
+      //   'Pleas fill all the field',
+      //   'warning'
+      // );
+      this.btnUpdatePrice = false;
+      (document.getElementById('onDemandCostPriceID') as HTMLInputElement).value = this.oldCostPrice;
+    } else {
+      this.btnUpdatePrice = true;
+      const sellingPrice = parseFloat((document.getElementById('onDemandSellingPriceID') as HTMLInputElement).value.trim());
+      const margin = parseFloat((document.getElementById('onDemandMarginID') as HTMLInputElement).value.trim());
+
+      const oldMargin = parseFloat(this.oldChangingRate);
+      if (sellingPrice > 0 && margin > 0){
+
+        if (oldMargin <= margin){
+          const newCostPrice = sellingPrice - (margin * sellingPrice / 100);
+          (document.getElementById('onDemandCostPriceID') as HTMLInputElement).value = newCostPrice.toString();
+        }else {
+          Swal.fire(
+            'Error',
+            'Margin must be greater than ' + oldMargin,
+            'warning'
+          );
+          (document.getElementById('onDemandMarginID') as HTMLInputElement).value = this.oldChangingRate;
+        }
+      }else {
+        Swal.fire(
+          'Error',
+          'Values must be greater than 0',
+          'warning'
+        );
+        (document.getElementById('onDemandSellingPriceID') as HTMLInputElement).value = this.oldSellingPrice;
+        (document.getElementById('onDemandMarginID') as HTMLInputElement).value = this.oldChangingRate;
+      }
+
+    }
+  }
+  updatePrice() {
+
+    const productId = this.ids;
+    const newCostPrice = parseFloat((document.getElementById('onDemandCostPriceID') as HTMLInputElement).value.trim());
+    const newChangingRate = parseFloat((document.getElementById('onDemandMarginID') as HTMLInputElement).value.trim());
+    const newSellingPrice = parseFloat((document.getElementById('onDemandSellingPriceID') as HTMLInputElement).value.trim());
+
+    const payload = {
+      referenceId: productId,
+      type: 'PRODUCT_PRICE',
+      sub_type: 'product_price',
+      comment: 'PRODUCT_PRICE',
+      requestedBy: this.vendorCode,
+      data: [
+        {
+          column_name: 'cost_price',
+          old_value: this.oldCostPrice,
+          new_value: newCostPrice,
+          call_name: 'cost_price',
+        },
+        {
+          column_name: 'changing_rate',
+          old_value: this.oldChangingRate,
+          new_value: newChangingRate,
+          call_name: 'changing_rate',
+        },
+        {
+          column_name: 'selling_price',
+          old_value: this.oldSellingPrice,
+          new_value: newSellingPrice,
+          call_name: 'selling_price',
+        }
+      ]
+    };
+
+
+    if (productId === ''){
+      Swal.fire(
+        'Error',
+        'Error',
+        'warning'
+      );
+    }else {
+      this.productService.editField(payload).subscribe(
+        data => this.manageEditField(data),
+      );
+    }
+  }
 }
