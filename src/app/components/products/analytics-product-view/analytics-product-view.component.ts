@@ -37,6 +37,7 @@ export class AnalyticsProductViewComponent implements OnInit {
     if(sessionUser === 'ROLE_ADMIN'){
       this.showHighestViewsForAdmin();
     }
+
   }
 
   ngOnInit(): void {
@@ -63,6 +64,7 @@ export class AnalyticsProductViewComponent implements OnInit {
       this.partnerArray.push(pr);
     }
   }
+
 
   stopLoading() {
     this.stillLoading = false;
