@@ -60,7 +60,7 @@
                     <img src="../../../../assets/images/ico/04.png" width="80px">
                   </div>
                 </div>
-                <div class="media-body col-9" *ngIf="isLoginUser" routerLink="/products/digital/digital-product-list"
+                <div class="media-body col-9" *ngIf="isLoginUser" routerLink="/products/digital/new-additions"
                      style="cursor: pointer;"><span class="m-0">Pending Approval Product</span>
                   <h3 class="mb-0"> <span class="counter" [CountTo]="pendingCount" [from]="0"
                                           [duration]="2">{{pendingCount}}</span>
@@ -100,7 +100,7 @@
                     <img src="../../../../assets/images/ico/04.png" width="80px">
                   </div>
                 </div>
-                <div class="media-body col-8" routerLink="/products/digital/digital-product-list" style="cursor: pointer;">
+                <div class="media-body col-8" routerLink="/products/digital/new-additions" style="cursor: pointer;">
                   <span class="m-0">Approval Pending product</span>
                   <h3 class="mb-0"> <span class="counter" [CountTo]="pendingCount" [from]="0"
                                           [duration]="2">{{pendingCount}}</span>
@@ -129,7 +129,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-4 blockS" *ngIf="isLoginUser"></div>
+<!--        <div class="col-md-4 blockS" *ngIf="isLoginUser"></div>-->
         <!--Analytics Products View Start-->
         <div class="col-md-4 blockS" *ngIf="isLoginUser">
           <div class="card o-hidden  widget-cards">

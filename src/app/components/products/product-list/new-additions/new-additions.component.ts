@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ProductService} from "../../../../shared/service/product.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PendingStockAllocationShareService} from "../../../../shared/service/pending-stock-allocation-share.service";
-import {NgbModal, NgbTabset} from "@ng-bootstrap/ng-bootstrap";
+import {NgbModal, NgbTabChangeEvent, NgbTabset} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../../shared/auth/auth.service";
 import Swal from 'sweetalert2';
 import {environment} from "../../../../../environments/environment.prod";
@@ -32,14 +32,24 @@ export class NewAdditionsComponent implements OnInit {
   public paginatedPendingStockAllow = [];
   public filtereDpendingStockByOnDemand = [];
 
+  public headNonActive = [];
+  public headNonActivePartner = [];
+  public headPendingStockAdmin = [];
+  public headPendingStockPartner = [];
+
   public isAdmin = false;
   public isPartner = false;
-  public categoryUID = '';
+  nonActiveAdmin: boolean = false;
+  nonActivePartner: boolean = false;
+  onDemand: boolean = false;
+  pendingStockPartner: boolean = false;
+  pendingStockAdmin: boolean = false;
 
   public oldProductStatus = false;
 
   public EnablePriceEdit = false;
   public EnableStockEdit = false;
+
   public startIndex;
 
   public product_code = '';
@@ -74,6 +84,9 @@ export class NewAdditionsComponent implements OnInit {
   totalPagesPQC = 0; // Total number of pages
 
   totalPagesPendingAllow = 0; // Total number of pages
+
+  public emptyTableStock = false;
+  public emptyTablePendingProduct = false;
 
   @ViewChild('imagePopup') imagePopup: ElementRef;
   @ViewChild('pricePopup') pricePopup: ElementRef;
@@ -226,16 +239,25 @@ export class NewAdditionsComponent implements OnInit {
 
   getPendingQC() {
     const count = this.approvalPartnerProductList.length;
+    this.nonActivePartner=true
     return `Pending New Addition (${count})`;
   }
 
   PendingStockAllocation() {
     const count = this.pending_stock_allocation.length;
+    if(this.isAdmin){
+      this.pendingStockAdmin = true;
+      this.pendingStockPartner=false;
+    }else{
+      this.pendingStockAdmin = false;
+      this.pendingStockPartner=true;
+    }
     return `Pending Shipments (${count})`;
   }
 
   getPendingApprovalList() {
     const count = this.nonActiveProductsArray.length;
+    this.nonActiveAdmin = true;
     return `Pending New Addition (${count})`;
   }
 
@@ -265,6 +287,15 @@ export class NewAdditionsComponent implements OnInit {
           };
           this.nonActiveProductsArray.push(or);
         }
+        this.headNonActive = [
+          {'Head': 'Image', 'FieldName' : 'image' },
+          {'Head': 'Title',  'FieldName' : 'title' },
+          {'Head': 'Selling Price', 'FieldName':'price' },
+          {'Head': 'Stock In Hand', 'FieldName':'in_stock' },
+          {'Head': 'Create Date', 'FieldName':'createDate' },
+          {'Head': 'Action',  'FieldName':'' },
+        ];
+
 
         this.totalPagesPA = Math.ceil(this.nonActiveProductsArray.length / this.list_pages2);
         this.onPageChange(1, 'PendingPro');
@@ -333,6 +364,12 @@ export class NewAdditionsComponent implements OnInit {
             this.approvalPartnerProductList.push(or);
           }
         }
+        this.headNonActivePartner = [
+          {'Head': 'Image', 'FieldName' : 'image' },
+          {'Head': 'Title',  'FieldName' : 'title' },
+          {'Head': 'Create Date', 'FieldName':'createDate' },
+          {'Head': 'Brand',  'FieldName':'' },
+        ];
 
         this.totalPagesPQC = Math.ceil(this.approvalPartnerProductList.length / this.list_pages2);
         this.onPageChange(1, 'PendingQC');
@@ -359,6 +396,22 @@ export class NewAdditionsComponent implements OnInit {
       };
       this.pending_stock_allocation.push(or);
     }
+
+    this.headPendingStockAdmin = [
+      {'Head': 'Image', 'FieldName' : 'image' },
+      {'Head': 'Title',  'FieldName' : 'title' },
+      {'Head': 'Selling Price', 'FieldName':'price' },
+      {'Head': 'Stock In Hand', 'FieldName':'in_stock' },
+      {'Head': 'Create Date', 'FieldName':'createDate' },
+    ];
+    this.headPendingStockPartner = [
+      {'Head': 'Image', 'FieldName' : 'image' },
+      {'Head': 'Title',  'FieldName' : 'title' },
+      {'Head': 'Selling Price', 'FieldName':'price' },
+      {'Head': 'Stock In Hand', 'FieldName':'in_stock' },
+      {'Head': 'Create Date', 'FieldName':'createDate' },
+      {'Head': 'Action',  'FieldName':'' },
+    ];
     this.totalPagesPendingAllow = Math.ceil(this.pending_stock_allocation.length / this.list_pages2);
     this.onPageChange(1, 'PendingStockAllocation')
 
@@ -376,24 +429,38 @@ export class NewAdditionsComponent implements OnInit {
     this.modalRef = this.modal.open(this.pricePopup, {centered: true});
   }
 
-  ApproveProductNon(value) {
-    if (this.filteredPendingProducts.length !== 0) {
-      const url = 'products/digital/digital-approve-product/' + this.filteredPendingProducts[this.startIndex + value].productCode;
+  ApproveProductNon(event) {
+      const url = 'products/digital/digital-approve-product/' + event.productCode;
       this.router.navigate([url]);
-    } else {
-      const url = 'products/digital/digital-approve-product/' + this.nonActiveProductsArray[this.startIndex + value].productCode;
-      this.router.navigate([url]);
-    }
   }
 
-  popUpImage(index: number) {
-    if (this.filteredPendingProducts.length !== 0) {
-      this.imageUrl = this.imagePathURI + this.filteredPendingProducts[this.startIndex + index].image;
-      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
-    } else {
-      this.imageUrl = this.imagePathURI + this.nonActiveProductsArray[this.startIndex + index].image;
-      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+  onTabSelect(event: NgbTabChangeEvent) {
+    const tabId = event.nextId;
+    console.log(tabId)
+    switch (tabId) {
+      case 'ngb-tab-0':
+        // stock allocation
+        this.emptyTableStock = false;
+        break;
+      case 'ngb-tab-1':
+        // pending products
+        this.emptyTablePendingProduct = false;
+        break;
+      default:
+        this.emptyTableStock = false;
+        this.emptyTablePendingProduct = false;
     }
+  }
+  popUpImage(event) {
+      this.imageUrl = this.imagePathURI + event.image;
+      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+    // if (this.filteredPendingProducts.length !== 0) {
+    //   this.imageUrl = this.imagePathURI + this.filteredPendingProducts[this.startIndex + index].image;
+    //   this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+    // } else {
+    //   this.imageUrl = this.imagePathURI + this.nonActiveProductsArray[this.startIndex + index].image;
+    //   this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+    // }
   }
 
   popUpImagePendingAllocation(index: number) {
@@ -490,17 +557,36 @@ export class NewAdditionsComponent implements OnInit {
   // search Filters
   PendingQCFilter(searchTerm: string): void {
     this.filteredPendingQC = this.approvalPartnerProductList.filter(product =>
-      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+        product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.vendor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.categoryPath.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    if (this.filteredPendingQC.length == 0) {
+      this.emptyTablePendingProduct = true;
+    } else {
+      this.emptyTablePendingProduct = false;
+    }
+
     this.totalPagesPQC = Math.ceil(this.filteredPendingQC.length / this.list_pages2);
     this.onPageChange(1, 'PendingQC');
   }
 
   PendingStockAllocationFilter(searchTerm: String): void {
     this.filterdPendingAllocation = this.pending_stock_allocation.filter(product =>
-      product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+        product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.vendor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.categoryPath.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    if (this.filterdPendingAllocation.length == 0) {
+      this.emptyTableStock = true;
+    } else {
+      this.emptyTableStock = false;
+    }
+
     this.totalPagesPendingAllow = Math.ceil(this.filterdPendingAllocation.length / this.list_pages2);
     this.onPageChange(1, 'PendingStockAllocation')
   }
@@ -517,9 +603,17 @@ export class NewAdditionsComponent implements OnInit {
   PendingProductFilter(searchTerm: string): void {
 
     this.filteredPendingProducts = this.nonActiveProductsArray.filter(product =>
-      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+        product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.vendor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.categoryPath.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    if (this.filteredPendingProducts.length == 0) {
+      this.emptyTablePendingProduct = true;
+    } else {
+      this.emptyTablePendingProduct = false;
+    }
     this.totalPagesPA = Math.ceil(this.filteredPendingProducts.length / this.list_pages2);
     this.onPageChange(1, 'PendingPro');
   }

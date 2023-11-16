@@ -13,19 +13,25 @@ import { UnHoldShipmentComponent } from './un-hold-shipment/un-hold-shipment.com
 import { MakeReservedComponent } from './make-reserved/make-reserved.component';
 import { ListShipmentReservedComponent } from './list-shipment-reserved/list-shipment-reserved.component';
 import { RecievedShipmentComponent } from './recieved-shipment/recieved-shipment.component';
-
+import { ListPendingShipmentComponent } from './list-pending-shipment/list-pending-shipment.component';
+import { ListHoldShipmentComponent } from './list-hold-shipment/list-hold-shipment.component';
+import { CommonTableComponent } from './common-table/common-table.component';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
+import {ProductsModule} from "../products/products.module";
 
 @NgModule({
-  declarations: [ListShipmentComponent, AddShipmentComponent, EditShipmentComponent, UnHoldShipmentComponent, MakeReservedComponent, ListShipmentReservedComponent, RecievedShipmentComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    HttpClientModule,
-    NgbModule,
-    Ng2SmartTableModule,
-    ReactiveFormsModule,
-    ShipmentRoutingModule,
-    NgxDatatableModule
-  ]
+  declarations: [ListShipmentComponent, AddShipmentComponent, EditShipmentComponent, UnHoldShipmentComponent, MakeReservedComponent, ListShipmentReservedComponent, RecievedShipmentComponent, ListPendingShipmentComponent, ListHoldShipmentComponent, CommonTableComponent],
+    imports: [
+        CommonModule,
+        FormsModule,
+        HttpClientModule,
+        NgbModule,
+        Ng2SmartTableModule,
+        ReactiveFormsModule,
+        ShipmentRoutingModule,
+        NgxDatatableModule,
+        NgxSkeletonLoaderModule,
+        ProductsModule
+    ]
 })
 export class ShipmentModule { }

@@ -33,8 +33,8 @@ import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
 import {AnalyticsProductViewComponent} from './analytics-product-view/analytics-product-view.component';
 import { ChangeRequestsComponent } from './product-list/change-requests/change-requests.component';
 import { NewAdditionsComponent } from './product-list/new-additions/new-additions.component';
-import { ProductListComponent } from './product-list/product-list/product-list.component';
 import { ProductSearchComponent } from './product-list/product-search/product-search.component';
+import {SharedModule} from "../../shared/shared.module";
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   maxFilesize: 50,
@@ -44,29 +44,39 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
 @NgModule({
   // declarations: [DigitalListComponent, DigitalAddComponent, EditProductsComponent, ViewProductComponent, ApproveProductComponent, QaApprovalViewComponent, QaNormalViewComponent, DeclinedProductComponent, ProductViewComponent, ApproveEditProductComponent, ApproveEditImageComponentComponent, PaginationComponent, AnalyticsProductViewComponent],
     declarations: [
-        DigitalListComponent, DigitalAddComponent, EditProductsComponent, ViewProductComponent, ApproveProductComponent, QaApprovalViewComponent, QaNormalViewComponent, DeclinedProductComponent, ProductViewComponent, ApproveEditProductComponent, ApproveEditImageComponentComponent, PaginationComponent, ChangeRequestsComponent, NewAdditionsComponent, ProductListComponent, ProductSearchComponent, AnalyticsProductViewComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    CKEditorModule,
-    ProductsRoutingModule,
-    Ng2SmartTableModule,
-    NgbModule,
-    DropzoneModule,
-    GalleryModule.forRoot(),
-    NgxDatatableModule,
-    AngularEditorModule,
-    SelectModule,
-    NgxSkeletonLoaderModule,
-  ],
-  providers: [
-    {
-      provide: DROPZONE_CONFIG,
-      useValue: DEFAULT_DROPZONE_CONFIG
-    },
-    NgbActiveModal
-  ]
+
+        DigitalListComponent, DigitalAddComponent, EditProductsComponent, ViewProductComponent, ApproveProductComponent, QaApprovalViewComponent, QaNormalViewComponent, DeclinedProductComponent, ProductViewComponent, ApproveEditProductComponent, ApproveEditImageComponentComponent, PaginationComponent, ChangeRequestsComponent, NewAdditionsComponent, ProductSearchComponent, AnalyticsProductViewComponent],
+
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        CKEditorModule,
+        ProductsRoutingModule,
+        Ng2SmartTableModule,
+        NgbModule,
+        DropzoneModule,
+        GalleryModule.forRoot(),
+        NgxDatatableModule,
+        AngularEditorModule,
+        SelectModule,
+        NgxSkeletonLoaderModule,
+      SharedModule,
+    ],
+    exports: [
+        PaginationComponent,
+
+
+
+    ],
+    providers: [
+        {
+            provide: DROPZONE_CONFIG,
+            useValue: DEFAULT_DROPZONE_CONFIG
+        },
+        NgbActiveModal
+    ]
+
 })
 export class ProductsModule {
 }
