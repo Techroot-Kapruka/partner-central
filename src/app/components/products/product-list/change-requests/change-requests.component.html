@@ -58,10 +58,12 @@
                         <app-table-template [HeadArray]="headEditProduct" [DataArray]="paginatedEditImgApproval.length > 0 ? paginatedEditImgApproval : nonActiveEditedImagesArray"
                                             [emptyTable]="emptyTableImg"    [editTab]="editTab" (onEditProduct)="ApproveEditImageProduct($event)"> </app-table-template>
                       </div>
+                    </div>
+                    <div class="pull-right" style="margin-top: 15px">
                       <app-pagination
-                              [currentPage]="currentPageEditImgApproval"
-                              [totalPages]="totalPagesEditImgApproval"
-                              (pageChange)="onPageChange($event,'EditImgApproval')"
+                              [currentPage]="currentPageEditProApproval"
+                              [totalPages]="totalPagesEditProApproval"
+                              (pageChange)="onPageChange($event,'EditProApproval')"
                       ></app-pagination>
                     </div>
                   </div>
