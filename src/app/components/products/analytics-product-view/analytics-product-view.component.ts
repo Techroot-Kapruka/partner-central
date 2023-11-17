@@ -33,7 +33,11 @@ export class AnalyticsProductViewComponent implements OnInit {
               private modal: NgbModal, private productService: ProductService) {
     this.getListProductView();
     this.getPartner();
-    // this.getSelectedPartnerAnalytics();
+    const sessionUser = sessionStorage.getItem('userRole');
+    if(sessionUser === 'ROLE_ADMIN'){
+      this.showHighestViewsForAdmin();
+    }
+
   }
 
   ngOnInit(): void {
@@ -123,6 +127,11 @@ export class AnalyticsProductViewComponent implements OnInit {
     }
     this.totalPages = Math.ceil(this.analyticsProductClickList.length / this.list_pages2);
     this.onPageChange(1,'ActivePro')
+  }
+  showHighestViewsForAdmin(){
+    this.analyticsService.showHighestViewsForAdmin().subscribe(
+      data => this.manageGetListProductView(data)
+    );
   }
 
   updateTableData(Descrip: string) {
