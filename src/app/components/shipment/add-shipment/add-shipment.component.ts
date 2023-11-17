@@ -201,7 +201,7 @@ export class AddShipmentComponent implements OnInit {
     let TotalSellerIncome=(document.getElementById('txtTotalSellerIncome') as HTMLInputElement).value
     Swal.fire({
       title: 'Shipment Added...!',
-      text: 'Click Download to get your shipment ID QR Code.',
+      text: 'Click to Download your Shipment QR Code.',
       icon: 'success',
       showCancelButton: false,
       showConfirmButton: true,

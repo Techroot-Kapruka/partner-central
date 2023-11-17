@@ -760,6 +760,7 @@ export class DigitalListComponent implements OnInit {
                 };
                 this.productService.updateStock(payloard).subscribe(
                     data => this.manageUpdateStock(data),
+                    error => this.manageUpdateError(error)
                 );
             }
         });
@@ -797,6 +798,16 @@ export class DigitalListComponent implements OnInit {
         // this.getNonActiveProdcut();
     }
 
+    manageUpdateError(data){
+        console.log(data)
+        Swal.fire(
+            'error!',
+            data.error.message,
+            'error'
+        ).then(() => {
+            this.getConsignmentProducts();
+        });
+    }
     getPartnersQrImage() {
         const payloard = {
             vendorCode: sessionStorage.getItem('partnerId')
