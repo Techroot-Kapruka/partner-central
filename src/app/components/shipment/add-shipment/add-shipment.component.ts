@@ -66,6 +66,7 @@ export class AddShipmentComponent implements OnInit {
   changeCostPrice: any;
   changeSellingPrice: any;
   modalRef: any;
+  shipmentID: any;
 
   @ViewChild('changePricePopup') changePricePopup: ElementRef;
   constructor(private route: ActivatedRoute, private shipmentNewService: ShipmentNewService,private router: Router,
@@ -199,46 +200,61 @@ export class AddShipmentComponent implements OnInit {
   manageSaveShipment(data) {
     let TotalSellerIncome=(document.getElementById('txtTotalSellerIncome') as HTMLInputElement).value
     Swal.fire({
-      title: 'Good Job...!',
-      text: data.message,
-      icon: 'success'
+      title: 'Shipment Added...!',
+      text: 'Click Download to get your shipment ID QR Code.',
+      icon: 'success',
+      showCancelButton: false,
+      showConfirmButton: true,
+      confirmButtonText: 'Download',
+      allowOutsideClick: false,
     }).then((result) => {
-      const doc = new jsPDF();
+      const payLoard= {
+        shipment_id: data.data.shipment_id
+      };
 
-      doc.setFontSize(15);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Consignment Note', 75, 10);
-      doc.setFontSize(10);
-      doc.text('Vendor Information', 10, 30);
-      doc.setFont('helvetica', 'normal');
-      doc.text('Business Name:'+ data.data.vendor_name, 20, 40);
-      doc.text('Email:'+sessionStorage.getItem('email'), 20, 45);
-      doc.text('Phone Number:'+ sessionStorage.getItem('contact_number'), 20, 50);
-      doc.setFontSize(10);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Shipment Details', 10, 70);
-      doc.setFont("helvetica", "italic", "bold");
-      doc.text('Shipment ID: '+ data.data.shipment_id, 140, 80);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Product Name', 50, 90);
-      doc.text('Quantity', 130, 90);
-      doc.text('Seller Income', 155, 90);
-      doc.text('Amount', 190, 90);
-      doc.setFontSize(8);
-      doc.setFont('helvetica', 'normal');
+      this.shipmentID = data.data.shipment_id;
+      this.shipmentNewService.generateQRCode(payLoard).subscribe(
+          data => {
+            this.manageSaveQr(data);
+          },
+      );
 
-      let x=100;
-      for (let i=0; i<=this.shipArray.length-1; i++){
-        doc.text(''+this.shipArray[i].product_name, 10, x);
-        doc.text(''+this.shipArray[i].quantity, 135, x);
-        doc.text(''+this.shipArray[i].cost_price, 165, x);
-        doc.text(''+this.shipArray[i].selling_price, 195, x);
-        x+=10;
-      }
-      doc.setFont('helvetica', 'bold');
-      doc.setFontSize(10);
-      doc.text('Sub Total '+TotalSellerIncome, 130, x+10);
-      doc.save('Consignment Note.pdf');
+      // const doc = new jsPDF();
+      //
+      // doc.setFontSize(15);
+      // doc.setFont('helvetica', 'bold');
+      // doc.text('Consignment Note', 75, 10);
+      // doc.setFontSize(10);
+      // doc.text('Vendor Information', 10, 30);
+      // doc.setFont('helvetica', 'normal');
+      // doc.text('Business Name:'+ data.data.vendor_name, 20, 40);
+      // doc.text('Email:'+sessionStorage.getItem('email'), 20, 45);
+      // doc.text('Phone Number:'+ sessionStorage.getItem('contact_number'), 20, 50);
+      // doc.setFontSize(10);
+      // doc.setFont('helvetica', 'bold');
+      // doc.text('Shipment Details', 10, 70);
+      // doc.setFont("helvetica", "italic", "bold");
+      // doc.text('Shipment ID: '+ data.data.shipment_id, 140, 80);
+      // doc.setFont('helvetica', 'bold');
+      // doc.text('Product Name', 50, 90);
+      // doc.text('Quantity', 130, 90);
+      // doc.text('Seller Income', 155, 90);
+      // doc.text('Amount', 190, 90);
+      // doc.setFontSize(8);
+      // doc.setFont('helvetica', 'normal');
+      //
+      // let x=100;
+      // for (let i=0; i<=this.shipArray.length-1; i++){
+      //   doc.text(''+this.shipArray[i].product_name, 10, x);
+      //   doc.text(''+this.shipArray[i].quantity, 135, x);
+      //   doc.text(''+this.shipArray[i].cost_price, 165, x);
+      //   doc.text(''+this.shipArray[i].selling_price, 195, x);
+      //   x+=10;
+      // }
+      // doc.setFont('helvetica', 'bold');
+      // doc.setFontSize(10);
+      // doc.text('Sub Total '+TotalSellerIncome, 130, x+10);
+      // doc.save('Consignment Note.pdf');
     });
 
     this.tableData = [];
@@ -247,7 +263,35 @@ export class AddShipmentComponent implements OnInit {
     this.shipmentForm.get('txtGrossAmount').setValue('');
     this.shipmentForm.get('txtAllQuantity').setValue('');
     (document.getElementById('txtTotalSellerIncome') as HTMLInputElement).value = '';
+
+    const productSelect = document.getElementById('SelectedProduct') as HTMLSelectElement;
+    productSelect.value = '';
   }
+
+  manageSaveQr(data){
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const img = new Image();
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+
+      const dataUrl = canvas.toDataURL('image/png');
+      this.downloadQRImage(dataUrl);
+    };
+
+    img.src = 'data:image/png;base64,' + data.data.qrByte;
+  }
+
+  downloadQRImage(dataUrl: string) {
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = 'QRCode_' + this.shipmentID + '.png';
+    link.click();
+  }
+
 
   searchProduct() {
     const vendorCode = sessionStorage.getItem('partnerId');

@@ -64,7 +64,7 @@
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
                           <app-table-template [HeadArray]="headOut" [DataArray]="paginatedOutofStock.length > 0 ? paginatedOutofStock : list_outof_stock"
-                                              [emptyTable]="emptyTableOutStock" (onPopUpImg)="popUpImage($event)"  (onClick)="clickProduct($event)" > </app-table-template>
+                                              [outOfStock]="outOfStock" [emptyTable]="emptyTableOutStock" (onPopUpImg)="popUpImage($event)"  (onClick)="clickProduct($event)" > </app-table-template>
                         </div>
                       </div>
                     </div>
@@ -132,7 +132,7 @@
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
                           <app-table-template [HeadArray]="headOnDemand" [DataArray]="paginatedOnDemand.length > 0 ? paginatedOnDemand : consignmentProducts"
-                                              [emptyTable]="emptyTableOnDemand" (onPopUpImg)="popUpImage($event)"       (onAddStock)="UpdateVirtualStocks($event)" [startIndex]="startIndex" [vStock]="vstock" (check)="onVstockChange($event)" [onDemand]="onDemand" [nonActivePartner]="nonActivePartner"> </app-table-template>
+                                              [emptyTable]="emptyTableOnDemand" (onPopUpImg)="popUpImage($event)"       (onAddStock)="UpdateVirtualStocks($event)" [startIndex]="startIndex" [vStock]="vstock" [onDemand]="onDemand" [nonActivePartner]="nonActivePartner"> </app-table-template>
                         </div>
                       </div>
                     </div>

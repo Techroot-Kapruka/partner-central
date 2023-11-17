@@ -61,6 +61,7 @@ export class DigitalListComponent implements OnInit {
     public filterClickOutOfStock: number = 0;
     public filterClickSuspend: number = 0;
     public filterClickOnDemand: number = 0;
+    public addStockAmount: number;
 
     public product_code = '';
     public qrImage = '';
@@ -99,6 +100,7 @@ export class DigitalListComponent implements OnInit {
     active: boolean = false;
     suspend: boolean = false;
     onDemand: boolean = false;
+    outOfStock: boolean = false;
     nonActivePartner: boolean = false;
 
     protected readonly print = print;
@@ -288,6 +290,7 @@ export class DigitalListComponent implements OnInit {
                     vendor: data.data[i].vendor,
                     createDate: data.data[i].create_date,
                     categoryPath: data.data[i].categoryPath,
+                    update_date_time: data.data[i].update_date_time.slice(0, -2),
                     action: '',
                 };
                 this.list_pages.push(or);
@@ -577,6 +580,7 @@ export class DigitalListComponent implements OnInit {
                         createDate: data.data[i].create_date,
                         vendor: data.data[i].vendor,
                         categoryPath: data.data[i].categoryPath,
+                        update_date_time: data.data[i].update_date_time.slice(0, -2),
                         action: ''
                     };
                     this.nonActiveProductsArray.push(or);
@@ -688,6 +692,7 @@ export class DigitalListComponent implements OnInit {
                         variationId: data.data[i].onDemand_products.variationId,
                         categoryColor: data.data[i].onDemand_products.color,
                         categorySizes: data.data[i].onDemand_products.sizes,
+                        update_date_time: data.data[i].onDemand_products.update_date_time.slice(0, -2),
                         categoryPath: data.data[i].category_path,
                         image: data.data[i].product_img.split('/product')[1],
                         Action: ''
@@ -699,7 +704,6 @@ export class DigitalListComponent implements OnInit {
                     {'Head': 'Image', 'FieldName': 'image'},
                     {'Head': 'Title', 'FieldName': 'title'},
                     {'Head': 'In Stock', 'FieldName': 'in_stock'},
-                    {'Head': 'Add Stock', 'FieldName': 'createDate'},
                     {'Head': 'Create Date', 'FieldName': 'price'},
                     {'Head': 'Action', 'FieldName': ''},
                 ];
@@ -722,29 +726,63 @@ export class DigitalListComponent implements OnInit {
     // }
 
     // asitha
-    UpdateVirtualStocks(row: any) {
-        console.log('input Value!!!')
-        console.log(this.vstock[this.startIndex + row])
-        if (this.vstock[this.startIndex + row] === null || this.vstock[this.startIndex + row] === undefined || isNaN(this.vstock[this.startIndex + row]) || this.stockUpdate) {
-            Swal.fire(
-                'error!',
-                'Invalid stock value. Please enter a valid number.',
-                'error'
-            );
-            this.vstock[this.startIndex + row] = null;
-            return;
-        }
-
-        const payloard = {
-            productCode: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].productCode : this.consignmentProducts[this.startIndex + row].productCode,
-            vendor: sessionStorage.getItem('partnerId'),
-            quantity: this.vstock[this.startIndex + row],
-            variationTheme: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].variationTheme : this.consignmentProducts[this.startIndex + row].variationTheme,
-            variationId: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].variationId : this.consignmentProducts[this.startIndex + row].variationId
-        };
-        this.productService.updateStock(payloard).subscribe(
-            data => this.manageUpdateStock(data),
-        );
+    UpdateVirtualStocks(event) {
+        Swal.fire({
+            title: 'Add Stock',
+            text: '',
+            icon: 'info',
+            showCancelButton: true,
+            showConfirmButton: true,
+            confirmButtonText: 'Add Stock',
+            allowOutsideClick: false,
+            input: 'number',
+            inputPlaceholder: 'Add Stock',
+            inputAttributes: {
+                style: 'width: 50%; margin: 5px auto; display: block;'
+            },
+            inputValidator: (value) => {
+                this.addStockAmount = parseInt(value);
+                if (!value) {
+                    return 'Please enter a valid stock value';
+                }
+                if (parseInt(value) + event.in_stock < 0){
+                    return 'Add Stock Must Be More Than In Stock';
+                }
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const payloard = {
+                    productCode: event.productCode,
+                    vendor: sessionStorage.getItem('partnerId'),
+                    quantity: this.addStockAmount,
+                    variationTheme: event.variationTheme ,
+                    variationId: event.variationId
+                };
+                this.productService.updateStock(payloard).subscribe(
+                    data => this.manageUpdateStock(data),
+                );
+            }
+        });
+        // if (this.vstock[this.startIndex + row] === null || this.vstock[this.startIndex + row] === undefined || isNaN(this.vstock[this.startIndex + row]) || this.stockUpdate) {
+        //     Swal.fire(
+        //         'error!',
+        //         'Invalid stock value. Please enter a valid number.',
+        //         'error'
+        //     );
+        //     this.vstock[this.startIndex + row] = null;
+        //     return;
+        // }
+        //
+        // const payloard = {
+        //     productCode: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].productCode : this.consignmentProducts[this.startIndex + row].productCode,
+        //     vendor: sessionStorage.getItem('partnerId'),
+        //     quantity: this.vstock[this.startIndex + row],
+        //     variationTheme: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].variationTheme : this.consignmentProducts[this.startIndex + row].variationTheme,
+        //     variationId: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].variationId : this.consignmentProducts[this.startIndex + row].variationId
+        // };
+        // this.productService.updateStock(payloard).subscribe(
+        //     data => this.manageUpdateStock(data),
+        // );
 
     }
 
@@ -974,28 +1012,28 @@ export class DigitalListComponent implements OnInit {
         this.onPageChange(1, 'EditProApproval');
     }
 
-    private manageFieldImageEditData(data) {
-        for (let i = 0; i < data.data.length; i++) {
-
-            const payloard = {
-                productCode: data.data[i].productCode,
-                requestBy: data.data[i].vendorName,
-                editId: data.data[i].editId,
-                requestedDate: data.data[i].requestedDate,
-                title: data.data[i].title,
-                catePath: data.data[i].catePath,
-                action: ''
-
-            };
-
-            this.product_code = data.data[i].productCode;
-            this.unique_code = data.data[i].editId;
-
-            this.nonActiveEditedImageProductsArray.push(payloard);
-        }
-        this.totalPagesEditImgApproval = Math.ceil(this.nonActiveEditedImageProductsArray.length / this.list_pages2);
-        this.onPageChange(1, 'EditImgApproval');
-    }
+    // private manageFieldImageEditData(data) {
+    //     for (let i = 0; i < data.data.length; i++) {
+    //
+    //         const payloard = {
+    //             productCode: data.data[i].productCode,
+    //             requestBy: data.data[i].vendorName,
+    //             editId: data.data[i].editId,
+    //             requestedDate: data.data[i].requestedDate,
+    //             title: data.data[i].title,
+    //             catePath: data.data[i].catePath,
+    //             action: ''
+    //
+    //         };
+    //
+    //         this.product_code = data.data[i].productCode;
+    //         this.unique_code = data.data[i].editId;
+    //
+    //         this.nonActiveEditedImageProductsArray.push(payloard);
+    //     }
+    //     this.totalPagesEditImgApproval = Math.ceil(this.nonActiveEditedImageProductsArray.length / this.list_pages2);
+    //     this.onPageChange(1, 'EditImgApproval');
+    // }
 
     onImageError(event: any): void {
         this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
@@ -1026,6 +1064,7 @@ export class DigitalListComponent implements OnInit {
                     in_stock: data.data[i].in_stock,
                     createDate: data.data[i].create_date,
                     categoryPath: data.data[i].categoryPath,
+                    update_date_time: data.data[i].update_date_time.slice(0, -2),
                     vendor: data.data[i].vendor,
                     action: ''
                 };
@@ -1038,7 +1077,7 @@ export class DigitalListComponent implements OnInit {
                 {'Head': 'Stock In Hand', 'FieldName': 'in_stock'},
                 {'Head': 'Create Date', 'FieldName': 'createDate'},
             ];
-
+this.outOfStock=true;
             this.totalPagesOS = Math.ceil(this.list_outof_stock.length / this.list_pages2);
             this.onPageChange(1, 'OutofStock');
         }
@@ -1071,6 +1110,7 @@ export class DigitalListComponent implements OnInit {
                     createDate: data.data[i].create_date,
                     categoryPath: data.data[i].categoryPath,
                     vendor: data.data[i].vendor,
+                    update_date_time: data.data[i].update_date_time.slice(0, -2),
                     action: ''
                 };
                 this.list_suspend.push(or);
@@ -1146,8 +1186,10 @@ export class DigitalListComponent implements OnInit {
     }
 
     onVstockChange(row) {
+        console.log('here')
+        console.log(row)
         if (this.filteredOnDemandProduct.length > 0) {
-            if (this.vstock[this.startIndex + row] + this.filteredOnDemandProduct[this.startIndex + row].in_stock < 0) {
+            if ( this.filteredOnDemandProduct[this.startIndex + row].in_stock < 0) {
                 Swal.fire({
                     title: 'Add Stock Must Be More Than In Stock',
                     text: 'Please enter a valid stock value.',
@@ -1159,7 +1201,7 @@ export class DigitalListComponent implements OnInit {
                 this.stockUpdate = false;
             }
         } else {
-            if (this.consignmentProducts[this.startIndex + row].in_stock + this.vstock[this.startIndex + row] < 0) {
+            if ( this.vstock[this.startIndex + row] < 0) {
                 Swal.fire({
                     title: 'Add Stock Must Be More Than In Stock',
                     text: 'Please enter a valid stock value.',

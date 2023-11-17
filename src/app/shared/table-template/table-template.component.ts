@@ -19,6 +19,7 @@ export class TableTemplateComponent implements OnInit {
   @Input() active: boolean = false;
   @Input() suspend: boolean = false;
   @Input() onDemand: boolean = false;
+  @Input() outOfStock: boolean = false;
   @Input() nonActiveAdmin: boolean = false;
   @Input() nonActivePartner: boolean = false;
   @Input() pendingStockPartner: boolean = false;
