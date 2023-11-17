@@ -1163,8 +1163,10 @@ export class EditProductsComponent implements OnInit {
       referenceId: productId,
       type: 'PRODUCT',
       sub_type: 'product_basic',
-      comment: 'Test',
+      comment: 'product_basic',
       requestedBy: partnerId,
+      userId: sessionStorage.getItem('userId'),
+
       data: [
         {
           column_name: 'title',
@@ -1227,11 +1229,21 @@ export class EditProductsComponent implements OnInit {
   }
 
   private manageEditField(data) {
-    Swal.fire(
-      'well done...!',
-      data.message,
-      'success'
-    );
+
+    if (data.message_status === 'Error'){
+      Swal.fire(
+        'error...!',
+        data.message,
+        'error'
+      );
+    }else if(data.message_status === 'Success'){
+      Swal.fire(
+        'well done...!',
+        data.message,
+        'success'
+      );
+    }
+
     this.router.navigate(['products/digital/digital-product-list']);
 
   }
@@ -1277,8 +1289,10 @@ export class EditProductsComponent implements OnInit {
         referenceId: productId,
         type: 'PRODUCT',
         sub_type: 'product_description',
-        comment: 'Test',
+        comment: 'product_description',
         requestedBy: partnerId,
+        userId: sessionStorage.getItem('userId'),
+
         data: [
           {
             column_name: 'description',
@@ -1418,6 +1432,7 @@ export class EditProductsComponent implements OnInit {
       sub_type: 'product_price',
       comment: 'PRODUCT_PRICE',
       requestedBy: this.vendorCode,
+      userId: sessionStorage.getItem('userId'),
       data: [
         {
           column_name: 'cost_price',

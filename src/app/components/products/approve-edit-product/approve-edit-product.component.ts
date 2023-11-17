@@ -77,7 +77,8 @@ export class ApproveEditProductComponent implements OnInit {
     let payloads = {
       referenceId: this.productCode_,
       rejectedUser: this.requestedBy,
-      unique_code : this.uniqueCode_
+      unique_code : this.uniqueCode_,
+      userId : sessionStorage.getItem('userId')
     };
 
 
