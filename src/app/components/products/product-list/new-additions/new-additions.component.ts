@@ -252,7 +252,7 @@ export class NewAdditionsComponent implements OnInit {
       this.pendingStockAdmin = false;
       this.pendingStockPartner=true;
     }
-    return `Pending Shipments (${count})`;
+    return `Pending Stock Allocation (${count})`;
   }
 
   getPendingApprovalList() {
