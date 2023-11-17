@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {ProductService} from "../../../../shared/service/product.service";
 import {Router} from "@angular/router";
 import {environment} from "../../../../../environments/environment.prod";
-import {error} from "protractor";
 
 @Component({
   selector: 'app-product-search',
@@ -167,7 +166,5 @@ export class ProductSearchComponent implements OnInit {
     this.imageDefaultPathURI = this.imagePathURI.replace('/product', '');
     event.target.src = this.imageDefaultPathURI + '/1.jpg';
   }
-
-
 
 }
