@@ -47,11 +47,20 @@
     </div>
     <div class="col-md-6 blocksB" [hidden]="!isDivVisible" *ngIf="isViewFormVisible">
       <div style="border: 1px solid #0E0D39;max-height: 75vh;overflow-y: scroll;padding: 1%">
-        <p class="pathTitle">{{elementCategoryPath}} </p>
-        <p class="blockstitle">{{elementProductCode}} - {{elementTitle}} </p>
+        <div class="row">
+          <div class="col-md-8">
+            <p class="pathTitle">{{elementCategoryPath}} </p>
+          </div>
+          <div class="col-md-4">
+            <h3><span class="badge {{badge}}" style="float: right">{{elementStatus}}</span></h3>
+          </div>
+        </div>
+
+        <p class="blockstitle">{{elementProductCode}} - {{elementTitle}}</p>
         <img src="{{imagePathURI + elementImage}}" alt="Image" class="img-fluid" (error)="onImageError($event)" style="width: 200px;height: 200px">
 
         <p class="blockSV">{{elementVendorCode}} - {{elementVendor}}</p>
+
         <p>{{elementDescription}}</p>
         <p>Create Date Time : {{elementCreateDateTime}}</p>
         <div class="table-responsive-sm">
@@ -92,8 +101,10 @@
             </tr>
             </tbody>
           </table>
+          <p class="history-container" [innerHTML]="elementHistory"></p>
         </div>
       </div>
     </div>
   </div>
 </div>
+

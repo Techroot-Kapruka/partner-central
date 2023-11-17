@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ProductService} from "../../../../shared/service/product.service";
 import {Router} from "@angular/router";
 import {environment} from "../../../../../environments/environment.prod";
+import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-product-search',
@@ -26,20 +27,27 @@ export class ProductSearchComponent implements OnInit {
   public elementCreateDateTime: any;
   public elementCategoryName: any;
   public elementVendor: any;
+  public elementStatus: any;
   public elementVendorCode: any;
   public elementDescription: any;
   public elementImage: any;
+  public elementHistory: SafeHtml;
   public elementVariations = [];
   public elementVariationsTheme = [];
   public imageDefaultPathURI = '';
 
-  isButtonClick: boolean = true;
 
-  constructor(private productService: ProductService, private router: Router) {
+
+  isButtonClick: boolean = true;
+  public badge: any;
+
+  constructor(private productService: ProductService, private router: Router, private sanitizer: DomSanitizer) {
   }
 
   ngOnInit(): void {
   }
+
+
 
   onSearch(inputValue: string) {
     this.searchText = inputValue;
@@ -66,7 +74,7 @@ export class ProductSearchComponent implements OnInit {
   }
 
   manageGetProductSearchList(data) {
-    if(data.data === null){
+    if (data.data === null) {
       this.isButtonClick = true
     }
     this.startIndex = 0;
@@ -88,7 +96,7 @@ export class ProductSearchComponent implements OnInit {
   private errorManage(error: any) {
     console.log(error)
     // if (error.status === 401) {
-      this.isButtonClick = true
+    this.isButtonClick = true
     // }
   }
 
@@ -121,8 +129,15 @@ export class ProductSearchComponent implements OnInit {
     this.elementVendorCode = data.data.product.vendor
     this.elementDescription = data.data.product.productDescription.description
     this.elementImage = (data.data.product.productImage.image1 && data.data.product.productImage.image1 ? data.data.product.productImage.image1.split('/product')[1] : '') || ''
-    console.log('image : ' + this.elementImage)
-
+    if (data.data.product.isOut === 0) {
+      this.elementStatus = 'Available'
+      this.badge = 'badge-success'
+    }else {
+      this.elementStatus = 'Out of Stock'
+      this.badge = 'badge-danger'
+    }
+    // this.elementHistory = 'Exotic Perfumes & Cosmetics - Create Product - Sat Nov 11 12:14:29 IST 2023 <hr size=1>'
+    this.elementHistory = this.sanitizer.bypassSecurityTrustHtml(data.data.product.productHistory);
     this.elementVariations = [];
     for (let i = 0; i < data.data.product.productVariation.length; i++) {
       this.elementVariationsTheme = [];
@@ -142,7 +157,6 @@ export class ProductSearchComponent implements OnInit {
       }
       this.elementVariations.push(res);
     }
-    console.log(this.elementVariationsTheme)
     if (this.elementVariationsTheme[0].value == 'none') {
       this.isValue = true;
     } else {
@@ -166,5 +180,5 @@ export class ProductSearchComponent implements OnInit {
     this.imageDefaultPathURI = this.imagePathURI.replace('/product', '');
     event.target.src = this.imageDefaultPathURI + '/1.jpg';
   }
-  
+
 }
