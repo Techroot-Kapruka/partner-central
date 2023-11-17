@@ -34,5 +34,10 @@ export class AnalyticsProductService {
     return this.httpClient.post<any>(this.SERVER + 'analyticsProduct/getProductViewList', object, {headers});
   }
 
+  showHighestViewsForAdmin() {
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.get<any>(this.SERVER + 'analyticsProduct/showHighestViewsForAdmin', {headers});
+  }
+
 
 }

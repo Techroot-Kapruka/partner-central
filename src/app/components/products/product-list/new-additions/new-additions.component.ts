@@ -2,7 +2,7 @@ import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ProductService} from "../../../../shared/service/product.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {PendingStockAllocationShareService} from "../../../../shared/service/pending-stock-allocation-share.service";
-import {NgbModal, NgbTabset} from "@ng-bootstrap/ng-bootstrap";
+import {NgbModal, NgbTabChangeEvent, NgbTabset} from "@ng-bootstrap/ng-bootstrap";
 import {AuthService} from "../../../../shared/auth/auth.service";
 import Swal from 'sweetalert2';
 import {environment} from "../../../../../environments/environment.prod";
@@ -84,6 +84,9 @@ export class NewAdditionsComponent implements OnInit {
   totalPagesPQC = 0; // Total number of pages
 
   totalPagesPendingAllow = 0; // Total number of pages
+
+  public emptyTableStock = false;
+  public emptyTablePendingProduct = false;
 
   @ViewChild('imagePopup') imagePopup: ElementRef;
   @ViewChild('pricePopup') pricePopup: ElementRef;
@@ -431,6 +434,23 @@ export class NewAdditionsComponent implements OnInit {
       this.router.navigate([url]);
   }
 
+  onTabSelect(event: NgbTabChangeEvent) {
+    const tabId = event.nextId;
+    console.log(tabId)
+    switch (tabId) {
+      case 'ngb-tab-0':
+        // stock allocation
+        this.emptyTableStock = false;
+        break;
+      case 'ngb-tab-1':
+        // pending products
+        this.emptyTablePendingProduct = false;
+        break;
+      default:
+        this.emptyTableStock = false;
+        this.emptyTablePendingProduct = false;
+    }
+  }
   popUpImage(event) {
       this.imageUrl = this.imagePathURI + event.image;
       this.modalRef = this.modal.open(this.imagePopup, {centered: true});
@@ -537,17 +557,36 @@ export class NewAdditionsComponent implements OnInit {
   // search Filters
   PendingQCFilter(searchTerm: string): void {
     this.filteredPendingQC = this.approvalPartnerProductList.filter(product =>
-      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+        product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.vendor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.categoryPath.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    if (this.filteredPendingQC.length == 0) {
+      this.emptyTablePendingProduct = true;
+    } else {
+      this.emptyTablePendingProduct = false;
+    }
+
     this.totalPagesPQC = Math.ceil(this.filteredPendingQC.length / this.list_pages2);
     this.onPageChange(1, 'PendingQC');
   }
 
   PendingStockAllocationFilter(searchTerm: String): void {
     this.filterdPendingAllocation = this.pending_stock_allocation.filter(product =>
-      product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+        product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.vendor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.categoryPath.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    if (this.filterdPendingAllocation.length == 0) {
+      this.emptyTableStock = true;
+    } else {
+      this.emptyTableStock = false;
+    }
+
     this.totalPagesPendingAllow = Math.ceil(this.filterdPendingAllocation.length / this.list_pages2);
     this.onPageChange(1, 'PendingStockAllocation')
   }
@@ -564,9 +603,17 @@ export class NewAdditionsComponent implements OnInit {
   PendingProductFilter(searchTerm: string): void {
 
     this.filteredPendingProducts = this.nonActiveProductsArray.filter(product =>
-      product.title.toLowerCase().includes(searchTerm.toLowerCase())
+        product.productCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.vendor.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.categoryPath.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    if (this.filteredPendingProducts.length == 0) {
+      this.emptyTablePendingProduct = true;
+    } else {
+      this.emptyTablePendingProduct = false;
+    }
     this.totalPagesPA = Math.ceil(this.filteredPendingProducts.length / this.list_pages2);
     this.onPageChange(1, 'PendingPro');
   }

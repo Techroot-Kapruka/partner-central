@@ -1,8 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {AnalyticsProductService} from '../../../shared/service/analytics-product.service';
 import {environment} from "../../../../environments/environment.prod";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {ProductService} from "../../../shared/service/product.service";
 
 @Component({
   selector: 'app-analytics-product-view',
@@ -24,13 +25,46 @@ export class AnalyticsProductViewComponent implements OnInit {
   modalRef: any;
   public imageDefaultPathURI = '';
 
+  public isAdmin = false;
+  public partnerArray = [];
+
   @ViewChild('imagePopup') imagePopup: ElementRef;
-  constructor(private router: Router, private activatedroute: ActivatedRoute, private analyticsService: AnalyticsProductService, private modal: NgbModal) {
+  constructor(private router: Router, private analyticsService: AnalyticsProductService,
+              private modal: NgbModal, private productService: ProductService) {
     this.getListProductView();
+    this.getPartner();
+    const sessionUser = sessionStorage.getItem('userRole');
+    if(sessionUser === 'ROLE_ADMIN'){
+      this.showHighestViewsForAdmin();
+    }
+
   }
 
   ngOnInit(): void {
   }
+
+  getPartner(): void {
+    const sessionUser = sessionStorage.getItem('userRole');
+    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER') {
+      this.isAdmin = true;
+      this.productService.getPartnerAll().subscribe(
+        data => this.managePartners(data),
+      );
+    }
+  }
+  managePartners(data) {
+    let pr = {};
+    const array = data.data.length;
+    const partnerValue = data.data;
+    for (let i = 0; i < array; i++) {
+      pr = {
+        name: partnerValue[i].businessName,
+        value: partnerValue[i].partner_u_id
+      };
+      this.partnerArray.push(pr);
+    }
+  }
+
 
   stopLoading() {
     this.stillLoading = false;
@@ -47,6 +81,23 @@ export class AnalyticsProductViewComponent implements OnInit {
     this.selected.push(...selected);
 
   }
+  getSelectedPartnerAnalytics() {
+    const sessionUser = sessionStorage.getItem('userRole');
+    let object = {};
+    if (sessionUser === 'ROLE_PARTNER') {
+      object = {
+        vendor_code: sessionStorage.getItem('partnerId')
+      };
+    }else {
+      const name = (document.getElementById('select_pro2') as HTMLInputElement).value;
+      object = {
+        vendor_code: name
+      };
+    }
+    this.analyticsService.getListProductView(object).subscribe(
+      data => this.manageGetListProductView(data)
+    );
+  }
   getListProductView() {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
@@ -57,6 +108,7 @@ export class AnalyticsProductViewComponent implements OnInit {
   }
 
   manageGetListProductView(data) {
+    console.log(data)
     this.startIndex = 0;
     this.analyticsProductClickList = [];
     for (let i = 0; i < data.data.length; i++) {
@@ -67,7 +119,7 @@ export class AnalyticsProductViewComponent implements OnInit {
         productAddToCartTotal : data.data[i].productAddToCartTotal,
         productOrderTotal : data.data[i].productOrderTotal,
         categoryPath : data.data[i].categoryPath,
-        productImage : data.data[i].productImage,
+        productImage: (data.data[i].productImage && data.data[i].productImage ? data.data[i].productImage.split('/product')[1] : '') || '',
         rateCart : data.data[i].rateCart,
         rateOrder : data.data[i].rateOrder
       };
@@ -75,6 +127,11 @@ export class AnalyticsProductViewComponent implements OnInit {
     }
     this.totalPages = Math.ceil(this.analyticsProductClickList.length / this.list_pages2);
     this.onPageChange(1,'ActivePro')
+  }
+  showHighestViewsForAdmin(){
+    this.analyticsService.showHighestViewsForAdmin().subscribe(
+      data => this.manageGetListProductView(data)
+    );
   }
 
   updateTableData(Descrip: string) {
@@ -92,7 +149,7 @@ export class AnalyticsProductViewComponent implements OnInit {
   }
 
   popUpImageActive(index: number) {
-      this.imageUrl = this.imagePathURI + this.analyticsProductClickList[this.startIndex + index].image;
+      this.imageUrl = this.imagePathURI + this.analyticsProductClickList[this.startIndex + index].productImage;
       this.modalRef = this.modal.open(this.imagePopup, {centered: true});
   }
 

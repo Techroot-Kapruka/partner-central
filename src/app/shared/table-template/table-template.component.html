@@ -29,7 +29,7 @@
     </thead>
     <tbody>
 
-    <ng-container *ngIf="!editTab">
+    <ng-container *ngIf="!editTab && !emptyTable">
         <tr *ngFor="let productDetail of DataArray; let i = index;">
             <td align="center">{{stopLoading()}}<img src="{{ imagePathURI + productDetail.image }}" height="60px" width="60px"
                                     (error)="onImageError($event)" (click)="popUpImageActive(productDetail)"></td>
@@ -96,7 +96,7 @@
         </tr>
     </ng-container>
 
-    <ng-container *ngIf="editTab">
+    <ng-container *ngIf="editTab && !emptyTable">
         <tr *ngFor="let productDetail of DataArray; let i = index;">
             <!--            <td *ngFor="let head of HeadArray">{{productDetail.image}}</td>-->
             <td align="center">{{stopLoading()}}<img src="{{ imagePathURI + productDetail.image }}" height="60px" width="60px"
@@ -118,6 +118,14 @@
                 </button>
             </td>
         </tr>
+    </ng-container>
+    <ng-container *ngIf="emptyTable">
+        <tr class="alert alert-info" role="alert">
+            <td colspan="6">
+                No Data
+            </td>
+        </tr>
+
     </ng-container>
     </tbody>
 </table>
