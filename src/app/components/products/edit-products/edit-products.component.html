@@ -132,9 +132,9 @@
 <!--                                <img class="editImg" alt="" src="../../../../assets/images/ico/editImg.png" *ngIf="!isAdmin">-->
                                 <img class="imgUpload" id="imageOneO" alt="" src="{{imagePathURI+imageOne}}" (click)="loadimg(1)" >
                               </div>
-                              <div style="display: flex; justify-content: center; align-items: center;margin-top: 5%" *ngIf="!isAdmin">
+                              <div style="display: flex; justify-content: center; align-items: center;margin-top: 5%" *ngIf="imageOne && !isAdmin">
                                 <label for="image01" class="upload-button btn btn-light" style="text-align: center"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></label>
-                                <input id="image01" class="upload" type="file" formControlName="imageOne" accept="image/jpeg" style="display: none;" (change)="changeValue($event, 1)">
+                                <input id="image01" class="upload" type="file" formControlName="imageOne" accept="image/jpeg" style="display: none;" (change)="imageAssign($event, 'imageOneO',1)">
 
                               </div>
                             </li>
@@ -147,7 +147,7 @@
                               </div>
                               <div *ngIf="imageOne2 && !isAdmin" style="display: flex; justify-content: center; align-items: center;margin-top: 5%">
                                 <label for="image02" class="upload-button btn btn-light" style="text-align: center"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></label>
-                                <input id="image02" class="upload" type="file" formControlName="imageOne2" accept="image/jpeg" style="display: none;" (change)="changeValue2($event)">
+                                <input id="image02" class="upload" type="file" formControlName="imageOne2" accept="image/jpeg" style="display: none;" (change)="imageAssign($event,'imageTwoO',2)">
 
                               </div>
                             </li>
@@ -160,7 +160,7 @@
                               </div>
                               <div *ngIf="imageOne3 && !isAdmin" style="display: flex; justify-content: center; align-items: center;margin-top: 5%">
                                 <label for="image03" class="upload-button btn btn-light" style="text-align: center"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></label>
-                                <input id="image03" class="upload" type="file" formControlName="imageOne3" accept="image/jpeg" style="display: none;" (change)="changeValue3($event)">
+                                <input id="image03" class="upload" type="file" formControlName="imageOne3" accept="image/jpeg" style="display: none;" (change)="imageAssign($event,'imageTreeE',3)">
 
                               </div>
                             </li>
@@ -173,7 +173,7 @@
                               </div>
                               <div *ngIf="imageOne4 && !isAdmin" style="display: flex; justify-content: center; align-items: center;margin-top: 5%">
                                 <label for="image04" class="upload-button btn btn-light" style="text-align: center"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></label>
-                                <input id="image04" class="upload" type="file" formControlName="imageOne4" accept="image/jpeg" style="display: none;" (change)="changeValue4($event)">
+                                <input id="image04" class="upload" type="file" formControlName="imageOne4" accept="image/jpeg" style="display: none;" (change)="imageAssign($event,'imageFourR',4)">
 
                               </div>
                             </li>
@@ -187,7 +187,7 @@
                               </div>
                               <div *ngIf="imageOne5 && !isAdmin" style="display: flex; justify-content: center; align-items: center;margin-top: 5%">
                                 <label for="image05" class="upload-button btn btn-light" style="text-align: center"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></label>
-                                <input id="image05" class="upload" type="file" formControlName="imageOne5" accept="image/jpeg" style="display: none;" (change)="changeValue5($event)" >
+                                <input id="image05" class="upload" type="file" formControlName="imageOne5" accept="image/jpeg" style="display: none;" (change)="imageAssign($event,'imageFiveE',5)" >
                               </div>
                             </li>
                             <!--=============================-->

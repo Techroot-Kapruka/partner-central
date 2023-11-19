@@ -383,389 +383,44 @@ export class EditProductsComponent implements OnInit {
     }
   }
 
-  async changeValue(event: any, i) {
-    if (event.target.files.length === 0) {
-      return;
-    }
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-
-    if (!mimeType.match(/^image\/jpeg$/i)) {
-      Swal.fire(
-        'Error',
-        'Please select a JPEG (jpg) image.',
-        'warning'
-      );
-      return; // Stop further actions if the image is not a JPEG
-    }
-
-    // Check the image resolution
-    let image = new Image();
-    image.src = URL.createObjectURL(event.target.files[0]);
-
-    // Create a promise to hold the async operation
-    const checkImageResolution = new Promise<void>((resolve, reject) => {
-      image.onload = () => {
-        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
-          Swal.fire(
-            'Error',
-            'The maximum resolution supported for images is 5000x5000 pixels.',
-            'error'
-          );
-          reject('Invalid image resolution'); // Reject the promise to stop further actions
-        } else {
-          resolve(); // Resolve the promise to continue with further actions
-        }
-      };
-    });
-
-    try {
-      // Wait for the image resolution check to complete
-      await checkImageResolution;
-
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-
-
-      reader.onload = (_event) => {
-        (document.getElementById('imageOneO') as HTMLInputElement).src = reader.result.toString();
-        (document.getElementById('mainImage') as HTMLInputElement).src = reader.result.toString();
-      };
-
-      // Upload and handle the image
-      if (event.target.files.length > 0) {
-        const file = event.target.files[0];
-        this.imageService.resizeImage(file)
-          .then((resizedFile) => {
-            this.imageCliant.patchValue({
-              fileSource: resizedFile
-            });
-          })
-          .catch((error) => {
-            Swal.fire(
-              'error',
-              'Image upload error: ' + error,
-              'error'
-            );
+  async imageAssign(event, imgID, index){
+    const result = await this.imageService.validateImage(event,imgID,"edit");
+    switch(index){
+      case 1:
+        if(result){
+          this.imageCliant.patchValue({
+            fileSource: result
           });
-      }
-    } catch (error) {
-      Swal.fire(
-        'Error',
-        'The maximum resolution supported for images is 5000x5000 pixels.',
-        'error'
-      );
-    }
-  }
-
-  async changeValue2(event) {
-    if (event.target.files.length === 0) {
-      return;
-    }
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-
-    if (!mimeType.match(/^image\/jpeg$/i)) {
-      Swal.fire(
-        'Error',
-        'Please select a JPEG (jpg) image.',
-        'warning'
-      );
-      return;
-    }
-    // Check the image resolution
-    let image = new Image();
-    image.src = URL.createObjectURL(event.target.files[0]);
-    // Create a promise to hold the async operation
-    const checkImageResolution = new Promise<void>((resolve, reject) => {
-      image.onload = () => {
-        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
-          Swal.fire(
-            'Error',
-            'The maximum resolution supported for images is 5000x5000 pixels.',
-            'error'
-          );
-          this.removeimg(2);
-          reject('Invalid image resolution'); // Reject the promise to stop further actions
-        } else {
-          resolve(); // Resolve the promise to continue with further actions
         }
-      };
-    });
-
-    try {
-      // Wait for the image resolution check to complete
-      await checkImageResolution;
-
-      // Continue with further actions here because the image is valid
-      // Display the image
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-
-      reader.onload = (_event) => {
-        (document.getElementById('imageTwoO') as HTMLInputElement).src = reader.result.toString();
-      };
-
-      // Upload and handle the image
-      if (event.target.files.length > 0) {
-        const file = event.target.files[0];
-        this.imageService.resizeImage(file)
-          .then((resizedFile) => {
-            this.imageCliant.patchValue({
-              fileSource2: resizedFile
-            });
-          })
-          .catch((error) => {
-            this.removeimg(2);
-            Swal.fire(
-              'error',
-              'Image upload error: ' + error,
-              'error'
-            );
+        break;
+      case 2:
+        if(result){
+          this.imageCliant.patchValue({
+            fileSource2: result
           });
-      }
-    } catch (error) {
-      Swal.fire(
-        'Error',
-        'The maximum resolution supported for images is 5000x5000 pixels.',
-        'error'
-      );
-    }
-  }
-
-  async changeValue3(event) {
-
-    if (event.target.files.length === 0) {
-      return;
-    }
-    // Image upload validation
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-
-    if (!mimeType.match(/^image\/jpeg$/i)) {
-      Swal.fire(
-        'Error',
-        'Please select a JPEG (jpg) image.',
-        'warning'
-      );
-      return;
-    }
-    // Check the image resolution
-    let image = new Image();
-    image.src = URL.createObjectURL(event.target.files[0]);
-
-    // Create a promise to hold the async operation
-    const checkImageResolution = new Promise<void>((resolve, reject) => {
-      image.onload = () => {
-        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
-          Swal.fire(
-            'Error',
-            'The maximum resolution supported for images is 5000x5000 pixels.',
-            'error'
-          );
-          this.removeimg(3);
-          reject('Invalid image resolution'); // Reject the promise to stop further actions
-        } else {
-          resolve(); // Resolve the promise to continue with further actions
         }
-      };
-    });
-
-    try {
-      // Wait for the image resolution check to complete
-      await checkImageResolution;
-
-      // Continue with further actions here because the image is valid
-
-
-      // Display the image
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-
-      reader.onload = (_event) => {
-        (document.getElementById('imageTreeE') as HTMLInputElement).src = reader.result.toString();
-      };
-
-      // Upload and handle the image
-      if (event.target.files.length > 0) {
-        const file = event.target.files[0];
-        this.imageService.resizeImage(file)
-          .then((resizedFile) => {
-            this.imageCliant.patchValue({
-              fileSource3: resizedFile
-            });
-          })
-          .catch((error) => {
-            this.removeimg(3);
-            Swal.fire(
-              'error',
-              'Image upload error: ' + error,
-              'error'
-            );
+        break;
+      case 3:
+        if(result){
+          this.imageCliant.patchValue({
+            fileSource3: result
           });
-      }
-    } catch (error) {
-      Swal.fire(
-        'Error',
-        'The maximum resolution supported for images is 5000x5000 pixels.',
-        'error'
-      );
-    }
-  }
-
-  async changeValue4(event) {
-
-    if (event.target.files.length === 0) {
-      return;
-    }
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-
-    if (!mimeType.match(/^image\/jpeg$/i)) {
-      Swal.fire(
-        'Error',
-        'Please select a JPEG (jpg) image.',
-        'warning'
-      );
-      return;
-    }
-    // Check the image resolution
-    let image = new Image();
-    image.src = URL.createObjectURL(event.target.files[0]);
-
-    // Create a promise to hold the async operation
-    const checkImageResolution = new Promise<void>((resolve, reject) => {
-      image.onload = () => {
-        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
-          Swal.fire(
-            'Error',
-            'The maximum resolution supported for images is 5000x5000 pixels.',
-            'error'
-          );
-          this.removeimg(4);
-          reject('Invalid image resolution'); // Reject the promise to stop further actions
-        } else {
-          resolve(); // Resolve the promise to continue with further actions
         }
-      };
-    });
-
-    try {
-      // Wait for the image resolution check to complete
-      await checkImageResolution;
-
-
-      // Display the image
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-
-      reader.onload = (_event) => {
-        (document.getElementById('imageFourR') as HTMLInputElement).src = reader.result.toString();
-      };
-
-      // Upload and handle the image
-      if (event.target.files.length > 0) {
-        const file = event.target.files[0];
-        this.imageService.resizeImage(file)
-          .then((resizedFile) => {
-            this.imageCliant.patchValue({
-              fileSource4: resizedFile
-            });
-          })
-          .catch((error) => {
-            this.removeimg(4);
-            Swal.fire(
-              'error',
-              'Image upload error: ' + error,
-              'error'
-            );
+        break;
+      case 4:
+        if(result){
+          this.imageCliant.patchValue({
+            fileSource4: result
           });
-      }
-    } catch (error) {
-      Swal.fire(
-        'Error',
-        'The maximum resolution supported for images is 5000x5000 pixels.',
-        'error'
-      );
-    }
-  }
-
-  async changeValue5(event) {
-
-    if (event.target.files.length === 0) {
-      return;
-    }
-// Image upload validation
-    const mimeType = event.target.files[0].type;
-
-    if (!mimeType.match(/^image\/jpeg$/i)) {
-      Swal.fire(
-        'Error',
-        'Please select a JPEG (jpg) image.',
-        'warning'
-      );
-      return;
-    }
-    // Check the image resolution
-    let image = new Image();
-    image.src = URL.createObjectURL(event.target.files[0]);
-
-    // Create a promise to hold the async operation
-    const checkImageResolution = new Promise<void>((resolve, reject) => {
-      image.onload = () => {
-        if (image.naturalWidth > 5000 || image.naturalHeight > 5000) {
-          Swal.fire(
-            'Error',
-            'The maximum resolution supported for images is 5000x5000 pixels.',
-            'error'
-          );
-          this.removeimg(5);
-          reject('Invalid image resolution'); // Reject the promise to stop further actions
-        } else {
-          resolve(); // Resolve the promise to continue with further actions
         }
-      };
-    });
-
-    try {
-      // Wait for the image resolution check to complete
-      await checkImageResolution;
-
-      // Continue with further actions here because the image is valid
-
-
-      // Display the image
-      const reader = new FileReader();
-      reader.readAsDataURL(event.target.files[0]);
-
-      reader.onload = (_event) => {
-        (document.getElementById('imageFiveE') as HTMLInputElement).src = reader.result.toString();
-      };
-
-      // Upload and handle the image
-      if (event.target.files.length > 0) {
-        const file = event.target.files[0];
-        this.imageService.resizeImage(file)
-          .then((resizedFile) => {
-            this.imageCliant.patchValue({
-              fileSource4: resizedFile
-            });
-          })
-          .catch((error) => {
-            this.removeimg(5);
-            Swal.fire(
-              'Error',
-              'Image upload error: ' + error,
-              'error'
-            );
+        break;
+      case 5:
+        if(result){
+          this.imageCliant.patchValue({
+            fileSource5: result
           });
-      }
-    } catch (error) {
-      Swal.fire(
-        'Error',
-        'The maximum resolution supported for images is 5000x5000 pixels.',
-        'error'
-      );
+        }
+        break;
     }
   }
 
@@ -800,7 +455,6 @@ export class EditProductsComponent implements OnInit {
       }
     }
   }
-
 
   getSubcategoryForSubSub(code) {
     // const tex = (document.getElementById('category_id_sub_sub') as HTMLInputElement).value;
