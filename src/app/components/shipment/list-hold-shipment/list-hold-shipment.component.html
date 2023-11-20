@@ -4,7 +4,7 @@
       <div class="card tab2-card">
         <div class="card-body tab2-card">
           <ngb-tabset class="tab-coupon">
-            <ngb-tab title="Shipment Hold List (Latest 100 records)">
+            <ngb-tab [title]="getHoldShipment()">
               <ng-template ngbTabContent>
                 <div class="tab-pane fade active show" id="account1" role="tabpanel" aria-labelledby="account-tab">
                   <div *ngIf="shipmentErrorMsg">

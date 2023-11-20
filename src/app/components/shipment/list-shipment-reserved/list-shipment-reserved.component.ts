@@ -226,4 +226,9 @@ export class ListShipmentReservedComponent implements OnInit {
       'error'
     );
   }
+
+  getApprovedShipment() {
+    const count = this.recivedShipmentArray.length;
+    return `Shipment List (${count})`;
+  }
 }

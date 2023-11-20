@@ -58,4 +58,9 @@ export class ListHoldShipmentComponent implements OnInit {
     let url = '/shipment/edit-shipment/' + tempCode;
     this.router.navigate([url]);
   }
+
+  getHoldShipment() {
+    const count = this.holdShipmentArray.length;
+    return `Shipment Hold List (${count})`;
+  }
 }
