@@ -3,7 +3,7 @@
     <div class="col-sm-12">
       <div class="card tab2-card">
         <div class="card-body tab2-card">
-          <ngb-tabset class="tab-coupon">
+          <ngb-tabset class="tab-coupon" (tabChange)="onTabSelect($event)">
 
             <ngb-tab [title]="getActiveTabTitle()" *ngIf="qaTables">
               <ng-template ngbTabContent>
@@ -12,13 +12,13 @@
 
                     <div class="row">
                       <div class="col-md-6">
-                        <input autofocus type="text" class="form-control" placeholder="Search By Product Name..."
-                               (input)="ActiveProductFilter($event.target.value)" style="width: 60%"/>
+                        <input id="searchInput" autofocus type="text" class="form-control" placeholder="Enter your search term..."
+                               (input)="ProductFilter($event.target.value)" style="width: 60%"/>
                       </div>
-                      <div class="col-md-6" *ngIf="isAdmin">
-                        <input autofocus type="text" class="form-control" placeholder="Search By Business Name..."
-                               (input)="filterAllProducts($event.target.value)" style="width: 60%"/>
-                      </div>
+<!--                      <div class="col-md-6" *ngIf="isAdmin">-->
+<!--                        <input autofocus type="text" class="form-control" placeholder="Search By Business Name..."-->
+<!--                               (input)="filterAllProducts($event.target.value)" style="width: 60%"/>-->
+<!--                      </div>-->
                     </div>
                     <div class="clearfix"></div>
                     <div class="row">
@@ -26,7 +26,7 @@
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
                           <app-table-template [HeadArray]="headActive" [DataArray]="paginatedItems.length > 0 ? paginatedItems : list_pages"
-                          (onPopUpImg)="popUpImage($event)" (onClick)="clickProduct($event)" (onLoadPage)="loadPage($event)" [active]="active"> </app-table-template>
+                          [emptyTable]="emptyTableActive" (onPopUpImg)="popUpImage($event)" (onClick)="clickProduct($event)" (onLoadPage)="loadPage($event)" [active]="active"> </app-table-template>
                         </div>
                       </div>
                     </div>
@@ -49,13 +49,13 @@
                   <div class="custom-datatable">
                     <div class="row">
                       <div class="col-md-6">
-                        <input autofocus type="text" class="form-control" placeholder="Search By Product Name..."
+                        <input autofocus type="text" class="form-control" placeholder="Enter your search term..."
                                (input)="OutofStockFilter($event.target.value)" style="width: 60%"/>
                       </div>
-                      <div class="col-md-6" *ngIf="isAdmin">
-                        <input autofocus type="text" class="form-control" placeholder="Search By Business Name..."
-                               (input)="filterOutofStockByBusinessName($event.target.value)" style="width: 60%"/>
-                      </div>
+<!--                      <div class="col-md-6" *ngIf="isAdmin">-->
+<!--                        <input autofocus type="text" class="form-control" placeholder="Search By Business Name..."-->
+<!--                               (input)="filterOutofStockByBusinessName($event.target.value)" style="width: 60%"/>-->
+<!--                      </div>-->
                     </div>
 
                     <div class="clearfix"></div>
@@ -64,7 +64,7 @@
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
                           <app-table-template [HeadArray]="headOut" [DataArray]="paginatedOutofStock.length > 0 ? paginatedOutofStock : list_outof_stock"
-                                              (onPopUpImg)="popUpImage($event)"  (onClick)="clickProduct($event)" > </app-table-template>
+                                              [outOfStock]="outOfStock" [emptyTable]="emptyTableOutStock" (onPopUpImg)="popUpImage($event)"  (onClick)="clickProduct($event)" > </app-table-template>
                         </div>
                       </div>
                     </div>
@@ -86,13 +86,13 @@
                   <div class="custom-datatable">
                     <div class="row">
                       <div class="col-md-6">
-                        <input autofocus type="text" class="form-control" placeholder="Search By Product Name..."
-                               (input)="SuspendProductFilter($event.target.value)"/>
+                        <input autofocus type="text" class="form-control" placeholder="Enter your search term..."
+                               style="width: 60%" (input)="SuspendProductFilter($event.target.value)"/>
                       </div>
-                      <div class="col-md-6" *ngIf="isAdmin">
-                        <input autofocus type="text" class="form-control" placeholder="Search By Business Name..."
-                               (input)="SuspendProductFilterByBusinessName($event.target.value)"/>
-                      </div>
+<!--                      <div class="col-md-6" *ngIf="isAdmin">-->
+<!--                        <input autofocus type="text" class="form-control" placeholder="Search By Business Name..."-->
+<!--                               style="width: 60%" (input)="SuspendProductFilterByBusinessName($event.target.value)"/>-->
+<!--                      </div>-->
                     </div>
                     <div class="clearfix"></div>
                     <div class="row">
@@ -100,7 +100,7 @@
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
                           <app-table-template [HeadArray]="headActive" [DataArray]="paginatedSuspend.length > 0 ? paginatedSuspend : list_suspend"
-                                              (onPopUpImg)="popUpImage($event)"      (onEdit)="clickSusEditProduct($event)" [suspend]="suspend"> </app-table-template>
+                                              [emptyTable]="emptyTableSus" (onPopUpImg)="popUpImage($event)"      (onEdit)="clickSusEditProduct($event)" [suspend]="suspend"> </app-table-template>
                         </div>
                       </div>
                     </div>
@@ -122,8 +122,8 @@
                   <div class="custom-datatable">
                     <div class="row">
                       <div class="col-md-6">
-                        <input id="OnDemandsearchInput" autofocus type="text" class="form-control" placeholder="Search By Product Name..."
-                               (input)="OnDemandProductFilter($event.target.value)" style="width: 60%;" [(ngModel)]="OnDemandsearchInput"/>
+                        <input id="OnDemandsearchInput" autofocus type="text" class="form-control" placeholder="Enter your search term..."
+                               (input)="OnDemandProductFilter($event.target.value)" style="width: 60%;" />
                       </div>
                     </div>
                     <div class="clearfix"></div>
@@ -132,7 +132,7 @@
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
                           <app-table-template [HeadArray]="headOnDemand" [DataArray]="paginatedOnDemand.length > 0 ? paginatedOnDemand : consignmentProducts"
-                                              (onPopUpImg)="popUpImage($event)"       (onAddStock)="UpdateVirtualStocks($event)" [startIndex]="startIndex" [vStock]="vstock" (check)="onVstockChange($event)" [onDemand]="onDemand" [nonActivePartner]="nonActivePartner"> </app-table-template>
+                                              [emptyTable]="emptyTableOnDemand" (onPopUpImg)="popUpImage($event)"       (onAddStock)="UpdateVirtualStocks($event)" [startIndex]="startIndex" [vStock]="vstock" [onDemand]="onDemand" [nonActivePartner]="nonActivePartner"> </app-table-template>
                         </div>
                       </div>
                     </div>

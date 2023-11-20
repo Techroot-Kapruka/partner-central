@@ -40,7 +40,7 @@
                                 <button (click)="removeimg(1)" *ngIf="imgUploaded1"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" id="image01" type="file"
                                        formControlName="imageOne" accept="image/jpeg"
-                                       (change)="changeValue($event, 1)" required>
+                                       (change)="imageAssign($event,'imageOneO',1)" required>
                                 <img class="imgUpload" id="imageOneO"
                                      alt="Click To Add Image"
                                      style="justify-items: center; align-items: center; justify-self: center;"
@@ -59,7 +59,7 @@
                                 <button (click)="removeimg(2)" *ngIf="imgUploaded2"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" type="file"
                                        formControlName="imageOne2" accept="image/jpeg"
-                                       (change)="changeValue2($event)">
+                                       (change)="imageAssign($event,'imageTwoO',2)">
                                 <img class="imgUpload" id="imageTwoO" alt=""
                                      src="assets/images/dashboard/icons8-plus.gif"
                                      size="100px">
@@ -78,7 +78,7 @@
                                 <button (click)="removeimg(3)" *ngIf="imgUploaded3"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" type="file" accept="image/jpeg"
                                        formControlName="imageOne3"
-                                       (change)="changeValue3($event)">
+                                       (change)="imageAssign($event,'imageTreeE',3)">
                                 <img class="imgUpload" id="imageTreeE" alt=""
                                      src="assets/images/dashboard/icons8-plus.gif"
                                      size="100px">
@@ -96,7 +96,7 @@
                                 <button (click)="removeimg(4)" *ngIf="imgUploaded4"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" type="file" accept="image/jpeg"
                                        formControlName="imageOne4"
-                                       (change)="changeValue4($event)">
+                                       (change)="imageAssign($event,'imageFourR',4)">
                                 <img class="imgUpload" id="imageFourR" alt=""
                                      src="assets/images/dashboard/icons8-plus.gif"
                                      size="100px">
@@ -114,7 +114,7 @@
                                 <button (click)="removeimg(5)" *ngIf="imgUploaded5"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" type="file" accept="image/jpeg"
                                        formControlName="imageOne5"
-                                       (change)="changeValue5($event)">
+                                       (change)="imageAssign($event,'imageFiveE',5)">
                                 <img class="imgUpload" id="imageFiveE" alt=""
                                      src="assets/images/dashboard/icons8-plus.gif"
                                      size="100px">

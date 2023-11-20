@@ -379,27 +379,33 @@ export class DashboardComponent implements OnInit {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
-    this.analyticsService.getSumProductViewTotal(object).subscribe(
-      data => this.manageGetSumProductViewTotal(data)
-    );
+    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN'){
+      this.analyticsService.getSumProductViewTotal(object).subscribe(
+          data => this.manageGetSumProductViewTotal(data)
+      );
+    }
   }
 
   getSumProductAddToCart() {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
-    this.analyticsService.getSumProductAddToCart(object).subscribe(
-      data => this.manageGetSumProductAddToCart(data)
-    );
+    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN'){
+      this.analyticsService.getSumProductAddToCart(object).subscribe(
+          data => this.manageGetSumProductAddToCart(data)
+      );
+    }
   }
 
   getSumProductOrderTotal() {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
-    this.analyticsService.getSumProductOrderTotal(object).subscribe(
-      data => this.manageGetSumProductOrderTotal(data)
-    );
+    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN'){
+      this.analyticsService.getSumProductOrderTotal(object).subscribe(
+          data => this.manageGetSumProductOrderTotal(data)
+      );
+    }
   }
 
   managePartner(data) {

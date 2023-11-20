@@ -29,7 +29,7 @@
     </thead>
     <tbody>
 
-    <ng-container *ngIf="!editTab">
+    <ng-container *ngIf="!editTab && !emptyTable">
         <tr *ngFor="let productDetail of DataArray; let i = index;">
             <td align="center">{{stopLoading()}}<img src="{{ imagePathURI + productDetail.image }}" height="60px" width="60px"
                                     (error)="onImageError($event)" (click)="popUpImageActive(productDetail)"></td>
@@ -47,13 +47,12 @@
             </td>
             <td *ngIf="!onDemand && !nonActivePartner">{{productDetail.price}}</td>
             <td *ngIf="!nonActivePartner">{{productDetail.in_stock}}</td>
-            <td *ngIf="onDemand">
-                <input class="form-control" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
-                       type = "number"
-                       maxlength = "5" name="vstock" id="vstock"
-                       pattern="[0-9]*" [(ngModel)]="vStock[startIndex+i]" (ngModelChange)="onVstockChange(i)" style="width: 70%;">
+            <td>{{productDetail.createDate}}
+            <br>
+                <div *ngIf="active || suspend || onDemand || outOfStock">
+                    <p>Last Update <br>{{productDetail.update_date_time}}</p>
+                </div>
             </td>
-            <td>{{productDetail.createDate}}</td>
             <td *ngIf="nonActivePartner">{{productDetail.brand}}</td>
             <td *ngIf="active || suspend || onDemand || nonActiveAdmin || (pendingStockPartner && !pendingStockAdmin)">
                 <button type="button" *ngIf="active"
@@ -79,7 +78,7 @@
 
                 <button type="button" *ngIf="onDemand"
                         style="width: 96px;height: 28px;font-size: 10px;"
-                        class="btn btn-outline-success" (click)="addStock(i)">Add Stock
+                        class="btn btn-outline-success" (click)="addStock(productDetail)">Add Stock
                 </button>
 
                 <button type="button" *ngIf="nonActiveAdmin" (click)='review(productDetail)'
@@ -96,7 +95,7 @@
         </tr>
     </ng-container>
 
-    <ng-container *ngIf="editTab">
+    <ng-container *ngIf="editTab && !emptyTable">
         <tr *ngFor="let productDetail of DataArray; let i = index;">
             <!--            <td *ngFor="let head of HeadArray">{{productDetail.image}}</td>-->
             <td align="center">{{stopLoading()}}<img src="{{ imagePathURI + productDetail.image }}" height="60px" width="60px"
@@ -118,6 +117,14 @@
                 </button>
             </td>
         </tr>
+    </ng-container>
+    <ng-container *ngIf="emptyTable">
+        <tr class="alert alert-info" role="alert">
+            <td colspan="6">
+                No Data Found!
+            </td>
+        </tr>
+
     </ng-container>
     </tbody>
 </table>

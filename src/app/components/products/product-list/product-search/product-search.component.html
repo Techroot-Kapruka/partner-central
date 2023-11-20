@@ -1,17 +1,17 @@
 <div class="container-fluid">
-<div class="row">
-  <div class="col-md-6">
-    <form class="form-inline" style="margin-left: -2%">
-      <div class="form-group mx-sm-3 mb-2">
-        <input type="text" class="form-control" id="txtProductSearch" placeholder="Product Search"
-               [(ngModel)]="searchValue" #searchInput [ngModelOptions]="{standalone: true}">
-      </div>
-      <button type="submit" class="btn btn-primary mb-2" (click)="onSearch(searchInput.value)">Search</button>
-    </form>
-    <p>You may search by: Product ID, Product Name, Description etc.</p>
-    <p *ngIf="isTableVisible">Search Result for: {{searchInput.value}} </p>
-    <p style="margin-top: -2%" *ngIf="isTableVisible">(Limit to 20 Products maximum)</p>
+  <div class="row">
+    <div class="col-md-6">
+      <form class="form-inline" style="margin-left: -2%; margin-top: -2%">
+        <div class="form-group mx-sm-3 mb-2">
+          <input type="text" class="form-control" id="txtProductSearch" placeholder="Product Search"
+                 [(ngModel)]="searchValue" #searchInput [ngModelOptions]="{standalone: true}">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2" (click)="onSearch(searchInput.value)" *ngIf="isButtonClick">Search</button>
 
+      </form>
+      <p style="display: block;line-height: 1.2;margin: 0">You may search by: Product ID, Product Name, Description etc.</p>
+      <p style="display: block;line-height: 1.2;margin: 5px 0" *ngIf="isTableVisible">Search Result for: {{searchInput.value}} </p>
+      <p style="display: block;line-height: 1.2;margin: 0 0 15px" *ngIf="isTableVisible">(Limit to 20 Products maximum)</p>
       <div class="row table-responsive" style="max-height: 65vh">
         <table *ngIf="isTableVisible"
                class="table table-striped table-bordered table table-hover table-sm">
@@ -20,7 +20,7 @@
             <th class="textStyle" style="width: 40%">Title</th>
             <th class="textStyle" style="width: 40%">Description</th>
             <th class="textStyle" style="width: 20%">Selling Price</th>
-            <th class="textStyle" style="width: 20%;display: none" >Action</th>
+            <th class="textStyle" style="width: 20%">Action</th>
           </tr>
           </thead>
           <tbody>
@@ -33,15 +33,78 @@
               <p class="style-p"><a href="javascript:void(0);" (click)="loadPage(i)">view on web</a></p>
             </td>
             <td class="textStyle">{{productDetail.description}}</td>
-            <td class="textStyle" style="text-align: center">{{productDetail.sellingPrice}}</td>
-            <td style="display: none"><button class="btn btn-sm btn-outline-info">View</button> </td>
+            <td class="textStyle" style="text-align: center">{{productDetail.sellingPrice.toFixed(2)}}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-info"
+                      (click)="showDiv(productDetail.productCode, productDetail.vendor)">View
+              </button>
+            </td>
           </tr>
           </tbody>
         </table>
       </div>
 
-  </div>
-  <div class="col-md-6">
+    </div>
+    <div class="col-md-6 blocksB" [hidden]="!isDivVisible" *ngIf="isViewFormVisible">
+      <div style="border: 1px solid #0E0D39;max-height: 75vh;overflow-y: scroll;padding: 1%">
+        <div class="row">
+          <div class="col-md-8">
+            <p class="pathTitle">{{elementCategoryPath}} </p>
+          </div>
+          <div class="col-md-4">
+            <h3><span class="badge {{badge}}" style="float: right">{{elementStatus}}</span></h3>
+          </div>
+        </div>
+
+        <p class="blockstitle">{{elementProductCode}} - {{elementTitle}}</p>
+        <img src="{{imagePathURI + elementImage}}" alt="Image" class="img-fluid" (error)="onImageError($event)" style="width: 200px;height: 200px">
+
+        <p class="blockSV">{{elementVendorCode}} - {{elementVendor}}</p>
+
+        <p>{{elementDescription}}</p>
+        <p>Create Date Time : {{elementCreateDateTime}}</p>
+        <div class="table-responsive-sm">
+          <table class="table table-striped table-bordered table table-hover table-sm">
+            <thead>
+            <tr>
+              <th class="textStyle" style="width: 40%">Code</th>
+              <th class="textStyle" style="width: 20%">Theme</th>
+              <th class="textStyle" style="width: 20%">Cost</th>
+              <th class="textStyle" style="width: 20%">Selling</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let variation of elementVariations">
+              <td class="textStyle">{{variation.variation_code}}</td>
+              <td class="textStyle" *ngIf="!isValue">
+                <ul>
+                  <li *ngFor="let theme of variation.value">
+                    <span> {{ theme.theme }}</span>
+                    <span> - </span>
+                    <ng-container *ngIf="!isColorCode(theme.value)">
+                      <span>{{ theme.value }}</span>
+                    </ng-container>
+                    <span><button class="btn btn-sm" [ngStyle]="getStyle(theme.value)"></button> </span>
+                  </li>
+                </ul>
+              </td>
+              <td class="textStyle"  *ngIf="isValue">
+                <ul>
+                  <li>
+                    No Theme
+                  </li>
+                </ul>
+              </td>
+              <td class="textStyle">{{variation.cost_price.toFixed(2)}}</td>
+              <td class="textStyle">{{variation.selling_price.toFixed(2)}}</td>
+
+            </tr>
+            </tbody>
+          </table>
+          <p class="history-container" [innerHTML]="elementHistory"></p>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
-</div>
+

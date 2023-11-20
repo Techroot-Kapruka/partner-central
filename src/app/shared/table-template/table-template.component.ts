@@ -19,6 +19,7 @@ export class TableTemplateComponent implements OnInit {
   @Input() active: boolean = false;
   @Input() suspend: boolean = false;
   @Input() onDemand: boolean = false;
+  @Input() outOfStock: boolean = false;
   @Input() nonActiveAdmin: boolean = false;
   @Input() nonActivePartner: boolean = false;
   @Input() pendingStockPartner: boolean = false;
@@ -26,6 +27,7 @@ export class TableTemplateComponent implements OnInit {
   @Input() editTab: boolean = false;
   @Input() stillLoading: boolean = true;
   @Input() startIndex: number;
+  @Input() emptyTable: boolean = false;
 
   @Output() onClick = new EventEmitter<any>();
   @Output() onEdit = new EventEmitter<any>();
@@ -69,6 +71,8 @@ export class TableTemplateComponent implements OnInit {
       }, 10000);
     }else{
         if (this.DataArray.length === 0) {
+          this.stopLoading();
+        }else if (this.pendingStockPartner){
           this.stopLoading();
         }
     }

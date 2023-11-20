@@ -77,7 +77,8 @@ export class ApproveEditProductComponent implements OnInit {
     let payloads = {
       referenceId: this.productCode_,
       rejectedUser: this.requestedBy,
-      unique_code : this.uniqueCode_
+      unique_code : this.uniqueCode_,
+      userId : sessionStorage.getItem('userId')
     };
 
 
@@ -92,7 +93,7 @@ export class ApproveEditProductComponent implements OnInit {
       data.message,
       'success'
     );
-    this.router.navigate(['/products/digital/digital-product-list']).then( );
+    this.router.navigate(['/products/digital/change-requests']).then( );
   }
 
   private manageRejectFields(data) {
@@ -101,6 +102,6 @@ export class ApproveEditProductComponent implements OnInit {
       data.message,
       'success'
     );
-    this.router.navigate(['/products/digital/digital-product-list']).then( );
+    this.router.navigate(['/products/digital/change-requests']).then( );
   }
 }
