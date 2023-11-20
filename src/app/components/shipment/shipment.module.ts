@@ -17,7 +17,7 @@ import { ListPendingShipmentComponent } from './list-pending-shipment/list-pendi
 import { ListHoldShipmentComponent } from './list-hold-shipment/list-hold-shipment.component';
 import { CommonTableComponent } from './common-table/common-table.component';
 import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
-import {ProductsModule} from "../products/products.module";
+import {ProductsModule} from '../products/products.module';
 
 @NgModule({
   declarations: [ListShipmentComponent, AddShipmentComponent, EditShipmentComponent, UnHoldShipmentComponent, MakeReservedComponent, ListShipmentReservedComponent, RecievedShipmentComponent, ListPendingShipmentComponent, ListHoldShipmentComponent, CommonTableComponent],

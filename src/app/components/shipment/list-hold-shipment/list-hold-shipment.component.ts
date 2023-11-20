@@ -12,6 +12,8 @@ export class ListHoldShipmentComponent implements OnInit {
   public selected = [];
   public holdShipmentArray = [];
   public columnArray = [];
+  public isShipmentValid = false;
+  public shipmentErrorMsg = false;
 
   constructor(private shipmentNewService: ShipmentNewService, private router: Router) {
     this.columnArray = [
@@ -40,10 +42,15 @@ export class ListHoldShipmentComponent implements OnInit {
   manageTakeHoldShipment(data) {
     this.holdShipmentArray = [];
     if (data.data != null) {
+      this.isShipmentValid = true;
+      this.shipmentErrorMsg = false;
       this.holdShipmentArray = data.data;
       this.holdShipmentArray.forEach(element => {
         element.create_date = new Date();
       });
+    }else{
+      this.isShipmentValid = false;
+      this.shipmentErrorMsg = true;
     }
   }
 
