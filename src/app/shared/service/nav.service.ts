@@ -902,6 +902,10 @@ export class NavService {
     this.items.value[2].children[2].title = '';
     this.items.value[2].children[2].type = '';
 
+    this.items.value[2].children[3].path = '';
+    this.items.value[2].children[3].title = '';
+    this.items.value[2].children[3].type = '';
+
     this.items.value[6].children[0].path = '';
     this.items.value[6].children[0].title = '';
     this.items.value[6].children[0].type = '';
