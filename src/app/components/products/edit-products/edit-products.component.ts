@@ -1179,13 +1179,14 @@ export class EditProductsComponent implements OnInit {
           old_value: this.oldBrand,
           new_value: brand,
           call_name: 'brand',
-        },
-        {
-          column_name: 'manufacture',
-          old_value: this.oldManufacture,
-          new_value: manufacture,
-          call_name: 'manufacture',
         }
+        // ,
+        // {
+        //   column_name: 'manufacture',
+        //   old_value: this.oldManufacture,
+        //   new_value: manufacture,
+        //   call_name: 'manufacture',
+        // }
       ]
     };
 
