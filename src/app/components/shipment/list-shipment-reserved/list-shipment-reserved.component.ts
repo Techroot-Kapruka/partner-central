@@ -12,13 +12,13 @@ import {PriceChangeService} from '../../../shared/service/price-change.service';
 })
 
 export class ListShipmentReservedComponent implements OnInit {
-  public shipment_list = [];
   public priceChangeCount = 20;
   public selected = [];
   public isAdmin = false;
   public isRecievedShipmentValid = false;
   public recievedShipmentErrorMsg = false;
 
+  public selectedValue = 'Select Vendor';
   public partnerArray = [];
   public recivedShipmentArray = [];
   public changePriceArray = [];
@@ -71,17 +71,19 @@ export class ListShipmentReservedComponent implements OnInit {
     let pr = {};
     const bussinessArrLangth = data.data.length;
     const partnerValue = data.data;
+    this.partnerArray = [];
     for (let i = 0; i < bussinessArrLangth; i++) {
       pr = {
-        name: partnerValue[i].businessName,
+        label: partnerValue[i].businessName,
         value: partnerValue[i].partner_u_id
       };
       this.partnerArray.push(pr);
     }
   }
 
-  getSelectedPartnerRecivedShipment() {
-    const name = (document.getElementById('select_pro2') as HTMLInputElement).value;
+  getSelectedPartnerRecivedShipment(event) {
+    // const name = (document.getElementById('select_pro2') as HTMLInputElement).value;
+    const name = event.value;
     const bussArr = {
       vendor_code: name
     };
@@ -123,7 +125,7 @@ export class ListShipmentReservedComponent implements OnInit {
   }
 
   viewRecivedShipment(tempCode) {
-    let url = '/shipment/view-shipment/' + tempCode;
+    const url = '/shipment/view-shipment/' + tempCode;
     this.router.navigate([url]);
   }
 
@@ -146,7 +148,7 @@ export class ListShipmentReservedComponent implements OnInit {
     this.changePriceArray = [];
     if (data.data != null) {
       for (let i = 0; i < data.data.length; i++) {
-        let obj = {
+        const obj = {
           changeId: data.data[i].changeId,
           createDate: data.data[i].createDate,
           productCode: data.data[i].productCode,
@@ -179,7 +181,7 @@ export class ListShipmentReservedComponent implements OnInit {
     this.changePriceArray = [];
     if (data.data != null) {
       for (let i = 0; i < data.data.length; i++) {
-        let obj = {
+        const obj = {
           changeId: data.data[i].changeId,
           createDate: data.data[i].createDate,
           productCode: data.data[i].productCode,
@@ -196,12 +198,12 @@ export class ListShipmentReservedComponent implements OnInit {
   }
 
   approvedChangePrice(index) {
-    let priceChangeId = this.changePriceArray[index].changeId;
-    let user = sessionStorage.getItem('userId');
-    let obj = {
-      priceChangeId: priceChangeId,
-      user: user
-    }
+    const priceChangeId = this.changePriceArray[index].changeId;
+    const user = sessionStorage.getItem('userId');
+    const obj = {
+      priceChangeId,
+      user
+    };
     this.priceChangeService.approvedChangePrice(obj).subscribe(
       data => this.manageApproveChangePrice(data),
       error => this.errorApprovalManage(error)
@@ -214,7 +216,7 @@ export class ListShipmentReservedComponent implements OnInit {
       data.message,
       'success'
     );
-    let url = 'shipment/receive-shipment';
+    const url = 'shipment/receive-shipment';
     this.router.navigate([url]);
     window.location.reload();
   }
