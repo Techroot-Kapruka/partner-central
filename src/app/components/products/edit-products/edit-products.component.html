@@ -18,9 +18,9 @@
     <div class="card col-12">
 
 
-      <ngb-tabset class="tab-coupon">
+      <ngb-tabset class="tab-coupon" (tabChange)="changeTab($event)" [destroyOnHide]="true">
         <!--      basic info tab-->
-        <ngb-tab title="Basic Info">
+        <ngb-tab title="Basic Info" [id]="0">
           <ng-template ngbTabContent>
             <div class="tab-pane fade active show" role="tabpanel" aria-labelledby="account-tab">
               <div class="card-body">
@@ -51,7 +51,7 @@
         </ngb-tab>
 
         <!--        Description Tab-->
-        <ngb-tab title="Description">
+        <ngb-tab title="Description" [id]="1">
           <ng-template ngbTabContent>
             <div class="tab-pane fade active show" role="tabpanel" aria-labelledby="account-tab">
               <div class="card-body">
@@ -87,7 +87,7 @@
         </ngb-tab>
 
         <!-- Variation Tab-->
-        <ngb-tab title="Variations">
+        <ngb-tab title="Variations" [id]="2">
           <ng-template ngbTabContent>
             <div style="margin: 20px;">
               <table class="table table-striped"
@@ -116,7 +116,7 @@
         </ngb-tab>
 
         <!--        Images Tab-->
-        <ngb-tab title="Images">
+        <ngb-tab title="Images" [id]="3">
           <ng-template ngbTabContent>
             <div class="tab-pane fade active show" role="tabpanel" aria-labelledby="account-tab">
               <div class="card-body">
@@ -228,7 +228,7 @@
         </ngb-tab>
 
 
-        <ngb-tab title="Category" *ngIf="isAdmin">
+        <ngb-tab title="Category" *ngIf="isAdmin" [id]="4">
           <ng-template ngbTabContent>
             <div class="tab-pane fade active show" role="tabpanel" aria-labelledby="account-tab">
               <div class="card-body">
@@ -287,7 +287,7 @@
           </ng-template>
         </ngb-tab>
         <!--+++++ edit price only ondemand product ++++++-->
-        <ngb-tab title="Price" *ngIf="editPrice">
+        <ngb-tab title="Price" *ngIf="editPrice" [id]="5">
           <ng-template ngbTabContent>
             <div class="tab-pane fade active show" role="tabpanel" aria-labelledby="account-tab">
               <div class="card-body">

@@ -129,7 +129,7 @@ export class EditProductsComponent implements OnInit {
   };
   @ViewChild('imagePopup') imagePopup: ElementRef;
 
-  constructor(private categoryService: CategoryService, private router: Router, private _Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService, private imageService: ImageService) {
+  constructor(private categoryService: CategoryService,private router: Router, private _Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService, private imageService: ImageService) {
     this.ids = '';
     this.getAllCategory();
     this._Activatedroute.paramMap.subscribe(params => {
@@ -169,7 +169,6 @@ export class EditProductsComponent implements OnInit {
     let payloard = {
       product_code: this.ids
     };
-
     this.productService.getImageForEdit(payloard).subscribe(
       data => this.manageImageForEdit(data),
     );
@@ -383,6 +382,12 @@ export class EditProductsComponent implements OnInit {
     }
   }
 
+  changeTab(event: any){
+    if (event.nextId == '3') {
+      this.imageControlMethord();
+    }
+  }
+
   async imageAssign(event, imgID, index){
     const result = await this.imageService.validateImage(event,imgID,"edit");
     switch(index){
@@ -423,7 +428,6 @@ export class EditProductsComponent implements OnInit {
         break;
     }
   }
-
 
 // ===============================================================start edit methods====================================
 
@@ -575,13 +579,11 @@ export class EditProductsComponent implements OnInit {
     }
   }
 
-
   // ------------------------------------------------------------------------
   getProductByEdit(id) {
     let payloard = {
       product_code: id
     };
-
     this.productService.getSelecedProductByEdit(payloard).subscribe(
       data => this.managetSelecedProductByEdit(data, id),
     );
@@ -702,7 +704,6 @@ export class EditProductsComponent implements OnInit {
       }
     }
 
-
     if (data.data.product.productOffer.condition == 'Brand New') {
       (document.getElementById('condition') as HTMLInputElement).innerHTML = '<option value="Brand New">Brand New</option> <option value="Used - Good">Used - Good</option><option value="Used - Like New">Used - Like New</option><option value="">--Select--</option>';
     } else if (data.data.product.productOffer.condition == 'Used - Good') {
@@ -716,21 +717,18 @@ export class EditProductsComponent implements OnInit {
     p_string = '' + price_val;
     this.amountBefor = p_string;
 
-
     let payloard = {
       product_code: proCodeImg
     };
 
-
     this.productService.getImageForEdit(payloard).subscribe(
       data => this.manageImageForEdit(data),
     );
+
     // this.disableElement(data);
   }
 
-
   manageImageForEdit(data) {
-
     var imageURI01Output = [];
     var imageURI02Output = [];
     var imageURI03Output = [];
@@ -775,7 +773,6 @@ export class EditProductsComponent implements OnInit {
     this.imageData.push(or);
   }
 
-
   backToLIst() {
     let url = 'products/digital/digital-product-list';
     this.router.navigate([url]);
@@ -804,7 +801,6 @@ export class EditProductsComponent implements OnInit {
         'info'
       );
     }
-
   }
 
   saveFieldBaseInfo() {
@@ -843,13 +839,9 @@ export class EditProductsComponent implements OnInit {
         // }
       ]
     };
-
-
     this.productService.editField(payload).subscribe(
       data => this.manageEditField(data),
     );
-
-
   }
 
   private editFormControlMethode() {
@@ -898,9 +890,7 @@ export class EditProductsComponent implements OnInit {
         'success'
       );
     }
-
     this.router.navigate(['products/digital/digital-product-list']);
-
   }
 
   saveFieldDescription() {
@@ -975,10 +965,7 @@ export class EditProductsComponent implements OnInit {
         data => this.manageEditField(data),
       );
     }
-
   }
-
-
   saveEditedImage() {
     let one = this.imageCliant.get('fileSource').value;
     let one2 = this.imageCliant.get('fileSource2').value;
@@ -986,8 +973,15 @@ export class EditProductsComponent implements OnInit {
     let one4 = this.imageCliant.get('fileSource4').value;
     let one5 = this.imageCliant.get('fileSource5').value;
     const pricecc = new File([''], '');
+    if(one=== '' && one2 === '' && one3 === '' && one4 === '' && one5 === ''){
+      Swal.fire(
+        "You haven't made any changes",
+        '',
+        'warning'
+      );
+      return;
+    }
     if (one === '') {
-
       one = pricecc;
     }
 
@@ -1012,7 +1006,6 @@ export class EditProductsComponent implements OnInit {
       error => this.mnageErrorProduct(error)
     );
   }
-
 
   mnageErrorProduct(error) {
     Swal.fire(
