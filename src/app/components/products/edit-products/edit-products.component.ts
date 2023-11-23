@@ -605,10 +605,10 @@ export class EditProductsComponent implements OnInit {
     this.description.get('txt_description').setValue(data.data.product.productDescription.description);
     this.descriptionContent = data.data.product.productDescription.description;
     this.description.get('special_notes').setValue(data.data.product.productDescription.special_notes);
-    this.description.get('availability').setValue(data.data.product.productDescription.availability.toUpperCase());
+    // this.description.get('availability').setValue(data.data.product.productDescription.availability.toUpperCase());
     this.old_Txt_description = data.data.product.productDescription.description;
     this.old_special_notes = data.data.product.productDescription.special_notes;
-    this.old_availability = data.data.product.productDescription.availability.toUpperCase();
+    // this.old_availability = data.data.product.productDescription.availability.toUpperCase();
 
 // category
     this.parts = data.data.category_path.split('> ');
