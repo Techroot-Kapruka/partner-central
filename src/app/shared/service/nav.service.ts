@@ -105,7 +105,7 @@ export class NavService {
       children: [
         {path: '/shipment/receive-shipment', title: 'Shipment List', type: 'link'},
         {path: '/shipment/list-pending-shipment', title: 'Pending Shipments', type: 'link'},
-        {path: '/shipment/list-hold-shipment', title: 'Hold Shipments', type: 'link'},
+        // {path: '/shipment/list-hold-shipment', title: 'Hold Shipments', type: 'link'},
         {path: '/shipment/add-shipment', title: 'Shipment Add', type: 'link'},
         {path: '/shipment/receive-shipment', title: 'Shipment Receive List', type: 'link'}
       ]
@@ -204,9 +204,9 @@ export class NavService {
 
       let dashBordArrLength3 = this.items.value.length;
       for (let i = 0; i < dashBordArrLength3 - 1; i++) {
-        this.items.value[4].children[4].path = '';
-        this.items.value[4].children[4].title = '';
-        this.items.value[4].children[4].type = '';
+        this.items.value[4].children[3].path = '';
+        this.items.value[4].children[3].title = '';
+        this.items.value[4].children[3].type = '';
 
       }
 
@@ -291,10 +291,6 @@ export class NavService {
     this.items.value[5].children[3].title = '';
     this.items.value[5].children[3].type = '';
 
-    this.items.value[5].children[4].path = '';
-    this.items.value[5].children[4].title = '';
-    this.items.value[5].children[4].type = '';
-
     this.items.value[6].icon = '';
     this.items.value[6].title = '';
     this.items.value[6].type = '';
@@ -358,10 +354,6 @@ export class NavService {
     this.items.value[5].children[3].title = '';
     this.items.value[5].children[3].type = '';
 
-    this.items.value[5].children[4].path = '';
-    this.items.value[5].children[4].title = '';
-    this.items.value[5].children[4].type = '';
-
     this.items.value[7].icon = '';
     this.items.value[7].title = '';
     this.items.value[7].type = '';
@@ -409,10 +401,6 @@ export class NavService {
     this.items.value[5].children[3].path = '';
     this.items.value[5].children[3].title = '';
     this.items.value[5].children[3].type = '';
-
-    this.items.value[5].children[4].path = '';
-    this.items.value[5].children[4].title = '';
-    this.items.value[5].children[4].type = '';
 
     this.items.value[7].icon = '';
     this.items.value[7].title = '';
@@ -462,10 +450,6 @@ export class NavService {
     this.items.value[5].children[3].path = '';
     this.items.value[5].children[3].title = '';
     this.items.value[5].children[3].type = '';
-
-    this.items.value[5].children[4].path = '';
-    this.items.value[5].children[4].title = '';
-    this.items.value[5].children[4].type = '';
 
     this.items.value[7].icon = '';
     this.items.value[7].title = '';
@@ -564,9 +548,6 @@ export class NavService {
               this.items.value[4].children[1].path = '';
               this.items.value[4].children[1].title = '';
               this.items.value[4].children[1].type = '';
-              this.items.value[4].children[2].path = '';
-              this.items.value[4].children[2].title = '';
-              this.items.value[4].children[2].type = '';
             }
             if (name === 'upload_files') {
               this.items.value[5].icon = '';
@@ -686,10 +667,9 @@ export class NavService {
             this.items.value[5].title = '';
             this.items.value[5].type = '';
             this.items.value[5].active = true;
-            this.items.value[5].children[4].path = '';
-            this.items.value[5].children[4].title = '';
-            this.items.value[5].children[4].type = '';
-
+            this.items.value[5].children[3].path = '';
+            this.items.value[5].children[3].title = '';
+            this.items.value[5].children[3].type = '';
           }
 
 
@@ -785,9 +765,9 @@ export class NavService {
       this.items.value[5].title = '';
       this.items.value[5].type = '';
       this.items.value[5].active = true;
-      this.items.value[5].children[4].path = '';
-      this.items.value[5].children[4].title = '';
-      this.items.value[5].children[4].type = '';
+      this.items.value[5].children[3].path = '';
+      this.items.value[5].children[3].title = '';
+      this.items.value[5].children[3].type = '';
 
 
       this.items.value[6].icon = '';
@@ -854,9 +834,9 @@ export class NavService {
     this.items.value[5].title = '';
     this.items.value[5].type = '';
     this.items.value[5].active = true;
-    this.items.value[5].children[4].path = '';
-    this.items.value[5].children[4].title = '';
-    this.items.value[5].children[4].type = '';
+    this.items.value[5].children[3].path = '';
+    this.items.value[5].children[3].title = '';
+    this.items.value[5].children[3].type = '';
 
     this.items.value[6].icon = '';
     this.items.value[6].title = '';
@@ -941,9 +921,6 @@ export class NavService {
     this.items.value[5].children[3].path = '';
     this.items.value[5].children[3].title = '';
     this.items.value[5].children[3].type = '';
-    this.items.value[5].children[4].path = '';
-    this.items.value[5].children[4].title = '';
-    this.items.value[5].children[4].type = '';
 
     this.items.value[7].icon = '';
     this.items.value[7].title = '';
@@ -988,10 +965,6 @@ export class NavService {
     this.items.value[5].children[3].path = '';
     this.items.value[5].children[3].title = '';
     this.items.value[5].children[3].type = '';
-
-    this.items.value[5].children[4].path = '';
-    this.items.value[5].children[4].title = '';
-    this.items.value[5].children[4].type = '';
 
     this.items.value[6].icon = '';
     this.items.value[6].title = '';
@@ -1162,9 +1135,6 @@ export class NavService {
     this.items.value[5].children[3].path = '';
     this.items.value[5].children[3].title = '';
     this.items.value[5].children[3].type = '';
-    this.items.value[5].children[4].path = '';
-    this.items.value[5].children[4].title = '';
-    this.items.value[5].children[4].type = '';
 
     this.items.value[7].icon = '';
     this.items.value[7].title = '';
