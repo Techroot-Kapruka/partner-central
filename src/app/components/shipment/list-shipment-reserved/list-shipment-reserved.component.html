@@ -1,79 +1,82 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="card tab2-card">
-        <div class="card-body tab2-card">
-          <ngb-tabset class="tab-coupon">
-            <ngb-tab title="Shipment List">
-              <ng-template ngbTabContent>
-                <div *ngIf="recievedShipmentErrorMsg">
-                  <h4>You have no Recieved Shipments yet</h4>
-                </div>
-                <div class="tab-pane fade active show" id="account1" role="tabpanel" aria-labelledby="account-tab">
-                  <div class="custom-datatable">
-                    <div *ngIf="isAdmin" class="btn-popup pull-right">
-                      <select (change)="getSelectedPartnerRecivedShipment()" id="select_pro2" class="form-control">
-                        <option selected>-- Select Vendor --</option>
-                        <option *ngFor="let partnerArrays of partnerArray" value="{{partnerArrays['value']}}">
-                          {{partnerArrays['name']}}
-                        </option>
-                      </select>
+<form>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="card tab2-card">
+          <div class="card-body tab2-card">
+            <ngb-tabset class="tab-coupon">
+              <ngb-tab [title]="getApprovedShipment()">
+                <ng-template ngbTabContent>
+                  <div class="tab-pane fade active show" id="account1" role="tabpanel" aria-labelledby="account-tab">
+                    <div *ngIf="recievedShipmentErrorMsg">
+                      <h4>You have no Recieved Shipments yet</h4>
                     </div>
-                    <div class="clearfix"></div>
-                    <div *ngIf="isRecievedShipmentValid">
-                      <app-common-table [showActionButton]="true" [tableData]="recivedShipmentArray" [lengthOfArray]="recivedShipmentArray.length"
-                                        [columnArray]="columnArray" (onEdit)="viewRecivedShipment($event)">
-                      </app-common-table>
+                    <div *ngIf="isAdmin" class="btn-popup pull-right">
+                      <!--<select (change)="getSelectedPartnerRecivedShipment()" id="select_pro2"
+                              class="form-control">
+                        <option selected>&#45;&#45; Select Vendor &#45;&#45;</option>
+                        <option *ngFor="let partnerArrays of partnerArray" value="{{partnerArrays['value']}}">
+                          {{partnerArrays['label']}}
+                        </option>
+                      </select>-->
+                      <ng-select [options]="partnerArray" style="width: 400px; float: left; color: #1b252a;"
+                                 [(ngModel)]="selectedValue"
+                                 (selected)="getSelectedPartnerRecivedShipment($event)"></ng-select>
+                    </div>
+                    <app-common-table *ngIf="isRecievedShipmentValid" [showActionButton]="true"
+                                      [tableData]="recivedShipmentArray"
+                                      [lengthOfArray]="recivedShipmentArray.length"
+                                      [columnArray]="columnArray" (onEdit)="viewRecivedShipment($event)">
+                    </app-common-table>
+                  </div>
+                </ng-template>
+              </ngb-tab>
+              <ngb-tab title="Pending Price Change List" *ngIf="false">
+                <ng-template ngbTabContent>
+                  <div class="tab-pane fade active show" id="account2" role="tabpanel" aria-labelledby="account-tab">
+                    <div class="custom-datatable">
+                      <div *ngIf="isAdmin" class="btn-popup pull-right">
+                        <select (change)="getSelectedPartnerPriceChange()" id="select_pro3" class="form-control">
+                          <option selected>-- Select Vendor --</option>
+                          <option *ngFor="let partnerArrays of partnerArray" value="{{partnerArrays['value']}}">
+                            {{partnerArrays['label']}}
+                          </option>
+                        </select>
+                      </div>
+                      <div class="clearfix"></div>
+                      <ngx-datatable class="bootstrap expandable" [rows]="changePriceArray" [columnMode]="'force'"
+                                     [headerHeight]="50"
+                                     [footerHeight]="50" [rowHeight]="'auto'" [limit]="priceChangeCount"
+                                     [selected]="selected"
+                                     [selectionType]="false" [selectAllRowsOnPage]="false">
+                        <ngx-datatable-column name="Change Id" [width]="20"></ngx-datatable-column>
+                        <ngx-datatable-column name="Create Date" [width]="30"></ngx-datatable-column>
+                        <ngx-datatable-column name="Product Code" [width]="25"></ngx-datatable-column>
+                        <ngx-datatable-column name="Product Name" [width]="40"></ngx-datatable-column>
+                        <ngx-datatable-column name="Old Cost Price" [width]="25"></ngx-datatable-column>
+                        <ngx-datatable-column name="New Cost Price" [width]="25"></ngx-datatable-column>
+                        <ngx-datatable-column name="Old Selling Price" [width]="25"></ngx-datatable-column>
+                        <ngx-datatable-column name="New Selling Price" [width]="25"></ngx-datatable-column>
+                        <ngx-datatable-column name="Action" prop="name" [width]="10" *ngIf="isAdmin">
+                          <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
+                                       let-row="row">
+                            <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
+                            <button type="button" (click)='approvedChangePrice(rowIndex)'
+                                    style="width: 96px;height: 28px;font-size: 10px;"
+                                    class="btn btn-outline-success"
+                            >Approve
+                            </button>
+                          </ng-template>
+                        </ngx-datatable-column>
+                      </ngx-datatable>
                     </div>
                   </div>
-                </div>
-              </ng-template>
-            </ngb-tab>
-            <ngb-tab title="Pending Price Change List" *ngIf="false">
-              <ng-template ngbTabContent>
-                <div class="tab-pane fade active show" id="account2" role="tabpanel" aria-labelledby="account-tab">
-                  <div class="custom-datatable">
-                    <div *ngIf="isAdmin" class="btn-popup pull-right">
-                      <select (change)="getSelectedPartnerPriceChange()" id="select_pro3" class="form-control">
-                        <option selected>-- Select Vendor --</option>
-                        <option *ngFor="let partnerArrays of partnerArray" value="{{partnerArrays['value']}}">
-                          {{partnerArrays['name']}}
-                        </option>
-                      </select>
-                    </div>
-                    <div class="clearfix"></div>
-                    <ngx-datatable class="bootstrap expandable" [rows]="changePriceArray" [columnMode]="'force'"
-                                   [headerHeight]="50"
-                                   [footerHeight]="50" [rowHeight]="'auto'" [limit]="priceChangeCount"
-                                   [selected]="selected"
-                                   [selectionType]="false" [selectAllRowsOnPage]="false">
-                      <ngx-datatable-column name="Change Id" [width]="20"></ngx-datatable-column>
-                      <ngx-datatable-column name="Create Date" [width]="30"></ngx-datatable-column>
-                      <ngx-datatable-column name="Product Code" [width]="25"></ngx-datatable-column>
-                      <ngx-datatable-column name="Product Name" [width]="40"></ngx-datatable-column>
-                      <ngx-datatable-column name="Old Cost Price" [width]="25"></ngx-datatable-column>
-                      <ngx-datatable-column name="New Cost Price" [width]="25"></ngx-datatable-column>
-                      <ngx-datatable-column name="Old Selling Price" [width]="25"></ngx-datatable-column>
-                      <ngx-datatable-column name="New Selling Price" [width]="25"></ngx-datatable-column>
-                      <ngx-datatable-column name="Action" prop="name" [width]="10" *ngIf="isAdmin">
-                        <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value"
-                                     let-row="row">
-                          <!--<button type="button" (click)='ApproveUsers(rowIndex)'-->
-                          <button type="button" (click)='approvedChangePrice(rowIndex)'
-                                  style="width: 96px;height: 28px;font-size: 10px;"
-                                  class="btn btn-outline-success"
-                          >Approve
-                          </button>
-                        </ng-template>
-                      </ngx-datatable-column>
-                    </ngx-datatable>
-                  </div>
-                </div>
-              </ng-template>
-            </ngb-tab>
-          </ngb-tabset>
+                </ng-template>
+              </ngb-tab>
+            </ngb-tabset>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</form>

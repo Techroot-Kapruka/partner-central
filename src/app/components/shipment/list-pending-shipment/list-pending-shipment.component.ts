@@ -84,4 +84,9 @@ export class ListPendingShipmentComponent implements OnInit {
     }
     this.router.navigate([url]);
   }
+
+  getPendingShipment() {
+    const count = this.allShipmentArr.length;
+    return `Pending Shipment List (${count})`;
+  }
 }

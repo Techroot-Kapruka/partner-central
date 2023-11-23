@@ -4,19 +4,17 @@
       <div class="card tab2-card">
         <div class="card-body tab2-card">
           <ngb-tabset class="tab-coupon">
-            <ngb-tab title="Pending Shipment List">
+            <ngb-tab [title]="getPendingShipment()">
               <ng-template ngbTabContent>
-                <div *ngIf="shipmentErrorMsg">
-                  <h4>You have no Shipments yet</h4>
-                </div>
-                <div *ngIf="isShipmentValid">
-                  <div class="tab-pane fade active show" id="account" role="tabpanel" aria-labelledby="account-tab">
-                    <div class="custom-datatable">
-                      <div class="clearfix"></div>
-                      <app-common-table [showActionButton]="true" [tableData]="allShipmentArr" [lengthOfArray]="allShipmentArr.length"
-                                        [columnArray]="columnArray" (onEdit)="viewShippedShipment($event)">
-                      </app-common-table>
-                    </div>
+                <div class="tab-pane fade active show" id="account" role="tabpanel" aria-labelledby="account-tab">
+                  <div *ngIf="shipmentErrorMsg">
+                    <h4>You have no Shipments yet</h4>
+                  </div>
+                  <div *ngIf="isShipmentValid">
+                    <app-common-table [showActionButton]="true" [tableData]="allShipmentArr"
+                                      [lengthOfArray]="allShipmentArr.length"
+                                      [columnArray]="columnArray" (onEdit)="viewShippedShipment($event)">
+                    </app-common-table>
                   </div>
                 </div>
               </ng-template>
