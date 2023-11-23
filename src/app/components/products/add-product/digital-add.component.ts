@@ -668,7 +668,6 @@ export class DigitalAddComponent implements OnInit {
         let one4 = this.imageCliant.get('fileSource4').value;
         let one5 = this.imageCliant.get('fileSource5').value;
 
-        console.log(one);
         const pricecc = new File([''], '');
         if (one === '') {
 
@@ -956,7 +955,7 @@ export class DigitalAddComponent implements OnInit {
   }
 
 async imageAssign(event, imgID, index){
-  const result = await this.imageService.validateImage(event,imgID);
+  const result = await this.imageService.validateImage(event,imgID,"add");
     switch(index){
       case 1:
         if(result){

@@ -7,12 +7,11 @@ import Swal from "sweetalert2";
 export class ImageService {
 
   constructor() { }
-  async validateImage(event, imgID) {
+  async validateImage(event:any, imgID:string, functionality:string) {
     var validation:any;
     if (event.target.files.length === 0) {
       return false;
     }
-    var x = (document.getElementById(imgID) as HTMLImageElement);
     // Image upload validation
     const mimeType = event.target.files[0].type;
     if (!mimeType.match(/^image\/jpeg$/i)) {
@@ -36,7 +35,9 @@ export class ImageService {
             'The maximum resolution supported for images is 5000x5000 pixels.',
             'error'
           );
-          (document.getElementById(imgID) as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+          if(functionality==="add"){
+            (document.getElementById(imgID) as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+          }
           reject('Invalid image resolution'); // Reject the promise to stop further actions
         } else {
           resolve();
@@ -59,7 +60,9 @@ export class ImageService {
           validation=resizedFile;
           })
           .catch((error) => {
-            (document.getElementById(imgID) as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+            if(functionality==="add"){
+              (document.getElementById(imgID) as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+            }
             Swal.fire(
               'error',
               'Image upload error: ' + error,
