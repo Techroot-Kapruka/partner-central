@@ -19,9 +19,10 @@
                           {{partnerArrays['label']}}
                         </option>
                       </select>-->
-                      <ng-select [options]="partnerArray" style="width: 400px; float: left; color: #1b252a;"
+                      <!--<ng-select [options]="partnerArray" style="width: 400px; float: left; color: #1b252a;"
                                  [(ngModel)]="selectedValue"
-                                 (selected)="getSelectedPartnerRecivedShipment($event)"></ng-select>
+                                 (selected)="getSelectedPartnerRecivedShipment($event)"></ng-select>-->
+                      <app-dropdown [dataArray]="partnerArray" [isDisabled]="false" [defaultValue]="selectedVendor" (selected)="getSelectedPartnerRecivedShipment($event)"></app-dropdown>
                     </div>
                     <app-common-table *ngIf="isRecievedShipmentValid" [showActionButton]="true"
                                       [tableData]="recivedShipmentArray"

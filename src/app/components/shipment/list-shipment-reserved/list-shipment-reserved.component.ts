@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ShipmentNewService} from '../../../shared/service/shipment-new.service';
 import {Router} from '@angular/router';
 import {ProductService} from '../../../shared/service/product.service';
 import Swal from 'sweetalert2';
 import {PriceChangeService} from '../../../shared/service/price-change.service';
+import { DropdownComponent } from '../../../shared/dropdown/dropdown.component';
 
 @Component({
   selector: 'app-list-shipment-reserved',
@@ -18,11 +19,13 @@ export class ListShipmentReservedComponent implements OnInit {
   public isRecievedShipmentValid = false;
   public recievedShipmentErrorMsg = false;
 
-  public selectedValue = 'Select Vendor';
+  public selectedVendor = 'Select Vendor';
   public partnerArray = [];
   public recivedShipmentArray = [];
   public changePriceArray = [];
   public columnArray = [];
+
+  @ViewChild(DropdownComponent, { static: false }) dropdownComponent: DropdownComponent;
 
   constructor(private shipmentNewService: ShipmentNewService, private router: Router,
               private productService: ProductService, private priceChangeService: PriceChangeService) {
@@ -81,11 +84,10 @@ export class ListShipmentReservedComponent implements OnInit {
     }
   }
 
-  getSelectedPartnerRecivedShipment(event) {
+  getSelectedPartnerRecivedShipment(vandorCode) {
     // const name = (document.getElementById('select_pro2') as HTMLInputElement).value;
-    const name = event.value;
     const bussArr = {
-      vendor_code: name
+      vendor_code: vandorCode
     };
     this.shipmentNewService.getRecivedShipmentByVendorId(bussArr).subscribe(
       data => this.managRecivedShipmetAll(data),
@@ -121,6 +123,11 @@ export class ListShipmentReservedComponent implements OnInit {
     } else {
       this.isRecievedShipmentValid = false;
       this.recievedShipmentErrorMsg = true;
+
+      this.selectedVendor = 'Select Vendor';
+      if (this.dropdownComponent) {
+        this.dropdownComponent.setDefaultValue();
+      }
     }
   }
 
