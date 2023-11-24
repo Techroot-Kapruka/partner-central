@@ -6,6 +6,20 @@ import {environment} from './environments/environment';
 
 if (environment.production) {
   enableProdMode();
+  //disable right click
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    //disable f12
+    switch (e.key){
+      case 'F12': {
+        e.preventDefault();
+        break;
+      }
+    }
+  });
   // if(window){
   //   window.console.log=function(){};
   //   window.console.error=function(){};
