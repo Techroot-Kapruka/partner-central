@@ -476,6 +476,10 @@ export class AddShipmentComponent implements OnInit {
   }
 
   addToTable() {
+    let summation = 0;
+    for (const i of this.quantityMap.keys()) {
+      summation += parseInt(this.quantityMap.get(i));
+    }
     const dataForm = this.shipmentForm.value;
     if (dataForm.txtProductCode === '') {
       Swal.fire(
@@ -495,7 +499,7 @@ export class AddShipmentComponent implements OnInit {
         'Product Cost Price empty',
         'error'
       );
-    } else if (this.quantityMap.size === 0) {
+    } else if (summation === 0) {
       Swal.fire(
         'Whoops...!',
         'Product Quantity empty',
