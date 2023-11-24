@@ -205,6 +205,21 @@ export class MakeReservedComponent implements OnInit {
 
       let url = '/shipment/receive-shipment';
       this.router.navigate([url]);
+    }else if(data.status_code == 400){
+      Swal.fire(
+        'Whoops...!',
+        'Price change not Approved.!',
+        'error'
+      );
+      this.createFormConteolerForShipment();
+      this.tableData = [];
+      this.id = '';
+      this.partnerId = '';
+      this.partnerName = '';
+
+
+      let url = '/shipment/list-pending-shipment';
+      this.router.navigate([url]);
     }
   }
 
