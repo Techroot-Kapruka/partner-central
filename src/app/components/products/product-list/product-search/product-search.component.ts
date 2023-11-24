@@ -17,6 +17,7 @@ export class ProductSearchComponent implements OnInit {
   isTableVisible: boolean = false;
   isViewFormVisible: boolean = false;
   isValue: boolean = false;
+  editOption: boolean = false;
   public startIndex;
 
   isDivVisible: boolean = false;
@@ -30,6 +31,7 @@ export class ProductSearchComponent implements OnInit {
   public elementStatus: any;
   public elementVendorCode: any;
   public elementDescription: any;
+  public elementAvailableStock: any;
   public elementImage: any;
   public elementHistory: SafeHtml;
   public elementVariations = [];
@@ -128,14 +130,42 @@ export class ProductSearchComponent implements OnInit {
     this.elementCategoryName = data.data.product.categoryName
     this.elementVendorCode = data.data.product.vendor
     this.elementDescription = data.data.product.productDescription.description
+    this.elementAvailableStock = data.data.product.in_stock
     this.elementImage = (data.data.product.productImage.image1 && data.data.product.productImage.image1 ? data.data.product.productImage.image1.split('/product')[1] : '') || ''
-    if (data.data.product.isOut === 0) {
-      this.elementStatus = 'Available'
-      this.badge = 'badge-success'
-    }else {
-      this.elementStatus = 'Out of Stock'
-      this.badge = 'badge-danger'
+    // if (data.data.product.is_active === 0) {
+    //   this.elementStatus = 'Available'
+    //   this.badge = 'badge-success'
+    // }else {
+    //   this.elementStatus = 'Out of Stock'
+    //   this.badge = 'badge-danger'
+    // }
+    switch (data.data.product.is_active) {
+      case 1:
+        this.elementStatus = 'Available';
+        this.badge = 'badge-success';
+        this.editOption = false;
+        break;
+      case -10:
+        this.elementStatus = 'Suspended';
+        this.badge = 'badge-warning';
+        this.editOption = true;
+        break;
+      case -5:
+        this.elementStatus = 'Out of Stock';
+        this.badge = 'badge-danger';
+        this.editOption = false;
+        break;
+      case -20:
+        this.elementStatus = 'QA Approved';
+        this.badge = 'badge-info';
+        this.editOption = true;
+        break;
+      default:
+        this.elementStatus = '';
+        this.badge = 'badge';
+        this.editOption = true;
     }
+
     // this.elementHistory = 'Exotic Perfumes & Cosmetics - Create Product - Sat Nov 11 12:14:29 IST 2023 <hr size=1>'
     this.elementHistory = this.sanitizer.bypassSecurityTrustHtml(data.data.product.productHistory);
     this.elementVariations = [];
@@ -162,6 +192,11 @@ export class ProductSearchComponent implements OnInit {
     } else {
       this.isValue = false;
     }
+  }
+
+  onEditClick(elementProductCode){
+    const url = '#/products/digital/digital-edit-product/' + elementProductCode;
+    window.open(url, '_blank');
   }
 
   getStyle(value: string): any {

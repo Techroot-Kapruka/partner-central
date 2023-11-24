@@ -127,10 +127,20 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'product/getConsignmentProductsByVendor', payLoard, {headers});
   }
 
-
-  getnonActiveImageProduct() {
+  getEditFieldsDataAll(role, userID) {
+    const formData: FormData = new FormData();
+    formData.append('role', role);
+    formData.append('userID ', userID);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.get<any>(this.SERVER + 'fieldEdit/editProductImageList', {headers});
+    return this.httpClient.post<any>(this.SERVER + 'fieldEdit/getNoneActiveProducts', formData, {headers});
+  }
+
+  getnonActiveImageProduct(role, userID) {
+    const formData: FormData = new FormData();
+    formData.append('role', role);
+    formData.append('userID ', userID);
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'fieldEdit/editProductImageList', formData, {headers});
   }
 
   ApproveProduct(payloard: any) {
@@ -231,10 +241,7 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'fieldEdit/editImages', formData, {headers});
   }
 
-  getEditFieldsDataAll() {
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.get<any>(this.SERVER + 'fieldEdit/getNoneActiveProducts', {headers});
-  }
+
 
   getEditFieldsDataAllForApproval(payloard: any) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
