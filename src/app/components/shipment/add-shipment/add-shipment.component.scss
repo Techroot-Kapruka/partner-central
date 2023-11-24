@@ -140,9 +140,11 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
-.table-striped{
+
+.table-striped {
   table-layout: fixed;
 }
+
 .table-container {
   overflow-y: auto;
 }
@@ -153,13 +155,13 @@ input:checked + .slider:before {
 }
 
 
-
-.parent-common-fields{
+.parent-common-fields {
   display: flex;
   width: 100%;
   flex-wrap: nowrap;
 }
-.middle-parent{
+
+.middle-parent {
 
   display: flex;
   width: 100%;
@@ -167,9 +169,11 @@ input:checked + .slider:before {
   flex-direction: row;
   justify-content: space-around;
 }
-.common-fields{
+
+.common-fields {
   align-self: flex-start;
 }
+
 ul li:hover {
   background: #000080 !important;
   color: #fff !important;
