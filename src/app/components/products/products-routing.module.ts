@@ -17,6 +17,7 @@ import {AnalyticsProductViewComponent} from "./analytics-product-view/analytics-
 import {ChangeRequestsComponent} from "./product-list/change-requests/change-requests.component";
 import {ProductSearchComponent} from "./product-list/product-search/product-search.component";
 import {NewAdditionsComponent} from "./product-list/new-additions/new-additions.component";
+import {AuthGuard} from "../../auth.guard";
 
 const routes: Routes = [
   {
@@ -28,7 +29,8 @@ const routes: Routes = [
         data: {
           title: 'Product List',
           breadcrumb: 'Product List'
-        }
+        },
+        canActivate: [AuthGuard]
       },
       {
         path: 'digital/digital-add-product',
@@ -36,7 +38,8 @@ const routes: Routes = [
         data: {
           title: 'Add Products',
           breadcrumb: 'Add Product'
-        }
+        },
+        canActivate: [AuthGuard]
       },
       {
         path: 'digital/digital-edit-product/:id',
@@ -108,14 +111,16 @@ const routes: Routes = [
         data: {
           title: 'Analytics Product View List',
           breadcrumb: 'Analytics Product View List'
-        }
+        },
+        canActivate: [AuthGuard]
       },
       {path: 'digital/change-requests',
       component: ChangeRequestsComponent,
       data: {
         title: 'Change Requests',
         breadcrumb: 'Approve image Edited Product'
-        }
+        },
+        canActivate: [AuthGuard]
       },
       {
         path: 'digital/new-additions',
@@ -123,7 +128,8 @@ const routes: Routes = [
         data: {
           title: 'New Additions',
           breadcrumb: 'Approve image Edited Product'
-        }
+        },
+        canActivate: [AuthGuard]
       },
       {
         path: 'digital/product-search',
@@ -131,7 +137,8 @@ const routes: Routes = [
         data: {
           title: 'Product Search',
           breadcrumb: 'Approve image Edited Product'
-        }
+        },
+        canActivate: [AuthGuard]
       }
     ]
   }
