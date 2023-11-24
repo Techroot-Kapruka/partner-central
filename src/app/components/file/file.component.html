@@ -1,19 +1,35 @@
-<div class="item-wrapper one" xmlns="http://www.w3.org/1999/html">
+<!--<select style="margin-top: 20px" (change) ="changeBulkTemplateOnCategory($event)">-->
+<!--  <option disabled [selected]="true">&#45;&#45;SELECT CATEGORY&#45;&#45;</option>-->
+<!--  <option *ngFor="let category of partnerSpecificCategoryArr"-->
+<!--          [value]="category.catName">{{category.catName}}</option>-->
+<!--</select>-->
+
+<div class="card" style="margin: 20px">
+  <div class="card-header">
+    <h6>Please Select a Category to Upload the Bulk</h6>
+  </div>
+  <div class="card-body">
+    <ng-select [options]="partnerSpecificCategoryArrForTemplate" [multiple]="false" placeholder="Select Category"
+               (selected)="changeBulkTemplateOnCategory($event)"></ng-select>
+    <div *ngIf="bulkTemplateCatSelected" class="download_url">
+      <a [href]="bulkTemplateHref"><i class="fa fa-download">&nbsp; Download the Sample Document
+        Template for Bulk Upload {{selectedCategoryForTemplate}}</i></a>
+    </div>
+  </div>
+</div>
+<div class="item-wrapper one" xmlns="http://www.w3.org/1999/html" *ngIf="bulkTemplateCatSelected">
   <div class="item">
     <div class="item-inner">
       <div class="item-content">
         <form class="form" [formGroup]="bioSection" (ngSubmit)="callingFunction()">
-
-
-
           <div class="dropzone row" (drop)="changeValue($event)" (dragover)="changeValue($event)"
                (dragleave)="changeValue($event)">
             <label class="col col-6" style="cursor: pointer;"> <img src="" alt="" class="uploaded-image">
               <div class="h-100">
                 <div class="dplay-tbl">
                   <div class="dplay-tbl-cell"><i class="fa fa-cloud-upload"></i>
-                    <h5><b>Choose Your Exel File to Upload</b></h5>
-                    <h6 class="mt-10 mb-70">Or Drop Your Exel Here</h6>
+                    <h5><b>Choose Your Excel File to Upload</b></h5>
+                    <h6 class="mt-10 mb-70">Or Drop Your Excel Here</h6>
                     <h6 class="mt-10 mb-70" id="prepend-big-btn"></h6>
                   </div>
                 </div>
@@ -21,7 +37,8 @@
             </label>
             <div class="">
               <div>
-                <input formControlName="Exel_file" data-required="file" accept=".xlsx, .xls" type="file"
+                <input [disabled]="showAddImagesElement" formControlName="Exel_file" data-required="file"
+                       accept=".xlsx, .xls" type="file"
                        id="Exel_file"
                        class="form-control-file" (change)="changeValue($event)"
                        data-traget-resolution="image_resolution" value="">
@@ -31,10 +48,9 @@
             <div class="col col-1">
               <div style="width: 100%;">
                 <div class="pull-right" style="margin-right: 20px;">
-<!--                  <img src="assets/images/ExcelDownload.png"  width="10px" height="10px" data-toggle="tooltip"-->
-<!--                       data-placement="bottom" title="Download Bulk Upload Excel"-->
-<!--                       style="color: dodgerblue;cursor: pointer" (click)="downloadBulkItemExcel();"/>-->
-
+                  <!--                  <img src="assets/images/ExcelDownload.png"  width="10px" height="10px" data-toggle="tooltip"-->
+                  <!--                       data-placement="bottom" title="Download Bulk Upload Excel"-->
+                  <!--                       style="color: dodgerblue;cursor: pointer" (click)="downloadBulkItemExcel();"/>-->
 
 
                 </div>
@@ -42,10 +58,7 @@
             </div>
 
           </div>
-          <div class="download_url">
-<!--          <a  href="url">Download the Sample Document Template for Bulk Upload</a>-->
-            <a href="assets/excel/BulkUpload.xlsx"><i class="fa fa-download">&nbsp; Download the Sample Document Template for Bulk Upload</i></a>
-          </div>
+
 
         </form>
 
@@ -54,7 +67,7 @@
 
   </div>
 </div>
-<div class="card">
+<div class="card" *ngIf="excelUploaded">
   <div class="card-title">
     <br>
   </div>
@@ -62,104 +75,150 @@
     <table class="table table-bordered">
       <thead>
       <tr>
-        <th scope="col">No.</th>
-        <th scope="col">Category</th>
-        <th scope="col" *ngIf="showAddImagesElement">Product Code</th>
-        <th scope="col">Product Name</th>
-        <th scope="col">Brand</th>
-        <th scope="col" *ngIf="showAllElements">SellerSKU</th>
-        <th scope="col">Listing Price</th>
-        <th scope="col" *ngIf="showAllElements">Margin Rate</th>
-        <th scope="col" *ngIf="showAllElements">Seller Income</th>
-        <th scope="col" *ngIf="showAllElements">Product Description</th>
-        <th scope="col" *ngIf="showAllElements">Product Variation</th>
-        <th scope="col" *ngIf="showAddImagesElement">Image 1</th>
-        <th scope="col" *ngIf="showAddImagesElement">Image 2</th>
-        <th scope="col" *ngIf="showAddImagesElement">Image 3</th>
-        <th scope="col" *ngIf="showAddImagesElement">Image 4</th>
-        <th scope="col" *ngIf="showAddImagesElement">Image 5</th>
+        <th [id]="'header_status'">Status</th>
+        <th>Images</th>
+        <th *ngFor="let header of headers">{{ header }}</th>
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let tbleArray of tableArray let i = index" [attr.data-index]="i">
-        <td>{{tbleArray.index}}</td>
-        <td>
-          <select [disabled]="showAddImagesElement" (change)="onCategoryChange($event, i, tbleArray.listingPrice)">
-            <option [selected]="true">--SELECT CATEGORY--</option>
-            <option *ngFor="let category of partnerSpecificCategoryArr"
-                    [value]="category.catCode">{{category.catName}}</option>
-          </select>
+      <tr [id]="'index_'+i" *ngFor="let tbleArray of tableArray let i = index" [attr.data-index]="i">
+        <td [id]="'status_'+i">{{i + 1}}</td>
+        <td [id]="'addImageBtn_'+i" *ngIf="showSavedElements">
+          <button [id]="'addImageButton_'+i" class="btn btn-info btn-sm" (click)="popUpImageActive(i)">Add Images
+          </button>
         </td>
-        <td *ngIf="showAddImagesElement">{{ afterSavedArray[i]?.productCode }}</td>
-        <td>{{tbleArray.productName}}</td>
-        <td>{{tbleArray.brand}}</td>
-        <td *ngIf="showAllElements">{{tbleArray.sellerSku}}</td>
-        <td>{{tbleArray.listingPrice}}</td>
-        <td *ngIf="showAllElements">{{tbleArray.marginRate}}</td>
-        <td *ngIf="showAllElements">{{tbleArray.sellerIncome}}</td>
-        <td *ngIf="showAllElements">{{tbleArray.productDescription}}</td>
-        <td *ngIf="showAllElements">{{tbleArray.productVariant}}</td>
-        <td *ngIf="showAddImagesElement">
-          <div class="box-input-file" style="position: relative; color: #00c292">
-            <input type="file" style="display: none;" [id]="'fileInput_' + i + '_1'" accept="image/*"
-                   required (change)="onFileInputChange($event, i, 1,afterSavedArray[i].productCode)">
-            <img class="imgUpload col" [id]="'imgUpload_' + i + '_1'" alt="Click To Add Image"
-                 [src]="getImageSource(i + 1, 1)" (click)="openFileInput(i, 1)">
-          </div>
+        <td *ngFor="let header of headers"
+            style="position: relative; padding-bottom: 50px;"
+            [id]="removeSpacesFromString(header)+'_'+i"
+            (dblclick)="popUpEditActive(i+1, header, tbleArray[header])"
+        >
+          {{ tbleArray[header] }}
+          <i class="fa fa-edit edit-icon" [hidden]="checkEditRestrictFeild(header)"
+             (click)="popUpEditActive(i+1, header, tbleArray[header])"></i>
         </td>
-        <td *ngIf="showAddImagesElement">
-          <div class="box-input-file" style="position: relative; color: #00c292">
-            <input type="file" style="display: none;" [id]="'fileInput_' + i + '_2'" accept="image/*"
-                   required (change)="onFileInputChange($event, i, 2,afterSavedArray[i].productCode)">
-            <img class="imgUpload col" [id]="'imgUpload_' + i + '_2'" alt="Click To Add Image"
-                 [src]="getImageSource(i + 1, 2)" (click)="openFileInput(i, 2)">
-          </div>
-        </td>
-        <td *ngIf="showAddImagesElement">
-          <div class="box-input-file" style="position: relative; color: #00c292">
-            <input type="file" style="display: none;" [id]="'fileInput_' + i + '_3'" accept="image/*"
-                   required (change)="onFileInputChange($event, i, 3,afterSavedArray[i].productCode)">
-            <img class="imgUpload col" [id]="'imgUpload_' + i + '_3'" alt="Click To Add Image"
-                 [src]="getImageSource(i + 1, 3)" (click)="openFileInput(i, 3)">
-          </div>
-        </td>
-        <td *ngIf="showAddImagesElement">
-          <div class="box-input-file" style="position: relative; color: #00c292">
-            <input type="file" style="display: none;" [id]="'fileInput_' + i + '_4'" accept="image/*"
-                   required (change)="onFileInputChange($event, i, 4,afterSavedArray[i].productCode)">
-            <img class="imgUpload col" [id]="'imgUpload_' + i + '_4'" alt="Click To Add Image"
-                 [src]="getImageSource(i + 1, 4)" (click)="openFileInput(i, 4)">
-          </div>
-        </td>
-        <td *ngIf="showAddImagesElement">
-          <div class="box-input-file" style="position: relative; color: #00c292">
-            <input type="file" style="display: none;" [id]="'fileInput_' + i + '_5'" accept="image/*"
-                   required (change)="onFileInputChange($event, i, 5,afterSavedArray[i].productCode)">
-            <img class="imgUpload col" [id]="'imgUpload_' + i + '_5'" alt="Click To Add Image"
-                 [src]="getImageSource(i + 1, 5)" (click)="openFileInput(i, 5)">
-          </div>
-        </td>
+
+        <!--        <td style="position: relative; padding-bottom: 50px;" [id]="'productName_'+i" (dblclick)="popUpEditActive(tbleArray.index, 'Product Name', tbleArray.productName)">{{tbleArray.productName}}-->
+        <!--          <i class="fa fa-edit edit-icon" (click)="popUpEditActive(tbleArray.index, 'Product Name', tbleArray.productName)"></i>-->
+        <!--        </td>-->
+        <!--        <td style="position: relative; padding-bottom: 50px;" [id]="'brand_'+i" (dblclick)="popUpEditActive(tbleArray.index, 'Brand',tbleArray.brand)">{{tbleArray.brand}}-->
+        <!--          <i class="fa fa-edit edit-icon" (click)="popUpEditActive(tbleArray.index, 'Brand',tbleArray.brand)"></i>-->
+        <!--        </td>-->
+        <!--        <td style="position: relative; padding-bottom: 50px;" [id]="'sku_'+i" *ngIf="showAllElements" (dblclick)="popUpEditActive(tbleArray.index, 'Seller SKU', tbleArray.sellerSku)">{{tbleArray.sellerSku}}-->
+        <!--          <i class="fa fa-edit edit-icon"  (click)="popUpEditActive(tbleArray.index, 'Seller SKU', tbleArray.sellerSku)"></i>-->
+        <!--        </td>-->
+        <!--        <td style="position: relative; padding-bottom: 50px;" [id]="'listingPrice_'+i" (dblclick)="popUpEditActive(tbleArray.index, 'Listing Price',tbleArray.listingPrice)">{{tbleArray.listingPrice}}-->
+        <!--          <i class="fa fa-edit edit-icon" (click)="popUpEditActive(tbleArray.index, 'Listing Price',tbleArray.listingPrice)"></i>-->
+        <!--        </td>-->
+        <!--        <td [id]="'marginRate_'+i" *ngIf="showAllElements">{{tbleArray.marginRate}}</td>-->
+        <!--        <td [id]="'sellerIncome_'+i" *ngIf="showAllElements">{{tbleArray.sellerIncome}}</td>-->
+        <!--        <td style="position: relative; padding-bottom: 50px;" [id]="'description_'+i" *ngIf="showAllElements" (dblclick)="popUpEditActive(tbleArray.index, 'Product Description', tbleArray.productDescription)">{{tbleArray.productDescription}}-->
+        <!--          <i class="fa fa-edit edit-icon" (click)="popUpEditActive(tbleArray.index, 'Product Description', tbleArray.productDescription)"></i>-->
+        <!--        </td>-->
+        <!--        <td style="position: relative; padding-bottom: 50px;" *ngIf="showAllElements" (dblclick)="popUpEditActive(tbleArray.index, 'Product Variation', tbleArray.productVariant)">{{tbleArray.productVariant}}-->
+        <!--          <i class="fa fa-edit edit-icon" (click)="popUpEditActive(tbleArray.index, 'Product Variation', tbleArray.productVariant)"></i>-->
+        <!--        </td>-->
+
+
       </tr>
       </tbody>
     </table>
+    <ng-template #imagePopup let-modal>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Add Images for product: {{productNameModal}}</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table">
+            <td>
+              <div class="box-input-file" style="position: relative; color: #00c292">
+                <input type="file" style="display: none;" [id]="'fileInput_' + modalIndex + '_1'" accept="image/jpeg"
+                       required (change)="onFileInputChange($event, modalIndex, 1,modalIndex)">
+                <img class="imgUpload col" [id]="'imgUpload_' + modalIndex + '_1'" alt="Click To Add Image"
+                     [src]="getImageSource(modalIndex + 1, 1)" (click)="openFileInput(modalIndex, 1)">
+              </div>
+            </td>
+            <td>
+              <div class="box-input-file" style="position: relative; color: #00c292">
+                <input type="file" style="display: none;" [id]="'fileInput_' + modalIndex + '_2'" accept="image/jpeg"
+                       required (change)="onFileInputChange($event, modalIndex, 2,modalIndex)">
+                <img class="imgUpload col" [id]="'imgUpload_' + modalIndex + '_2'" alt="Click To Add Image"
+                     [src]="getImageSource(modalIndex + 1, 2)" (click)="openFileInput(modalIndex, 2)">
+              </div>
+            </td>
+            <td>
+              <div class="box-input-file" style="position: relative; color: #00c292">
+                <input type="file" style="display: none;" [id]="'fileInput_' + modalIndex + '_3'" accept="image/jpeg"
+                       required (change)="onFileInputChange($event, modalIndex, 3,modalIndex)">
+                <img class="imgUpload col" [id]="'imgUpload_' + modalIndex + '_3'" alt="Click To Add Image"
+                     [src]="getImageSource(modalIndex + 1, 3)" (click)="openFileInput(modalIndex, 3)">
+              </div>
+            </td>
+            <td>
+              <div class="box-input-file" style="position: relative; color: #00c292">
+                <input type="file" style="display: none;" [id]="'fileInput_' + modalIndex + '_4'" accept="image/jpeg"
+                       required (change)="onFileInputChange($event, modalIndex, 4,modalIndex)">
+                <img class="imgUpload col" [id]="'imgUpload_' + modalIndex + '_4'" alt="Click To Add Image"
+                     [src]="getImageSource(modalIndex + 1, 4)" (click)="openFileInput(modalIndex, 4)">
+              </div>
+            </td>
+            <td>
+              <div class="box-input-file" style="position: relative; color: #00c292">
+                <input type="file" style="display: none;" [id]="'fileInput_' + modalIndex + '_5'" accept="image/jpeg"
+                       required (change)="onFileInputChange($event, modalIndex, 5,modalIndex)">
+                <img class="imgUpload col" [id]="'imgUpload_' + modalIndex + '_5'" alt="Click To Add Image"
+                     [src]="getImageSource(modalIndex + 1, 5)" (click)="openFileInput(modalIndex, 5)">
+              </div>
+            </td>
+          </table>
 
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-danger" (click)="popUpImageClose()">Close</button>
+          <button class="btn btn-success" (click)="popUpImageSave(modalIndex)">Save Images</button>
+        </div>
+      </div>
+    </ng-template>
 
+    <ng-template #editFieldPopup let-modal>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Edit {{editFieldName}} Field</h5>
+          <button type="button" class="close" (click)="popUpEditClose()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <input class="form-control" [type]="editInputType" [ngModel]="editInputValue"
+                 (input)="changeModelOnChange($event)">
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-danger" (click)="popUpEditClose()">
+            Close
+          </button>
+          <button class="btn btn-success" (click)="popUpEditSave(modalIndex)">
+            Save
+          </button>
+        </div>
+      </div>
+    </ng-template>
 
   </div>
 </div>
 
-<div class="upload-btn">
-  <button class="btn btn-primary"  *ngIf="!uploaded && showAllElements"
-          (click)="bulkProductSave($event)" style="width: 306px;">Upload Products
+<div class="upload-btn" *ngIf="excelUploaded">
+  <!--  <button class="btn btn-primary" *ngIf="!uploaded && showAllElements" [disabled]="clicked"-->
+  <!--          (click)="bulkProductSave($event)" style="width: 306px;">Add Images-->
+  <!--  </button>  -->
+  <button [id]="'btn_status'" type="button" class="btn btn-primary" *ngIf="!uploaded && needVerification"
+          (click)="verifyDetails()" style="width: 306px;">
+    <span>
+    <div *ngIf="verifying" class="spinner-border spinner-border-sm" role="status"></div><i [id]="'btn_status_icon'"
+                                                                                           *ngIf="!verifying"
+                                                                                           class="fa fa-check-circle-o"></i>
+  </span> Verify Details
   </button>
-  <button class="btn btn-success" *ngIf="showAddImagesElement" (click)="bulkImageSave($event)"
-          style="width: 306px;">Save Bulk
+  <button class="btn btn-success" *ngIf="!needVerification && !disableSaveButton" [disabled]="disableSaveButton" (click)="bulkProductSave($event)"
+          style="width: 306px;">Save Products
   </button>
 </div>
-<!--<form [formGroup]="bioSection" (ngSubmit)="callingFunction()">-->
-<!--<label>-->
-<!--Age:-->
-<!--<input (change)="changeValue($event)" type="file" formControlName="files">-->
-<!--</label>-->
-<!--<button type="submit">Submit Application</button>-->
-<!--</form>-->
+
