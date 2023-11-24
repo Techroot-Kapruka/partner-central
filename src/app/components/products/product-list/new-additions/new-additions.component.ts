@@ -430,8 +430,10 @@ export class NewAdditionsComponent implements OnInit {
   }
 
   ApproveProductNon(event) {
-      const url = 'products/digital/digital-approve-product/' + event.productCode;
-      this.router.navigate([url]);
+    const url = `#/products/digital/digital-approve-product/${event.productCode}`;
+    window.open(url, '_blank');
+    /*const url = '#/products/digital/digital-approve-product/' + event.productCode;
+    this.router.navigate([url]);*/
   }
 
   onTabSelect(event: NgbTabChangeEvent) {
