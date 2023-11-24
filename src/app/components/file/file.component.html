@@ -210,7 +210,7 @@
   <!--          (click)="bulkProductSave($event)" style="width: 306px;">Add Images-->
   <!--  </button>  -->
   <button [id]="'btn_status'" type="button" class="btn btn-primary" *ngIf="!uploaded && needVerification"
-          (click)="verifyDetails()" style="width: 306px;">
+          (click)="syncWrapper(verifyDetails())" style="width: 306px;">
     <span>
     <div *ngIf="verifying" class="spinner-border spinner-border-sm" role="status"></div><i [id]="'btn_status_icon'"
                                                                                            *ngIf="!verifying"
