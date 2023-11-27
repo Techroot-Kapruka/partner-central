@@ -76,7 +76,7 @@ export class PoListComponent implements OnInit {
 
   getPoList() {
     let payload = {};
-    if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
+    if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
       this.isAdmin = true;
       payload = {
         type: 'all'

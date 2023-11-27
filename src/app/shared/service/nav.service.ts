@@ -62,9 +62,21 @@ export class NavService {
       type: 'sub',
       active: false,
       children: [
+        {path: '/products/digital/product-search', title: 'Product Search', type: 'link'},
         {path: '/products/digital/digital-product-list', title: 'Product List', type: 'link'},
         {path: '/products/digital/digital-add-product', title: 'Add Product', type: 'link'},
+
         {path: '/filess/file', title: 'Bulk upload', type: 'link'},
+
+        // new Added thingsss
+        {path: '/products/digital/new-additions', title: 'New Additions', type: 'link'},
+        {path: '/products/digital/change-requests', title: 'Change Requests', type: 'link'},
+
+        // {path: '/products/digital/edit-image-approval', title: 'Edit Image Approval', type: 'link'},
+        // {path: '/products/digital/out-of-stock', title: 'Out Of Stock', type: 'link'},
+        // {path: '/products/digital/suspended', title: 'Suspended', type: 'link'},
+        // {path: '/products/digital/on-demand', title: 'On Demand', type: 'link'},
+
       ]
     },
     {
@@ -92,6 +104,8 @@ export class NavService {
       active: false,
       children: [
         {path: '/shipment/receive-shipment', title: 'Shipment List', type: 'link'},
+        {path: '/shipment/list-pending-shipment', title: 'Pending Shipments', type: 'link'},
+        // {path: '/shipment/list-hold-shipment', title: 'Hold Shipments', type: 'link'},
         {path: '/shipment/add-shipment', title: 'Shipment Add', type: 'link'},
         {path: '/shipment/receive-shipment', title: 'Shipment Receive List', type: 'link'}
       ]
@@ -147,7 +161,8 @@ export class NavService {
       children: [
         {path: '/report/category-report', title: 'Category Report', type: 'link'},
         {path: '/report/product-report', title: 'Product Report', type: 'link'},
-        {path: '/report/supplier-report', title: 'Supplier Report', type: 'link'}
+        {path: '/report/supplier-report', title: 'Supplier Report', type: 'link'},
+        {path: '/products/digital/analytics-product-view', title: 'Product Analytics', type: 'link'},
       ]
     },
 
@@ -165,7 +180,7 @@ export class NavService {
 
     if (userInSession === 'ROLE_PARTNER') {
       let dashBordArrLength4 = this.items.value.length;
-      console.log(this.items.value);
+
       for (let i = 0; i < dashBordArrLength4 - 1; i++) {
         if (this.items.value[6].title === 'Users') {
           this.items.value.splice(6, 1);
@@ -189,9 +204,9 @@ export class NavService {
 
       let dashBordArrLength3 = this.items.value.length;
       for (let i = 0; i < dashBordArrLength3 - 1; i++) {
-        this.items.value[4].children[2].path = '';
-        this.items.value[4].children[2].title = '';
-        this.items.value[4].children[2].type = '';
+        this.items.value[4].children[3].path = '';
+        this.items.value[4].children[3].title = '';
+        this.items.value[4].children[3].type = '';
 
       }
 
@@ -216,10 +231,7 @@ export class NavService {
     } else if (sessionStorage.getItem('userRole') === 'ROLE_PURCHASING_USER') {
       this.managePurchasingUser();
     } else if (sessionStorage.getItem('userRole') === 'ROLE_FINANCE_USER') {
-      console.log('finance user');
       this.manageFinanceUser();
-    }else if (sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
-      this.manageSuperAdmin();
     }
   }
 
@@ -274,6 +286,10 @@ export class NavService {
     this.items.value[5].children[2].path = '';
     this.items.value[5].children[2].title = '';
     this.items.value[5].children[2].type = '';
+
+    this.items.value[5].children[3].path = '';
+    this.items.value[5].children[3].title = '';
+    this.items.value[5].children[3].type = '';
 
     this.items.value[6].icon = '';
     this.items.value[6].title = '';
@@ -330,13 +346,13 @@ export class NavService {
     this.items.value[4].title = '';
     this.items.value[4].type = '';
 
-    this.items.value[5].children[1].path = '';
-    this.items.value[5].children[1].title = '';
-    this.items.value[5].children[1].type = '';
-
     this.items.value[5].children[2].path = '';
     this.items.value[5].children[2].title = '';
     this.items.value[5].children[2].type = '';
+
+    this.items.value[5].children[3].path = '';
+    this.items.value[5].children[3].title = '';
+    this.items.value[5].children[3].type = '';
 
     this.items.value[7].icon = '';
     this.items.value[7].title = '';
@@ -353,31 +369,38 @@ export class NavService {
   }
 
   manageAdmin() {
+    console.log(this.items)
 
     //category
     this.items.value[1].path = '';
     this.items.value[1].title = '';
     this.items.value[1].type = '';
 
-    this.items.value[2].children[1].path = '';
-    this.items.value[2].children[1].title = '';
-    this.items.value[2].children[1].type = '';
+    //create user hide
+    this.items.value[6].children[0].path = '';
+    this.items.value[6].children[0].title = '';
+    this.items.value[6].children[0].type = '';
+
+    this.items.value[2].children[3].path = '';
+    this.items.value[2].children[3].title = '';
+    this.items.value[2].children[3].type = '';
 
     this.items.value[2].children[2].path = '';
     this.items.value[2].children[2].title = '';
     this.items.value[2].children[2].type = '';
 
+
     this.items.value[4].path = '';
     this.items.value[4].title = '';
     this.items.value[4].type = '';
 
-    this.items.value[5].children[1].path = '';
-    this.items.value[5].children[1].title = '';
-    this.items.value[5].children[1].type = '';
-
     this.items.value[5].children[2].path = '';
     this.items.value[5].children[2].title = '';
     this.items.value[5].children[2].type = '';
+
+    this.items.value[5].children[3].path = '';
+    this.items.value[5].children[3].title = '';
+    this.items.value[5].children[3].type = '';
 
     this.items.value[7].icon = '';
     this.items.value[7].title = '';
@@ -391,6 +414,11 @@ export class NavService {
     this.items.value[9].title = '';
     this.items.value[9].type = '';
 
+    // this.items.value[11].children[3].path = '';
+    // this.items.value[11].children[3].title = '';
+    // this.items.value[11].children[3].type = '';
+
+
     // this.items.value[12].icon = '';
     // this.items.value[12].title = '';
     // this.items.value[12].type = '';
@@ -403,6 +431,7 @@ export class NavService {
 
   manageSuperAdmin() {
 
+    console.log(this.items);
     this.items.value[2].children[1].path = '';
     this.items.value[2].children[1].title = '';
     this.items.value[2].children[1].type = '';
@@ -410,18 +439,17 @@ export class NavService {
     this.items.value[2].children[2].path = '';
     this.items.value[2].children[2].title = '';
     this.items.value[2].children[2].type = '';
-
     this.items.value[4].path = '';
     this.items.value[4].title = '';
     this.items.value[4].type = '';
 
-    this.items.value[5].children[1].path = '';
-    this.items.value[5].children[1].title = '';
-    this.items.value[5].children[1].type = '';
-
     this.items.value[5].children[2].path = '';
     this.items.value[5].children[2].title = '';
     this.items.value[5].children[2].type = '';
+
+    this.items.value[5].children[3].path = '';
+    this.items.value[5].children[3].title = '';
+    this.items.value[5].children[3].type = '';
 
     this.items.value[7].icon = '';
     this.items.value[7].title = '';
@@ -460,9 +488,14 @@ export class NavService {
   partnerPrivilegeItem(data) {
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       //hide bulk upload
-      // this.items.value[1].children[2].path = '';
-      // this.items.value[1].children[2].title = '';
-      // this.items.value[1].children[2].type = '';
+      // this.items.value[1].children[3].path = '';
+      // this.items.value[1].children[3].title = '';
+      // this.items.value[1].children[3].type = '';
+
+      // hide change Requests
+      this.items.value[1].children[5].path = '';
+      this.items.value[1].children[5].title = '';
+      this.items.value[1].children[5].type = '';
 
       if (data.data === null) {
         this.items.value.splice(0, 7);
@@ -504,14 +537,17 @@ export class NavService {
               this.items.value[3].children[0].type = '';
             }
             if (name === 'shipment_add') {
-              this.items.value[4].children[1].path = '';
-              this.items.value[4].children[1].title = '';
-              this.items.value[4].children[1].type = '';
+              this.items.value[4].children[2].path = '';
+              this.items.value[4].children[2].title = '';
+              this.items.value[4].children[2].type = '';
             }
             if (name === 'shipment_list') {
               this.items.value[4].children[0].path = '';
               this.items.value[4].children[0].title = '';
               this.items.value[4].children[0].type = '';
+              this.items.value[4].children[1].path = '';
+              this.items.value[4].children[1].title = '';
+              this.items.value[4].children[1].type = '';
             }
             if (name === 'upload_files') {
               this.items.value[5].icon = '';
@@ -541,9 +577,9 @@ export class NavService {
     this.items.value[5].title = '';
     this.items.value[5].type = '';
 
-    this.items.value[9].icon = '';
-    this.items.value[9].title = '';
-    this.items.value[9].type = '';
+    // this.items.value[9].icon = '';
+    // this.items.value[9].title = '';
+    // this.items.value[9].type = '';
 
     this.items.value[9].children[0].path = '';
     this.items.value[9].children[0].title = '';
@@ -631,10 +667,9 @@ export class NavService {
             this.items.value[5].title = '';
             this.items.value[5].type = '';
             this.items.value[5].active = true;
-            this.items.value[5].children[2].path = '';
-            this.items.value[5].children[2].title = '';
-            this.items.value[5].children[2].type = '';
-
+            this.items.value[5].children[3].path = '';
+            this.items.value[5].children[3].title = '';
+            this.items.value[5].children[3].type = '';
           }
 
 
@@ -730,9 +765,9 @@ export class NavService {
       this.items.value[5].title = '';
       this.items.value[5].type = '';
       this.items.value[5].active = true;
-      this.items.value[5].children[2].path = '';
-      this.items.value[5].children[2].title = '';
-      this.items.value[5].children[2].type = '';
+      this.items.value[5].children[3].path = '';
+      this.items.value[5].children[3].title = '';
+      this.items.value[5].children[3].type = '';
 
 
       this.items.value[6].icon = '';
@@ -799,9 +834,9 @@ export class NavService {
     this.items.value[5].title = '';
     this.items.value[5].type = '';
     this.items.value[5].active = true;
-    this.items.value[5].children[2].path = '';
-    this.items.value[5].children[2].title = '';
-    this.items.value[5].children[2].type = '';
+    this.items.value[5].children[3].path = '';
+    this.items.value[5].children[3].title = '';
+    this.items.value[5].children[3].type = '';
 
     this.items.value[6].icon = '';
     this.items.value[6].title = '';
@@ -851,6 +886,10 @@ export class NavService {
     this.items.value[2].children[2].title = '';
     this.items.value[2].children[2].type = '';
 
+    this.items.value[2].children[3].path = '';
+    this.items.value[2].children[3].title = '';
+    this.items.value[2].children[3].type = '';
+
     this.items.value[6].children[0].path = '';
     this.items.value[6].children[0].title = '';
     this.items.value[6].children[0].type = '';
@@ -879,6 +918,9 @@ export class NavService {
     this.items.value[5].children[2].path = '';
     this.items.value[5].children[2].title = '';
     this.items.value[5].children[2].type = '';
+    this.items.value[5].children[3].path = '';
+    this.items.value[5].children[3].title = '';
+    this.items.value[5].children[3].type = '';
 
     this.items.value[7].icon = '';
     this.items.value[7].title = '';
@@ -916,13 +958,13 @@ export class NavService {
     this.items.value[2].children[2].title = '';
     this.items.value[2].children[2].type = '';
 
-    this.items.value[5].children[1].path = '';
-    this.items.value[5].children[1].title = '';
-    this.items.value[5].children[1].type = '';
-
     this.items.value[5].children[2].path = '';
     this.items.value[5].children[2].title = '';
     this.items.value[5].children[2].type = '';
+
+    this.items.value[5].children[3].path = '';
+    this.items.value[5].children[3].title = '';
+    this.items.value[5].children[3].type = '';
 
     this.items.value[6].icon = '';
     this.items.value[6].title = '';
@@ -971,8 +1013,6 @@ export class NavService {
     this.items.value[10].type = '';
     this.items.value[10].active = true;
     this.items.value[10].children[0].path = '';
-
-    console.log(this.items);
   }
 
   // manageFinanceUser() {
@@ -1092,6 +1132,9 @@ export class NavService {
     this.items.value[5].children[2].path = '';
     this.items.value[5].children[2].title = '';
     this.items.value[5].children[2].type = '';
+    this.items.value[5].children[3].path = '';
+    this.items.value[5].children[3].title = '';
+    this.items.value[5].children[3].type = '';
 
     this.items.value[7].icon = '';
     this.items.value[7].title = '';

@@ -40,7 +40,7 @@
                                 <button (click)="removeimg(1)" *ngIf="imgUploaded1"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" id="image01" type="file"
                                        formControlName="imageOne" accept="image/jpeg"
-                                       (change)="changeValue($event, 1)" required>
+                                       (change)="imageAssign($event,'imageOneO',1)" required>
                                 <img class="imgUpload" id="imageOneO"
                                      alt="Click To Add Image"
                                      style="justify-items: center; align-items: center; justify-self: center;"
@@ -59,7 +59,7 @@
                                 <button (click)="removeimg(2)" *ngIf="imgUploaded2"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" type="file"
                                        formControlName="imageOne2" accept="image/jpeg"
-                                       (change)="changeValue2($event)">
+                                       (change)="imageAssign($event,'imageTwoO',2)">
                                 <img class="imgUpload" id="imageTwoO" alt=""
                                      src="assets/images/dashboard/icons8-plus.gif"
                                      size="100px">
@@ -78,7 +78,7 @@
                                 <button (click)="removeimg(3)" *ngIf="imgUploaded3"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" type="file" accept="image/jpeg"
                                        formControlName="imageOne3"
-                                       (change)="changeValue3($event)">
+                                       (change)="imageAssign($event,'imageTreeE',3)">
                                 <img class="imgUpload" id="imageTreeE" alt=""
                                      src="assets/images/dashboard/icons8-plus.gif"
                                      size="100px">
@@ -96,7 +96,7 @@
                                 <button (click)="removeimg(4)" *ngIf="imgUploaded4"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" type="file" accept="image/jpeg"
                                        formControlName="imageOne4"
-                                       (change)="changeValue4($event)">
+                                       (change)="imageAssign($event,'imageFourR',4)">
                                 <img class="imgUpload" id="imageFourR" alt=""
                                      src="assets/images/dashboard/icons8-plus.gif"
                                      size="100px">
@@ -114,7 +114,7 @@
                                 <button (click)="removeimg(5)" *ngIf="imgUploaded5"><i class="fa-solid fa-xmark" style="color: #000000;"></i></button>
                                 <input class="upload" type="file" accept="image/jpeg"
                                        formControlName="imageOne5"
-                                       (change)="changeValue5($event)">
+                                       (change)="imageAssign($event,'imageFiveE',5)">
                                 <img class="imgUpload" id="imageFiveE" alt=""
                                      src="assets/images/dashboard/icons8-plus.gif"
                                      size="100px">
@@ -146,7 +146,7 @@
 
               </span>
               <div class="col-md-4" id="help02">
-                                <span class="span"  style="padding: 15px; padding-left: 35px; color: #000; font-weight: 400">Select Category Path :</span>
+                <span class="span"  style="padding: 15px; padding-left: 35px; color: #000; font-weight: 400">Select Category Path :</span>
                 <span class="SCPInfo" style="margin-left: 5px" (click)="toggleHintSCP()">
                 <img style="text-align: right" src="assets/images/Help.png" height="20px" weight="20px"
                      title="Upload Image Help">
@@ -272,7 +272,7 @@
                     <span class="input-group-text">LKR</span>
                   </div>
                   <input class="form-control" id="price" type="text" required
-                         (keydown)="setSellingPrice()" maxlength="8" style="width: 200px" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                         (input)="setSellingPrice()" maxlength="8" style="width: 200px" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                   <!--(input)="formatCurrency($event)"-->
                 </div>
               </div>
@@ -512,8 +512,17 @@
                   <!--                            value="{{array}}"-->
                   <!--                            style="color: black">-->
                   <!--                  </datalist>-->
-                  <ng-select [options]="variationOptions" style="width: 200px; float: left; {{selectColorErrorStyle}}"
-                             (selected)="onChange($event)"></ng-select>
+                  <!--<ng-select [options]="variationOptions" style="width: 200px; float: left; {{selectColorErrorStyle}}"-->
+                  <!--[(ngModel)]="selectedValue" (selected)="onChange($event)"></ng-select>-->
+
+                  <select class="custom-select" id="colorSelect"
+                          (click)="selectColor($event)"  style="width: 200px; float: left; {{selectColorErrorStyle}}">
+                    <option value="">Choose Color</option>
+                    <option *ngFor="let color of variationOptions; let i = index"
+                            value="{{color['value']}}">
+                      {{color['label']}}
+                    </option>
+                  </select>
 
                   <div class="mainDev"
                        style="display:block; justify-content: left; align-items: start;"
@@ -625,7 +634,7 @@
                       </td>
                       <td
                         style="margin-top: 5px; margin-left: 2px; vertical-align: middle;">{{clothesArray['size_']}}</td>
-                      <td><input class="form-control" type="text"
+                      <td><input class="form-control" type="text" disabled
                                  value="{{clothesArray['sku_']}}" style="font-weight: 600"></td>
                       <td>
                         <button type="button" style="font-size: 10px; margin-left: 2%; margin-top: 5px;"

@@ -57,6 +57,7 @@ export class ShipmentNewService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'shipment/rejectedShipmentItem', payLoard, {headers});
   }
+
   getAllTakeHoldShipment22(payLoard: any) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'shipment/takeHoldShipmentByVendor', payLoard, {headers});
@@ -75,6 +76,16 @@ export class ShipmentNewService {
   getRecivedShipmentByVendorId(payLoard: any){
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'shipment/takeReceivedShipmentByVendor', payLoard, {headers});
+  }
+
+  takeReceivedShipment(){
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.get<any>(this.SERVER + 'shipment/takeReceivedShipment', {headers});
+  }
+
+  generateQRCode(data: any){
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'shipment/generateQRCode', data, {headers});
   }
 
 }

@@ -239,7 +239,8 @@ export class UnHoldShipmentComponent implements OnInit {
     this.shipmentForm.get("txtGrossAmount").setValue(0.0);
     this.shipmentForm.get("txtAllQuantity").setValue(0);
     document.getElementById('txt_aria').style.display = 'none';
-    let url = '/shipment/list-shipment';
+    // let url = '/shipment/list-shipment';
+    let url = '/shipment/receive-shipment';
     this.router.navigate([url]);
   }
 

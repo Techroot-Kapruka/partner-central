@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {environment} from "../../../environments/environment.prod";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {environment} from '../../../environments/environment.prod';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -28,5 +28,16 @@ export class AnalyticsProductService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'analyticsProduct/getSumProductOrderTotal', object, {headers});
   }
+
+  getListProductView(object: any) {
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'analyticsProduct/getProductViewList', object, {headers});
+  }
+
+  showHighestViewsForAdmin() {
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.get<any>(this.SERVER + 'analyticsProduct/showHighestViewsForAdmin', {headers});
+  }
+
 
 }

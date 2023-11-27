@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import {AuthService} from '../../../shared/auth/auth.service';
 import {CategoryService} from '../../../shared/service/category.service';
 import {ProductService} from '../../../shared/service/product.service';
+import {PrivilegeUserService} from "../../../shared/service/privilege-user.service";
 
 @Component({
   selector: 'app-approve-partner',
@@ -37,7 +38,7 @@ export class ApprovePartnerComponent implements OnInit {
   value:number;
   approveButtonClicked = false;
 
-  constructor(private authService: AuthService, private router: Router, private _Activatedroute: ActivatedRoute, private routeData: ActivatedRoute, private httpClientService: HttpClientService, private categoryService: CategoryService, private productService: ProductService) {
+  constructor(private authService: AuthService, private router: Router, private _Activatedroute: ActivatedRoute, private routeData: ActivatedRoute, private httpClientService: HttpClientService, private categoryService: CategoryService, private productService: ProductService, private privilegeUserService: PrivilegeUserService) {
     this._Activatedroute.paramMap.subscribe(params => {
       this.value=parseInt(params.get('value'));
       this.getSelectedPartner(params.get('id'));
@@ -98,8 +99,7 @@ export class ApprovePartnerComponent implements OnInit {
   }
 
   userAlertFunction(data) {
-    console.log(data)
-    if(data.data.partnerUser.type=='company'){
+    if (data.data.partnerUser.type=='company'){
       this.isCompany=true;
       this.imageNameBR=data.data.partnerUser.image_br;
     }else{
@@ -295,10 +295,39 @@ this.approveButtonClicked = false;
   }
 
   manageApproveUsers(data) {
+    if (data.message_status === 'Success'){
+      this.privilegeUserHitDb(data.data);
+    }else{
+      this.approveButtonClicked = false;
+    }
+  }
+
+  privilegeUserHitDb(vendorCode) {
+    const partner_privilege = [];
+
+    partner_privilege.push('A1');
+    partner_privilege.push('A2');
+    partner_privilege.push('A3');
+    partner_privilege.push('A4');
+    partner_privilege.push('A5');
+    partner_privilege.push('A6');
+    partner_privilege.push('A7');
+    partner_privilege.push('A0');
+
+    const payLoard = {
+      partner_u_id: vendorCode,
+      partner_privilege
+    };
+    this.privilegeUserService.privilegeUserSave(payLoard).subscribe(
+      data => this.ManagePrivilegeUserSave(data),
+    );
+  }
+
+  ManagePrivilegeUserSave(data) {
     this.requestSendCategoryArr = [];
     Swal.fire(
       'Good job',
-      data.message,
+      'Partner Approved Successfully',
       'success'
     );
     this.router.navigate(['/users/list-user']);
