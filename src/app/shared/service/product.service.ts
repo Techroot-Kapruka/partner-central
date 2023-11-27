@@ -223,6 +223,11 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'fieldEdit/save', payloard, {headers});
   }
 
+  editShipmentField(data: any) {
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'fieldEdit/saveEditShipmentField', data, {headers});
+  }
+
   editAdminSave(payloard: any) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'genaralutill/doSimpleColumnUpdate', payloard, {headers});

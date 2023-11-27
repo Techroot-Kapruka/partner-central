@@ -26,7 +26,7 @@ export class ListPendingShipmentComponent implements OnInit {
         {header: 'Total Quantity', fieldName: 'total_quantity', dataType: 'string', bColor: '', bValue: ''},
         {header: 'Gross Amount', fieldName: 'gross_amount', dataType: 'string', bColor: '', bValue: ''},
         {header: 'Received', fieldName: 'is_receive', dataType: 'string', bColor: 'red', bValue: 'No'},
-        {header: 'Action', fieldName: '', dataType: '', bColor: '', bValue: 'Receive'},
+        {header: 'Action', fieldName: '', dataType: '', bColor: '', bValue: 'Review'},
       ];
     } else {
       this.columnArray = [
@@ -78,11 +78,12 @@ export class ListPendingShipmentComponent implements OnInit {
   viewShippedShipment(tempCode) {
     let url = '';
     if (this.isAdmin) {
-      url = '/shipment/receive-shipment-make/' + tempCode;
+      url = '#/shipment/receive-shipment-make/' + tempCode;
     } else {
-      url = '/shipment/view-shipment/' + tempCode;
+      url = '#/shipment/view-shipment/' + tempCode;
     }
-    this.router.navigate([url]);
+    window.open(url);
+    // this.router.navigate([url]);
   }
 
   getPendingShipment() {

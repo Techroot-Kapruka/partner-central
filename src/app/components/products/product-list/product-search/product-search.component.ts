@@ -1,8 +1,8 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ProductService} from "../../../../shared/service/product.service";
-import {Router} from "@angular/router";
-import {environment} from "../../../../../environments/environment.prod";
-import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
+import {ProductService} from '../../../../shared/service/product.service';
+import {Router} from '@angular/router';
+import {environment} from '../../../../../environments/environment.prod';
+import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-product-search',
@@ -10,7 +10,7 @@ import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
   styleUrls: ['./product-search.component.scss']
 })
 export class ProductSearchComponent implements OnInit {
-  public imagePathURI = environment.imageURIENV
+  public imagePathURI = environment.imageURIENV;
   public productSearchList = [];
   searchValue: string = '';
   public searchText: string;
@@ -39,7 +39,6 @@ export class ProductSearchComponent implements OnInit {
   public imageDefaultPathURI = '';
 
 
-
   isButtonClick: boolean = true;
   public badge: any;
 
@@ -48,7 +47,6 @@ export class ProductSearchComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 
 
   onSearch(inputValue: string) {
@@ -68,7 +66,7 @@ export class ProductSearchComponent implements OnInit {
       vendor_code: sessionStorage.getItem('partnerId'),
       userRole: sessionStorage.getItem('userRole')
     };
-    this.isButtonClick = false
+    this.isButtonClick = false;
     this.productService.productSearchWithContext(this.searchText, object).subscribe(
       data => this.manageGetProductSearchList(data),
       error => this.errorManage(error)
@@ -77,7 +75,7 @@ export class ProductSearchComponent implements OnInit {
 
   manageGetProductSearchList(data) {
     if (data.data === null) {
-      this.isButtonClick = true
+      this.isButtonClick = true;
     }
     this.startIndex = 0;
     this.productSearchList = [];
@@ -92,13 +90,13 @@ export class ProductSearchComponent implements OnInit {
       };
       this.productSearchList.push(response);
     }
-    this.isButtonClick = true
+    this.isButtonClick = true;
   }
 
   private errorManage(error: any) {
-    console.log(error)
+    console.log(error);
     // if (error.status === 401) {
-    this.isButtonClick = true
+    this.isButtonClick = true;
     // }
   }
 
@@ -117,21 +115,21 @@ export class ProductSearchComponent implements OnInit {
     };
     this.productService.getSelecedProductByEdit(object).subscribe(
       data => this.manageGetProductDetailsByCode(data, productCode, vendor)
-    )
+    );
   }
 
   manageGetProductDetailsByCode(data: any, id, vendor) {
-    this.elementTitle = data.data.product.title
-    this.elementProductCode = data.data.product.product_code
-    this.elementItemGroup = data.data.product.item_group
-    this.elementCategoryPath = data.data.category_path
-    this.elementVendor = vendor
-    this.elementCreateDateTime = data.data.product.create_date_time
-    this.elementCategoryName = data.data.product.categoryName
-    this.elementVendorCode = data.data.product.vendor
-    this.elementDescription = data.data.product.productDescription.description
-    this.elementAvailableStock = data.data.product.in_stock
-    this.elementImage = (data.data.product.productImage.image1 && data.data.product.productImage.image1 ? data.data.product.productImage.image1.split('/product')[1] : '') || ''
+    this.elementTitle = data.data.product.title;
+    this.elementProductCode = data.data.product.product_code;
+    this.elementItemGroup = data.data.product.item_group;
+    this.elementCategoryPath = data.data.category_path;
+    this.elementVendor = vendor;
+    this.elementCreateDateTime = data.data.product.create_date_time;
+    this.elementCategoryName = data.data.product.categoryName;
+    this.elementVendorCode = data.data.product.vendor;
+    this.elementDescription = data.data.product.productDescription.description;
+    this.elementAvailableStock = data.data.product.in_stock;
+    this.elementImage = (data.data.product.productImage.image1 && data.data.product.productImage.image1 ? data.data.product.productImage.image1.split('/product')[1] : '') || '';
     // if (data.data.product.is_active === 0) {
     //   this.elementStatus = 'Available'
     //   this.badge = 'badge-success'
@@ -145,14 +143,19 @@ export class ProductSearchComponent implements OnInit {
         this.badge = 'badge-success';
         this.editOption = false;
         break;
-      case -10:
+      case -101:
         this.elementStatus = 'Suspended';
-        this.badge = 'badge-warning';
+        this.badge = 'badge-danger';
+        this.editOption = true;
+        break;
+      case -102:
+        this.elementStatus = 'Suspended';
+        this.badge = 'badge-danger';
         this.editOption = true;
         break;
       case -5:
         this.elementStatus = 'Out of Stock';
-        this.badge = 'badge-danger';
+        this.badge = 'badge-warning';
         this.editOption = false;
         break;
       case -20:
@@ -175,7 +178,7 @@ export class ProductSearchComponent implements OnInit {
         const theme = {
           theme: data.data.product.productVariation[i].variations[j].theame,
           value: data.data.product.productVariation[i].variations[j].theame_value
-        }
+        };
         this.elementVariationsTheme.push(theme);
       }
 
@@ -184,7 +187,7 @@ export class ProductSearchComponent implements OnInit {
         variation_code: data.data.product.productVariation[i].variation_code,
         selling_price: data.data.product.productVariation[i].selling_price,
         value: this.elementVariationsTheme,
-      }
+      };
       this.elementVariations.push(res);
     }
     if (this.elementVariationsTheme[0].value == 'none') {
@@ -194,7 +197,7 @@ export class ProductSearchComponent implements OnInit {
     }
   }
 
-  onEditClick(elementProductCode){
+  onEditClick(elementProductCode) {
     const url = '#/products/digital/digital-edit-product/' + elementProductCode;
     window.open(url, '_blank');
   }
