@@ -1,0 +1,154 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 blocksB">
+      <div style="border: 1px solid #0E0D39;padding: 1%">
+        <div class="row">
+          <div class="col-md-8">
+            <p class="pathTitle">{{elementCategoryPath}} </p>
+          </div>
+        </div>
+
+        <p class="blockstitle">{{elementProductCode}} - {{elementTitle}}</p>
+        <div class="row">
+          <div class="col-md-4"><img src="{{imagePathURI + elementImage1}}" alt="Image" class="img-fluid"
+                                     (error)="onImageError($event)"
+                                     style="width: 200px;height: 200px" (click)="popUpImageActive(1)"></div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-3" style="padding: 0">
+                  <img src="{{imagePathURI + elementImage2}}" alt="Image" class="img-fluid"
+                       (error)="onImageError($event)" style="width: 60px; height: 60px;" (click)="popUpImageActive(2)">
+                </div>
+                <div class="col-md-3" style="padding: 0;margin-left: 2%">
+                  <img src="{{imagePathURI + elementImage3}}" alt="Image" class="img-fluid"
+                       (error)="onImageError($event)" style="width: 60px; height: 60px;" (click)="popUpImageActive(3)">
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="row" style="margin-top: -31%">
+                <div class="col-md-3" style="padding: 0">
+                  <img src="{{imagePathURI + elementImage4}}" alt="Image" class="img-fluid"
+                       (error)="onImageError($event)" style="width: 60px; height: 60px;" (click)="popUpImageActive(4)">
+                </div>
+                <div class="col-md-3" style="padding: 0;margin-left: 2%">
+                  <img src="{{imagePathURI + elementImage5}}" alt="Image" class="img-fluid"
+                       (error)="onImageError($event)" style="width: 60px; height: 60px;" (click)="popUpImageActive(5)">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <p class="blockSV">{{elementVendorCode}} - {{elementVendor}}</p>
+        <p class="history-container" [innerHTML]="elementDescription"></p>
+        <p>Create Date Time : {{elementCreateDateTime}}</p>
+        <div class="table-responsive-sm">
+          <table class="table table-striped table-bordered table table-hover table-sm">
+            <thead>
+            <tr>
+              <th class="textStyle" style="width: 35%">Code</th>
+              <th class="textStyle" style="width: 20%">Theme</th>
+              <th class="textStyle" style="width: 15%">Cost (Rs)</th>
+              <th class="textStyle" style="width: 15%">Changing Rate (%)</th>
+              <th class="textStyle" style="width: 15%">Selling (Rs)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let variation of elementVariations">
+              <td class="textStyle">{{variation.variation_code}}</td>
+              <td class="textStyle" *ngIf="!isValue">
+                <ul>
+                  <li *ngFor="let theme of variation.value">
+                    <span> {{ theme.theme }}</span>
+                    <span> - </span>
+                    <ng-container *ngIf="!isColorCode(theme.value)">
+                      <span>{{ theme.value }}</span>
+                    </ng-container>
+                    <span><button class="btn btn-sm" [ngStyle]="getStyle(theme.value)"></button> </span>
+                  </li>
+                </ul>
+              </td>
+              <td class="textStyle" *ngIf="isValue">
+                <ul>
+                  <li>
+                    No Theme
+                  </li>
+                </ul>
+              </td>
+              <td class="textStyle">{{variation.cost_price.toFixed(2)}}</td>
+              <td class="textStyle">{{variation.changing_rate.toFixed(2)}}</td>
+              <td class="textStyle">{{variation.selling_price.toFixed(2)}}</td>
+
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row" style="padding: 2%">
+          <div class="col-md-4">
+            <div class="form-group" style="border: 1px solid #D5D8DC;padding: 1%">
+              <div class="form-check" style="display: inline-block;vertical-align: top;margin-right: 15px">
+                <input class="form-check-input" type="radio" id="ond" name="supply" value="consignment"
+                       (change)="onRadioChange($event)" [defaultChecked]="true">
+                <label class="form-check-label" for="ond">Consignment</label>
+              </div>
+              <div class="form-check" style="display: inline-block;vertical-align: top;margin-right: 15px">
+                <input class="form-check-input" type="radio" id="cons" name="supply" (change)="onRadioChange($event)"
+                       value="on-demand">
+                <label class="form-check-label" for="cons">On Demand</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3"></div>
+          <div class="col-md-5" *ngIf="attributeIsVisible">
+            <table class="table table-striped table-bordered table-hover table-sm">
+              <tr>
+                <th class="textStyle">Attribute</th>
+                <th class="textStyle">Value</th>
+              </tr>
+              <tbody>
+              <tr *ngFor="let key of getAttributeKeys()">
+                <td class="textStyle">{{ key }}</td>
+                <td class="textStyle">{{ attributrHashMap[key] }}</td>
+              </tr>
+              </tbody>
+            </table>
+            <button style="text-align: center;float: right" class="btn btn-sm btn-outline-primary" (click)="loadMore()">Load More</button>
+          </div>
+        </div>
+
+        <div class="row justify-content-end">
+          <div class="col-auto">
+            <button type="button" class="btn btn-lg btn-danger" style="margin-bottom: 14%;"
+                    (click)="goToDeclinedMessageFormForProduct()">DECLINE
+            </button>
+          </div>
+          <div class="col-auto">
+            <button type="submit" id="saveId" [disabled]="approveButtonClicked" (click)="approveProduct()"
+                    class="btn btn-lg btn-primary"
+                    style="margin-bottom: 14%;">{{approveButtonClicked ? 'PROCESSING' : 'APPROVE'}}
+            </button>
+            <div class="loading" *ngIf="approveButtonClicked">
+              <div id="preloader"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #imagePopup let-modal>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Image Preview</h4>
+        <button type="button" class="close" (click)="closePopup()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <img [src]="imageUrl" alt="Image" class="img-fluid">
+      </div>
+    </div>
+  </ng-template>
+</div>
