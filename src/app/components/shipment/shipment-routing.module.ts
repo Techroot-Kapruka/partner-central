@@ -8,7 +8,6 @@ import {ListShipmentReservedComponent} from './list-shipment-reserved/list-shipm
 import {MakeReservedComponent} from './make-reserved/make-reserved.component';
 import {RecievedShipmentComponent} from './recieved-shipment/recieved-shipment.component';
 import {ListPendingShipmentComponent} from './list-pending-shipment/list-pending-shipment.component';
-import {ListHoldShipmentComponent} from './list-hold-shipment/list-hold-shipment.component';
 
 const routes: Routes = [
   {
@@ -28,14 +27,6 @@ const routes: Routes = [
         data: {
           title: 'Pending Shipment List',
           breadcrumb: 'Pending Shipments'
-        }
-      },
-      {
-        path: 'list-hold-shipment',
-        component: ListHoldShipmentComponent,
-        data: {
-          title: 'Hold Shipment List',
-          breadcrumb: 'Hold Shipments'
         }
       },
       {

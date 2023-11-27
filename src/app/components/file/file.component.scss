@@ -123,3 +123,32 @@ body {
   padding-right: 2px;
   max-width: 70px;
 }
+
+.edit-icon {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  cursor: pointer;
+}
+
+.table.table-bordered .icon-td {
+  position: relative;
+}
+
+.swal2-container {
+  z-index: 9999 !important;
+  position: relative;
+}
+
+.disabled-row {
+  color: #777; /* Change the color to the desired gray shade */
+  background-color: #f9f9f9; /* Change the background color to the desired gray shade */
+  opacity: 0.5; /* Adjust the opacity to make it visually disabled */
+  pointer-events: none; /* Disable pointer events on the row */
+}
+
+.text-on-disabled {
+  color: #f00;
+
+}
+
