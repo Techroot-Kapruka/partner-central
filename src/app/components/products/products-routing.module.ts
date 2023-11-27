@@ -17,6 +17,7 @@ import {AnalyticsProductViewComponent} from "./analytics-product-view/analytics-
 import {ChangeRequestsComponent} from "./product-list/change-requests/change-requests.component";
 import {ProductSearchComponent} from "./product-list/product-search/product-search.component";
 import {NewAdditionsComponent} from "./product-list/new-additions/new-additions.component";
+import {ProductApproveViewComponent} from "./product-approve-view/product-approve-view.component";
 
 const routes: Routes = [
   {
@@ -68,6 +69,14 @@ const routes: Routes = [
         data: {
           title: 'Approve Products',
           breadcrumb: 'Approve Product'
+        }
+      },
+      {
+        path: 'digital/product-approve-view/:id',
+        component: ProductApproveViewComponent,
+        data: {
+          title: 'Approve Products View',
+          breadcrumb: 'Approve Product View'
         }
       },
       {
