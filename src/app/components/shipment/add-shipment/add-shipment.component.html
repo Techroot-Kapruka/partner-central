@@ -1,4 +1,4 @@
-<form [formGroup]="shipmentForm" (ngSubmit)="hitShipment()">
+<form [formGroup]="shipmentForm" (ngSubmit)="submit(2)">
   <div class="container-fluid">
     <div class="row product-adding">
       <div class="col-md-12">
@@ -135,7 +135,7 @@
 
               <div class="form-group">
                 <button style="float: left;" type="button" (click)="popup()"
-                        class="btn btn-sm btn-info">Change Listing Price
+                        class="btn btn-sm btn-info" *ngIf="showPriceChange">Change Listing Price
                 </button>
                 <button style="float: right; margin-bottom: 3%;" type="button" (click)="addToTable()"
                         class="btn btn-lg btn-success">Add Table
@@ -163,7 +163,7 @@
                         </div>
                       </div>
                       <br>
-                      <button type="submit" class="btn btn-primary" style="float: right" (click)="saveChangePrice()">
+                      <button type="submit" class="btn btn-primary" style="float: right" (click)="submit(1)">
                         Submit
                       </button>
                     </form>
