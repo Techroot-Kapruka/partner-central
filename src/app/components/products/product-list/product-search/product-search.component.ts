@@ -30,13 +30,16 @@ export class ProductSearchComponent implements OnInit {
   public elementVendor: any;
   public elementStatus: any;
   public elementVendorCode: any;
-  public elementDescription: any;
+  public elementDescription: SafeHtml;
   public elementAvailableStock: any;
   public elementImage: any;
   public elementHistory: SafeHtml;
   public elementVariations = [];
   public elementVariationsTheme = [];
   public imageDefaultPathURI = '';
+  attributrHashMap: { [key: string]: any } = {}
+  displayedRowCount = 5;
+  attributeIsVisible: boolean = false;
 
 
   isButtonClick: boolean = true;
@@ -119,6 +122,22 @@ export class ProductSearchComponent implements OnInit {
   }
 
   manageGetProductDetailsByCode(data: any, id, vendor) {
+
+    if (data.data.attributeList !== '{}') {
+      this.attributeIsVisible = true
+      const json = JSON.parse(data.data.attributeList);
+      for (const key of Object.keys(json)) {
+        this.attributrHashMap[key] = json[key];
+      }
+      for (const key in this.attributrHashMap) {
+        if (this.attributrHashMap.hasOwnProperty(key)) {
+          console.log(`Key: ${key} Value: ${this.attributrHashMap[key]}`);
+        }
+      }
+    }else {
+      this.attributeIsVisible = false
+    }
+
     this.elementTitle = data.data.product.title;
     this.elementProductCode = data.data.product.product_code;
     this.elementItemGroup = data.data.product.item_group;
@@ -127,7 +146,7 @@ export class ProductSearchComponent implements OnInit {
     this.elementCreateDateTime = data.data.product.create_date_time;
     this.elementCategoryName = data.data.product.categoryName;
     this.elementVendorCode = data.data.product.vendor;
-    this.elementDescription = data.data.product.productDescription.description;
+    this.elementDescription = this.sanitizer.bypassSecurityTrustHtml(data.data.product.productDescription.description);
     this.elementAvailableStock = data.data.product.in_stock;
     this.elementImage = (data.data.product.productImage.image1 && data.data.product.productImage.image1 ? data.data.product.productImage.image1.split('/product')[1] : '') || '';
     // if (data.data.product.is_active === 0) {
@@ -217,6 +236,14 @@ export class ProductSearchComponent implements OnInit {
   onImageError(event: any): void {
     this.imageDefaultPathURI = this.imagePathURI.replace('/product', '');
     event.target.src = this.imageDefaultPathURI + '/1.jpg';
+  }
+
+  getAttributeKeys(): string[] {
+    return Object.keys(this.attributrHashMap).slice(0, this.displayedRowCount);
+  }
+
+  loadMore() {
+    this.displayedRowCount += 5; // Increase the displayed row count
   }
 
 }

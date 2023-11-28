@@ -113,7 +113,7 @@ export class DeclinedMessageComponent implements OnInit {
     if (this.descType.startsWith('Vendor')) {
       this.router.navigate(['/users/list-user']);
     } else {
-      this.router.navigate(['/digital/digital-product-list']);
+      this.router.navigate(['/products/digital/digital-product-list']);
     }
   }
 
