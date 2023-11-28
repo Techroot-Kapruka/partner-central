@@ -14,7 +14,7 @@
     <div *ngIf="bulkTemplateCatSelected" class="download_url">
       <!--<a [href]="bulkTemplateHref"><i class="fa fa-download">&nbsp; Download the Sample Document-->
         <!--Template for Bulk Upload {{selectedCategoryForTemplate}}</i></a>-->
-      <button class="button-66" role="button"> <i class="fa fa-cloud-download" aria-hidden="true"></i> &nbsp; Download the Sample Document</button>
+      <button (click)="downloadTemplate()" class="button-66" role="button"> <i class="fa fa-cloud-download" aria-hidden="true"></i> &nbsp; Download the Sample Document {{selectedCategoryForTemplate}}</button>
     </div>
   </div>
 </div>

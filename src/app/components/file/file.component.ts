@@ -130,7 +130,7 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
                 break;
             }
             case 'MARGIN': {
-                this.editInputType = 'number';
+                this.popUpEditClose();
                 break;
             }
             default: {
@@ -1048,6 +1048,10 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
 
     }
 
+  downloadTemplate(): void {
+    window.open(this.bulkTemplateHref);
+  }
+
     syncWrapper(callback) {
         callback();
     }
@@ -1139,6 +1143,7 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
                     verified = false;
                 }
 
+              console.log(categoryPath)
                 // Check if margin rate is 0
                 const marginValue = this.findCaseInsensitiveFromObj(table, 'Margin');
                 if (marginValue !== undefined) {
@@ -1151,11 +1156,12 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
                     errorMessages.push("No Margin Rate Field!");
                     verified = false
                 }
+              console.log(marginValue)
 
                 //check if category path exist
                 let payload = {keyword: categoryPath}
                 const data = await this.categoryService.searchByPath(payload).toPromise();
-
+              console.log(data)
                 if (data.data.pathList[0] === undefined || data.data.pathList[0] === null) {
                     verified = false
                     marginRateDb = 0;
@@ -1198,6 +1204,8 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
                             verified = false;
                         }
                     } else {
+                      marginRate.className = 'table-danger';
+                      errorMessages.push("Cannot Change Margin Rate");
                         verified = false;
                     }
                 }
