@@ -1,13 +1,17 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit, Input, ViewChild, ElementRef} from '@angular/core';
 import {Router} from '@angular/router';
 import {ActivatedRoute} from '@angular/router';
 import {DropzoneConfigInterface} from 'ngx-dropzone-wrapper';
-import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {ModalDismissReasons, NgbModal, NgbTabset} from '@ng-bootstrap/ng-bootstrap';
 import {ProductService} from '../../../shared/service/product.service';
 import Swal from 'sweetalert2';
 import {FormControl, FormGroup} from '@angular/forms';
 import {environment} from '../../../../environments/environment.prod';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
+import {CategoryService} from "../../../shared/service/category.service";
+import {addWarning} from "@angular-devkit/build-angular/src/utils/webpack-diagnostics";
+import {ImageService} from "../../../shared/service/image.service";
+import {__values} from "tslib";
 
 
 @Component({
@@ -30,6 +34,7 @@ export class EditProductsComponent implements OnInit {
   public isSize = false;
   public colorsAndSize = false;
   public closeResult: string;
+  modalRef: any;
   public colorArray = [];
   public sizeArray = [];
   public productGroupTabel = [];
@@ -49,13 +54,15 @@ export class EditProductsComponent implements OnInit {
   public storageValue = '';
   public capacityValue = '';
   public nonGroupArray = [];
+  public productCategoryArray = [];
+  public productSubCategoryArray = [];
+  public productSubSubCategoryArray = [];
   public parts = [];
   public imageOne = '';
   public imageOne2 = '';
   public imageOne3 = '';
   public imageOne4 = '';
   public imageOne5 = '';
-  public selectedimg = '';
   public ids = '';
   public imageData = [];
   public imagePathURI = environment.imageURIENV;
@@ -63,6 +70,10 @@ export class EditProductsComponent implements OnInit {
   public amountBefor = '';
   showmsg = false;
   showmsg1 = false;
+  public activeUpdate = false;
+  imageUrl: any;
+  filteredSubCategory = [];
+  filteredSubSubCategory = [];
 
   public oldTitle = '';
   public oldBrand = '';
@@ -77,6 +88,16 @@ export class EditProductsComponent implements OnInit {
   public old_availability = '';
   public old_txt_listning_price = '';
   public old_txt_price_rate = '';
+  public productCode = '';
+
+  public editPrice = false;
+  public btnUpdatePrice = false;
+
+  public vendorCode = '';
+  public oldCostPrice = '';
+  public oldChangingRate = '';
+  public oldSellingPrice = '';
+
   descriptionContent;
 
   editorConfig: AngularEditorConfig = {
@@ -106,14 +127,26 @@ export class EditProductsComponent implements OnInit {
       ['html'],
     ],
   };
+  @ViewChild('imagePopup') imagePopup: ElementRef;
 
-
-  constructor(private router: Router, private _Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService) {
+  constructor(private categoryService: CategoryService,private router: Router, private _Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService, private imageService: ImageService) {
     this.ids = '';
+    this.getAllCategory();
     this._Activatedroute.paramMap.subscribe(params => {
       this.getProductByEdit(params.get('id'));
       this.ids = params.get('id');
+
+      const sessionUserRole = sessionStorage.getItem('userRole');
+      const pattern = /0V\d+POD/;
+      const isMatch = pattern.test(this.ids);// check ondemand id
+      if (isMatch && sessionUserRole === 'ROLE_PARTNER' ) {
+        this.editPrice = true;
+      }else {
+        this.editPrice = false;
+      }
+
     });
+
     this.imageControlMethord();
     this.editFormControlMethode();
     this.getImages();
@@ -136,7 +169,6 @@ export class EditProductsComponent implements OnInit {
     let payloard = {
       product_code: this.ids
     };
-
     this.productService.getImageForEdit(payloard).subscribe(
       data => this.manageImageForEdit(data),
     );
@@ -242,11 +274,11 @@ export class EditProductsComponent implements OnInit {
 
   imageControlMethord() {
     this.imageCliant = new FormGroup({
-      // imageOne: new FormControl(''),
-      // imageOne2: new FormControl(''),
-      // imageOne3: new FormControl(''),
-      // imageOne4: new FormControl(''),
-      // imageOne5: new FormControl(''),
+      imageOne: new FormControl(''),
+      imageOne2: new FormControl(''),
+      imageOne3: new FormControl(''),
+      imageOne4: new FormControl(''),
+      imageOne5: new FormControl(''),
       fileSource: new FormControl(''),
       fileSource2: new FormControl(''),
       fileSource3: new FormControl(''),
@@ -270,206 +302,333 @@ export class EditProductsComponent implements OnInit {
     });
   }
 
+  popImageView(newImgSrc) {
+    this.imageUrl = newImgSrc;
+    this.modalRef = this.modalService.open(this.imagePopup, {centered: true});
+  }
+
+  closePopup() {
+    this.modalRef.close();
+    this.imageUrl = undefined;
+  }
+
+  removeimg(x: number) {
+    switch (x) {
+      case 1:
+
+        this.imageCliant.patchValue({
+          fileSource: '',
+          imageOne: '',
+        });
+        (document.getElementById('imageOneO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 2:
+        this.imageCliant.patchValue({
+          fileSource2: '',
+          imageOne2: '',
+        });
+        (document.getElementById('imageTwoO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 3:
+        this.imageCliant.patchValue({
+          fileSource3: '',
+          imageOne3: '',
+        });
+        (document.getElementById('imageTreeE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 4:
+        this.imageCliant.patchValue({
+          fileSource4: '',
+          imageOne4: '',
+        });
+        (document.getElementById('imageFourR') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+      case 5:
+        this.imageCliant.patchValue({
+          fileSource5: '',
+          imageOne5: '',
+        });
+        (document.getElementById('imageFiveE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        break;
+    }
+  }
+
   loadimg(x: number) {
     switch (x) {
       case 1:
-        this.selectedimg = this.imageOne
+        var newImgSrc = document.getElementById("imageOneO").getAttribute('src');
+        this.popImageView(newImgSrc);
         break;
 
       case 2:
-        this.selectedimg = this.imageOne2
+        var newImgSrc = document.getElementById("imageTwoO").getAttribute('src');
+        this.popImageView(newImgSrc);
         break;
 
       case 3:
-        this.selectedimg = this.imageOne3
+        var newImgSrc = document.getElementById("imageTreeE").getAttribute('src');
+        this.popImageView(newImgSrc);
         break;
 
       case 4:
-        this.selectedimg = this.imageOne4
+        var newImgSrc = document.getElementById("imageFourR").getAttribute('src');
+        this.popImageView(newImgSrc);
         break;
 
       case 5:
-        this.selectedimg = this.imageOne5
+        var newImgSrc = document.getElementById("imageFiveE").getAttribute('src');
+        this.popImageView(newImgSrc);
         break;
     }
   }
 
-  changeValue(event: any, i) {
-    if (event.target.files.length === 0) {
-      return;
-    }
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-
-    // tslint:disable-next-line:variable-name
-    reader.onload = (_event) => {
-      (document.getElementById('imageOneO') as HTMLInputElement).src = reader.result.toString();
-      (document.getElementById('mainImage') as HTMLInputElement).src = reader.result.toString();
-
-    };
-
-    // ========================================================
-
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource: file
-      });
+  changeTab(event: any){
+    if (event.nextId == '3') {
+      this.imageControlMethord();
     }
   }
 
-  changeValue2(event: any) {
-    // this.selectedimg=this.imageOne2
-    if (event.target.files.length === 0) {
-      return;
-    }
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-
-    reader.onload = (_event) => {
-      (document.getElementById('imageTwoO') as HTMLInputElement).src = reader.result.toString();
-    };
-
-
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource2: file
-      });
-    }
-  }
-
-  changeValue3(event) {
-    // this.selectedimg=this.imageOne3
-    if (event.target.files.length === 0) {
-      return;
-    }
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-
-    reader.onload = (_event) => {
-      (document.getElementById('imageTreeE') as HTMLInputElement).src = reader.result.toString();
-    };
-
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource3: file
-      });
+  async imageAssign(event, imgID, index){
+    const result = await this.imageService.validateImage(event,imgID,"edit");
+    switch(index){
+      case 1:
+        if(result){
+          this.imageCliant.patchValue({
+            fileSource: result
+          });
+        }
+        break;
+      case 2:
+        if(result){
+          this.imageCliant.patchValue({
+            fileSource2: result
+          });
+        }
+        break;
+      case 3:
+        if(result){
+          this.imageCliant.patchValue({
+            fileSource3: result
+          });
+        }
+        break;
+      case 4:
+        if(result){
+          this.imageCliant.patchValue({
+            fileSource4: result
+          });
+        }
+        break;
+      case 5:
+        if(result){
+          this.imageCliant.patchValue({
+            fileSource5: result
+          });
+        }
+        break;
     }
   }
-
-  changeValue4(event) {
-    this.selectedimg = this.imageOne4;
-    if (event.target.files.length === 0) {
-      return;
-    }
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-
-    reader.onload = (_event) => {
-      (document.getElementById('imageFourR') as HTMLInputElement).src = reader.result.toString();
-    };
-
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource4: file
-      });
-    }
-  }
-
-  changeValue5(event) {
-
-    if (event.target.files.length === 0) {
-      return;
-    }
-    // Image upload validation
-    const mimeType = event.target.files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
-      return;
-    }
-    // Image upload
-    const reader = new FileReader();
-    reader.readAsDataURL(event.target.files[0]);
-
-    reader.onload = (_event) => {
-      (document.getElementById('imageFiveE') as HTMLInputElement).src = reader.result.toString();
-    };
-
-    if (event.target.files.length > 0) {
-      const file = event.target.files[0];
-      this.imageCliant.patchValue({
-        fileSource5: file
-      });
-    }
-
-  }
-
 
 // ===============================================================start edit methods====================================
 
+  // ============================================================================
+  getAllCategory() {
+    const sendData = {
+      code: 'c'
+    };
+
+    this.categoryService.getAllCategory(sendData).subscribe(
+      data => this.setAllCategory(data),
+    );
+  }
+
+  setAllCategory(data) {
+    let cr = {};
+    cr = {
+      name: '',
+      code: ''
+    };
+
+    if (data.data != null) {
+      for (let i = 0; i < data.data.length; i++) {
+        cr = {
+          name: data.data[i].name,
+          code: data.data[i].code
+        };
+        this.productCategoryArray.push(cr);
+      }
+    }
+  }
+
+  getSubcategoryForSubSub(code) {
+    // const tex = (document.getElementById('category_id_sub_sub') as HTMLInputElement).value;
+    const senDdata = {
+      code: code
+    };
+    this.categoryService.getAllCategory(senDdata).subscribe(
+      data => this.manageGetSubcategoryForSubSubSub(data)
+    );
+  }
+
+  manageGetSubcategoryForSubSubSub(data) {
+    this.productSubSubCategoryArray = [];
+    let cr = {};
+    cr = {
+      name: '',
+      code: ''
+    };
+    if (data.data != null) {
+      for (let i = 0; i < data.data.length; i++) {
+        cr = {
+          name: data.data[i].name,
+          code: data.data[i].code
+        };
+        this.productSubSubCategoryArray.push(cr);
+      }
+    }
+  }
+
+  selectSubcategory(event, x: number) {
+
+    switch (x) {
+      case 1:
+        const tex = (document.getElementById('category_ids') as HTMLInputElement).value;
+        this.filteredSubCategory = this.productSubCategoryArray.filter((item) => (item as any).name === tex);
+
+        this.category.get('Category2').setValue(tex);
+        this.category.get('Category3').setValue('');
+        event.target.value = ''
+        this.filteredSubSubCategory = [];
+        this.activeUpdate = true;
+
+        this.getSubcategoryForSubSub(this.filteredSubCategory[0].code);
+        break;
+      case 2:
+        const sub = (document.getElementById('category_sub_subids') as HTMLInputElement).value;
+        this.filteredSubSubCategory = this.productSubSubCategoryArray.filter((item) => (item as any).name === sub);
+
+        this.category.get('Category3').setValue(sub);
+        event.target.value = ''
+        break;
+      default:
+    }
+  }
+
+  updateSubSubCategory() {
+    if (this.filteredSubSubCategory.length > 0) {
+      const payload = {
+        column: 'category_code',
+        tblname: 'product_basic_info',
+        value: this.filteredSubSubCategory[0].code,
+        whereClause: 'product_code',
+        whereValue: this.ids
+      }
+      this.productService.editAdminSave(payload).subscribe(
+        data => {
+          Swal.fire(
+            'Updated!',
+            '',
+            'success'
+          ),
+            this.getProductByEdit(this.ids);
+          this.activeUpdate = false;
+          this.productSubSubCategoryArray = []
+        }
+      );
+
+    } else {
+      Swal.fire(
+        'Updated!',
+        '',
+        'success'
+      );
+      this.activeUpdate = false;
+      this.productSubSubCategoryArray = []
+      this.getProductByEdit(this.ids);
+    }
+  }
+
+  getSubcategory(cate) {
+    for (let i = 0; i < this.productCategoryArray.length; i++) {
+      if (this.productCategoryArray[i].name === cate) {
+        const senDdata = {
+          code: this.productCategoryArray[i].code
+        };
+        this.categoryService.getAllCategory(senDdata).subscribe(
+          data => this.manageAllSubCategory(data)
+        );
+      }
+    }
+  }
+
+  manageAllSubCategory(data) {
+    this.productSubCategoryArray = [];
+    let cr = {};
+    cr = {
+      name: '',
+      code: ''
+    };
+    if (data.data != null) {
+      for (let i = 0; i < data.data.length; i++) {
+        cr = {
+          name: data.data[i].name,
+          code: data.data[i].code
+        };
+        this.productSubCategoryArray.push(cr);
+      }
+    }
+  }
+
+  // ------------------------------------------------------------------------
   getProductByEdit(id) {
     let payloard = {
       product_code: id
     };
-
     this.productService.getSelecedProductByEdit(payloard).subscribe(
       data => this.managetSelecedProductByEdit(data, id),
     );
   }
 
   managetSelecedProductByEdit(data, proCodeImg) {
-
+    this.getSubcategory(data.data.product.item_group);
     // base info
     this.baseInfo.get('Title').setValue(data.data.product.title);
+    this.productCode = data.data.product.product_code;
     this.baseInfo.get('Brand').setValue(data.data.product.brand);
     this.baseInfo.get('Manufacture').setValue(data.data.product.manufacture);
     this.oldTitle = data.data.product.title;
     this.oldBrand = data.data.product.brand;
     this.oldManufacture = data.data.product.manufacture;
+    this.vendorCode = data.data.product.vendor;
 
     // description
     this.description.get('txt_description').setValue(data.data.product.productDescription.description);
     this.descriptionContent = data.data.product.productDescription.description;
     this.description.get('special_notes').setValue(data.data.product.productDescription.special_notes);
-    this.description.get('availability').setValue(data.data.product.productDescription.availability.toUpperCase());
+    // this.description.get('availability').setValue(data.data.product.productDescription.availability.toUpperCase());
     this.old_Txt_description = data.data.product.productDescription.description;
     this.old_special_notes = data.data.product.productDescription.special_notes;
-    this.old_availability = data.data.product.productDescription.availability.toUpperCase();
+    // this.old_availability = data.data.product.productDescription.availability.toUpperCase();
 
-    // category
+// category
     this.parts = data.data.category_path.split('> ');
-    for (let i = 1; i <= this.parts.length; i++){
-      this.category.get('Category'+ i).setValue(this.parts[i-1]);
+    switch (this.parts.length) {
+      case 1:
+        this.category.get('Category1').setValue(data.data.category_path);
+        break;
+      case 2:
+        this.category.get('Category1').setValue(data.data.category_path);
+        this.category.get('Category2').setValue(this.parts[1]);
+        break;
+      case 3:
+        this.category.get('Category1').setValue(data.data.category_path);
+        this.category.get('Category2').setValue(this.parts[1]);
+        this.category.get('Category3').setValue(this.parts[2]);
+        break;
     }
 
     //offer
+
     this.offer.get('txt_seller_sku').setValue(data.data.product.productOffer.seller_sku);
     this.offer.get('condition').setValue(data.data.product.productOffer.condition);
     this.old_txt_seller_sku = data.data.product.productOffer.seller_sku;
@@ -487,25 +646,25 @@ export class EditProductsComponent implements OnInit {
 
     if (data.data.product.is_active == 1) {
       this.title_name = 'Edit Product';
-      // document.getElementById('saveId').style.display = 'none';
     }
-    // (document.getElementById('breadcrum') as HTMLInputElement).innerHTML = data.data.category_path;
-    // (document.getElementById('category_code') as HTMLInputElement).value = data.data.product.category_code;
+
+    // VARIATION DETAIL SET
     if (data.data.product.has_group == 0) {
       this.checkBoxCon = new FormGroup({
         productGroup: new FormControl(false),
       });
+
       this.nonGroupArray = [];
       for (let i = 0; i < data.data.product.productVariation.length; i++) {
         let payData = {
           id: data.data.product.productVariation[i].id,
           theme: data.data.product.productVariation[i].variation_theme,
           value: data.data.product.productVariation[i].variation,
-          qty: data.data.product.productVariation[i].quantity
+          qty: data.data.product.productVariation[i].quantity,
+
         };
         this.nonGroupArray.push(payData);
       }
-
 
     } else {
       this.checkBoxCon = new FormGroup({
@@ -528,14 +687,22 @@ export class EditProductsComponent implements OnInit {
           payData = {
             size: size_value,
             color: color_value,
+            changing_rate: data.data.product.productVariation[i].changing_rate,
+            cost_price: data.data.product.productVariation[i].cost_price,
+            selling_price: data.data.product.productVariation[i].selling_price,
 
           };
         }
         this.productGroupTabel.push(payData);
       }
 
+      // ++++++++++++++++ondemand price set values++++++++++++++++++++++++
+      if (this.editPrice){
+        this.oldSellingPrice = this.productGroupTabel[0].selling_price;
+        this.oldChangingRate = this.productGroupTabel[0].changing_rate;
+        this.oldCostPrice = this.productGroupTabel[0].cost_price;
+      }
     }
-
 
     if (data.data.product.productOffer.condition == 'Brand New') {
       (document.getElementById('condition') as HTMLInputElement).innerHTML = '<option value="Brand New">Brand New</option> <option value="Used - Good">Used - Good</option><option value="Used - Like New">Used - Like New</option><option value="">--Select--</option>';
@@ -550,20 +717,18 @@ export class EditProductsComponent implements OnInit {
     p_string = '' + price_val;
     this.amountBefor = p_string;
 
-
     let payloard = {
       product_code: proCodeImg
     };
 
-
     this.productService.getImageForEdit(payloard).subscribe(
       data => this.manageImageForEdit(data),
     );
+
     // this.disableElement(data);
   }
 
   manageImageForEdit(data) {
-
     var imageURI01Output = [];
     var imageURI02Output = [];
     var imageURI03Output = [];
@@ -608,7 +773,6 @@ export class EditProductsComponent implements OnInit {
     this.imageData.push(or);
   }
 
-
   backToLIst() {
     let url = 'products/digital/digital-product-list';
     this.router.navigate([url]);
@@ -618,8 +782,25 @@ export class EditProductsComponent implements OnInit {
 //   handleTabClick($event) {
 //     $event.preventDefault();
 //   }
-  saveFieldCategory(x: number){
-console.log('category Clicked!!')
+  saveFieldCategory() {
+
+    if (this.filteredSubCategory.length > 0) {
+      const payload = {
+        column: 'category_code',
+        tblname: 'product_basic_info',
+        value: this.filteredSubCategory[0].code,
+        whereClause: 'product_code',
+        whereValue: this.ids
+      }
+      this.productService.editAdminSave(payload).subscribe(
+        data => this.updateSubSubCategory());
+    } else {
+      Swal.fire(
+        'No Changes Found!',
+        '',
+        'info'
+      );
+    }
   }
 
   saveFieldBaseInfo() {
@@ -632,8 +813,10 @@ console.log('category Clicked!!')
       referenceId: productId,
       type: 'PRODUCT',
       sub_type: 'product_basic',
-      comment: 'Test',
+      comment: 'product_basic',
       requestedBy: partnerId,
+      userId: sessionStorage.getItem('userId'),
+
       data: [
         {
           column_name: 'title',
@@ -646,22 +829,19 @@ console.log('category Clicked!!')
           old_value: this.oldBrand,
           new_value: brand,
           call_name: 'brand',
-        },
-        {
-          column_name: 'manufacture',
-          old_value: this.oldManufacture,
-          new_value: manufacture,
-          call_name: 'manufacture',
         }
+        // ,
+        // {
+        //   column_name: 'manufacture',
+        //   old_value: this.oldManufacture,
+        //   new_value: manufacture,
+        //   call_name: 'manufacture',
+        // }
       ]
     };
-
-
     this.productService.editField(payload).subscribe(
       data => this.manageEditField(data),
     );
-
-
   }
 
   private editFormControlMethode() {
@@ -669,6 +849,7 @@ console.log('category Clicked!!')
     this.baseInfo = new FormGroup({
       Title: new FormControl(''),
       Brand: new FormControl(''),
+      ProductCode: new FormControl(''),
       Manufacture: new FormControl(''),
     });
     // ----------- Description ---------------
@@ -677,12 +858,12 @@ console.log('category Clicked!!')
       special_notes: new FormControl(''),
       availability: new FormControl(''),
     });
+
     // ----------- Offer ---------------
     this.offer = new FormGroup({
       txt_seller_sku: new FormControl(''),
       condition: new FormControl(''),
     });
-
     // -------------category-----------
     this.category = new FormGroup({
       Category1: new FormControl(''),
@@ -695,125 +876,96 @@ console.log('category Clicked!!')
   }
 
   private manageEditField(data) {
-    Swal.fire(
-      'well done...!',
-      data.message,
-      'success'
-    );
-    this.router.navigate(['products/digital/digital-product-list']);
 
+    if (data.message_status === 'Error'){
+      Swal.fire(
+        'error...!',
+        data.message,
+        'error'
+      );
+    }else if(data.message_status === 'Success'){
+      Swal.fire(
+        'well done...!',
+        data.message,
+        'success'
+      );
+    }
+    this.router.navigate(['products/digital/digital-product-list']);
   }
 
   saveFieldDescription() {
-    let partnerId = sessionStorage.getItem('partnerId');
-    let description = this.descriptionContent;
-    let specialNotes = this.description.get('special_notes').value;
-    let availability = this.description.get('availability').value;
-    let productId = this.ids;
-
-    let payload = {
-      referenceId: productId,
-      type: 'PRODUCT',
-      sub_type: 'product_description',
-      comment: 'Test',
-      requestedBy: partnerId,
-      data: [
-        {
-          column_name: 'description',
-          old_value: this.old_Txt_description,
-          new_value: description,
-          call_name: 'description',
-        },
-        {
-          column_name: 'special_notes',
-          old_value: this.old_special_notes,
-          new_value: specialNotes,
-          call_name: 'special_notes',
-        },
-        {
-          column_name: 'availability',
-          old_value: this.old_availability,
-          new_value: availability,
-          call_name: 'availability',
+    if (this.isAdmin) {
+      if (this.old_Txt_description === this.descriptionContent) {
+        Swal.fire(
+          'No Changes Found!',
+          '',
+          'info'
+        );
+      } else {
+        const payload = {
+          column: 'description',
+          tblname: 'product_description',
+          value: this.descriptionContent,
+          whereClause: 'pro_code',
+          whereValue: this.ids
         }
-      ]
-    };
+        this.productService.editAdminSave(payload).subscribe(
+          data => {
+            Swal.fire(
+              'Updated!',
+              '',
+              'success'
+            ).then((result) => {
+              if (result.isConfirmed) {
+                this.descriptionContent === this.old_Txt_description
+              }
+            });
+          }
+        );
+      }
+    } else {
+      let partnerId = sessionStorage.getItem('partnerId');
+      let description = this.descriptionContent;
+      let specialNotes = this.description.get('special_notes').value;
+      let availability = this.description.get('availability').value;
+      let productId = this.ids;
+
+      let payload = {
+        referenceId: productId,
+        type: 'PRODUCT',
+        sub_type: 'product_description',
+        comment: 'product_description',
+        requestedBy: partnerId,
+        userId: sessionStorage.getItem('userId'),
+
+        data: [
+          {
+            column_name: 'description',
+            old_value: this.old_Txt_description,
+            new_value: description,
+            call_name: 'description',
+          },
+          {
+            column_name: 'special_notes',
+            old_value: this.old_special_notes,
+            new_value: specialNotes,
+            call_name: 'special_notes',
+          },
+          {
+            column_name: 'availability',
+            old_value: this.old_availability,
+            new_value: availability,
+            call_name: 'availability',
+          }
+        ]
+      };
 
 
-    this.productService.editField(payload).subscribe(
-      data => this.manageEditField(data),
-    );
+      this.productService.editField(payload).subscribe(
+        data => this.manageEditField(data),
+      );
+    }
   }
-
-  saveOfferFields() {
-    let partnerId = sessionStorage.getItem('partnerId');
-    let txt_seller_sku = this.offer.get('txt_seller_sku').value;
-    let txt_price = this.offer.get('txt_price').value;
-    let txt_quantity = this.offer.get('txt_quantity').value;
-    let condition = this.offer.get('condition').value;
-    let txt_amount = this.offer.get('txt_amount').value;
-    let txt_price_rate = this.offer.get('txt_price_rate').value;
-    let txt_listning_price = this.offer.get('txt_listning_price').value;
-    let productId = this.ids;
-
-    let payload = {
-      referenceId: productId,
-      type: 'PRODUCT',
-      sub_type: 'product_offer',
-      comment: 'Test',
-      requestedBy: partnerId,
-      data: [
-        {
-          column_name: 'seller_sku',
-          old_value: this.old_txt_seller_sku,
-          new_value: txt_seller_sku,
-          call_name: 'seller_sku',
-        },
-        {
-          column_name: 'price',
-          old_value: this.old_txt_price,
-          new_value: txt_price,
-          call_name: 'price',
-        },
-        {
-          column_name: 'quantity',
-          old_value: this.old_txt_quantity,
-          new_value: txt_quantity,
-          call_name: 'quantity',
-        },
-        {
-          column_name: 'condition',
-          old_value: this.old_condition,
-          new_value: condition,
-          call_name: 'condition',
-        },
-        {
-          column_name: 'amount',
-          old_value: this.old_txt_amount,
-          new_value: txt_amount,
-          call_name: 'amount',
-        },
-        {
-          column_name: 'price_rate',
-          old_value: this.old_txt_price_rate,
-          new_value: txt_price_rate,
-          call_name: 'price_rate',
-        },
-        {
-          column_name: 'listning_price',
-          old_value: this.old_txt_listning_price,
-          new_value: txt_listning_price,
-          call_name: 'listning_price',
-        }
-      ]
-    };
-
-
-    this.productService.editField(payload).subscribe(
-      data => this.manageEditField(data),
-    );
-  }
-
   saveEditedImage() {
     let one = this.imageCliant.get('fileSource').value;
     let one2 = this.imageCliant.get('fileSource2').value;
@@ -821,8 +973,15 @@ console.log('category Clicked!!')
     let one4 = this.imageCliant.get('fileSource4').value;
     let one5 = this.imageCliant.get('fileSource5').value;
     const pricecc = new File([''], '');
+    if(one=== '' && one2 === '' && one3 === '' && one4 === '' && one5 === ''){
+      Swal.fire(
+        "You haven't made any changes",
+        '',
+        'warning'
+      );
+      return;
+    }
     if (one === '') {
-
       one = pricecc;
     }
 
@@ -848,11 +1007,10 @@ console.log('category Clicked!!')
     );
   }
 
-
   mnageErrorProduct(error) {
     Swal.fire(
       'Oops...',
-      error.message,
+      'Something Went Wrong!',
       'error'
     );
   }
@@ -863,5 +1021,99 @@ console.log('category Clicked!!')
       'product save successful..!',
       'success'
     );
+  }
+
+  protected readonly event = event;
+  protected readonly Event = Event;
+
+
+  calcSellerIncomeBySellingPrice(){
+    if ((document.getElementById('onDemandSellingPriceID') as HTMLInputElement).value === '' || (document.getElementById('onDemandMarginID') as HTMLInputElement).value === '') {
+      // Swal.fire(
+      //   'Error',
+      //   'Pleas fill all the field',
+      //   'warning'
+      // );
+      this.btnUpdatePrice = false;
+      (document.getElementById('onDemandCostPriceID') as HTMLInputElement).value = this.oldCostPrice;
+    } else {
+      this.btnUpdatePrice = true;
+      const sellingPrice = parseFloat((document.getElementById('onDemandSellingPriceID') as HTMLInputElement).value.trim());
+      const margin = parseFloat((document.getElementById('onDemandMarginID') as HTMLInputElement).value.trim());
+
+      const oldMargin = parseFloat(this.oldChangingRate);
+      if (sellingPrice > 0 && margin > 0){
+
+        if (oldMargin <= margin){
+          const newCostPrice = sellingPrice - (margin * sellingPrice / 100);
+          (document.getElementById('onDemandCostPriceID') as HTMLInputElement).value = newCostPrice.toString();
+        }else {
+          Swal.fire(
+            'Error',
+            'Margin must be greater than ' + oldMargin,
+            'warning'
+          );
+          (document.getElementById('onDemandMarginID') as HTMLInputElement).value = this.oldChangingRate;
+        }
+      }else {
+        Swal.fire(
+          'Error',
+          'Values must be greater than 0',
+          'warning'
+        );
+        (document.getElementById('onDemandSellingPriceID') as HTMLInputElement).value = this.oldSellingPrice;
+        (document.getElementById('onDemandMarginID') as HTMLInputElement).value = this.oldChangingRate;
+      }
+
+    }
+  }
+  updatePrice() {
+
+    const productId = this.ids;
+    const newCostPrice = parseFloat((document.getElementById('onDemandCostPriceID') as HTMLInputElement).value.trim());
+    const newChangingRate = parseFloat((document.getElementById('onDemandMarginID') as HTMLInputElement).value.trim());
+    const newSellingPrice = parseFloat((document.getElementById('onDemandSellingPriceID') as HTMLInputElement).value.trim());
+
+    const payload = {
+      referenceId: productId,
+      type: 'PRODUCT_PRICE',
+      sub_type: 'product_price',
+      comment: 'PRODUCT_PRICE',
+      requestedBy: this.vendorCode,
+      userId: sessionStorage.getItem('userId'),
+      data: [
+        {
+          column_name: 'cost_price',
+          old_value: this.oldCostPrice,
+          new_value: newCostPrice,
+          call_name: 'cost_price',
+        },
+        {
+          column_name: 'changing_rate',
+          old_value: this.oldChangingRate,
+          new_value: newChangingRate,
+          call_name: 'changing_rate',
+        },
+        {
+          column_name: 'selling_price',
+          old_value: this.oldSellingPrice,
+          new_value: newSellingPrice,
+          call_name: 'selling_price',
+        }
+      ]
+    };
+
+
+    if (productId === ''){
+      Swal.fire(
+        'Error',
+        'Error',
+        'warning'
+      );
+    }else {
+      this.productService.editField(payload).subscribe(
+        data => this.manageEditField(data),
+      );
+    }
   }
 }

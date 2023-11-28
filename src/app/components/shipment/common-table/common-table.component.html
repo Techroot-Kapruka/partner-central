@@ -1,0 +1,46 @@
+<input autofocus type="text" class="form-control" placeholder="Search..." style="width: 50%"
+       (input)="ActiveProductFilter($event.target.value)"/>
+<div class="col-sm-9">
+  <div *ngIf="isSearchRecordEmpty">
+    <h5>Shipment records not found according to your search...</h5>
+  </div>
+  <div *ngIf="isSearchRecordNotEmpty">
+    <div class="row table-responsive" style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
+      <table class="table table-sm table-bordered">
+        <thead class="table-primary">
+        <tr>
+          <th *ngFor="let column of columnArray">{{column.header}}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor=" let item of (paginatedItems.length > 0 ? paginatedItems : tableData); let i = index;">
+          <td *ngFor="let column of columnArray">
+            <div *ngIf="column.header === 'Received'">
+              <button type="button"
+                      style="width: 55px;height: 23px;font-size: 10px; color: white;font-weight: bold;text-align: center;border: none;border-radius: 3px; background-color: {{column.bColor}} ">{{column.bValue}}</button>
+            </div>
+            <div *ngIf="column.header === 'Action' && showActionButton">
+              <button type="button" (click)='editRecord(item)'
+                      style="width: 96px;height: 28px;font-size: 10px;"
+                      class="btn btn-outline-success">{{column.bValue}}</button>
+            </div>
+            <div *ngIf="column.header !== 'Action' && column.header !== 'Received'">
+              <span *ngIf="column.dataType === 'string'">{{item[column.fieldName]}}</span>
+              <span *ngIf="column.dataType === 'date'">{{item[column.fieldName] |date:'Y-M-dd'}}</span>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div *ngIf="isSearchRecordNotEmpty">
+  <div class="pull-right" style="margin-top: 15px">
+    <app-pagination
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      (pageChange)="onPageChange($event)"
+    ></app-pagination>
+  </div>
+</div>

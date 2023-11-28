@@ -1,6 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {FileComponent} from './file.component';
+import {CanDeactivateGuard} from "../../can-deactivate.guard";
 
 const routes: Routes = [
   {
@@ -12,7 +13,8 @@ const routes: Routes = [
         data: {
           title: 'Bulk Product Upload',
           breadcrumb: 'Dashboard'
-        }
+        },
+        canDeactivate: [CanDeactivateGuard],
       }
     ]
   }

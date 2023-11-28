@@ -1,0 +1,130 @@
+<table class="table table-sm table-bordered">
+    <thead class="table-primary">
+    <!--        loader-->
+    <tr *ngIf="stillLoading">
+        <td>
+            <ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>
+        </td>
+        <td>
+            <ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>
+        </td>
+        <td>
+            <ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>
+        </td>
+        <td>
+            <ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>
+        </td>
+        <td>
+            <ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>
+        </td>
+        <td>
+            <ngx-skeleton-loader count="1" animation="pulse"></ngx-skeleton-loader>
+        </td>
+    </tr>
+    <!--        loader-->
+
+    <tr>
+        <th *ngFor="let head of HeadArray">{{head.Head}}</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <ng-container *ngIf="!editTab && !emptyTable">
+        <tr *ngFor="let productDetail of DataArray; let i = index;">
+            <td align="center">{{stopLoading()}}<img src="{{ imagePathURI + productDetail.image }}" height="60px" width="60px"
+                                    (error)="onImageError($event)" (click)="popUpImageActive(productDetail)"></td>
+            <td><p
+                    style="margin: 0px; font-size: 16px; color: #000; cursor: pointer">
+                {{ productDetail.title}}&nbsp;&nbsp;&nbsp;<a href="javascript:void(0);" (click)="loadPage(productDetail)"*ngIf="active">view on
+                web</a></p>
+                <p style="margin: 0px;font-size: 16px; color: #000">{{
+                    productDetail.productCode }}</p>
+                <p style="margin: 0px; font-size: 14px; color: #6f6f6f;" *ngIf="!onDemand">&nbsp; &nbsp;{{productDetail.vendor}}</p>
+                <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp;
+                    &nbsp;{{productDetail.categoryPath}}</p>
+                <div *ngIf="onDemand" style="margin-left: 10px; margin:0; width:10%; background-color: {{productDetail.categoryColor}}"> &nbsp; &nbsp;</div>
+                <p style="margin: 0px; font-size: 14px; color: #6f6f6f;" *ngIf="onDemand"> &nbsp; &nbsp;{{productDetail.categorySizes}}</p>
+            </td>
+            <td *ngIf="!onDemand && !nonActivePartner">{{productDetail.price}}</td>
+            <td *ngIf="!nonActivePartner">{{productDetail.in_stock}}</td>
+            <td>{{productDetail.createDate}}
+            <br>
+                <div *ngIf="active || suspend || onDemand || outOfStock">
+                    <p>Last Update <br>{{productDetail.update_date_time}}</p>
+                </div>
+            </td>
+            <td *ngIf="nonActivePartner">{{productDetail.brand}}</td>
+            <td *ngIf="active || suspend || onDemand || nonActiveAdmin || (pendingStockPartner && !pendingStockAdmin)">
+                <button type="button" *ngIf="active"
+                        style="width: 80px;height: 28px;font-size: 10px;"
+                        class="btn btn-outline-success" (click)="view(productDetail,1)">View
+                </button>
+                <button type="button" *ngIf="active"
+                        style="width: 80px;height: 28px;font-size: 10px;"
+                        class="btn btn-outline-info" (click)="edit(productDetail,2)">edit
+                </button>
+                <button type="button" *ngIf="active"
+                        style="width: 80px;height: 28px;font-size: 10px;"
+                        class="btn btn-outline-danger" (click)="delete(productDetail,3)">delete
+                </button>
+                <button type="button" *ngIf="active"
+                        style="width: 80px;height: 28px;font-size: 10px;"
+                        class="btn btn-outline-warning" (click)="out(productDetail,4)">out
+                </button>
+                <button type="button" *ngIf="suspend"
+                        style="width: 80px;height: 28px;font-size: 10px;"
+                        class="btn btn-outline-info" (click)="editSus(productDetail)">edit
+                </button>
+
+                <button type="button" *ngIf="onDemand"
+                        style="width: 96px;height: 28px;font-size: 10px;"
+                        class="btn btn-outline-success" (click)="addStock(productDetail)">Add Stock
+                </button>
+
+                <button type="button" *ngIf="nonActiveAdmin" (click)='review(productDetail)'
+                        style="width: 96px;height: 28px;font-size: 10px;"
+                        class="btn btn-outline-success">Review
+                </button>
+
+                <button type="button" *ngIf="pendingStockPartner"
+                        style="width: 96px;height: 28px;font-size: 10px;"
+                        class="btn btn-outline-success" (click)="addStock(productDetail)">Add Stock
+                </button>
+
+            </td>
+        </tr>
+    </ng-container>
+
+    <ng-container *ngIf="editTab && !emptyTable">
+        <tr *ngFor="let productDetail of DataArray; let i = index;">
+            <!--            <td *ngFor="let head of HeadArray">{{productDetail.image}}</td>-->
+            <td align="center">{{stopLoading()}}<img src="{{ imagePathURI + productDetail.image }}" height="60px" width="60px"
+                                    (error)="onImageError($event)"></td>
+            <td><p
+                    style="margin: 0px; font-size: 16px; color: #000; cursor: pointer">
+                {{ productDetail.title}}</p>
+                <p style="margin: 0px;font-size: 16px; color: #000">{{
+                    productDetail.productCode }}</p>
+                <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp;
+                    &nbsp;{{productDetail.categoryPath}}</p>
+            </td>
+            <td>{{productDetail.requestedDate}}</td>
+            <td>{{productDetail.requestBy}}</td>
+            <td>
+                <button type="button"
+                        style="width: 80px;height: 28px;font-size: 10px;"
+                        class="btn btn-outline-success" (click)="viewProduct(productDetail)">View
+                </button>
+            </td>
+        </tr>
+    </ng-container>
+    <ng-container *ngIf="emptyTable">
+        <tr class="alert alert-info" role="alert">
+            <td colspan="6">
+                No Data Found!
+            </td>
+        </tr>
+
+    </ng-container>
+    </tbody>
+</table>

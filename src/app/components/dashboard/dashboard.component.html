@@ -60,10 +60,10 @@
                     <img src="../../../../assets/images/ico/04.png" width="80px">
                   </div>
                 </div>
-                <div class="media-body col-9" *ngIf="isLoginUser" routerLink="/products/digital/digital-product-list"
+                <div class="media-body col-9" *ngIf="isLoginUser" routerLink="/products/digital/new-additions"
                      style="cursor: pointer;"><span class="m-0">Pending Approval Product</span>
-                  <h3 class="mb-0"> <span class="counter" [CountTo]="qaApprovalCount" [from]="0"
-                                          [duration]="2">{{qaApprovalCount}}</span>
+                  <h3 class="mb-0"> <span class="counter" [CountTo]="pendingCount" [from]="0"
+                                          [duration]="2">{{pendingCount}}</span>
                   </h3>
                 </div>
               </div>
@@ -100,10 +100,10 @@
                     <img src="../../../../assets/images/ico/04.png" width="80px">
                   </div>
                 </div>
-                <div class="media-body col-8" routerLink="/digital/digital-product-list" style="cursor: pointer;">
+                <div class="media-body col-8" routerLink="/products/digital/new-additions" style="cursor: pointer;">
                   <span class="m-0">Approval Pending product</span>
-                  <h3 class="mb-0"> <span class="counter" [CountTo]="mathCountForApprovalPendingProduct" [from]="0"
-                                          [duration]="2">{{mathCountForApprovalPendingProduct}}</span>
+                  <h3 class="mb-0"> <span class="counter" [CountTo]="pendingCount" [from]="0"
+                                          [duration]="2">{{pendingCount}}</span>
                   </h3>
                 </div>
               </div>
@@ -119,17 +119,17 @@
                     <img src="../../../../assets/images/ico/05.png" width="80px">
                   </div>
                 </div>
-                <div class="media-body col-8" routerLink="/digital/digital-product-list" style="cursor: pointer;">
+                <div class="media-body col-8" routerLink="/products/digital/digital-product-list" style="cursor: pointer;">
                   <span class="m-0">Products</span>
-                  <h3 class="mb-0"> <span class="counter" [CountTo]="specialGift" [from]="0"
-                                          [duration]="2">{{specialGift}}</span>
+                  <h3 class="mb-0"> <span class="counter" [CountTo]="activeCount" [from]="0"
+                                          [duration]="2">{{activeCount}}</span>
                   </h3>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="col-md-4 blockS" *ngIf="isLoginUser"></div>
+<!--        <div class="col-md-4 blockS" *ngIf="isLoginUser"></div>-->
         <!--Analytics Products View Start-->
         <div class="col-md-4 blockS" *ngIf="isLoginUser">
           <div class="card o-hidden  widget-cards">
@@ -142,7 +142,7 @@
                   </div>
                 </div>
                 <div class="media-body col-9" *ngIf="isLoginUser"
-                     style="cursor: pointer;"><span class="m-0">Total Product Clicks</span>
+                     style="cursor: pointer;" routerLink="/products/digital/analytics-product-view"><span class="m-0">Total Product Clicks</span>
                   <h3 class="mb-0"> <span class="counter" [CountTo]="analyticsProductViewTotal" [from]="0"
                                           [duration]="2">{{analyticsProductViewTotal}}</span>
                   </h3>
@@ -162,7 +162,7 @@
                   </div>
                 </div>
                 <div class="media-body col-9" *ngIf="isLoginUser"
-                     style="cursor: pointer;"><span class="m-0">Total Product Add to Cart</span>
+                     style="cursor: pointer;" routerLink="/products/digital/analytics-product-view"><span class="m-0">Total Product Add to Cart</span>
                   <h3 class="mb-0"> <span class="counter" [CountTo]="analyticsProductCartTotal" [from]="0"
                                           [duration]="2">{{analyticsProductCartTotal}}</span>
                   </h3>
@@ -182,7 +182,7 @@
                   </div>
                 </div>
                 <div class="media-body col-9" *ngIf="isLoginUser"
-                     style="cursor: pointer;"><span class="m-0">Total Product Orders</span>
+                     style="cursor: pointer;" routerLink="/products/digital/analytics-product-view"><span class="m-0">Total Product Orders</span>
                   <h3 class="mb-0"> <span class="counter" [CountTo]="analyticsProductOrderTotal" [from]="0"
                                           [duration]="2">{{analyticsProductOrderTotal}}</span>
                   </h3>

@@ -6,6 +6,7 @@ import {colorSets} from '@swimlane/ngx-charts';
 import {ChartOptions} from 'chart.js';
 import Swal from 'sweetalert2';
 import {AnalyticsProductService} from "../../shared/service/analytics-product.service";
+import {ProductService} from "../../shared/service/product.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -46,6 +47,8 @@ export class DashboardComponent implements OnInit {
   public isPendingShipmentShow = false;
   public qaApprovalProductTable = false;
   public qaApprovalCount = 0;
+  public activeCount = 0;
+  public pendingCount = 0;
   public analyticsProductViewTotal = 0;
   public analyticsProductCartTotal = 0;
   public analyticsProductOrderTotal = 0;
@@ -59,7 +62,7 @@ export class DashboardComponent implements OnInit {
   public isColumnChart = false;
   showViewShopButton = false;
 
-  constructor(private dashboardService: DashboardService, private router: Router, private _Activatedroute: ActivatedRoute,
+  constructor(private productService: ProductService ,private dashboardService: DashboardService, private router: Router, private _Activatedroute: ActivatedRoute,
               private analyticsService: AnalyticsProductService) {
     this._Activatedroute.paramMap.subscribe(params => {
       this.partnerId = params.get('partnerId');
@@ -78,6 +81,7 @@ export class DashboardComponent implements OnInit {
     if (sessionStorage.getItem('userRole') === 'ROLE_GUEST') {
 
     } else {
+      // this.getCount();
       this.setPendingShipmentCount();
       this.approvalPendingUserCount();
       this.setReceivedShipmentCount();
@@ -172,7 +176,27 @@ export class DashboardComponent implements OnInit {
   ];
 
   /* End Doughnut Chart */
+  getCount(){
+    const busName = sessionStorage.getItem('businessName');
+    const userRole = sessionStorage.getItem('userRole');
+    const categoryID = sessionStorage.getItem('userId');
 
+    this.productService.getAllActiveProductList(busName, categoryID).subscribe(
+      data => this.activeProductCount(data),
+    );
+
+    this.productService.getnonActiveProduct(busName, categoryID).subscribe(
+      data => this.pendingProductCount(data),
+    );
+  }
+
+  pendingProductCount(data){
+    this.pendingCount = data.data.length
+  }
+
+  activeProductCount(data){
+    this.activeCount = data.data.length
+  }
   showElerments() {
 
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
@@ -292,27 +316,28 @@ export class DashboardComponent implements OnInit {
   }
 
   specialGiftCount() {
-    const roleLog = sessionStorage.getItem('userRole');
-    if (roleLog === 'ROLE_ADMIN') {
-      this.dashboardService.getSpecialGiftCount().subscribe(
-        data => this.managespecialGiftCount(data)
-      );
-
-    } else if (roleLog === 'ROLE_CATEGORY_MANAGER') {
-      const payLoad = {
-        user_u_id: sessionStorage.getItem('userId')
-      };
-      this.dashboardService.getSpecialGiftCountByCatManager(payLoad).subscribe(
-        data => this.managespecialGiftCount(data)
-      );
-    } else {
-      const payLoad = {
-        partner_u_id: sessionStorage.getItem('partnerId')
-      };
-      this.dashboardService.getSpecialGiftCountByPartner(payLoad).subscribe(
-        data => this.managespecialGiftCount(data)
-      );
-    }
+    this.getCount();
+    // const roleLog = sessionStorage.getItem('userRole');
+    // if (roleLog === 'ROLE_ADMIN') {
+    //   this.dashboardService.getSpecialGiftCount().subscribe(
+    //     data => this.managespecialGiftCount(data)
+    //   );
+    //
+    // } else if (roleLog === 'ROLE_CATEGORY_MANAGER') {
+    //   const payLoad = {
+    //     user_u_id: sessionStorage.getItem('userId')
+    //   };
+    //   this.dashboardService.getSpecialGiftCountByCatManager(payLoad).subscribe(
+    //     data => this.managespecialGiftCount(data)
+    //   );
+    // } else {
+    //   const payLoad = {
+    //     partner_u_id: sessionStorage.getItem('partnerId')
+    //   };
+    //   this.dashboardService.getSpecialGiftCountByPartner(payLoad).subscribe(
+    //     data => this.managespecialGiftCount(data)
+    //   );
+    // }
   }
 
   approvelPendingProduct() {
@@ -354,27 +379,33 @@ export class DashboardComponent implements OnInit {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
-    this.analyticsService.getSumProductViewTotal(object).subscribe(
-      data => this.manageGetSumProductViewTotal(data)
-    );
+    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN'){
+      this.analyticsService.getSumProductViewTotal(object).subscribe(
+          data => this.manageGetSumProductViewTotal(data)
+      );
+    }
   }
 
   getSumProductAddToCart() {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
-    this.analyticsService.getSumProductAddToCart(object).subscribe(
-      data => this.manageGetSumProductAddToCart(data)
-    );
+    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN'){
+      this.analyticsService.getSumProductAddToCart(object).subscribe(
+          data => this.manageGetSumProductAddToCart(data)
+      );
+    }
   }
 
   getSumProductOrderTotal() {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
-    this.analyticsService.getSumProductOrderTotal(object).subscribe(
-      data => this.manageGetSumProductOrderTotal(data)
-    );
+    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN'){
+      this.analyticsService.getSumProductOrderTotal(object).subscribe(
+          data => this.manageGetSumProductOrderTotal(data)
+      );
+    }
   }
 
   managePartner(data) {

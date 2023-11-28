@@ -13,19 +13,29 @@ import { UnHoldShipmentComponent } from './un-hold-shipment/un-hold-shipment.com
 import { MakeReservedComponent } from './make-reserved/make-reserved.component';
 import { ListShipmentReservedComponent } from './list-shipment-reserved/list-shipment-reserved.component';
 import { RecievedShipmentComponent } from './recieved-shipment/recieved-shipment.component';
-
+import { ListPendingShipmentComponent } from './list-pending-shipment/list-pending-shipment.component';
+import { CommonTableComponent } from './common-table/common-table.component';
+import {NgxSkeletonLoaderModule} from 'ngx-skeleton-loader';
+import {ProductsModule} from '../products/products.module';
+import {SelectModule} from 'ng-select';
+import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
-  declarations: [ListShipmentComponent, AddShipmentComponent, EditShipmentComponent, UnHoldShipmentComponent, MakeReservedComponent, ListShipmentReservedComponent, RecievedShipmentComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    HttpClientModule,
-    NgbModule,
-    Ng2SmartTableModule,
-    ReactiveFormsModule,
-    ShipmentRoutingModule,
-    NgxDatatableModule
-  ]
+  // tslint:disable-next-line:max-line-length
+  declarations: [ListShipmentComponent, AddShipmentComponent, EditShipmentComponent, UnHoldShipmentComponent, MakeReservedComponent, ListShipmentReservedComponent, RecievedShipmentComponent, ListPendingShipmentComponent, CommonTableComponent],
+    imports: [
+        CommonModule,
+        FormsModule,
+        HttpClientModule,
+        NgbModule,
+        Ng2SmartTableModule,
+        ReactiveFormsModule,
+        ShipmentRoutingModule,
+        NgxDatatableModule,
+        NgxSkeletonLoaderModule,
+        ProductsModule,
+        SelectModule,
+        SharedModule
+    ]
 })
 export class ShipmentModule { }

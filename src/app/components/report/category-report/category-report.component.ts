@@ -9,11 +9,12 @@ import * as excel from 'xlsx';
 })
 export class CategoryReportComponent implements OnInit {
 
- public filteredCategories: any = [];
+  public filteredCategories: any = [];
   public productCategoryArray = [];
   public mainCategoryArray: any = [];
   public subCategoryArray: any = [];
   public subSubCategoryArray: any = [];
+  public categorySearch = '';
 
   constructor(private categoryService: CategoryService) {
     this.getAllCategory();
@@ -22,6 +23,7 @@ export class CategoryReportComponent implements OnInit {
 
   ngOnInit(): void {
   }
+
   toggleExpansion(item: any) {
     // Toggle the expansion state of the clicked item
     item.expanded = !item.expanded;
@@ -32,6 +34,7 @@ export class CategoryReportComponent implements OnInit {
       category.category_name.toLowerCase().includes(searchTerm.toLowerCase())
     );
   }
+
   getAllCategory() {
     const sendData = {
       code: 'c'
@@ -42,7 +45,7 @@ export class CategoryReportComponent implements OnInit {
     );
   }
 
-// ++++++++++++++++++++ Categories loading Array set-up for Editable Table ++++++++++++++++
+  // ++++++++++++++++++++ Categories loading Array set-up for Editable Table ++++++++++++++++
   setAllCategory(data) {
     let cr = {};
     cr = {
@@ -67,29 +70,31 @@ export class CategoryReportComponent implements OnInit {
         this.mainCategoryArray = [];
         for (let i = 0; i < data.data.length; i++) {
           if (data.data[i].category_name != null) {
-            let subCategories: any = [];
+            const subCategories: any = [];
             for (let j = 0; j < data.data[i].subcategories.length; j++) {
               if (data.data[i].subcategories[j].sub_category_name != null) {
-                let subSubCategories: any = [];
-                for (let x = 0; x < data.data[i].subcategories[j].subsubcategories.length; x++){
-                    let sendObj2 = {
-                      sub_sub_category_name: data.data[i].subcategories[j].subsubcategories[x].sub_sub_category_name,
-                      sub_sub_category_code: data.data[i].subcategories[j].subsubcategories[x].sub_sub_category_code
-                    };
-                    subSubCategories.push(sendObj2);
+                const subSubCategories: any = [];
+                for (let x = 0; x < data.data[i].subcategories[j].subsubcategories.length; x++) {
+                  const sendObj2 = {
+                    sub_sub_category_name: data.data[i].subcategories[j].subsubcategories[x].sub_sub_category_name,
+                    sub_sub_category_code: data.data[i].subcategories[j].subsubcategories[x].sub_sub_category_code,
+                    sub_sub_category_price_rate: data.data[i].subcategories[j].subsubcategories[x].sub_sub_category_price_rate
+                  };
+                  subSubCategories.push(sendObj2);
                 }
-                let sendObj1 = {
+                const sendObj1 = {
                   sub_category_name: data.data[i].subcategories[j].sub_category_name,
                   sub_category_code: data.data[i].subcategories[j].sub_category_code,
+                  sub_category_price_rate: data.data[i].subcategories[j].sub_category_price_rate,
                   subsubcategories: subSubCategories
                 };
                 subCategories.push(sendObj1);
               }
             }
-            let sendObj = {
+            const sendObj = {
               category_name: data.data[i].category_name,
               category_code: data.data[i].category_code,
-              subcategories : subCategories,
+              subcategories: subCategories,
               category_price_rate: data.data[i].category_price_rate
             };
             this.mainCategoryArray.push(sendObj);
@@ -99,20 +104,53 @@ export class CategoryReportComponent implements OnInit {
       errors => {
       });
   }
+
   exportToExcel(): void {
-    const element = document.getElementById('excel-table');
-    const ws: excel.WorkSheet = excel.utils.table_to_sheet(element);
 
+    let filterCategories = [];
+    const AllData = [];
+    const catName = '';
+    const subcatName = '';
+    const subsubcatName = '';
+    filterCategories = this.mainCategoryArray.filter(category =>
+      category.category_name.toLowerCase().includes(this.categorySearch.toLowerCase())
+    );
 
-    // Set the width cols
-    ws['!cols'] = [
-      { width: 40 },
-      { width: 15 },
-      { width: 15 }
-    ];
+    filterCategories.forEach(category => {
+      // Example action: Accessing properties of each category
+      const categoryName = category.category_name;
+      const categoryCode = category.category_code;
+      const categoryPrice = category.category_price_rate;
+      const subcategories = category.subcategories;
+
+      AllData.push([categoryCode, categoryName, subcatName, subsubcatName, categoryPrice]);
+
+      subcategories.forEach(subcategory => {
+        const subCategoryName = subcategory.sub_category_name;
+        const subCategoryCode = subcategory.sub_category_code;
+        const subCategoryPrice = subcategory.sub_category_price_rate;
+        const subsubcategories = subcategory.subsubcategories;
+
+        AllData.push([subCategoryCode, catName, subCategoryName, subsubcatName, subCategoryPrice]);
+
+        subsubcategories.forEach(subsubcategory => {
+          const subsubCategoryName = subsubcategory.sub_sub_category_name;
+          const subsubCategoryCode = subsubcategory.sub_sub_category_code;
+          const subsubCategoryPrice = subsubcategory.sub_sub_category_price_rate;
+
+          AllData.push([subsubCategoryCode, catName, subcatName, subsubCategoryName, subsubCategoryPrice]);
+        });
+      });
+    });
+
+    // Create a worksheet
+    const ws: excel.WorkSheet = excel.utils.aoa_to_sheet([['Category Code', 'Category Name', 'Sub Category Name', 'Sub Sub Category Name', 'Category Price'], ...AllData]);
+
+    // Create a workbook with the worksheet
     const wb: excel.WorkBook = excel.utils.book_new();
     excel.utils.book_append_sheet(wb, ws, 'Category-Report');
 
+    // Save the workbook as an Excel file
     excel.writeFile(wb, 'category-report.xlsx');
   }
 }

@@ -2,7 +2,13 @@
   padding: 0;
   float: left;
 }
-
+.media-body span{
+  min-height: 100px ;
+  display: block;
+}
+.media-body h3 span{
+  min-height: 0;
+}
 .blockAB {
   width: 100%;
   margin-bottom: 20px;
@@ -179,13 +185,20 @@
 }
 
 .blockS {
-  min-height: 142px;
+  min-height: 170px;
 }
-
+@media only screen and (min-width: 1220px) {
+  .media-body  span{
+    min-height: 74px;
+  }
+}
 @media only screen and (max-width: 767px) {
   .blockAB {
     background: transparent;
     box-shadow: none;
+  }
+  .media-body  span{
+    min-height: 0;
   }
   .blockS {
     min-height: 0;

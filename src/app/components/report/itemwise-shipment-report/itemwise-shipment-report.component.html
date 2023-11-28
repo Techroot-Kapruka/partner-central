@@ -1,0 +1,95 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card tab2-card">
+        <div class="card-body tab2-card">
+          <div class="custom-datatable">
+            <div class="row">
+              <label for="fromDatePicker" style="width: 7%; margin-right: 20px">From date : </label>
+              <input type="date" autofocus class="form-control" id="fromDatePicker" [(ngModel)]="fromDate"
+                     style="width: 25%;">
+              <label for="toDatePicker" style="width: 7%; margin-left: 40px; margin-right: 20px">To date : </label>
+              <input type="date" class="form-control" id="toDatePicker" [(ngModel)]="toDate" style="width: 25%;">
+              <div class="btn-popup pull-right">
+                <button class="btn btn-success float-right" style="margin-left: 40px" (click)="loadDate()">Search
+                </button>
+              </div>
+            </div>
+            <div class="row">
+              <input type="text" class="form-control" style="width: 65%" placeholder="Search..."
+                     [(ngModel)]="shipmentSearch" #inputRef (click)="selectAllText(inputRef)"
+                     (input)="filterItems($event.target.value)">
+              <div class="btn-popup pull-right">
+                <button class="btn btn-success float-right" style="margin-left: 30px" (click)="exportToExcel()">Export
+                  to Excel
+                </button>
+              </div>
+            </div>
+            <div *ngIf="isLoading;">
+              <div class="loader"></div>
+            </div>
+            <div *ngIf="isSearchRecordEmpty">
+              <h5>Shipment records not found according to your search...</h5>
+            </div>
+            <div *ngIf="!isLoading">
+              <div *ngIf="isSearchRecordNotEmpty">
+                <div class="row">
+                  <div class="col-md-9">
+                    <div class="row table-responsive"
+                         style="margin-top: 1%;max-height:50vh; max-height: 60vh; overflow-y: auto; width: 135%;">
+                      <table class="table table-sm table-bordered">
+                        <thead class="table-primary">
+                        <tr>
+                          <th>Shipment</th>
+                          <th>Supplier</th>
+                          <th>Item Code</th>
+                          <th>Quantity</th>
+                          <th>Amount</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr
+                          *ngFor="let shipmentDetail of (filteredProducts.length > 0 ? filteredProducts : shipmentData); let i = index">
+                          <td>
+                            {{ shipmentDetail.shipment_id }}
+                            <p
+                              style="margin: 0px; font-size: 14px; color: #6f6f6f;">{{ shipmentDetail.create_date }}</p>
+                          </td>
+                          <td>{{ shipmentDetail.businessName }}
+                            <p
+                              style="margin: 0px; font-size: 14px; color: #6f6f6f;">{{ shipmentDetail.vendor_code }}</p>
+                          </td>
+                          <td>{{ shipmentDetail.product_code }}
+                            <p
+                              style="margin: 0px; font-size: 14px; color: #6f6f6f;">{{ shipmentDetail.categoryName }}</p>
+                          </td>
+                          <td>
+                            Total : {{ shipmentDetail.total_quantity }}
+                            <p style="margin: 0px; font-size: 14px; color: #007f0c;">Approved
+                              : {{ shipmentDetail.approved_qty }}</p>
+                            <p style="margin: 0px; font-size: 14px; color: #f44336;">Rejected
+                              : {{ shipmentDetail.rejected_qty }}</p>
+                          </td>
+                          <td>
+                            Rs. {{ shipmentDetail.approved_amount | number:'1.2-2' }}
+                            <p style="margin: 0px; font-size: 14px; color: #6f6f6f;">Category Margin
+                              : {{ shipmentDetail.categoryRate}}</p>
+                            <p style="margin: 0px; font-size: 14px; color: #6f6f6f;">Cost Price :
+                              Rs. {{ shipmentDetail.cost_price | number:'1.2-2' }}</p>
+                            <p style="margin: 0px; font-size: 14px; color: #6f6f6f;">Selling Price :
+                              Rs. {{ shipmentDetail.selling_price | number:'1.2-2' }}</p>
+                          </td>
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

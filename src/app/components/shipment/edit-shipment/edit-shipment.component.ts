@@ -35,6 +35,42 @@ export class EditShipmentComponent implements OnInit {
     );
   }
 
+  downloadQRCode(id){
+    const payLoard= {
+      shipment_id: id
+    };
+
+    this.shipmentNewService.generateQRCode(payLoard).subscribe(
+        data => {
+          this.manageSaveQr(data);
+        },
+    );
+  }
+
+  manageSaveQr(data){
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const img = new Image();
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+
+      const dataUrl = canvas.toDataURL('image/png');
+      this.downloadQRImage(dataUrl);
+    };
+
+    img.src = 'data:image/png;base64,' + data.data.qrByte;
+  }
+
+  downloadQRImage(dataUrl: string) {
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = 'QRCode_' + this.id + '.png';
+    link.click();
+  }
+
   createFormConteolerForShipment() {
     this.shipmentForm = new FormGroup({
       txtAllQuantity: new FormControl(''),
@@ -112,14 +148,12 @@ export class EditShipmentComponent implements OnInit {
   }
 
   backToLIst() {
-
-    if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
+    // if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
       const url = '/shipment/receive-shipment';
       this.router.navigate([url]);
-
-    } else {
+    /*} else {
       const url = '/shipment/list-shipment';
       this.router.navigate([url]);
-    }
+    }*/
   }
 }
