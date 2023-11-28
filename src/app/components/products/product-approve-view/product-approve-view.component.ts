@@ -63,8 +63,6 @@ export class ProductApproveViewComponent implements OnInit {
   }
 
   private manageGetProductDetailsByCode(data: any, productCode: string) {
-    console.log('AAA'+data.data.attributeList)
-
     if (data.data.attributeList !== '{}') {
       this.attributeIsVisible = true
       const json = JSON.parse(data.data.attributeList);

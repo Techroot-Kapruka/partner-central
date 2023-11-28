@@ -61,7 +61,7 @@
         <img src="{{imagePathURI + elementImage}}" alt="Image" class="img-fluid" (error)="onImageError($event)" style="width: 200px;height: 200px">
         <p class="blockSV">{{elementVendorCode}} - {{elementVendor}}</p>
 
-        <p>{{elementDescription}}</p>
+        <p class="history-container" [innerHTML]="elementDescription"></p>
         <p>Create Date Time : {{elementCreateDateTime}}</p>
         <p>Available Stock : {{elementAvailableStock}}</p>
         <div class="table-responsive-sm">
@@ -102,7 +102,25 @@
             </tr>
             </tbody>
           </table>
-          <p class="history-container" [innerHTML]="elementHistory"></p>
+
+          <div class="row" *ngIf="attributeIsVisible">
+            <div class="col-md-9">
+              <table class="table table-striped table-bordered table-hover table-sm">
+                <tr>
+                  <th class="textStyle">Attribute</th>
+                  <th class="textStyle">Value</th>
+                </tr>
+                <tbody>
+                <tr *ngFor="let key of getAttributeKeys()">
+                  <td class="textStyle">{{ key }}</td>
+                  <td class="textStyle">{{ attributrHashMap[key] }}</td>
+                </tr>
+                </tbody>
+              </table>
+              <button style="text-align: center;float: right" class="btn btn-sm btn-outline-info" (click)="loadMore()">See More</button>
+            </div>
+          </div>
+          <p class="history-container mt-2" [innerHTML]="elementHistory"></p>
         </div>
       </div>
     </div>
