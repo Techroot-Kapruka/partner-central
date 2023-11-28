@@ -88,4 +88,11 @@ export class ShipmentNewService {
     return this.httpClient.post<any>(this.SERVER + 'shipment/generateQRCode', data, {headers});
   }
 
+  getShipmentDetails(fromDate, toDate){
+    const formData: FormData = new FormData();
+    formData.append('fromDate', fromDate);
+    formData.append('toDate ', toDate);
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'shipment/getShipmentDetails', formData, {headers});
+  }
 }
