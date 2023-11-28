@@ -122,19 +122,20 @@ export class ProductSearchComponent implements OnInit {
   }
 
   manageGetProductDetailsByCode(data: any, id, vendor) {
-
-    if (data.data.attributeList !== '{}') {
-      this.attributeIsVisible = true
-      const json = JSON.parse(data.data.attributeList);
-      for (const key of Object.keys(json)) {
-        this.attributrHashMap[key] = json[key];
-      }
-      for (const key in this.attributrHashMap) {
-        if (this.attributrHashMap.hasOwnProperty(key)) {
-          console.log(`Key: ${key} Value: ${this.attributrHashMap[key]}`);
+    if (data.data.attributeList !== null) {
+      if (data.data.attributeList !== '{}') {
+        this.attributeIsVisible = true
+        const json = JSON.parse(data.data.attributeList);
+        for (const key of Object.keys(json)) {
+          this.attributrHashMap[key] = json[key];
+        }
+        for (const key in this.attributrHashMap) {
+          if (this.attributrHashMap.hasOwnProperty(key)) {
+            console.log(`Key: ${key} Value: ${this.attributrHashMap[key]}`);
+          }
         }
       }
-    }else {
+    } else {
       this.attributeIsVisible = false
     }
 
