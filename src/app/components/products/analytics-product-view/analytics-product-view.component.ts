@@ -34,7 +34,7 @@ export class AnalyticsProductViewComponent implements OnInit {
     this.getListProductView();
     this.getPartner();
     const sessionUser = sessionStorage.getItem('userRole');
-    if(sessionUser === 'ROLE_ADMIN'){
+    if(sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN'){
       this.showHighestViewsForAdmin();
     }
 
@@ -45,7 +45,7 @@ export class AnalyticsProductViewComponent implements OnInit {
 
   getPartner(): void {
     const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER') {
+    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER') {
       this.isAdmin = true;
       this.productService.getPartnerAll().subscribe(
         data => this.managePartners(data),

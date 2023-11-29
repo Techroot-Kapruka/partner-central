@@ -166,7 +166,7 @@ export class DigitalListComponent implements OnInit {
             this.EnableStockEdit = true;
         } else if (sessionStorage.getItem('userRole') === 'ROLE_QA') {
             this.qaTables = false;
-        } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
+        } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
             this.qaTables = true;
             this.EnableStockEdit = true;
         } else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER') {
@@ -179,7 +179,7 @@ export class DigitalListComponent implements OnInit {
     hideElement(): void {
         const role = sessionStorage.getItem('userRole');
 
-        if (role === 'ROLE_ADMIN' || role === 'ROLE_CATEGORY_MANAGER' || role === 'ROLE_STORES_MANAGER') {
+        if (role === 'ROLE_ADMIN' || role === 'ROLE_SUPER_ADMIN' || role === 'ROLE_CATEGORY_MANAGER' || role === 'ROLE_STORES_MANAGER') {
             this.isAdmin = true;
         } else {
             this.isAdmin = false;
@@ -514,7 +514,7 @@ export class DigitalListComponent implements OnInit {
 
     getPartner(): void {
         const sessionUser = sessionStorage.getItem('userRole');
-        if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER') {
+        if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER') {
             this.productService.getPartnerAll().subscribe(
                 data => this.manageBussinessPartner(data),
             );
@@ -895,7 +895,7 @@ export class DigitalListComponent implements OnInit {
         let businessName = '';
         const names = '';
         const sessionUser2 = sessionStorage.getItem('userRole');
-        if (sessionUser2 === 'ROLE_ADMIN') {
+        if (sessionUser2 === 'ROLE_ADMIN' || sessionUser2 === 'ROLE_SUPER_ADMIN') {
             businessName = (document.getElementById('select_pro3') as HTMLInputElement).value;
         } else if (sessionUser2 === 'ROLE_PARTNER') {
             businessName = sessionStorage.getItem('partnerId');

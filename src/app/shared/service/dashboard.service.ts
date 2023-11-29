@@ -120,7 +120,7 @@ export class DashboardService {
             const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
             // return this.httpClient.get<any>('http://192.168.16.101:8090/api/partnerCentral/payment/latestInvoices');
             return this.httpClient.post<any>(this.SERVER + 'payment/latestInvoices/bySupplier', payloard, {headers});
-        } else if (isAdmin === 'ROLE_ADMIN') {
+        } else if (isAdmin === 'ROLE_ADMIN' || isAdmin === 'ROLE_SUPER_ADMIN') {
             const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
             // return this.httpClient.get<any>('http://192.168.16.101:8090/api/partnerCentral/payment/latestInvoices');
             return this.httpClient.get<any>(this.SERVER + 'payment/latestInvoices', {headers});
