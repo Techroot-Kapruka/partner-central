@@ -7,7 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClientService} from '../../shared/service/http-client.service';
 import {ProductService} from '../../shared/service/product.service';
 import {HttpClient} from '@angular/common/http';
-import {CanComponentDeactivate} from "../../can-deactivate.guard";
+// import {CanComponentDeactivate} from "../../can-deactivate.guard";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {catchError, concatMap, finalize, switchMap, takeWhile, tap, toArray} from "rxjs/operators";
 import {from, Observable, of} from "rxjs";
@@ -19,7 +19,7 @@ import {map} from "rxjs/internal/operators";
     templateUrl: './file.component.html',
     styleUrls: ['./file.component.scss'],
 })
-export class FileComponent implements OnInit, CanComponentDeactivate {
+export class FileComponent{
     public formdata;
     public tableArray = [];
     public categoryArr = [];
