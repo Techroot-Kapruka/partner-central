@@ -2,7 +2,8 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {CategoryReportComponent} from './category-report/category-report.component';
 import {ProductReportComponent} from './product-report/product-report.component';
-import {VendorReportComponent} from "./vendor-report/vendor-report.component";
+import {VendorReportComponent} from './vendor-report/vendor-report.component';
+import {ItemwiseShipmentReportComponent} from './itemwise-shipment-report/itemwise-shipment-report.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,14 @@ const routes: Routes = [
         data: {
           title: 'Supplier Report',
           breadcrumb: 'Supplier Report'
+        }
+      },
+      {
+        path: 'itemwise-shipment-report',
+        component: ItemwiseShipmentReportComponent,
+        data: {
+          title: 'Item Wise Shipment',
+          breadcrumb: 'Item Wise Shipment'
         }
       },
     ]

@@ -8,13 +8,15 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ProductReportComponent } from './product-report/product-report.component';
 import { VendorReportComponent } from './vendor-report/vendor-report.component';
+import { ItemwiseShipmentReportComponent } from './itemwise-shipment-report/itemwise-shipment-report.component';
 
 
 @NgModule({
   declarations: [
     CategoryReportComponent,
     ProductReportComponent,
-    VendorReportComponent
+    VendorReportComponent,
+    ItemwiseShipmentReportComponent
   ],
   imports: [
     CommonModule,
