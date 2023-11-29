@@ -98,15 +98,30 @@
 
 
         </td>
+<!--        <td *ngFor="let header of headers"-->
+<!--            style="position: relative; padding-bottom: 50px;"-->
+<!--            [id]="removeSpacesFromString(header)+'_'+i"-->
+<!--            (dblclick)="popUpEditActive(i+1, header, tbleArray[header])"-->
+<!--        >-->
+<!--          {{ tbleArray[header] }}-->
+<!--          <i class="fa fa-edit edit-icon" [hidden]="checkEditRestrictFeild(header)"-->
+<!--             (click)="popUpEditActive(i+1, header, tbleArray[header])"></i>-->
+<!--        </td>-->
         <td *ngFor="let header of headers"
             style="position: relative; padding-bottom: 50px;"
             [id]="removeSpacesFromString(header)+'_'+i"
-            (dblclick)="popUpEditActive(i+1, header, tbleArray[header])"
-        >
-          {{ tbleArray[header] }}
+            (dblclick)="popUpEditActive(i+1, header, tbleArray[header])">
+          <ng-container *ngIf="header === 'Variations'; else showNormalData">
+            {{ hideSeparator(tbleArray[header]) }}
+          </ng-container>
+          <ng-template #showNormalData>
+            {{ tbleArray[header] }}
+          </ng-template>
           <i class="fa fa-edit edit-icon" [hidden]="checkEditRestrictFeild(header)"
              (click)="popUpEditActive(i+1, header, tbleArray[header])"></i>
         </td>
+
+
 
         <!--        <td style="position: relative; padding-bottom: 50px;" [id]="'productName_'+i" (dblclick)="popUpEditActive(tbleArray.index, 'Product Name', tbleArray.productName)">{{tbleArray.productName}}-->
         <!--          <i class="fa fa-edit edit-icon" (click)="popUpEditActive(tbleArray.index, 'Product Name', tbleArray.productName)"></i>-->
