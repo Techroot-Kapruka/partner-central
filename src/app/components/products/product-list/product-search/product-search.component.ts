@@ -203,6 +203,7 @@ export class ProductSearchComponent implements OnInit {
       }
 
       const res = {
+        quantity: data.data.product.productVariation[i].quantity,
         cost_price: data.data.product.productVariation[i].cost_price,
         variation_code: data.data.product.productVariation[i].variation_code,
         selling_price: data.data.product.productVariation[i].selling_price,
