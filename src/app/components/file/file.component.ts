@@ -69,6 +69,7 @@ export class FileComponent{
     showSavedElements = true;
     disableSaveButton = false;
     uploadComplete = false;
+    attributeArray = [];
 
 
     bioSection = new FormGroup({
@@ -129,8 +130,7 @@ export class FileComponent{
                 break;
             }
             case 'MARGIN': {
-                this.editInputType = 'number';
-                return
+                this.popUpEditClose();
                 break;
             }
             default: {
@@ -312,8 +312,6 @@ export class FileComponent{
             payload['image4'] = 'image4';
             payload['image5'] = 'image5';
             payload['index'] = index;
-            console.log(payload)
-            console.log(this.headers)
             this.tableArray.push(payload);
         }
         this.excelUploaded = true
@@ -535,6 +533,45 @@ export class FileComponent{
         return value.split(",");
     }
 
+    capitalizeFirstLetter(input: string): string {
+        return input.replace(/\b\w/g, match => match.toUpperCase());
+    }
+
+    async extractVariations(input: string): Promise<{ [color: string]: string[] }> {
+        return new Promise(resolve => {
+            const pairs = input.split('|').filter(pair => pair.trim() !== '');
+
+            const variationsByColor = {};
+
+            pairs.forEach(pair => {
+                const [size, color] = pair.trim().split(' ');
+
+                if (!variationsByColor[color]) {
+                    variationsByColor[color] = [];
+                }
+
+                variationsByColor[color].push(size);
+            });
+
+            resolve(variationsByColor);
+        });
+    }
+
+    async getAllVariationColors() {
+        return new Promise(resolve => {
+            let variationColors;
+            this.productService.getAllColorsForVariation().subscribe(
+                data => {
+                    console.log(data.data)
+                    variationColors = data.data;
+                    resolve(variationColors);
+                }
+            );
+            console.log(variationColors)
+
+        });
+    }
+
     async bulkProductSave(event: Event) {
         this.disableSaveButton = true;
         this.needVerification = false;
@@ -546,9 +583,12 @@ export class FileComponent{
                 this.catCodeSelected = item.sellerIncome !== 0;
             }
             const observables: Observable<any>[] = [];
+
+
             for (let table of this.tableArray) {
+                this.attributeArray = [];
                 //variation is now always NA for development
-                table.variations = 'NA';
+                // table.variations = 'NA';
 
                 document.getElementById(`status_${table.index}`).innerHTML =
                     '<div class="spinner-border text-success spinner-border-sm" role="status">\n' +
@@ -573,53 +613,67 @@ export class FileComponent{
                 //calculate cost price
                 let costPrice = 0;
                 costPrice = this.calculateSellerIncome(this.findCaseInsensitiveFromObj(table, 'Selling price'), (this.findCaseInsensitiveFromObj(table, 'Margin')))
-
+                const attributeFieldsIndexes = this.searchArrayIndices(table, '_Attribute')
                 const productVariation = [];
-                if (this.removeSpacesFromString(this.selectedMainCategory) === this.removeSpacesFromString('CLOTHING') || this.selectedMainCategory === this.removeSpacesFromString('ELECTRONICS')) {
+
+                if (this.removeSpacesFromString(this.selectedMainCategory) === this.removeSpacesFromString('CLOTHING') || this.removeSpacesFromString(this.selectedMainCategory) === this.removeSpacesFromString('ELECTRONICS')) {
+
+
+                    //get attributes
+                    attributeFieldsIndexes.forEach((value) => {
+                        if (table[value] !== 'NA') {
+                            const key = this.capitalizeFirstLetter(value.replace('_Attribute', ''));
+                            const attribute = {[key]: table[value]}
+                            this.attributeArray.push(attribute)
+                        }
+                    })
 
                 }
                 if (
-                    (this.removeSpacesFromString(this.selectedMainCategory) === this.removeSpacesFromString('CLOTHING') || this.selectedMainCategory === this.removeSpacesFromString('ELECTRONICS')) &&
+                    (this.removeSpacesFromString(this.selectedMainCategory) === this.removeSpacesFromString('CLOTHING') || this.removeSpacesFromString(this.selectedMainCategory) === this.removeSpacesFromString('ELECTRONICS')) &&
                     this.removeSpacesFromString(this.findCaseInsensitiveFromObj(table, 'Variations')) !== this.removeSpacesFromString('NA')
                 ) {
-                    const parts: string[] = table.productVariant.split("|");
-                    const sizes: string[] = [];
-                    const colors: string[] = [];
 
-                    for (const part of parts) {
-                        const keyValue: string[] = part.split("=");
-                        if (keyValue.length === 2) {
-                            const key: string = keyValue[0].trim();
-                            const value: string = keyValue[1].trim();
+                    const variationColors: any = await this.getAllVariationColors()
 
-                            if (key === "size") {
-                                sizes.push(...this.parseValues(value));
-                            } else if (key === "color") {
-                                colors.push(...this.parseValues(value));
+
+                    // const variationData = await this.extractVariations(this.findCaseInsensitiveFromObj(table, 'Variations'))
+                    const variationsByColor = await this.extractVariations(this.findCaseInsensitiveFromObj(table, 'Variations'))
+                    // const productVariation = [];
+
+                    for (let color in variationsByColor) {
+                        let colorValue = color
+                        for (let colorNames of variationColors) {
+                            if (colorNames.colorName === color) {
+                                colorValue = colorNames.colorCode;
                             }
                         }
-                    }
-                    for (const color of colors) {
-                        for (const size of sizes) {
-                            const variationp = {
-                                changing_amount: 0,
-                                changing_rate: 0.0,
-                                cost_price: costPrice,
-                                selling_price: this.findCaseInsensitiveFromObj(table, 'Selling price'),
-                                variation: 'Black',
-                                variation_theme: 'color',
-                                variations: [
-                                    {
-                                        theame: 'color',
-                                        theame_value: color
-                                    },
-                                    {
-                                        theame: 'size',
-                                        theame_value: size
-                                    }
-                                ]
+
+                        if (variationsByColor.hasOwnProperty(color)) {
+                            const sizesForColor = variationsByColor[color];
+
+                            for (const size of sizesForColor) {
+                                const variationp = {
+                                    changing_amount: 0,
+                                    changing_rate: 0.0,
+                                    cost_price: costPrice,
+                                    selling_price: this.findCaseInsensitiveFromObj(table, 'Selling price'),
+                                    variation: 'Black',
+                                    variation_theme: 'color',
+                                    variations: [
+                                        {
+                                            theame: 'color',
+                                            theame_value: colorValue
+                                        },
+                                        {
+                                            theame: 'size',
+                                            theame_value: size
+                                        }
+                                    ]
+                                };
+
+                                productVariation.push(variationp);
                             }
-                            productVariation.push(variationp);
                         }
                     }
                 } else {
@@ -667,7 +721,7 @@ export class FileComponent{
                         productKeyword: {
                             keywords: keywords
                         },
-                        productAttributes: []
+                        productAttributes: this.attributeArray
                     }
                     const emptyFile = new File([''], '');
                     //get images
@@ -743,7 +797,6 @@ export class FileComponent{
 
                                 } else if (result.message_status === 'failed') {
                                     // Update the row color for failure
-                                    console.log(result.index)
                                     document.getElementById(`index_${result.index}`).style.color = 'red';
                                     document.getElementById(`index_${result.index}`).classList.add('disabled-row');
                                     document.getElementById(`status_${result.index}`).setAttribute('colspan', '2')
@@ -769,7 +822,6 @@ export class FileComponent{
                             );
                             return of(null);
                         } else {
-                            console.log(results);
                             const allSuccess = results.every((result) => result.message_status === 'Success');
                             if (allSuccess) {
                                 return of(results);
@@ -784,9 +836,7 @@ export class FileComponent{
                     // })
                 ).subscribe(
                     (results) => {
-                        console.log(results)
                         if (results) {
-                            console.log('All products inserted successfully');
                         }
                         this.uploadComplete = true;
                     }
@@ -812,10 +862,34 @@ export class FileComponent{
         }
     }
 
+    // searchArrayIndices(array, searchKey: string, searchString: string): number[] {
+    //     const indices: number[] = [];
+    //
+    //     array.forEach((obj, index) => {
+    //         if (obj.hasOwnProperty(searchKey) && obj[searchKey].includes(searchString)) {
+    //             indices.push(index);
+    //         }
+    //     });
+    //
+    //     return indices;
+    // }
+
+    searchArrayIndices(obj, searchStr: string): string[] {
+        const properties: string[] = [];
+
+        for (const key in obj) {
+            if (obj.hasOwnProperty(key) && key.includes(searchStr)) {
+                properties.push(key);
+            }
+        }
+
+        return properties;
+    }
+
+
     bulkImageSave(event: Event) {
         this.clicked = true;
         event.preventDefault();
-        console.log(this.tableArray);
         // this.uploadImages();
     }
 
@@ -974,6 +1048,10 @@ export class FileComponent{
 
     }
 
+  downloadTemplate(): void {
+    window.open(this.bulkTemplateHref);
+  }
+
     syncWrapper(callback) {
         callback();
     }
@@ -1065,6 +1143,7 @@ export class FileComponent{
                     verified = false;
                 }
 
+              console.log(categoryPath)
                 // Check if margin rate is 0
                 const marginValue = this.findCaseInsensitiveFromObj(table, 'Margin');
                 if (marginValue !== undefined) {
@@ -1077,11 +1156,12 @@ export class FileComponent{
                     errorMessages.push("No Margin Rate Field!");
                     verified = false
                 }
+              console.log(marginValue)
 
                 //check if category path exist
                 let payload = {keyword: categoryPath}
                 const data = await this.categoryService.searchByPath(payload).toPromise();
-
+              console.log(data)
                 if (data.data.pathList[0] === undefined || data.data.pathList[0] === null) {
                     verified = false
                     marginRateDb = 0;
@@ -1124,6 +1204,8 @@ export class FileComponent{
                             verified = false;
                         }
                     } else {
+                      marginRate.className = 'table-danger';
+                      errorMessages.push("Cannot Change Margin Rate");
                         verified = false;
                     }
                 }
@@ -1306,6 +1388,9 @@ export class FileComponent{
     }
 
     checkEditRestrictFeild(field: string) {
+        if (this.removeSpacesFromString(field).includes('attribute')) {
+            return true;
+        }
         switch (this.removeSpacesFromString(field)) {
             case 'margin': {
                 return true;
@@ -1329,7 +1414,6 @@ export class FileComponent{
     async returnCatCodeFromPath(path: string): Promise<string> {
         return this.categoryService.searchByPath({keyword: path}).pipe(
             map(data => {
-                console.log(data);
                 if (data.data !== null) {
                     return data.data.pathList[0].code;
                 } else {

@@ -1,4 +1,24 @@
-<div class="item-wrapper one" xmlns="http://www.w3.org/1999/html">
+<!--<select style="margin-top: 20px" (change) ="changeBulkTemplateOnCategory($event)">-->
+<!--  <option disabled [selected]="true">&#45;&#45;SELECT CATEGORY&#45;&#45;</option>-->
+<!--  <option *ngFor="let category of partnerSpecificCategoryArr"-->
+<!--          [value]="category.catName">{{category.catName}}</option>-->
+<!--</select>-->
+
+<div class="card" style="margin: 20px">
+  <div class="card-header">
+    <h5>Please Select a Category to Upload the Bulk</h5>
+  </div>
+  <div class="card-body">
+    <ng-select [options]="partnerSpecificCategoryArrForTemplate" [multiple]="false" placeholder="Select Category"
+               (selected)="changeBulkTemplateOnCategory($event)"></ng-select>
+    <div *ngIf="bulkTemplateCatSelected" class="download_url">
+      <!--<a [href]="bulkTemplateHref"><i class="fa fa-download">&nbsp; Download the Sample Document-->
+        <!--Template for Bulk Upload {{selectedCategoryForTemplate}}</i></a>-->
+      <button (click)="downloadTemplate()" class="button-66" role="button"> <i class="fa fa-cloud-download" aria-hidden="true"></i> &nbsp; Download the Sample Document {{selectedCategoryForTemplate}}</button>
+    </div>
+  </div>
+</div>
+<div class="item-wrapper one" xmlns="http://www.w3.org/1999/html" *ngIf="bulkTemplateCatSelected">
   <div class="item">
     <div class="item-inner">
       <div class="item-content">
@@ -59,7 +79,7 @@
     <br>
   </div>
   <div class="table-responsive">
-    <table class="table table-bordered">
+    <table class="table table-bordered" style="padding-left: 10px;">
       <thead>
       <tr>
         <th scope="col">No.</th>
@@ -81,14 +101,21 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let tbleArray of tableArray let i = index" [attr.data-index]="i">
-        <td>{{tbleArray.index}}</td>
-        <td>
-          <select [disabled]="showAddImagesElement" (change)="onCategoryChange($event, i, tbleArray.listingPrice)">
-            <option [selected]="true">--SELECT CATEGORY--</option>
-            <option *ngFor="let category of partnerSpecificCategoryArr"
-                    [value]="category.catCode">{{category.catName}}</option>
-          </select>
+      <tr [id]="'index_'+i" *ngFor="let tbleArray of tableArray let i = index" [attr.data-index]="i">
+        <td [id]="'status_'+i">{{i + 1}}</td>
+        <td [id]="'addImageBtn_'+i" *ngIf="showSavedElements">
+          <button [id]="'addImageButton_'+i" class="button-61" (click)="popUpImageActive(i)">Add Images
+          </button>
+
+
+          <!--<button class="button-61" role="button">Add Images</button>-->
+
+
+
+
+
+
+
         </td>
         <td *ngIf="showAddImagesElement">{{ afterSavedArray[i]?.productCode }}</td>
         <td>{{tbleArray.productName}}</td>
@@ -142,18 +169,79 @@
       </tr>
       </tbody>
     </table>
+    <ng-template #imagePopup let-modal>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Add Images for product: <h6> {{productNameModal}} </h6> </h4>
+        </div>
+        <div class="modal-body">
+          <table class="table">
+            <td>
+              <div class="box-input-file" style="position: relative; color: #00c292">
+                <input type="file" style="display: none;" [id]="'fileInput_' + modalIndex + '_1'" accept="image/jpeg"
+                       required (change)="onFileInputChange($event, modalIndex, 1,modalIndex)">
+                <img class="imgUpload col" [id]="'imgUpload_' + modalIndex + '_1'" alt="Click To Add Image"
+                     [src]="getImageSource(modalIndex + 1, 1)" (click)="openFileInput(modalIndex, 1)">
+
+              </div>
+            </td>
+            <td>
+              <div class="box-input-file" style="position: relative; color: #00c292">
+                <input type="file" style="display: none;" [id]="'fileInput_' + modalIndex + '_2'" accept="image/jpeg"
+                       required (change)="onFileInputChange($event, modalIndex, 2,modalIndex)">
+                <img class="imgUpload col" [id]="'imgUpload_' + modalIndex + '_2'" alt="Click To Add Image"
+                     [src]="getImageSource(modalIndex + 1, 2)" (click)="openFileInput(modalIndex, 2)">
+              </div>
+            </td>
+            <td>
+              <div class="box-input-file" style="position: relative; color: #00c292">
+                <input type="file" style="display: none;" [id]="'fileInput_' + modalIndex + '_3'" accept="image/jpeg"
+                       required (change)="onFileInputChange($event, modalIndex, 3,modalIndex)">
+                <img class="imgUpload col" [id]="'imgUpload_' + modalIndex + '_3'" alt="Click To Add Image"
+                     [src]="getImageSource(modalIndex + 1, 3)" (click)="openFileInput(modalIndex, 3)">
+              </div>
+            </td>
+            <td>
+              <div class="box-input-file" style="position: relative; color: #00c292">
+                <input type="file" style="display: none;" [id]="'fileInput_' + modalIndex + '_4'" accept="image/jpeg"
+                       required (change)="onFileInputChange($event, modalIndex, 4,modalIndex)">
+                <img class="imgUpload col" [id]="'imgUpload_' + modalIndex + '_4'" alt="Click To Add Image"
+                     [src]="getImageSource(modalIndex + 1, 4)" (click)="openFileInput(modalIndex, 4)">
+              </div>
+            </td>
+            <td>
+              <div class="box-input-file" style="position: relative; color: #00c292">
+                <input type="file" style="display: none;" [id]="'fileInput_' + modalIndex + '_5'" accept="image/jpeg"
+                       required (change)="onFileInputChange($event, modalIndex, 5,modalIndex)">
+                <img class="imgUpload col" [id]="'imgUpload_' + modalIndex + '_5'" alt="Click To Add Image"
+                     [src]="getImageSource(modalIndex + 1, 5)" (click)="openFileInput(modalIndex, 5)">
+              </div>
+            </td>
+          </table>
 
 
 
   </div>
 </div>
 
-<div class="upload-btn">
-  <button class="btn btn-primary"  *ngIf="!uploaded && showAllElements"
-          (click)="bulkProductSave($event)" style="width: 306px;">Upload Products
+<div class="upload-btn" *ngIf="excelUploaded">
+        <!--<button class="btn btn-primary" *ngIf="!uploaded && showAllElements" [disabled]="clicked"-->
+              <!--(click)="bulkProductSave($event)" style="width: 306px;">Add Images-->
+
+    <!--</button>-->
+  <button [id]="'btn_status'" type="button" class="button-37" *ngIf="!uploaded && needVerification"
+          (click)="syncWrapper(verifyDetails())" style="width: 306px;">
+    <span>
+    <div *ngIf="verifying" class="spinner-border spinner-border-sm" role="status"></div><i [id]="'btn_status_icon'"
+                                                                                           *ngIf="!verifying"
+                                                                                           class="fa fa-check-circle-o"></i>
+  </span> Verify Details
   </button>
-  <button class="btn btn-success" *ngIf="showAddImagesElement" (click)="bulkImageSave($event)"
-          style="width: 306px;">Save Bulk
+
+  <!--<button class="button-37" role="button"><i class="fa fa-check-circle-o"></i> &nbsp;  Verify Details</button>-->
+
+  <button class="button-38" *ngIf="!needVerification && !disableSaveButton" [disabled]="disableSaveButton" (click)="bulkProductSave($event)"
+          style="width: 306px;">Save Products
   </button>
 </div>
 <!--<form [formGroup]="bioSection" (ngSubmit)="callingFunction()">-->
