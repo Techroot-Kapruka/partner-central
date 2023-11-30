@@ -324,11 +324,20 @@ export class EditPartnerCategoryComponent implements OnInit {
     this.getAllCategoryForRequest();
     this.changeMainCategory();
     this.changeSubCategory();
-    Swal.fire(
-      'Good job...!',
-      data.message,
-      'success'
-    );
+    if (data.message_status === 'Success'){
+      Swal.fire(
+        'Good job...!',
+        data.message,
+        'success'
+      );
+    } else {
+      Swal.fire(
+        'Oops...!',
+        data.message,
+        'error'
+      );
+    }
+
     modal.dismiss('Cross click');
     this.getSelectedPartner(this.ids);
   }
