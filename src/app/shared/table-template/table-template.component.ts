@@ -62,7 +62,7 @@ export class TableTemplateComponent implements OnInit {
     // } else if (sessionStorage.getItem('userRole') === 'ROLE_STORES_MANAGER') {
     //   this.qaTables = true;
     // }
-    const Admin= sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN'
+    const Admin= sessionStorage.getItem('userRole') === 'ROLE_ADMIN'
     if (Admin){
       setTimeout(() => {
         if (this.DataArray.length === 0) {

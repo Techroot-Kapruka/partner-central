@@ -132,7 +132,8 @@ export class AddShipmentComponent implements OnInit {
         let productValueIndex: number;
         let proValueIndex = '';
         if (this.isOnDemandShipment) {
-            proValueIndex = '';
+            productValueIndex = 0;
+          proValueIndex = '0'
         } else {
             // productValueIndex = (document.getElementById('SelectedProduct') as HTMLInputElement).value;
             productValueIndex = this.partnerProductArray.findIndex(item => item.product_code === selectedValue);
@@ -176,7 +177,8 @@ export class AddShipmentComponent implements OnInit {
             txtGrossAmount: new FormControl(''),
             txtTotalSellerIncome: new FormControl(''),
             txtChangingAmount: new FormControl(''),
-            txtChangingRate: new FormControl('')
+            txtChangingRate: new FormControl(''),
+          txtIsPriceChange: new FormControl('')
         });
     }
 
