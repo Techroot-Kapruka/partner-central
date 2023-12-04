@@ -163,6 +163,9 @@ export class MakeReservedComponent implements OnInit {
       this.tableDataForPayloard.push(cr);
     }
 
+    this.allRejectedQty = Number((document.getElementById('txtAllRejectedQty') as HTMLInputElement).value);
+    this.allApprovedQty = Number((document.getElementById('txtAllApprovedQty') as HTMLInputElement).value);
+
     let payLoard = {
 
       vendor_code: this.partnerId,
