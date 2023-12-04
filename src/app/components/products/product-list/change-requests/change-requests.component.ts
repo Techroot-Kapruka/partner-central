@@ -114,10 +114,10 @@ export class ChangeRequestsComponent implements OnInit {
         requestedDate: data.data[i].requestedDate,
         title: data.data[i].title,
         categoryPath: data.data[i].catePath,
-        action: ''
+        action: '',
+        image: data.data[i].image1.split('/product')[1],
 
       };
-
       this.product_code = data.data[i].productCode;
       this.unique_code = data.data[i].editId;
 
