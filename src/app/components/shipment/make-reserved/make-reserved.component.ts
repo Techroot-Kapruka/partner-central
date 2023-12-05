@@ -163,6 +163,9 @@ export class MakeReservedComponent implements OnInit {
       this.tableDataForPayloard.push(cr);
     }
 
+    this.allRejectedQty = Number((document.getElementById('txtAllRejectedQty') as HTMLInputElement).value);
+    this.allApprovedQty = Number((document.getElementById('txtAllApprovedQty') as HTMLInputElement).value);
+
     let payLoard = {
 
       vendor_code: this.partnerId,
@@ -227,6 +230,7 @@ export class MakeReservedComponent implements OnInit {
 
     let qty = Number(this.tableData[i].quantity);
     let rejectedQty = (document.getElementById('txtRejectedQty' + i) as HTMLInputElement).value;
+
     if (parseInt(rejectedQty) < 0) {
       Swal.fire(
         'Whoops...!',
@@ -234,18 +238,22 @@ export class MakeReservedComponent implements OnInit {
         'question'
       );
       (document.getElementById('txtRejectedQty' + i) as HTMLInputElement).value = '0';
-    } else if (parseInt(rejectedQty) > qty) {
-      Swal.fire(
-        'Whoops...!',
-        'number should be below ' + qty,
-        'question'
-      );
-
-      (document.getElementById('txtRejectedQty' + i) as HTMLInputElement).value = '0';
-
-    } else if (rejectedQty == '') {
 
     } else {
+      if (rejectedQty === '') {
+        (document.getElementById('txtRejectedQty' + i) as HTMLInputElement).value = '0';
+        rejectedQty = '0';
+
+      } else if (parseInt(rejectedQty) > qty) {
+        Swal.fire(
+          'Whoops...!',
+          'number should be below ' + qty,
+          'question'
+        );
+        (document.getElementById('txtApprovedQty' + i) as HTMLInputElement).value = this.tableData[i].quantity;
+        (document.getElementById('txtRejectedQty' + i) as HTMLInputElement).value = '0';
+        rejectedQty = '0';
+      }
 
       let Qty = (document.getElementById('Qty' + i) as HTMLInputElement).value;
       let approvedQty = parseInt(Qty) - parseInt(rejectedQty);
@@ -281,9 +289,7 @@ export class MakeReservedComponent implements OnInit {
       this.shipmentForm.get('approved_Amount').setValue(this.grossAmount);
       this.shipmentForm.get('rejected_Amount').setValue(this.allRejectedAmount);
       (document.getElementById('txtAllApprovedQty') as HTMLInputElement).value = this.allApprovedQty.toString();
-
     }
-
   }
 
 
@@ -298,5 +304,9 @@ export class MakeReservedComponent implements OnInit {
       (document.getElementById('txtRejectedQty' + i) as HTMLInputElement).value = '0';
       (document.getElementById('txtApprovedQty' + i) as HTMLInputElement).value = this.tableData[i].quantity.toString();
     }
+  }
+
+  selectAllText(inputElement: HTMLInputElement): void {
+    inputElement.select();
   }
 }
