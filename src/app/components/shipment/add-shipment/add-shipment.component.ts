@@ -349,7 +349,7 @@ export class AddShipmentComponent implements OnInit {
       this.createFormConteolerForShipment();
     } else {
       if (this.isOnDemandShipment) {
-        console.log(data.data.length)
+        console.log('AAAAAA : '+data.data.length)
         for (let i = 0; i < data.data.length; i++) {
           if (this.sharedData.some(item => item.productId === data.data[i].product_code)) {
             console.log('hi')
@@ -603,7 +603,7 @@ export class AddShipmentComponent implements OnInit {
       this.allQty = 0;
       if (this.isOnDemandShipment) {
         for (let i = 0; i < this.sharedData.length; i++) {
-          console.log(this.sharedData.length)
+          console.log(this.sharedData)
           this.allQty += parseInt(this.quantityMap.get(i));
           const sellerIncome = this.sharedData[i].costPrice * this.sharedData[i].size;
           const grossAmount = this.sharedData[i].sellingPrice * this.sharedData[i].size;
@@ -611,11 +611,11 @@ export class AddShipmentComponent implements OnInit {
           const insertTabelData = {
             product_code: this.sharedData[i].productId,
             product_name: tempProductName,
-            cost_price: dataForm.txtCostPrice,
+            cost_price: this.sharedData[i].costPrice,
             quantity: this.sharedData[i].size,
             changing_amount: dataForm.txtChangingAmount,
-            changing_rate: dataForm.txtChangingRate,
-            selling_price: dataForm.txtSellingPrice,
+            changing_rate: this.sharedData[i].changingRate,
+            selling_price: this.sharedData[i].sellingPrice,
             seller_income: sellerIncome.toString(),
             amount: grossAmount.toString(),
             color: this.productVariationArrayForClothes[0].color,
