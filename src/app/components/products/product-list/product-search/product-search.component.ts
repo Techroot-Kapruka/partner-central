@@ -150,13 +150,7 @@ export class ProductSearchComponent implements OnInit {
     this.elementDescription = this.sanitizer.bypassSecurityTrustHtml(data.data.product.productDescription.description);
     this.elementAvailableStock = data.data.product.in_stock;
     this.elementImage = (data.data.product.productImage.image1 && data.data.product.productImage.image1 ? data.data.product.productImage.image1.split('/product')[1] : '') || '';
-    // if (data.data.product.is_active === 0) {
-    //   this.elementStatus = 'Available'
-    //   this.badge = 'badge-success'
-    // }else {
-    //   this.elementStatus = 'Out of Stock'
-    //   this.badge = 'badge-danger'
-    // }
+
     switch (data.data.product.is_active) {
       case 1:
         this.elementStatus = 'Available';
@@ -187,6 +181,11 @@ export class ProductSearchComponent implements OnInit {
         this.elementStatus = '';
         this.badge = 'badge';
         this.editOption = true;
+    }
+    if(data.data.product.is_active === 1 && data.data.product.in_stock == 0){
+      this.elementStatus = 'Out of Stock';
+      this.badge = 'badge-warning';
+      this.editOption = false;
     }
 
     // this.elementHistory = 'Exotic Perfumes & Cosmetics - Create Product - Sat Nov 11 12:14:29 IST 2023 <hr size=1>'
