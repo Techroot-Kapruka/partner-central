@@ -2,24 +2,23 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {DigitalListComponent} from './list-product/digital-list.component';
 import {DigitalAddComponent} from './add-product/digital-add.component';
-import {EditProductsComponent} from "./edit-products/edit-products.component";
-import {ViewProductComponent} from "./view-product/view-product.component";
-import {ApproveProductComponent} from "./approve-product/approve-product.component";
+import {EditProductsComponent} from './edit-products/edit-products.component';
+import {ViewProductComponent} from './view-product/view-product.component';
+import {ApproveProductComponent} from './approve-product/approve-product.component';
 import {QaApprovalViewComponent} from './qa-approval-view/qa-approval-view.component';
 import {QaNormalViewComponent} from './qa-normal-view/qa-normal-view.component';
-import {ProductViewComponent} from "./product-view/product-view.component";
-import {ApproveEditProductComponent} from "./approve-edit-product/approve-edit-product.component";
-import {
-  ApproveEditImageComponentComponent
-} from "./approve-edit-image-component/approve-edit-image-component.component";
-import {AnalyticsProductService} from "../../shared/service/analytics-product.service";
-import {AnalyticsProductViewComponent} from "./analytics-product-view/analytics-product-view.component";
-import {ChangeRequestsComponent} from "./product-list/change-requests/change-requests.component";
-import {ProductSearchComponent} from "./product-list/product-search/product-search.component";
-import {NewAdditionsComponent} from "./product-list/new-additions/new-additions.component";
-import {ProductApproveViewComponent} from "./product-approve-view/product-approve-view.component";
-import {AuthGuard} from "../../auth.guard";
-
+import {ProductViewComponent} from './product-view/product-view.component';
+import {ApproveEditProductComponent} from './approve-edit-product/approve-edit-product.component';
+import {ApproveEditImageComponentComponent} from './approve-edit-image-component/approve-edit-image-component.component';
+import {AnalyticsProductService} from '../../shared/service/analytics-product.service';
+import {AnalyticsProductViewComponent} from './analytics-product-view/analytics-product-view.component';
+import {ChangeRequestsComponent} from './product-list/change-requests/change-requests.component';
+import {ProductSearchComponent} from './product-list/product-search/product-search.component';
+import {NewAdditionsComponent} from './product-list/new-additions/new-additions.component';
+import {ProductApproveViewComponent} from './product-approve-view/product-approve-view.component';
+import {AuthGuard} from '../../auth.guard';
+import {ResolveGuard} from '../../services/resolve.guard';
+import {DeclinedProductComponent} from './declined-product/declined-product.component';
 
 const routes: Routes = [
   {
@@ -148,6 +147,12 @@ const routes: Routes = [
           title: 'Product Search',
           breadcrumb: 'Approve image Edited Product'
         },
+        canActivate: [AuthGuard]
+      },
+      {
+        path: 'declined-product/:id',
+        component: DeclinedProductComponent,
+        resolve: {data: ResolveGuard},
         canActivate: [AuthGuard]
       }
     ]

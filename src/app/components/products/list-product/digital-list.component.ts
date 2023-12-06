@@ -328,76 +328,13 @@ export class DigitalListComponent implements OnInit {
                 break;
             case 3:
                 // delete
-                const {value: text} = await Swal.fire({
-                    title: 'Enter a comment',
-                    input: 'text',
-                    inputPlaceholder: 'Enter your comment here',
-                    inputValidator: (value) => {
-                        if (!value) {
-                            return 'You need to write something!';
-                        }
-                    },
-                    allowOutsideClick: false,
-
-                });
-                if (text) {
-                    Swal.fire({
-                        title: 'Do you want to save the changes?',
-                        showCancelButton: true,
-                        confirmButtonText: 'Save',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            const payLoad = {
-                                product_code: productCode,
-                                rejecteddBy: sessionStorage.getItem('userId'),
-                                rejectReason: text
-                            };
-
-                            this.productService.deleteProduct(payLoad).subscribe(
-                                data => this.getAllProduct(),
-                                error => (error.status)
-                            );
-
-                            Swal.fire('Saved!', '', 'success');
-                        } else if (result.isDenied) {
-                            Swal.fire('Changes are not saved', '', 'info');
-                        }
-                    });
-                }
+                const proCode = 'productList-Delete-' + productCode;
+                this.router.navigate(['declined-product/' + proCode]);
                 break;
             case 4:
                 // out
-                Swal.fire({
-                    title: 'Are you sure?',
-                    html: 'This action will make your product temporary marked Out Of Stock from the Kapruka Website.',
-                    icon: 'info',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes',
-                    cancelButtonText: 'No',
-                }).then((result) => {
-                    let payLoad;
-                    if (this.filteredProducts.length > 0) {
-                        payLoad = {
-                            product_code: productCode,
-                            updatedBy: sessionStorage.getItem('userId')
-                        };
-                    } else {
-                        payLoad = {
-                            product_code: productCode,
-                            updatedBy: sessionStorage.getItem('userId')
-                        };
-                    }
-                    if (result.isConfirmed) {
-                        this.productService.updateProductStock(payLoad).subscribe(
-                            error => (error.status)
-                        );
-                        Swal.fire('Done!', '', 'success').then((result) => {
-                            this.getAllProduct();
-                        });
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        Swal.fire('Cancelled', '', 'error');
-                    }
-                });
+                const pro_Code = 'productList-Edit-' + productCode;
+                this.router.navigate(['declined-product/' + pro_Code]);
                 break;
             default:
                 console.log("Invalid");
