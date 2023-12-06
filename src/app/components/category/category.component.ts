@@ -4,7 +4,7 @@ import {CategoryService} from '../../shared/service/category.service';
 import Swal from 'sweetalert2';
 import {Router} from "@angular/router";
 import {AuthGuard} from "../../auth.guard";
-import { NgbTabChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import {NgbTabChangeEvent} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-category',
@@ -37,6 +37,7 @@ export class CategoryComponent implements OnInit {
   public subSubSubCatAarray = [];
   public subcategoryArray = [];
   public subSubSubCategoryArray = [];
+  marginRate = 0;
 
   public tempCategoryObj;
 
@@ -58,6 +59,7 @@ export class CategoryComponent implements OnInit {
       data => this.manageLatestCategory(data)
     );
   }
+
   manageLatestCategory(data) {
     this.proMainCat = [];
     if (data.data != null) {
@@ -128,7 +130,8 @@ export class CategoryComponent implements OnInit {
     this.selected.splice(0, this.selected.length);
     this.selected.push(...selected);
   }
-  categoryValidation(){
+
+  categoryValidation() {
     this.clearForm();
 
     var nameError = document.getElementById('nameError');
@@ -140,65 +143,93 @@ export class CategoryComponent implements OnInit {
     var errorCount = 0;
 
     if (this.accountForm.value.categoryName === '' && this.accountForm.value.description === '' && this.accountForm.value.price_rate === '') {
-      nameInput.style.border="1px solid red";
-      priceInput.style.border="1px solid red";
-      descInput.style.border="1px solid red";
+      nameInput.style.border = "1px solid red";
+      priceInput.style.border = "1px solid red";
+      descInput.style.border = "1px solid red";
       Swal.fire(
         'Whoops...!',
         'Please fill the required fields!',
         'error'
       );
       return false;
-    }else {
-      if(this.accountForm.value.categoryName === ''){
-        nameError.innerHTML="Please enter a category name";
-        nameInput.style.border="1px solid red";
+    } else {
+      if (this.accountForm.value.categoryName === '') {
+        nameError.innerHTML = "Please enter a category name";
+        nameInput.style.border = "1px solid red";
         nameError.style.display = "inline";
-        errorCount ++;
-      }else{
+        errorCount++;
+      } else {
         var catName = this.accountForm.value.categoryName.trim();
         const regex = /^[a-zA-Z\s]+$/;
 
         if (!(catName.length <= 100 && regex.test(catName))) {
-          nameError.innerHTML="The Category Name must consist of fewer than 100 letters";
-          nameInput.style.border="1px solid red";
+          nameError.innerHTML = "The Category Name must consist of fewer than 100 letters";
+          nameInput.style.border = "1px solid red";
           nameError.style.display = "inline";
-          errorCount ++;
+          errorCount++;
         }
       }
-      if(this.accountForm.value.price_rate === ''){
-        priceError.innerHTML="Please enter a Price Rate";
-        priceInput.style.border="1px solid red";
+      if (this.accountForm.value.price_rate === '') {
+        priceError.innerHTML = "Please enter a Price Rate";
+        priceInput.style.border = "1px solid red";
         priceError.style.display = "inline";
-        errorCount ++;
-      }else{
+        errorCount++;
+      } else {
         if (/^\d+$/.test(this.accountForm.value.price_rate)) {
           var priceDigit = parseFloat(this.accountForm.value.price_rate);
           if (!(!isNaN(priceDigit) && priceDigit > 0 && priceDigit <= 100)) {
-            priceError.innerHTML="Price must be a number between 0 to 100";
+            priceError.innerHTML = "Price must be a number between 0 to 100";
             priceError.style.display = "inline";
-            priceInput.style.border="1px solid red";
-            errorCount ++;
+            priceInput.style.border = "1px solid red";
+            errorCount++;
           }
         } else {
-          priceError.innerHTML="Price must be a number between 0 to 100";
+          priceError.innerHTML = "Price must be a number between 0 to 100";
           priceError.style.display = "inline";
-          priceInput.style.border="1px solid red";
-          errorCount ++;
+          priceInput.style.border = "1px solid red";
+          errorCount++;
         }
       }
       var desc = this.accountForm.value.description.trim();
       if (desc.length > 200) {
         descError.style.display = "inline";
-        descInput.style.border="1px solid red";
-        errorCount ++;
+        descInput.style.border = "1px solid red";
+        errorCount++;
       }
     }
     return errorCount <= 0;
   }
 
-  subCategoryValidation(buttonvalue){
+  async onCategoryChange($event, changingCat: string) {
+    let catCode = $event.target.value;
+    if ($event.target.value.includes(":")) {
+      catCode = $event.target.value.split(':')[1].trim();
+    }
+    const response = await this.categoryService.getCategoryByCode({code: catCode}).toPromise();
+    if (response.data !== null) {
+      if (response.data.selling_price_margin > 0) {
+        switch (changingCat) {
+          case 'sub': {
+            (document.getElementById('txt_sub_price_rate') as HTMLInputElement).value = response.data.selling_price_margin;
+            break;
+          }
+          case 'sub-sub': {
+            (document.getElementById('txt_subs_price_rate') as HTMLInputElement).value = response.data.selling_price_margin;
+            break;
+          }
+          case 'sub-sub-sub': {
+            (document.getElementById('txt_subsub_price_rate') as HTMLInputElement).value = response.data.selling_price_margin;
+            break;
+          }
+        }
+
+      }
+    }
+  }
+
+  subCategoryValidation(buttonvalue) {
     this.clearForm();
+    this.categoryForm.value.subPricerate = (document.getElementById('txt_sub_price_rate') as HTMLInputElement).value
 
     var nameError = document.getElementById('subNameError');
     var priceError = document.getElementById('subPriceError');
@@ -210,73 +241,73 @@ export class CategoryComponent implements OnInit {
     var priceInput = document.getElementById('txt_sub_price_rate');
     var descInput = document.getElementById('validationCustom2443');
     var errorCount = 0;
-
     if (this.categoryForm.value.catCode === '' && this.categoryForm.value.subCategoryName === ''
-      && this.categoryForm.value.subDescription === '' && this.categoryForm.value.subPricerate==='') {
-      categoryInput.style.border="1px solid red";
-      nameInput.style.border="1px solid red";
-      priceInput.style.border="1px solid red";
-      descInput.style.border="1px solid red";
+      && this.categoryForm.value.subDescription === '' && this.categoryForm.value.subPricerate === '') {
+      categoryInput.style.border = "1px solid red";
+      nameInput.style.border = "1px solid red";
+      priceInput.style.border = "1px solid red";
+      descInput.style.border = "1px solid red";
       Swal.fire(
         'Whoops...!',
         'Please fill the required fields!',
         'error'
       );
       return false;
-    }else {
-      if(this.categoryForm.value.catCode === '' && buttonvalue==0){
-        categoryInput.style.border="1px solid red";
+    } else {
+      if (this.categoryForm.value.catCode === '' && buttonvalue == 0) {
+        categoryInput.style.border = "1px solid red";
         categoryError.style.display = "inline";
-        errorCount ++;
+        errorCount++;
       }
-      if(this.categoryForm.value.subCategoryName === ''){
+      if (this.categoryForm.value.subCategoryName === '') {
         nameError.style.display = "inline";
-        nameInput.style.border="1px solid red";
-        errorCount ++;
-      }else{
+        nameInput.style.border = "1px solid red";
+        errorCount++;
+      } else {
         var subCatName = this.categoryForm.value.subCategoryName.trim();
         const regex = /^[a-zA-Z\s]+$/;
 
         if (!(subCatName.length <= 100 && regex.test(subCatName))) {
-          nameError.innerHTML="Sub Category name must consist of fewer than 100 letters";
-          nameInput.style.border="1px solid red";
+          nameError.innerHTML = "Sub Category name must consist of fewer than 100 letters";
+          nameInput.style.border = "1px solid red";
           nameError.style.display = "inline";
-          errorCount ++;
+          errorCount++;
         }
       }
-      if(this.categoryForm.value.subPricerate === ''){
-        priceError.innerHTML="Please enter a Price Rate";
-        priceInput.style.border="1px solid red";
+      if (this.categoryForm.value.subPricerate === '') {
+        priceError.innerHTML = "Please enter a Price Rate";
+        priceInput.style.border = "1px solid red";
         priceError.style.display = "inline";
-        errorCount ++;
-      }else{
+        errorCount++;
+      } else {
         if (/^\d+$/.test(this.categoryForm.value.subPricerate)) {
           var priceDigit = parseFloat(this.categoryForm.value.subPricerate);
           if (!(!isNaN(priceDigit) && priceDigit > 0 && priceDigit <= 100)) {
-            priceError.innerHTML="Price must be a number between 0 to 100";
+            priceError.innerHTML = "Price must be a number between 0 to 100";
             priceError.style.display = "inline";
-            priceInput.style.border="1px solid red";
-            errorCount ++;
+            priceInput.style.border = "1px solid red";
+            errorCount++;
           }
         } else {
-          priceError.innerHTML="Price must be a number between 0 to 100";
+          priceError.innerHTML = "Price must be a number between 0 to 100";
           priceError.style.display = "inline";
-          priceInput.style.border="1px solid red";
-          errorCount ++;
+          priceInput.style.border = "1px solid red";
+          errorCount++;
         }
       }
       var desc = this.categoryForm.value.subDescription.trim();
       if (desc.length > 200) {
         descError.style.display = "inline";
-        descInput.style.border="1px solid red";
-        errorCount ++;
+        descInput.style.border = "1px solid red";
+        errorCount++;
       }
     }
     return errorCount <= 0;
   }
-  subSubCategoryValidation(buttonvalue){
-    this.clearForm();
 
+  subSubCategoryValidation(buttonvalue) {
+    this.clearForm();
+    this.subSubCategory.value.subsubPricerate = (document.getElementById('txt_subs_price_rate') as HTMLInputElement).value
     var nameError = document.getElementById('subSubNameError');
     var priceError = document.getElementById('subSubPriceError');
     var descError = document.getElementById('subSubDescError');
@@ -292,13 +323,13 @@ export class CategoryComponent implements OnInit {
     var errorCount = 0;
 
     if (this.subSubCategory.value.mainCategoryMain === '' && this.subSubCategory.value.subCategorynameCt === ''
-      && this.subSubCategory.value.subSubCategoryDescription === '' && this.subSubCategory.value.subSubCategoryName===''
-      && this.subSubCategory.value.subsubPricerate==='') {
-      categoryInput.style.border="1px solid red";
-      nameInput.style.border="1px solid red";
-      priceInput.style.border="1px solid red";
-      descInput.style.border="1px solid red";
-      subCategoryInput.style.border="1px solid red";
+      && this.subSubCategory.value.subSubCategoryDescription === '' && this.subSubCategory.value.subSubCategoryName === ''
+      && this.subSubCategory.value.subsubPricerate === '') {
+      categoryInput.style.border = "1px solid red";
+      nameInput.style.border = "1px solid red";
+      priceInput.style.border = "1px solid red";
+      descInput.style.border = "1px solid red";
+      subCategoryInput.style.border = "1px solid red";
 
       Swal.fire(
         'Whoops...!',
@@ -306,71 +337,71 @@ export class CategoryComponent implements OnInit {
         'error'
       );
       return false;
-    }else {
-      if(this.subSubCategory.value.mainCategoryMain === '' && buttonvalue==0){
+    } else {
+      if (this.subSubCategory.value.mainCategoryMain === '' && buttonvalue == 0) {
         categoryError.innerHTML = "Please select a Category";
-        categoryInput.style.border="1px solid red";
+        categoryInput.style.border = "1px solid red";
         categoryError.style.display = "inline";
-        errorCount ++;
+        errorCount++;
       }
-      if( buttonvalue==0){
-        if(this.subSubCategory.value.subCategorynameCt === ''){
+      if (buttonvalue == 0) {
+        if (this.subSubCategory.value.subCategorynameCt === '') {
           subCategoryError.innerHTML = "Please select a Sub Category";
           subCategoryError.style.display = "inline";
-          subCategoryInput.style.border="1px solid red";
-          errorCount ++;
+          subCategoryInput.style.border = "1px solid red";
+          errorCount++;
         }
       }
-      if(this.subSubCategory.value.subSubCategoryName === ''){
+      if (this.subSubCategory.value.subSubCategoryName === '') {
         nameError.innerHTML = "Please provide a Sub-Sub Category Name";
         nameError.style.display = "inline";
-        nameInput.style.border="1px solid red";
-        errorCount ++;
-      }
-      else{
+        nameInput.style.border = "1px solid red";
+        errorCount++;
+      } else {
         var subCatName = this.subSubCategory.value.subSubCategoryName.trim();
         const regex = /^[a-zA-Z\s]+$/;
 
         if (!(subCatName.length <= 100 && regex.test(subCatName))) {
-          nameError.innerHTML="Sub-Sub Category Name must consist of fewer than 100 letters";
-          nameInput.style.border="1px solid red";
+          nameError.innerHTML = "Sub-Sub Category Name must consist of fewer than 100 letters";
+          nameInput.style.border = "1px solid red";
           nameError.style.display = "inline";
-          errorCount ++;
+          errorCount++;
         }
       }
-      if(this.subSubCategory.value.subsubPricerate === ''){
-        priceError.innerHTML="Please enter a Price Rate";
-        priceInput.style.border="1px solid red";
+      if (this.subSubCategory.value.subsubPricerate === '') {
+        priceError.innerHTML = "Please enter a Price Rate";
+        priceInput.style.border = "1px solid red";
         priceError.style.display = "inline";
-        errorCount ++;
-      }else{
+        errorCount++;
+      } else {
         if (/^\d+$/.test(this.subSubCategory.value.subsubPricerate)) {
           var priceDigit = parseFloat(this.subSubCategory.value.subsubPricerate);
           if (!(!isNaN(priceDigit) && priceDigit > 0 && priceDigit <= 100)) {
-            priceError.innerHTML="Price Rate must be a number between 0 to 100";
+            priceError.innerHTML = "Price Rate must be a number between 0 to 100";
             priceError.style.display = "inline";
-            priceInput.style.border="1px solid red";
-            errorCount ++;
+            priceInput.style.border = "1px solid red";
+            errorCount++;
           }
         } else {
-          priceError.innerHTML="Price Rate must be a number between 0 to 100";
+          priceError.innerHTML = "Price Rate must be a number between 0 to 100";
           priceError.style.display = "inline";
-          priceInput.style.border="1px solid red";
-          errorCount ++;
+          priceInput.style.border = "1px solid red";
+          errorCount++;
         }
       }
       var desc = this.subSubCategory.value.subSubCategoryDescription.trim();
       if (desc.length > 200) {
         descError.style.display = "inline";
-        descInput.style.border="1px solid red";
-        errorCount ++;
+        descInput.style.border = "1px solid red";
+        errorCount++;
       }
     }
     return errorCount <= 0;
   }
-  subSubSubCategoryValidation(buttonValue){
-    this.clearForm();
 
+  subSubSubCategoryValidation(buttonValue) {
+    this.clearForm();
+    this.subSubSubCategory.value.subsubsubPricerate = (document.getElementById('txt_subsub_price_rate') as HTMLInputElement).value;
     var nameError = document.getElementById('subSubSubNameError');
     var priceError = document.getElementById('subSubSubPriceError');
     var descError = document.getElementById('subSubSubDescError');
@@ -388,14 +419,14 @@ export class CategoryComponent implements OnInit {
     var errorCount = 0;
 
     if (this.subSubSubCategory.value.catCode3 === '' && this.subSubSubCategory.value.SubCatCode3 === ''
-      && this.subSubSubCategory.value.subSubCatCode3 === '' && this.subSubSubCategory.value.subSubSubCategoryName===''
-      && this.subSubSubCategory.value.subSubSubCategoryDescription===''&& this.subSubSubCategory.value.subsubsubPricerate==='') {
-      categoryInput.style.border="1px solid red";
-      nameInput.style.border="1px solid red";
-      priceInput.style.border="1px solid red";
-      descInput.style.border="1px solid red";
-      subCategoryInput.style.border="1px solid red";
-      subSubCategoryInput.style.border="1px solid red";
+      && this.subSubSubCategory.value.subSubCatCode3 === '' && this.subSubSubCategory.value.subSubSubCategoryName === ''
+      && this.subSubSubCategory.value.subSubSubCategoryDescription === '' && this.subSubSubCategory.value.subsubsubPricerate === '') {
+      categoryInput.style.border = "1px solid red";
+      nameInput.style.border = "1px solid red";
+      priceInput.style.border = "1px solid red";
+      descInput.style.border = "1px solid red";
+      subCategoryInput.style.border = "1px solid red";
+      subSubCategoryInput.style.border = "1px solid red";
 
       Swal.fire(
         'Whoops...!',
@@ -403,91 +434,92 @@ export class CategoryComponent implements OnInit {
         'error'
       );
       return false;
-    }else {
-      if(this.subSubSubCategory.value.catCode3 === '' && buttonValue==0){
-        categoryError.innerHTML="Please select a Category";
-        categoryInput.style.border="1px solid red";
+    } else {
+      if (this.subSubSubCategory.value.catCode3 === '' && buttonValue == 0) {
+        categoryError.innerHTML = "Please select a Category";
+        categoryInput.style.border = "1px solid red";
         categoryError.style.display = "inline";
-        errorCount ++;
+        errorCount++;
       }
-      if(buttonValue==0){
-        if(this.subSubSubCategory.value.SubCatCode3 === ''){
+      if (buttonValue == 0) {
+        if (this.subSubSubCategory.value.SubCatCode3 === '') {
           subCategoryError.innerHTML = "Please select a Sub Category";
           subCategoryError.style.display = "inline";
-          subCategoryInput.style.border="1px solid red";
-          errorCount ++;
+          subCategoryInput.style.border = "1px solid red";
+          errorCount++;
         }
       }
-        if(this.subSubSubCategory.value.subSubCatCode3 === ''  && buttonValue==0){
-          subSubCategoryError.innerHTML = "Please select a Sub-Sub Category";
-          subSubCategoryError.style.display = "inline";
-          subSubCategoryInput.style.border="1px solid red";
-          errorCount ++;
-        }
+      if (this.subSubSubCategory.value.subSubCatCode3 === '' && buttonValue == 0) {
+        subSubCategoryError.innerHTML = "Please select a Sub-Sub Category";
+        subSubCategoryError.style.display = "inline";
+        subSubCategoryInput.style.border = "1px solid red";
+        errorCount++;
+      }
 
-      if(this.subSubSubCategory.value.subSubSubCategoryName === ''){
+      if (this.subSubSubCategory.value.subSubSubCategoryName === '') {
         nameError.style.display = "Please provide a Sub-Sub-Sub Category Name";
         nameError.style.display = "inline";
-        nameInput.style.border="1px solid red";
-        errorCount ++;
-      }
-      else{
+        nameInput.style.border = "1px solid red";
+        errorCount++;
+      } else {
         var subCatName = this.subSubSubCategory.value.subSubSubCategoryName.trim();
         const regex = /^[a-zA-Z\s]+$/;
 
         if (!(subCatName.length <= 100 && regex.test(subCatName))) {
-          nameError.innerHTML="Sub-Sub-Sub Category name must consist of fewer than 100 letters";
-          nameInput.style.border="1px solid red";
+          nameError.innerHTML = "Sub-Sub-Sub Category name must consist of fewer than 100 letters";
+          nameInput.style.border = "1px solid red";
           nameError.style.display = "inline";
-          errorCount ++;
+          errorCount++;
         }
       }
-      if(this.subSubSubCategory.value.subsubsubPricerate === ''){
-        priceError.innerHTML="Please enter a Price";
-        priceInput.style.border="1px solid red";
+      if (this.subSubSubCategory.value.subsubsubPricerate === '') {
+        priceError.innerHTML = "Please enter a Price";
+        priceInput.style.border = "1px solid red";
         priceError.style.display = "inline";
-        errorCount ++;
-      }else{
+        errorCount++;
+      } else {
         if (/^\d+$/.test(this.subSubSubCategory.value.subsubsubPricerate)) {
           var priceDigit = parseFloat(this.subSubSubCategory.value.subsubsubPricerate);
           if (!(!isNaN(priceDigit) && priceDigit > 0 && priceDigit <= 100)) {
-            priceError.innerHTML="Price Rate must be a number between 0 to 100";
+            priceError.innerHTML = "Price Rate must be a number between 0 to 100";
             priceError.style.display = "inline";
-            priceInput.style.border="1px solid red";
-            errorCount ++;
+            priceInput.style.border = "1px solid red";
+            errorCount++;
           }
         } else {
-          priceError.innerHTML="Price Rate must be a number between 0 to 100";
+          priceError.innerHTML = "Price Rate must be a number between 0 to 100";
           priceError.style.display = "inline";
-          priceInput.style.border="1px solid red";
-          errorCount ++;
+          priceInput.style.border = "1px solid red";
+          errorCount++;
         }
       }
       var desc = this.subSubSubCategory.value.subSubSubCategoryDescription.trim();
       if (desc.length > 200) {
         descError.style.display = "inline";
-        descInput.style.border="1px solid red";
-        errorCount ++;
+        descInput.style.border = "1px solid red";
+        errorCount++;
       }
     }
     return errorCount <= 0;
   }
-  clearForm(){
+
+  clearForm() {
     var inputfields = document.getElementsByClassName('catInput');
     var errorMsgs = document.getElementsByClassName('errorMsg');
 
-    for(var i =0;i<inputfields.length;i++){
+    for (var i = 0; i < inputfields.length; i++) {
       var inputfield = inputfields[i] as HTMLInputElement;
-      inputfield.style.border="";
+      inputfield.style.border = "";
     }
-    for(var i=0;i<errorMsgs.length;i++){
+    for (var i = 0; i < errorMsgs.length; i++) {
       var errorMsg = errorMsgs[i] as HTMLInputElement;
       errorMsg.style.display = "none";
     }
   }
+
   callingFunction() {
     var isValidated = this.categoryValidation();
-    if(isValidated){
+    if (isValidated) {
       var categoryName = this.accountForm.value.categoryName;
       if (categoryName.length > 0 && categoryName[0] === categoryName[0].toLowerCase()) {
         categoryName = categoryName[0].toUpperCase() + categoryName.slice(1);
@@ -516,14 +548,14 @@ export class CategoryComponent implements OnInit {
           description: this.accountForm.value.description,
           selling_price_margin: this.accountForm.value.price_rate
         };
-        if(this.tempCategoryObj.categoryName==payLoard.name
-          && this.tempCategoryObj.description==payLoard.description
-          && this.tempCategoryObj.price_rate==payLoard.selling_price_margin){
+        if (this.tempCategoryObj.categoryName == payLoard.name
+          && this.tempCategoryObj.description == payLoard.description
+          && this.tempCategoryObj.price_rate == payLoard.selling_price_margin) {
           Swal.fire({
             title: "You haven't made any changes",
             icon: "question"
           });
-        }else{
+        } else {
           this.categoryService.UpdateCategory(payLoard).subscribe(
             data => this.manageCategoryAdded(data)
           );
@@ -584,63 +616,65 @@ export class CategoryComponent implements OnInit {
 
   // ============= Save & Update Sub Category ============== >>>>>>>>>>>>>>>
   saveSubcategory() {
-      var subCategoryName = this.categoryForm.value.subCategoryName;
-      if (subCategoryName.length > 0 && subCategoryName[0] === subCategoryName[0].toLowerCase()) {
-        subCategoryName = subCategoryName[0].toUpperCase() + subCategoryName.slice(1);
-      }
+    console.log('fffffffyyyyyyyyyyykkkkkkkkkkkkk');
+    console.log(this.categoryForm.value.subPricerate);
+    var subCategoryName = this.categoryForm.value.subCategoryName;
+    if (subCategoryName.length > 0 && subCategoryName[0] === subCategoryName[0].toLowerCase()) {
+      subCategoryName = subCategoryName[0].toUpperCase() + subCategoryName.slice(1);
+    }
 
-      if (this.subBtnValue == 0) {
-        const isValidated = this.subCategoryValidation(this.subBtnValue);
-        if(isValidated){
-          const sendData = {
-            code: 's',
-            parentId: this.categoryForm.value.catCode,
-            name: subCategoryName,
-            description: this.categoryForm.value.subDescription,
-            isActive: 1,
-            selling_price_margin: this.categoryForm.value.subPricerate
-          };
-          this.categoryService.saveSubCategory(sendData).subscribe(
-            data => this.manageSubcategory(data),
-          );
+    if (this.subBtnValue == 0) {
+      const isValidated = this.subCategoryValidation(this.subBtnValue);
+      if (isValidated) {
+        const sendData = {
+          code: 's',
+          parentId: this.categoryForm.value.catCode,
+          name: subCategoryName,
+          description: this.categoryForm.value.subDescription,
+          isActive: 1,
+          selling_price_margin: this.categoryForm.value.subPricerate
+        };
+        this.categoryService.saveSubCategory(sendData).subscribe(
+          data => this.manageSubcategory(data),
+        );
+      }
+    }
+
+    // =================== Update Sub Category ============= >>>>>>>>>>>>>>>>>>>
+    else if (this.tempCategoryObj.subCategoryName == subCategoryName
+      && this.tempCategoryObj.subDescription == this.categoryForm.value.subDescription
+      && this.tempCategoryObj.subPricerate == this.categoryForm.value.subPricerate) {
+      Swal.fire({
+        title: "You haven't made any changes",
+        icon: "question"
+      });
+    } else {
+      const isValidated = this.subCategoryValidation(this.subBtnValue);
+      if (isValidated) {
+        let catCodeVal = '';
+        let catName = '';
+        if (this.categoryForm.value.catCode == '') {
+          catCodeVal = this.categoryForm.value.mainCatCode;
+          catName = this.categoryForm.value.mainCatName;
+
+        } else {
+          catCodeVal = this.categoryForm.value.catCode;
+          catName = '';
         }
+
+        const payLoard = {
+          code: this.categoryForm.value.subCatCode,
+          parentId: catCodeVal,
+          name: subCategoryName,
+          description: this.categoryForm.value.subDescription,
+          selling_price_margin: this.categoryForm.value.subPricerate
+        };
+        this.categoryService.updateSubCategory(payLoard).subscribe(
+          data => this.manageUpdatedSubcategory(data)
+        );
       }
-
-      // =================== Update Sub Category ============= >>>>>>>>>>>>>>>>>>>
-      else if(this.tempCategoryObj.subCategoryName==subCategoryName
-        && this.tempCategoryObj.subDescription==this.categoryForm.value.subDescription
-        && this.tempCategoryObj.subPricerate==this.categoryForm.value.subPricerate) {
-        Swal.fire({
-          title: "You haven't made any changes",
-          icon: "question"
-        });
-      }else{
-          const isValidated = this.subCategoryValidation(this.subBtnValue);
-          if(isValidated){
-            let catCodeVal = '';
-            let catName = '';
-            if (this.categoryForm.value.catCode == '') {
-              catCodeVal = this.categoryForm.value.mainCatCode;
-              catName = this.categoryForm.value.mainCatName;
-
-            } else {
-              catCodeVal = this.categoryForm.value.catCode;
-              catName = '';
-            }
-
-            const payLoard = {
-              code: this.categoryForm.value.subCatCode,
-              parentId: catCodeVal,
-              name: subCategoryName,
-              description: this.categoryForm.value.subDescription,
-              selling_price_margin: this.categoryForm.value.subPricerate
-            };
-            this.categoryService.updateSubCategory(payLoard).subscribe(
-              data => this.manageUpdatedSubcategory(data)
-            );
-          }
-        this.displayHiddenFields();
-      }
+      this.displayHiddenFields();
+    }
   }
 
   manageUpdatedSubcategory(data) {
@@ -666,7 +700,11 @@ export class CategoryComponent implements OnInit {
         'warning'
       );
     } else {
+      console.log("b4");
+      console.log(this.categoryForm.value.subPricerate);
       this.createAccountForm();
+      console.log("After");
+      console.log(this.categoryForm.value.subPricerate);
       Swal.fire(
         data.data.name,
         data.message,
@@ -703,7 +741,7 @@ export class CategoryComponent implements OnInit {
         this.productSubCategoryArray.push(cr);
       }
     }
-    this.subSubCategory.value.subCategorynameCt="";
+    this.subSubCategory.value.subCategorynameCt = "";
   }
 
 // +++++++++++++++++++++ Save And Update Function For SubSub ++++++++++++++
@@ -712,57 +750,56 @@ export class CategoryComponent implements OnInit {
     if (subSubCategoryName.length > 0 && subSubCategoryName[0] === subSubCategoryName[0].toLowerCase()) {
       subSubCategoryName = subSubCategoryName[0].toUpperCase() + subSubCategoryName.slice(1);
     }
-      if (this.subSubBtnValue == 0) {
-        var isValidated = this.subSubCategoryValidation(this.subSubBtnValue);
-        if(isValidated){
-          const sendData = {
-            code: 'k',
-            parentId: this.subSubCategory.value.subCategorynameCt,
-            name: subSubCategoryName,
-            description: this.subSubCategory.value.subSubCategoryDescription,
-            isActive: 1,
-            selling_price_margin: this.subSubCategory.value.subsubPricerate
-          };
-          this.categoryService.saveCategory(sendData).subscribe(
-            data => this.manageAllSubSubCategory(data),
-          );
-        }
+    if (this.subSubBtnValue == 0) {
+      var isValidated = this.subSubCategoryValidation(this.subSubBtnValue);
+      if (isValidated) {
+        const sendData = {
+          code: 'k',
+          parentId: this.subSubCategory.value.subCategorynameCt,
+          name: subSubCategoryName,
+          description: this.subSubCategory.value.subSubCategoryDescription,
+          isActive: 1,
+          selling_price_margin: this.subSubCategory.value.subsubPricerate
+        };
+        this.categoryService.saveCategory(sendData).subscribe(
+          data => this.manageAllSubSubCategory(data),
+        );
       }
-      // ================================== update part for Sub Sub ======================
-      else if(this.tempCategoryObj.subSubCategoryName==subSubCategoryName
+    }
+    // ================================== update part for Sub Sub ======================
+    else if (this.tempCategoryObj.subSubCategoryName == subSubCategoryName
       && this.tempCategoryObj.subSubCategoryDescription == this.subSubCategory.value.subSubCategoryDescription
-      && this.tempCategoryObj.subsubPricerate == this.subSubCategory.value.subsubPricerate){
-        Swal.fire({
-          title: "You haven't made any changes",
-          icon: "question"
-        });
-      }
-      else{
-        var isValidated = this.subSubCategoryValidation(this.subSubBtnValue);
-        if(isValidated){
-          let payLoard = {};
-          let parentId = '';
-          if (this.subSubCategory.value.subCategorynameCt == '') {
-            parentId = this.subSubCategory.value.subCategoryCode;
-          } else {
-            parentId = this.subSubCategory.value.subCategorynameCt;
-          }
-
-          payLoard = {
-            code: this.subSubCategory.value.subSubCategoryCode,
-            parentId,
-            name: subSubCategoryName,
-            cat_code: this.subSubCategory.value.mainCategoryCode,
-            sub_cat_code: this.subSubCategory.value.subCategoryCode,
-            description: this.subSubCategory.value.subSubCategoryDescription,
-            selling_price_margin: this.subSubCategory.value.subsubPricerate
-          };
-          this.categoryService.updateSubCategory(payLoard).subscribe(
-            data => this.manageEditAllSubSubCategory(data)
-          );
+      && this.tempCategoryObj.subsubPricerate == this.subSubCategory.value.subsubPricerate) {
+      Swal.fire({
+        title: "You haven't made any changes",
+        icon: "question"
+      });
+    } else {
+      var isValidated = this.subSubCategoryValidation(this.subSubBtnValue);
+      if (isValidated) {
+        let payLoard = {};
+        let parentId = '';
+        if (this.subSubCategory.value.subCategorynameCt == '') {
+          parentId = this.subSubCategory.value.subCategoryCode;
+        } else {
+          parentId = this.subSubCategory.value.subCategorynameCt;
         }
-        this.displayHiddenFields();
+
+        payLoard = {
+          code: this.subSubCategory.value.subSubCategoryCode,
+          parentId,
+          name: subSubCategoryName,
+          cat_code: this.subSubCategory.value.mainCategoryCode,
+          sub_cat_code: this.subSubCategory.value.subCategoryCode,
+          description: this.subSubCategory.value.subSubCategoryDescription,
+          selling_price_margin: this.subSubCategory.value.subsubPricerate
+        };
+        this.categoryService.updateSubCategory(payLoard).subscribe(
+          data => this.manageEditAllSubSubCategory(data)
+        );
       }
+      this.displayHiddenFields();
+    }
   }
 
   manageEditAllSubSubCategory(data) {
@@ -777,7 +814,7 @@ export class CategoryComponent implements OnInit {
     document.getElementById('lblMainCat').style.display = 'none';
     document.getElementById('subSubSave').style.display = 'block';
     document.getElementById('subSubEdit').style.display = 'none';
-    this.subSubBtnValue=0;
+    this.subSubBtnValue = 0;
     this.getSubSubCategoryAll();
     this.createAccountForm();
   }
@@ -813,7 +850,7 @@ export class CategoryComponent implements OnInit {
       description: new FormControl(this.proMainCat[index].description),
       price_rate: new FormControl(this.proMainCat[index].priceRate)
     });
-    this.tempCategoryObj=this.accountForm.value;
+    this.tempCategoryObj = this.accountForm.value;
   }
 
   // =============== Get All Sub Category For Editable table ================ >>>>>>>>>>
@@ -847,7 +884,7 @@ export class CategoryComponent implements OnInit {
     this.clearForm();
     this.hideningfields();
     this.subBtnValue = 1;
-    document.getElementById("select01").style.display="none";
+    document.getElementById("select01").style.display = "none";
     document.getElementById('oldCatDev').style.display = 'block';
     document.getElementById('oldCatName').style.display = 'block';
     document.getElementById('subEdit').style.display = 'block';
@@ -890,26 +927,29 @@ export class CategoryComponent implements OnInit {
       }
     }
   }
-hideningfields(){
-  var content = document.getElementsByClassName('hiddenFields');
 
-  for(var i =0;i<content.length;i++){
-    var visibleContent = content[i] as HTMLInputElement;
-    visibleContent.style.display="none";
+  hideningfields() {
+    var content = document.getElementsByClassName('hiddenFields');
+
+    for (var i = 0; i < content.length; i++) {
+      var visibleContent = content[i] as HTMLInputElement;
+      visibleContent.style.display = "none";
+    }
   }
-}
-displayHiddenFields(){
-  var hiddenContent = document.getElementsByClassName('hiddenFields');
-  for(var i =0;i<hiddenContent.length;i++){
-    var hidden = hiddenContent[i] as HTMLInputElement;
-    hidden.style.display="block";
+
+  displayHiddenFields() {
+    var hiddenContent = document.getElementsByClassName('hiddenFields');
+    for (var i = 0; i < hiddenContent.length; i++) {
+      var hidden = hiddenContent[i] as HTMLInputElement;
+      hidden.style.display = "block";
+    }
+    var inputfields = document.getElementsByClassName('catInput');
+    for (var i = 0; i < inputfields.length; i++) {
+      var inputfield = inputfields[i] as HTMLInputElement;
+      inputfield.style.display = "block";
+    }
   }
-  var inputfields = document.getElementsByClassName('catInput');
-  for(var i =0;i<inputfields.length;i++){
-    var inputfield = inputfields[i] as HTMLInputElement;
-    inputfield.style.display="block";
-  }
-}
+
   // ============== Edit Sub Category Methode ============= >>>>>>>>>>>
   editSubSubCategory(index) {
     this.clearForm();
@@ -934,7 +974,7 @@ displayHiddenFields(){
       subSubCategoryDescription: new FormControl(this.subsubCatAarray[index].description),
       subsubPricerate: new FormControl(this.subsubCatAarray[index].priceRate),
     });
-    this.tempCategoryObj=this.subSubCategory.value;
+    this.tempCategoryObj = this.subSubCategory.value;
     const senDdata = {
       code: this.subsubCatAarray[index].categoryCode
     };
@@ -970,7 +1010,7 @@ displayHiddenFields(){
         this.productSubSubCategoryArray.push(cr);
       }
     }
-    this.subSubSubCategory.value.subSubCatCode3="";
+    this.subSubSubCategory.value.subSubCatCode3 = "";
   }
 
   // ============= Get Sub Categories For Sub Sub Sub tab =============== >>>>>>>>>>>>>>>>
@@ -1000,8 +1040,8 @@ displayHiddenFields(){
         this.productSubCategoryArray.push(cr);
       }
     }
-    this.subSubSubCategory.value.SubCatCode3="";
-    this.subSubSubCategory.value.subSubCatCode3="";
+    this.subSubSubCategory.value.SubCatCode3 = "";
+    this.subSubSubCategory.value.subSubCatCode3 = "";
   }
 
   // ============== Save & Update Sub Sub Sub Categories ============ >>>>>>>>>>>>
@@ -1010,57 +1050,57 @@ displayHiddenFields(){
     if (subSubSubCategoryName.length > 0 && subSubSubCategoryName[0] === subSubSubCategoryName[0].toLowerCase()) {
       subSubSubCategoryName = subSubSubCategoryName[0].toUpperCase() + subSubSubCategoryName.slice(1);
     }
-      if (this.subSubSubBtnValue == 0) {
-        var isValidate = this.subSubSubCategoryValidation(this.subSubSubBtnValue);
-        if(isValidate){
-          const sendData = {
-            code: 'l',
-            name: subSubSubCategoryName,
-            parentId: this.subSubSubCategory.value.subSubCatCode3,
-            description: this.subSubSubCategory.value.subSubSubCategoryDescription,
-            isActive: 1,
-            selling_price_margin: this.subSubSubCategory.value.subsubsubPricerate
-          };
-          this.categoryService.saveCategory(sendData).subscribe(
-            data => this.manageSubSubSubCategory(data)
-          );
-        }
+    if (this.subSubSubBtnValue == 0) {
+      var isValidate = this.subSubSubCategoryValidation(this.subSubSubBtnValue);
+      if (isValidate) {
+        const sendData = {
+          code: 'l',
+          name: subSubSubCategoryName,
+          parentId: this.subSubSubCategory.value.subSubCatCode3,
+          description: this.subSubSubCategory.value.subSubSubCategoryDescription,
+          isActive: 1,
+          selling_price_margin: this.subSubSubCategory.value.subsubsubPricerate
+        };
+        this.categoryService.saveCategory(sendData).subscribe(
+          data => this.manageSubSubSubCategory(data)
+        );
       }
+    }
 
-      // ===============  Update Sub Sub Sub Categories =============== >>>>>>>>>>>>
-      else if(this.tempCategoryObj.subSubSubCategoryName==subSubSubCategoryName
-      && this.tempCategoryObj.subSubSubCategoryDescription==this.subSubSubCategory.value.subSubSubCategoryDescription
-      && this.tempCategoryObj.subsubsubPricerate==this.subSubSubCategory.value.subsubsubPricerate){
-        Swal.fire({
-          title: "You haven't made any changes",
-          icon: "question"
-        });
-      }else {
-        var isValidate = this.subSubSubCategoryValidation(this.subSubSubBtnValue);
-        if(isValidate){
-          let payLoard = {};
-          let parentId = '';
-          if (this.subSubSubCategory.value.subSubCatCode3 == '') {
-            parentId = this.subSubCategory.value.oldSubSubCategorycodeForSubSubSub;
-          } else {
-            parentId = this.subSubSubCategory.value.subSubCatCode3;
-          }
-
-          payLoard = {
-            code: this.subSubSubCategory.value.oldSubCategorycodeForSubSubSub,
-            parentId,
-            name: subSubSubCategoryName,
-            cat_code: this.subSubSubCategory.value.mainCategoryCode,
-            sub_cat_code: this.subSubSubCategory.value.subCategoryCode,
-            description: this.subSubSubCategory.value.subSubSubCategoryDescription,
-            selling_price_margin: this.subSubSubCategory.value.subsubsubPricerate
-          };
-          this.categoryService.updateSubCategory(payLoard).subscribe(
-            data => this.manageEditAllSubSubSubCategory(data),
-          );
+    // ===============  Update Sub Sub Sub Categories =============== >>>>>>>>>>>>
+    else if (this.tempCategoryObj.subSubSubCategoryName == subSubSubCategoryName
+      && this.tempCategoryObj.subSubSubCategoryDescription == this.subSubSubCategory.value.subSubSubCategoryDescription
+      && this.tempCategoryObj.subsubsubPricerate == this.subSubSubCategory.value.subsubsubPricerate) {
+      Swal.fire({
+        title: "You haven't made any changes",
+        icon: "question"
+      });
+    } else {
+      var isValidate = this.subSubSubCategoryValidation(this.subSubSubBtnValue);
+      if (isValidate) {
+        let payLoard = {};
+        let parentId = '';
+        if (this.subSubSubCategory.value.subSubCatCode3 == '') {
+          parentId = this.subSubCategory.value.oldSubSubCategorycodeForSubSubSub;
+        } else {
+          parentId = this.subSubSubCategory.value.subSubCatCode3;
         }
-        this.displayHiddenFields();
+
+        payLoard = {
+          code: this.subSubSubCategory.value.oldSubCategorycodeForSubSubSub,
+          parentId,
+          name: subSubSubCategoryName,
+          cat_code: this.subSubSubCategory.value.mainCategoryCode,
+          sub_cat_code: this.subSubSubCategory.value.subCategoryCode,
+          description: this.subSubSubCategory.value.subSubSubCategoryDescription,
+          selling_price_margin: this.subSubSubCategory.value.subsubsubPricerate
+        };
+        this.categoryService.updateSubCategory(payLoard).subscribe(
+          data => this.manageEditAllSubSubSubCategory(data),
+        );
       }
+      this.displayHiddenFields();
+    }
   }
 
   manageSubSubSubCategory(data) {
@@ -1175,7 +1215,7 @@ displayHiddenFields(){
       data.message,
       'success'
     );
-    this.subSubSubBtnValue=0;
+    this.subSubSubBtnValue = 0;
     document.getElementById('subSubSubEdit').style.display = 'none';
     document.getElementById('subSubSubSave').style.display = 'block';
     document.getElementById('txt_mainCatInSub3').style.display = 'none';
@@ -1188,17 +1228,18 @@ displayHiddenFields(){
     this.getSubSubSubCategoriesAll();
     this.createAccountForm();
   }
+
   changeTab(event) {
-    this.btnValue=0;
-    this.subBtnValue=0;
-    this.subSubBtnValue=0;
-    this.subSubSubBtnValue=0;
+    this.btnValue = 0;
+    this.subBtnValue = 0;
+    this.subSubBtnValue = 0;
+    this.subSubSubBtnValue = 0;
     this.createAccountForm();
 
     var inputfields = document.getElementsByClassName('inputTxt');
-    for(var i =0;i<inputfields.length;i++){
+    for (var i = 0; i < inputfields.length; i++) {
       var inputfield = inputfields[i] as HTMLInputElement;
-      inputfield.value="";
+      inputfield.value = "";
     }
   }
 }

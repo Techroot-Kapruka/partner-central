@@ -99,6 +99,7 @@ export class EditProductsComponent implements OnInit {
   public oldSellingPrice = '';
 
   descriptionContent;
+  titleValue;
 
   editorConfig: AngularEditorConfig = {
     editable: true,
@@ -157,7 +158,7 @@ export class EditProductsComponent implements OnInit {
   hideElement(): void {
     const role = sessionStorage.getItem('userRole');
 
-    if (role === 'ROLE_ADMIN' || role === 'ROLE_CATEGORY_MANAGER' || role === 'ROLE_STORES_MANAGER') {
+    if (role === 'ROLE_ADMIN' ||role === 'ROLE_SUPER_ADMIN' || role === 'ROLE_CATEGORY_MANAGER' || role === 'ROLE_STORES_MANAGER') {
       this.isAdmin = true;
     } else {
       this.isAdmin = false;
@@ -1114,6 +1115,40 @@ export class EditProductsComponent implements OnInit {
       this.productService.editField(payload).subscribe(
         data => this.manageEditField(data),
       );
+    }
+  }
+
+  updateTitle() {
+    if (this.isAdmin) {
+
+      if (this.oldTitle === this.titleValue) {
+        Swal.fire(
+          'No Changes Found!',
+          '',
+          'info'
+        );
+      } else {
+        const payload = {
+          column: 'title',
+          tblname: 'product_basic_info',
+          value: this.titleValue,
+          whereClause: 'product_code',
+          whereValue: this.ids
+        }
+        this.productService.editAdminSave(payload).subscribe(
+          data => {
+            Swal.fire(
+              'Updated!',
+              '',
+              'success'
+            ).then((result) => {
+              if (result.isConfirmed) {
+                this.titleValue === this.oldTitle;
+              }
+            });
+          }
+        );
+      }
     }
   }
 }

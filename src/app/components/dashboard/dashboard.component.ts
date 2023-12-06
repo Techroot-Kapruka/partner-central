@@ -5,8 +5,8 @@ import {zip} from 'rxjs';
 import {colorSets} from '@swimlane/ngx-charts';
 import {ChartOptions} from 'chart.js';
 import Swal from 'sweetalert2';
-import {AnalyticsProductService} from "../../shared/service/analytics-product.service";
-import {ProductService} from "../../shared/service/product.service";
+import {AnalyticsProductService} from '../../shared/service/analytics-product.service';
+import {ProductService} from '../../shared/service/product.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit {
   public isColumnChart = false;
   showViewShopButton = false;
 
-  constructor(private productService: ProductService ,private dashboardService: DashboardService, private router: Router, private _Activatedroute: ActivatedRoute,
+  constructor(private productService: ProductService, private dashboardService: DashboardService, private router: Router, private _Activatedroute: ActivatedRoute,
               private analyticsService: AnalyticsProductService) {
     this._Activatedroute.paramMap.subscribe(params => {
       this.partnerId = params.get('partnerId');
@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit {
     });
 
     const roleLog = sessionStorage.getItem('userRole');
-    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_CATEGORY_MANAGER') {
+    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_SUPER_ADMIN' || roleLog === 'ROLE_CATEGORY_MANAGER') {
       this.isAdmin = true;
     } else if (roleLog === 'ROLE_GUEST') {
       this.isGuest = true;
@@ -176,27 +176,28 @@ export class DashboardComponent implements OnInit {
   ];
 
   /* End Doughnut Chart */
-  getCount(){
+  getCount() {
     const busName = sessionStorage.getItem('businessName');
     const userRole = sessionStorage.getItem('userRole');
     const categoryID = sessionStorage.getItem('userId');
 
-    this.productService.getAllActiveProductList(busName, categoryID).subscribe(
+    this.productService.getAllActiveProductCount(busName, categoryID).subscribe(
       data => this.activeProductCount(data),
     );
 
-    this.productService.getnonActiveProduct(busName, categoryID).subscribe(
+    this.productService.getnonActiveProductCount(busName, categoryID).subscribe(
       data => this.pendingProductCount(data),
     );
   }
 
-  pendingProductCount(data){
-    this.pendingCount = data.data.length
+  pendingProductCount(data) {
+    this.pendingCount = data;
   }
 
-  activeProductCount(data){
-    this.activeCount = data.data.length
+  activeProductCount(data) {
+    this.activeCount = data;
   }
+
   showElerments() {
 
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
@@ -212,7 +213,7 @@ export class DashboardComponent implements OnInit {
       this.isOrderShow = false;
       this.qaTables = false;
       this.qaApprovalProductTable = true;
-    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
       this.isLoginUser = false;
       this.isLoginPartner = true;
       this.isOrderShow = true;
@@ -292,7 +293,7 @@ export class DashboardComponent implements OnInit {
 
   approvalPendingUserCount() {
     const roleLog = sessionStorage.getItem('userRole');
-    if (roleLog === 'ROLE_ADMIN') {
+    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_SUPER_ADMIN') {
       this.dashboardService.getApprovalPendingPartnerCount(roleLog).subscribe(
         data => this.manageApprovalPendingUserCount(data)
       );
@@ -301,7 +302,7 @@ export class DashboardComponent implements OnInit {
 
   orderCountByBusinessName() {
     const roleLog = sessionStorage.getItem('userRole');
-    if (roleLog === 'ROLE_ADMIN') {
+    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_SUPER_ADMIN') {
       this.dashboardService.getOrderCountByAdmin().subscribe(
         data => this.manageOrderCountByBusinessName(data)
       );
@@ -318,7 +319,7 @@ export class DashboardComponent implements OnInit {
   specialGiftCount() {
     this.getCount();
     // const roleLog = sessionStorage.getItem('userRole');
-    // if (roleLog === 'ROLE_ADMIN') {
+    // if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_SUPER_ADMIN') {
     //   this.dashboardService.getSpecialGiftCount().subscribe(
     //     data => this.managespecialGiftCount(data)
     //   );
@@ -358,7 +359,7 @@ export class DashboardComponent implements OnInit {
 
   partnerCount() {
     const roleLog = sessionStorage.getItem('userRole');
-    if (roleLog === 'ROLE_ADMIN') {
+    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_SUPER_ADMIN') {
       const payLoad = {
         businessName: sessionStorage.getItem('businessName')
       };
@@ -379,9 +380,9 @@ export class DashboardComponent implements OnInit {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
-    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN'){
+    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN' || sessionStorage.getItem('userRole') !== 'ROLE_SUPER_ADMIN') {
       this.analyticsService.getSumProductViewTotal(object).subscribe(
-          data => this.manageGetSumProductViewTotal(data)
+        data => this.manageGetSumProductViewTotal(data)
       );
     }
   }
@@ -390,9 +391,9 @@ export class DashboardComponent implements OnInit {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
-    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN'){
+    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN' || sessionStorage.getItem('userRole') !== 'ROLE_SUPER_ADMIN') {
       this.analyticsService.getSumProductAddToCart(object).subscribe(
-          data => this.manageGetSumProductAddToCart(data)
+        data => this.manageGetSumProductAddToCart(data)
       );
     }
   }
@@ -401,9 +402,9 @@ export class DashboardComponent implements OnInit {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
-    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN'){
+    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN' || sessionStorage.getItem('userRole') !== 'ROLE_SUPER_ADMIN') {
       this.analyticsService.getSumProductOrderTotal(object).subscribe(
-          data => this.manageGetSumProductOrderTotal(data)
+        data => this.manageGetSumProductOrderTotal(data)
       );
     }
   }
@@ -416,7 +417,7 @@ export class DashboardComponent implements OnInit {
 
   managespecialGiftCount(data) {
     const roleLog = sessionStorage.getItem('userRole');
-    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_CATEGORY_MANAGER') {
+    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_SUPER_ADMIN' || roleLog === 'ROLE_CATEGORY_MANAGER') {
       if (data.data != null) {
         this.specialGift = data.data;
       }
@@ -436,7 +437,7 @@ export class DashboardComponent implements OnInit {
 
   getLatestOrder() {
     const userRole = sessionStorage.getItem('userRole');
-    if (userRole === 'ROLE_ADMIN') {
+    if (userRole === 'ROLE_ADMIN' || userRole === 'ROLE_SUPER_ADMIN') {
       const payloard = {
         role: ['Admin', 'User']
       };
@@ -482,7 +483,7 @@ export class DashboardComponent implements OnInit {
 
   latestProducts() {
     const userRole = sessionStorage.getItem('userRole');
-    if (userRole === 'ROLE_ADMIN') {
+    if (userRole === 'ROLE_ADMIN' || userRole === 'ROLE_SUPER_ADMIN') {
       this.dashboardService.latestProductsAdmin().subscribe(
         data => this.manageLatestProducts(data)
       );
@@ -513,9 +514,9 @@ export class DashboardComponent implements OnInit {
           lastSync: data.data[i].lastSync
         };
         if (data.data[i].is_active == 1) {
-          this.productStatus = 'Active'
+          this.productStatus = 'Active';
         } else {
-          this.productStatus = 'Pending'
+          this.productStatus = 'Pending';
         }
         this.latestSync = arr.lastSync;
         this.latestProduct.push(arr);

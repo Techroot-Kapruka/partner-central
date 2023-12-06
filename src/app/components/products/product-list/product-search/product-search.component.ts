@@ -3,6 +3,7 @@ import {ProductService} from '../../../../shared/service/product.service';
 import {Router} from '@angular/router';
 import {environment} from '../../../../../environments/environment.prod';
 import {DomSanitizer, SafeHtml} from '@angular/platform-browser';
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-product-search',
@@ -18,6 +19,7 @@ export class ProductSearchComponent implements OnInit {
   isViewFormVisible: boolean = false;
   isValue: boolean = false;
   editOption: boolean = false;
+  deleteOption: boolean = false;
   public startIndex;
 
   isDivVisible: boolean = false;
@@ -150,43 +152,48 @@ export class ProductSearchComponent implements OnInit {
     this.elementDescription = this.sanitizer.bypassSecurityTrustHtml(data.data.product.productDescription.description);
     this.elementAvailableStock = data.data.product.in_stock;
     this.elementImage = (data.data.product.productImage.image1 && data.data.product.productImage.image1 ? data.data.product.productImage.image1.split('/product')[1] : '') || '';
-    // if (data.data.product.is_active === 0) {
-    //   this.elementStatus = 'Available'
-    //   this.badge = 'badge-success'
-    // }else {
-    //   this.elementStatus = 'Out of Stock'
-    //   this.badge = 'badge-danger'
-    // }
+
     switch (data.data.product.is_active) {
       case 1:
         this.elementStatus = 'Available';
         this.badge = 'badge-success';
         this.editOption = false;
+        this.deleteOption = false;
         break;
       case -101:
         this.elementStatus = 'Suspended';
         this.badge = 'badge-danger';
         this.editOption = true;
+        this.deleteOption = true;
         break;
       case -102:
         this.elementStatus = 'Suspended';
         this.badge = 'badge-danger';
         this.editOption = true;
+        this.deleteOption = false;
         break;
       case -5:
         this.elementStatus = 'Out of Stock';
         this.badge = 'badge-warning';
-        this.editOption = false;
+        this.editOption = true;
+        this.deleteOption = false;
         break;
       case -20:
         this.elementStatus = 'QA Approved';
         this.badge = 'badge-info';
-        this.editOption = true;
+        this.editOption = false;
+        this.deleteOption = false;
         break;
       default:
         this.elementStatus = '';
         this.badge = 'badge';
         this.editOption = true;
+        this.deleteOption = false;
+    }
+    if(data.data.product.is_active === 1 && data.data.product.in_stock == 0){
+      this.elementStatus = 'Out of Stock';
+      this.badge = 'badge-warning';
+      this.editOption = false;
     }
 
     // this.elementHistory = 'Exotic Perfumes & Cosmetics - Create Product - Sat Nov 11 12:14:29 IST 2023 <hr size=1>'
@@ -203,6 +210,7 @@ export class ProductSearchComponent implements OnInit {
       }
 
       const res = {
+        quantity: data.data.product.productVariation[i].quantity,
         cost_price: data.data.product.productVariation[i].cost_price,
         variation_code: data.data.product.productVariation[i].variation_code,
         selling_price: data.data.product.productVariation[i].selling_price,
@@ -247,4 +255,45 @@ export class ProductSearchComponent implements OnInit {
     this.displayedRowCount += 5; // Increase the displayed row count
   }
 
+  async onDeleteClick(elementProductCode: any) {
+    const {value: text} = await Swal.fire({
+      title: 'Enter a comment',
+      input: 'text',
+      inputPlaceholder: 'Enter your comment here',
+      inputValidator: (value) => {
+        if (!value) {
+          return 'You need to write something!';
+        }
+      },
+      allowOutsideClick: false,
+    });
+    if (text) {
+      Swal.fire({
+        title: 'Do you want to save the changes?',
+        showCancelButton: true,
+        confirmButtonText: 'Save',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const payLoad = {
+            product_code: elementProductCode,
+            rejecteddBy: sessionStorage.getItem('userId'),
+            rejectReason: text
+          };
+
+          this.productService.deleteProduct(payLoad).subscribe(
+            data => this.successDelete(data),
+            error => (error.status)
+          );
+
+          Swal.fire('Saved!', '', 'success');
+        } else if (result.isDenied) {
+          Swal.fire('Changes are not saved', '', 'info');
+        }
+      });
+    }
+  }
+
+  successDelete(data) {
+    window.location.reload();
+  }
 }

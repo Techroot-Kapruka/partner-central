@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {TokenStorageService} from './shared/auth/token-storage.service';
 import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from "@angular/router";
+import {CanDeactivateGuard} from "./can-deactivate.guard";
+import {FileComponent} from "./components/file/file.component";
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-root',
@@ -35,7 +38,7 @@ export class AppComponent implements OnInit{
     if (this.tokenStorage.getToken()){
       this.roles = this.tokenStorage.getAuthorities();
       this.roles.every(role => {
-        if (role === 'ROLE_ADMIN'){
+        if (role === 'ROLE_ADMIN' || role === 'ROLE_SUPER_ADMIN'){
           this.authority = 'admin';
           return false;
         }else if (role === 'ROLE_PARTNER'){
