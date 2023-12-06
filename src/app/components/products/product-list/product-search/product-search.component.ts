@@ -20,6 +20,7 @@ export class ProductSearchComponent implements OnInit {
   isValue: boolean = false;
   editOption: boolean = false;
   deleteOption: boolean = false;
+  stockOutOption: boolean = false;
   public startIndex;
 
   isDivVisible: boolean = false;
@@ -159,36 +160,42 @@ export class ProductSearchComponent implements OnInit {
         this.badge = 'badge-success';
         this.editOption = false;
         this.deleteOption = false;
+        this.stockOutOption = false;
         break;
       case -101:
         this.elementStatus = 'Suspended';
         this.badge = 'badge-danger';
         this.editOption = true;
         this.deleteOption = true;
+        this.stockOutOption = true;
         break;
       case -102:
         this.elementStatus = 'Suspended';
         this.badge = 'badge-danger';
         this.editOption = true;
-        this.deleteOption = false;
+        this.deleteOption = true;
+        this.stockOutOption = true;
         break;
       case -5:
         this.elementStatus = 'Out of Stock';
         this.badge = 'badge-warning';
-        this.editOption = true;
+        this.editOption = false;
         this.deleteOption = false;
+        this.stockOutOption = true;
         break;
       case -20:
         this.elementStatus = 'QA Approved';
         this.badge = 'badge-info';
-        this.editOption = false;
+        this.editOption = true;
         this.deleteOption = false;
+        this.stockOutOption = false;
         break;
       default:
         this.elementStatus = '';
         this.badge = 'badge';
         this.editOption = true;
-        this.deleteOption = false;
+        this.deleteOption = true;
+        this.stockOutOption = true;
     }
     if(data.data.product.is_active === 1 && data.data.product.in_stock == 0){
       this.elementStatus = 'Out of Stock';
@@ -256,44 +263,12 @@ export class ProductSearchComponent implements OnInit {
   }
 
   async onDeleteClick(elementProductCode: any) {
-    const {value: text} = await Swal.fire({
-      title: 'Enter a comment',
-      input: 'text',
-      inputPlaceholder: 'Enter your comment here',
-      inputValidator: (value) => {
-        if (!value) {
-          return 'You need to write something!';
-        }
-      },
-      allowOutsideClick: false,
-    });
-    if (text) {
-      Swal.fire({
-        title: 'Do you want to save the changes?',
-        showCancelButton: true,
-        confirmButtonText: 'Save',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          const payLoad = {
-            product_code: elementProductCode,
-            rejecteddBy: sessionStorage.getItem('userId'),
-            rejectReason: text
-          };
-
-          this.productService.deleteProduct(payLoad).subscribe(
-            data => this.successDelete(data),
-            error => (error.status)
-          );
-
-          Swal.fire('Saved!', '', 'success');
-        } else if (result.isDenied) {
-          Swal.fire('Changes are not saved', '', 'info');
-        }
-      });
-    }
+    const productCode = 'productSearch-Delete-' + elementProductCode;
+    this.router.navigate(['declined-product/' + productCode]);
   }
 
-  successDelete(data) {
-    window.location.reload();
+  onStockOutClick(elementProductCode: any) {
+    const productCode = 'productSearch-Edit-' + elementProductCode;
+    this.router.navigate(['declined-product/' + productCode]);
   }
 }
