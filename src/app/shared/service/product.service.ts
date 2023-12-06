@@ -40,6 +40,14 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'product/getAllActiveProductList', formData, {headers});
   }
 
+  getAllActiveProductCount(businessName, UserID) {
+    const formData: FormData = new FormData();
+    formData.append('businessName', businessName);
+    formData.append('categoryUID ', UserID);
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'product/getAllActiveProductCount', formData, {headers});
+  }
+
   getPendingStockAllocationList(businessName, UserID) {
     const formData: FormData = new FormData();
     formData.append('businessName', businessName);
@@ -113,6 +121,15 @@ export class ProductService {
     formData.append('categoryUID ', UserID);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/nonActiveProducts', formData, {headers});
+  }
+
+  getnonActiveProductCount(businessName, UserID) {
+    console.log(businessName);
+    const formData: FormData = new FormData();
+    formData.append('businessName', businessName);
+    formData.append('categoryUID ', UserID);
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'product/getAllNonActiveProductCount', formData, {headers});
   }
 
   // getAllActiveProductList(businessName, UserID) {
