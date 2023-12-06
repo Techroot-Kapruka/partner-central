@@ -65,7 +65,7 @@ export class ApproveEditImageComponentComponent implements OnInit {
 
     for (let i = 0; i < data.data.image.length ; i++){
       imagePath = data.data.image[i].split('/editimagetemp');
-      this.imageData.push(imagePath[1]);
+      this.imageData.push(imagePath[1]+ '?'+new Date().getTime());
     }
   }
 
