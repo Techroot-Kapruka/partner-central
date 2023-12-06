@@ -199,7 +199,6 @@ export class DashboardComponent implements OnInit {
   }
 
   showElerments() {
-
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       this.isLoginUser = true;
       this.showLoginButton();
