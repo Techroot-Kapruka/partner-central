@@ -146,7 +146,8 @@ export class ViewOrdersComponent implements OnInit {
     let shipmentArr = [];
     let dataa = [];
     const promises = [];
-    for (const item of this.cartsnapshotArr) {
+    this.cartsnapshotArr.forEach((item, i) => {
+      console.log(item)
 
       let productCode = item.productId.toLowerCase();
       if (productCode.toLowerCase().includes('ef_pc_')) {
@@ -162,7 +163,8 @@ export class ViewOrdersComponent implements OnInit {
       const promise = new Promise<void>((resolve, reject) => {
         this.productService.getProductPrices(payload).subscribe(
           datas => {
-            this.manageData(datas);
+            this.manageData(datas,i)
+
             resolve();
           },
           error => {
@@ -171,7 +173,7 @@ export class ViewOrdersComponent implements OnInit {
         );
       });
       promises.push(promise);
-    }
+    })
 
     // Wait for all promises to resolve before proceeding
     Promise.all(promises)
@@ -198,7 +200,7 @@ export class ViewOrdersComponent implements OnInit {
         // };
         //
         // shipmentArr.push(orr2);
-
+        console.log(this.resp)
         for (const item of this.cartsnapshotArr) {
           let productCode = item.productId.toLowerCase();
           if (productCode.toLowerCase().includes('ef_pc_')) {
@@ -207,16 +209,17 @@ export class ViewOrdersComponent implements OnInit {
             productCode = productCode.replace('ef_hs_', '');
           }
           productCode = productCode.toUpperCase();
-
           const orr = {
             image: 'image',
             name: item.name,
             productId: productCode,
             size: item.size,
-            sellingPrice: this.resp.sellingPrice,
-            costPrice: this.resp.costPrice,
+            sellingPrice: item.sellingPrice,
+            costPrice: item.costPrice,
+            changingRate: item.changingRate,
             orderRef: item.orderRef
           };
+          console.log(orr)
           shipmentArr.push(orr);
         }
         this.order.setDataArray(shipmentArr);
@@ -228,11 +231,11 @@ export class ViewOrdersComponent implements OnInit {
       });
   }
 
-  manageData(data) {
-    this.resp = {
-      costPrice: data.data.costPrice,
-      sellingPrice: data.data.SellingPrice
-    };
+  manageData(data,i) {
+    console.log(data)
+    this.cartsnapshotArr[i].sellingPrice = data.data.SellingPrice
+    this.cartsnapshotArr[i].costPrice = data.data.costPrice
+    this.cartsnapshotArr[i].changingRate = data.data.changingRate
   }
 
   popupImage(url: string) {
@@ -279,5 +282,7 @@ export class ViewOrdersComponent implements OnInit {
       }
     );
   }
+
+
 
 }

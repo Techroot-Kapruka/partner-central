@@ -336,7 +336,8 @@ export class DigitalListComponent implements OnInit {
                         if (!value) {
                             return 'You need to write something!';
                         }
-                    }
+                    },
+                    allowOutsideClick: false,
 
                 });
                 if (text) {
