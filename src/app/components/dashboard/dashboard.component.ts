@@ -684,15 +684,17 @@ export class DashboardComponent implements OnInit {
   }
 
   setReceivedShipmentCount() {
-    this.dashboardService.getReceivedShipmentCount().subscribe(
+    const busName = sessionStorage.getItem('businessName');
+    const userRole = sessionStorage.getItem('userRole');
+    const categoryID = sessionStorage.getItem('userId');
+    this.dashboardService.getReceivedShipmentCount(busName, categoryID).subscribe(
       data => this.manageReceivedShipmentCount(data)
     );
   }
 
   private manageReceivedShipmentCount(data) {
-    if (data.data != null) {
-      this.receivedShipment = data.data.shipment_count;
-    }
+    console.log(data);
+    this.receivedShipment = data;
   }
 
   setPendingShipmentCount() {
