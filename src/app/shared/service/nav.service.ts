@@ -94,7 +94,8 @@ export class NavService {
       type: 'sub',
       active: false,
       children: [
-        {path: '/payment/list-payment', title: 'Payment List', type: 'link'}
+        {path: '/payment/list-payment', title: 'Payment List', type: 'link'},
+        {path: '/payment/payment-withdrawal', title: 'Withdrawals', type: 'link'}
       ]
     },
     {

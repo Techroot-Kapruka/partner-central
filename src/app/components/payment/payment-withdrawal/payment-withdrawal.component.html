@@ -1,0 +1,93 @@
+<style>
+  #innerTable tbody tr {
+    height: 50px; /* Adjust the height as needed */
+  }
+  td{
+    border-right: 1px;
+  }
+</style>
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-body">
+      <div class="container mt-4">
+
+      <table  style="font-size: 10px; border: 1px solid black">
+        <thead style="border: 1px solid black">
+        <tr style="text-align: center;vertical-align: middle;" >
+          <th scope="col" style="width: 13%" >Reference Code</th>
+          <th scope="col" style="width: 15%">Item Code</th>
+          <th scope="col" style="width: 15%">Cost Price</th>
+          <th scope="col" style="width: 18%">Date Created</th>
+          <th scope="col" style="width: 10%">Status</th>
+          <th scope="col" style="width: 11%">Quantity</th>
+          <th scope="col" style="width: 13%">Price</th>
+          <th scope="col" style="width: 25%">Action
+            <div class="form-check" style="padding-left: 0.25rem;">
+              <input class="form-check-input" type="checkbox" id="mainCheckbox"
+                     (click)="selectAll()">
+              <label style="all: initial;font-size: 12px;width: 100%" class="form-check-label" for="mainCheckbox">
+                Select all
+              </label>
+            </div>
+        </tr>
+        </thead>
+        <tbody *ngFor="let childrenItem of recordList;index as i" style="border: 1px solid black" >
+          <tr style="text-align: center;vertical-align: middle;">
+            <td style="text-align: center; vertical-align: middle;" id="vnCode{{childrenItem.index}}">
+              {{childrenItem.referenceId}}
+            </td>
+            <td class="scrollable-cell"  colspan="5">
+              <div class="scrollable-content">
+                <table id="innerTable" style="width: 100%; border-top: none;">
+                  <tr *ngFor="let subContent of childrenItem.description;" style="height:10px;border: 1px solid black;border-bottom: none;border-top: none">
+                    <td style="width: 30%; text-align: left;">{{subContent['itemCode']}}</td>
+                    <td style="width: 22%; text-align: left;">{{subContent['costPrice']}}</td>
+                    <td style="width: 21%; text-align: left;">{{subContent['createDate']}}</td>
+                    <td style="width: 17%; text-align: left;" [ngStyle]="{'width': '17%', 'text-align': 'left', 'color': subContent['status'] === 'Returned' ? 'red' : 'green'}">{{subContent['status']}}</td>
+                    <td style="width: 15%; text-align: left;">{{subContent['itemQuantity']}}</td>
+                  </tr>
+                </table>
+              </div>
+            </td>
+            <td style="text-align: center; vertical-align: middle;">{{childrenItem.totalCostPrice}}</td>
+            <td style="text-align: center; vertical-align: middle;width: 20%">
+                <div class="form-check" style="margin-bottom: 30%">
+                  <input class="form-check-input checkBoxSet" type="checkbox" id="checkbox{{childrenItem.index}}"
+                         [checked]="checkedUnchecked['checkbox' + childrenItem.index]" (click)="checkedFunction(childrenItem.index,childrenItem.totalCostPrice)">
+                </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <br>
+      <table style="width: 60%;border-collapse: collapse; margin-left: 3%">
+        <tr >
+          <td>
+            <label for="totalCostPrice">Total Price</label>
+          </td>
+          <td>
+            <input style="width: 100%" id = "totalCostPrice" type="text" disabled [value]=totalPriceCounter>
+          </td>
+        </tr>
+        <tr >
+          <td>
+            <label for="selectedCostPrice">Selected Cost Price</label>
+          </td>
+          <td>
+            <input style="width: 100%" id = "selectedCostPrice" type = "text" disabled [value]=checkedCostPriceCount>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label for="remainder">Remainder</label>
+          </td>
+          <td>
+            <input style="width: 100%" id = "remainder" type = "text" disabled [value]=totalPriceCounter-checkedCostPriceCount>
+          </td>
+        </tr>
+      </table>
+      <button style="margin-left: 3%" class="btn btn-secondary" (click)="withdrawal()">Withdraw</button>
+    </div>
+  </div>
+</div>
