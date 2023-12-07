@@ -47,7 +47,7 @@ export class ProductReportComponent implements OnInit {
     this.searchText = '';
     this.isLoading = true;
     const partnerID = (document.getElementById('select_vendor') as HTMLInputElement).value;
-    this.getAllProducts(this.page - 1, partnerID);
+    this.getAllProducts(0, partnerID);
   }
 
   getAllProducts(page, partnerID) {
