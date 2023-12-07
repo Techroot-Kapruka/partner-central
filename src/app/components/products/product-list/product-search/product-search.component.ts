@@ -188,7 +188,7 @@ export class ProductSearchComponent implements OnInit {
         this.badge = 'badge-info';
         this.editOption = true;
         this.deleteOption = false;
-        this.stockOutOption = false;
+        this.stockOutOption = true;
         break;
       default:
         this.elementStatus = '';
