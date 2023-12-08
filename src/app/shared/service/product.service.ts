@@ -301,9 +301,13 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'product/getNonActiveProductsCategoryWise', payLoard, {headers});
   }
 
-  getAllProducts() {
+  getAllProducts(pageNo, partnerID, pageSize: any) {
+    const formData: FormData = new FormData();
+    formData.append('pageNo', pageNo);
+    formData.append('partner_u_id ', partnerID);
+    formData.append('pageSize ', pageSize);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.get<any>(this.SERVER + 'product/getAllActiveProducts', {headers});
+    return this.httpClient.post<any>(this.SERVER + 'product/getAllActiveProducts', formData, {headers});
   }
 
   // getAllProductsByCatManager(payLoard) {

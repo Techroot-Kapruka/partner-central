@@ -212,18 +212,39 @@ export class ChangeRequestsComponent implements OnInit {
       const unique_code = event.unique_code;
       const sub_type = event.subType;
       const ProDetails = product_code + '-' + unique_code + '-' + sub_type;
-      this.router.navigate(['products/digital/edited-approve-product/' + ProDetails]);
+      // this.router.navigate(['products/digital/edited-approve-product/' + ProDetails]);
+
+      const url = '#/products/digital/edited-approve-product/' + ProDetails;
+      window.open(url, '_blank');
   }
 
   ApproveEditImageProduct(event) {
-      const url = 'products/digital/edited-image-approve-product/' + event.productCode;
+      /*const url = 'products/digital/edited-image-approve-product/' + event.productCode;
       this.router.navigate([url], {
         queryParams: {
           product_code: event.productCode,
           unique_code: event.editId,
           requested_by: event.requestBy
         }
-      });
+      });*/
+
+    const url = '#/products/digital/edited-image-approve-product/' + event.productCode;
+    const queryParams = {
+      product_code: event.productCode,
+      unique_code: event.editId,
+      requested_by: event.requestBy
+    };
+
+    // Convert the queryParams object to a query string
+    const queryString = Object.keys(queryParams)
+      .map(key => `${key}=${queryParams[key]}`)
+      .join('&');
+
+    // Append the query string to the URL
+    const finalUrl = url + '?' + queryString;
+
+    // Open the URL in a new tab
+    window.open(finalUrl, '_blank');
   }
 
   onTabSelect(event: NgbTabChangeEvent) {

@@ -1,1 +1,32 @@
-<p>declined-product works!</p>
+<body>
+<div class="card" style="border-radius: 4%;">
+  <div class="card-body">
+    <div class="container">
+      <img *ngIf="!isEdit" src='assets/images/dashboard/icons8-dustbin-68.png'/>
+      <h4 class="card-title"
+          style="font-family: 'Lucida Sans'; font-size: 18px; color: #000000; opacity: 80%; margin-top: 30px;">
+        Product Code : {{productCode}}</h4>
+      <h4 *ngIf="isEdit" class="card-title"
+          style="font-family: 'Lucida Sans'; font-size: 18px; color: #000000; opacity: 80%; margin-top: 30px;">Are
+        You Sure?</h4>
+      <h6 class="card-title"
+          style="font-family: 'Lucida Sans'; font-size: 14px; color: #000000; opacity: 80%;">{{description}}</h6>
+      <form [formGroup]="declinedMsgBox">
+        <div *ngIf="!isEdit" class="row" style="justify-content: center; padding-top: 10px; ">
+                    <textarea formControlName="decilinedMessage" id="decilinedMessage" style="width: 80%" type="text"
+                              (keyup)="validateReason()"></textarea>
+        </div>
+        <label style="justify-content: center; color: red; display: none; animation: blink 2s infinite;"
+               id="declinedMessageLBL">** please enter the reason **</label>
+        <div class="row" style="justify-content: center; padding-top: 10px;">
+          <button type="button" class="btn" style="background-color: #142ADE;"
+                  (click)="approveProcess()"><strong style="color: white">{{descYes}}</strong></button>
+          <button type="button" class="btn"
+                  style="background-color: #142ADE; margin-left: 20px;" (click)="cancelProcess()"><strong
+            style="color: white">{{descNo}}</strong></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</body>

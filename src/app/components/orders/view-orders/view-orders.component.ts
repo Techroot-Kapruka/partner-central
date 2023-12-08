@@ -4,9 +4,8 @@ import {OrderService} from '../../../shared/service/order.service';
 import {FormControl, FormGroup} from '@angular/forms';
 import {environment} from '../../../../environments/environment.prod';
 import {ProductService} from '../../../shared/service/product.service';
-import {error} from 'protractor';
 import {OrderShareService} from '../../../shared/service/order-share.service';
-import {NgbCollapseModule, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-view-orders',
@@ -98,6 +97,13 @@ export class ViewOrdersComponent implements OnInit {
         await this.getImage(productCode.toUpperCase());
         const image = this.imagePathURI + this.images;
         this.size = data.data.cartsnapshot[i].size;
+        if (this.cartsnapshotArr.some(product => product.productId === data.data.cartsnapshot[i].productID)){
+          const existingIndex = this.cartsnapshotArr.findIndex(product => product.productId === data.data.cartsnapshot[i].productID)
+          const existingQty = this.cartsnapshotArr[existingIndex].size
+          this.cartsnapshotArr[existingIndex].size = existingQty + data.data.cartsnapshot[i].size
+          console.log('k')
+          continue
+        }
         const or = {
           image: image,
           name: data.data.cartsnapshot[i].name,
@@ -112,7 +118,7 @@ export class ViewOrdersComponent implements OnInit {
 
   async getImage(proCode: string) {
     let imgProductCode: string = proCode;
-    if (imgProductCode.includes('_TC')){
+    if (imgProductCode.includes('_TC')) {
       imgProductCode = imgProductCode.split('_TC')[0];
     }
     console.log(imgProductCode);
@@ -163,7 +169,7 @@ export class ViewOrdersComponent implements OnInit {
       const promise = new Promise<void>((resolve, reject) => {
         this.productService.getProductPrices(payload).subscribe(
           datas => {
-            this.manageData(datas,i)
+            this.manageData(datas, i)
 
             resolve();
           },
@@ -231,7 +237,7 @@ export class ViewOrdersComponent implements OnInit {
       });
   }
 
-  manageData(data,i) {
+  manageData(data, i) {
     console.log(data)
     this.cartsnapshotArr[i].sellingPrice = data.data.SellingPrice
     this.cartsnapshotArr[i].costPrice = data.data.costPrice
@@ -282,7 +288,6 @@ export class ViewOrdersComponent implements OnInit {
       }
     );
   }
-
 
 
 }

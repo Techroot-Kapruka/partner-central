@@ -1080,7 +1080,7 @@ export class EditProductsComponent implements OnInit {
       type: 'PRODUCT_PRICE',
       sub_type: 'product_price',
       comment: 'PRODUCT_PRICE',
-      requestedBy: this.vendorCode,
+      requestedBy: sessionStorage.getItem('partnerId'),
       userId: sessionStorage.getItem('userId'),
       data: [
         {
