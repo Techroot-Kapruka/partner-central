@@ -262,12 +262,19 @@ export class AddShipmentComponent implements OnInit {
         },
       );
     }
-
-    }
-  }
-
-
-      this.shipmentID = data.data.shipment_id;
+    Swal.fire({
+      title: 'Shipment Added...!',
+      text: 'Click to Download your Shipment QR Code.',
+      icon: 'success',
+      showCancelButton: false,
+      showConfirmButton: true,
+      confirmButtonText: 'Download',
+      allowOutsideClick: false,
+    }).then((result) => {
+      this.isBtnSaveDisabled = false;
+      const payLoard = {
+        shipment_id: data.data.shipment_id
+      };
 
       this.shipmentNewService.generateQRCode(payLoard).subscribe(
         data => {
