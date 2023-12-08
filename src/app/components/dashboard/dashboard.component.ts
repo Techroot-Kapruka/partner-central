@@ -72,7 +72,7 @@ export class DashboardComponent implements OnInit {
     });
 
     const roleLog = sessionStorage.getItem('userRole');
-    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_SUPER_ADMIN' || roleLog === 'ROLE_CATEGORY_MANAGER') {
+    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_CATEGORY_MANAGER') {
       this.isAdmin = true;
     } else if (roleLog === 'ROLE_GUEST') {
       this.isGuest = true;
@@ -212,7 +212,7 @@ export class DashboardComponent implements OnInit {
       this.isOrderShow = false;
       this.qaTables = false;
       this.qaApprovalProductTable = true;
-    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
       this.isLoginUser = false;
       this.isLoginPartner = true;
       this.isOrderShow = true;
@@ -292,7 +292,7 @@ export class DashboardComponent implements OnInit {
 
   approvalPendingUserCount() {
     const roleLog = sessionStorage.getItem('userRole');
-    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_SUPER_ADMIN') {
+    if (roleLog === 'ROLE_ADMIN') {
       this.dashboardService.getApprovalPendingPartnerCount(roleLog).subscribe(
         data => this.manageApprovalPendingUserCount(data)
       );
@@ -301,7 +301,7 @@ export class DashboardComponent implements OnInit {
 
   orderCountByBusinessName() {
     const roleLog = sessionStorage.getItem('userRole');
-    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_SUPER_ADMIN') {
+    if (roleLog === 'ROLE_ADMIN') {
       this.dashboardService.getOrderCountByAdmin().subscribe(
         data => this.manageOrderCountByBusinessName(data)
       );
@@ -318,7 +318,7 @@ export class DashboardComponent implements OnInit {
   specialGiftCount() {
     this.getCount();
     // const roleLog = sessionStorage.getItem('userRole');
-    // if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_SUPER_ADMIN') {
+    // if (roleLog === 'ROLE_ADMIN') {
     //   this.dashboardService.getSpecialGiftCount().subscribe(
     //     data => this.managespecialGiftCount(data)
     //   );
@@ -358,7 +358,7 @@ export class DashboardComponent implements OnInit {
 
   partnerCount() {
     const roleLog = sessionStorage.getItem('userRole');
-    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_SUPER_ADMIN') {
+    if (roleLog === 'ROLE_ADMIN') {
       const payLoad = {
         businessName: sessionStorage.getItem('businessName')
       };
@@ -379,7 +379,9 @@ export class DashboardComponent implements OnInit {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
+
     if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN' || sessionStorage.getItem('userRole') !== 'ROLE_SUPER_ADMIN') {
+
       this.analyticsService.getSumProductViewTotal(object).subscribe(
         data => this.manageGetSumProductViewTotal(data)
       );
@@ -390,7 +392,9 @@ export class DashboardComponent implements OnInit {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
+
     if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN' || sessionStorage.getItem('userRole') !== 'ROLE_SUPER_ADMIN') {
+
       this.analyticsService.getSumProductAddToCart(object).subscribe(
         data => this.manageGetSumProductAddToCart(data)
       );
@@ -401,7 +405,9 @@ export class DashboardComponent implements OnInit {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
+
     if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN' || sessionStorage.getItem('userRole') !== 'ROLE_SUPER_ADMIN') {
+
       this.analyticsService.getSumProductOrderTotal(object).subscribe(
         data => this.manageGetSumProductOrderTotal(data)
       );
@@ -416,7 +422,7 @@ export class DashboardComponent implements OnInit {
 
   managespecialGiftCount(data) {
     const roleLog = sessionStorage.getItem('userRole');
-    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_SUPER_ADMIN' || roleLog === 'ROLE_CATEGORY_MANAGER') {
+    if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_CATEGORY_MANAGER') {
       if (data.data != null) {
         this.specialGift = data.data;
       }
@@ -436,7 +442,7 @@ export class DashboardComponent implements OnInit {
 
   getLatestOrder() {
     const userRole = sessionStorage.getItem('userRole');
-    if (userRole === 'ROLE_ADMIN' || userRole === 'ROLE_SUPER_ADMIN') {
+    if (userRole === 'ROLE_ADMIN') {
       const payloard = {
         role: ['Admin', 'User']
       };
@@ -482,7 +488,9 @@ export class DashboardComponent implements OnInit {
 
   latestProducts() {
     const userRole = sessionStorage.getItem('userRole');
+
     if (userRole === 'ROLE_ADMIN' || userRole === 'ROLE_SUPER_ADMIN') {
+
       this.dashboardService.latestProductsAdmin().subscribe(
         data => this.manageLatestProducts(data)
       );
