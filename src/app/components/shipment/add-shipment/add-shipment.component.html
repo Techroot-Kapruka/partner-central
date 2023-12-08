@@ -127,9 +127,7 @@
               <div class="form-group">
 
                 <button style="float: left;" type="button" (click)="popup()"
-
                         class="btn btn-sm btn-info" *ngIf="showPriceChange">Change Listing Price
-
                 </button>
                 <button style="float: right; margin-bottom: 3%;" type="button" [disabled]="isBtnAddDisabled" (click)="addToTable()"
                         class="btn btn-lg btn-success">Add Table
@@ -154,6 +152,19 @@
                         <div class="col-md-6">
                           <label for="newSellingPrice">New Price</label>
                           <input class="form-control" id="newSellingPrice" type="text"/>
+                        </div>
+                      </div>
+                      <div class="row mt-2">
+                        <div class="col-md-6">
+                          <label for="oldPrice">Old Changing Rate</label>
+                          <input class="form-control" id="oldChange" disabled type="text"
+                                 value="{{changeChangingRate}}"/>
+                        </div>
+                        <div class="col-md-6">
+                          <label for="newSellingPrice">New Changing Rate</label>
+<!--                          <input class="form-control" id="newChange" type="text"/>-->
+                          <input (change)=updateChangingRate() class="form-control" id="initialRate" step="0.50"
+                                 type="number" required >
                         </div>
                       </div>
                       <br>

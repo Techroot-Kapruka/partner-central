@@ -40,9 +40,6 @@ export class HeaderComponent implements OnInit {
     } else if (this.userRole === 'ROLE_STORES_MANAGER') {
       this.userRoleType = 'STORES_MANAGER';
       this.imageName = 'man.png';
-    } else if (this.userRole === 'ROLE_SUPER_ADMIN') {
-      this.userRoleType = 'SUPER ADMIN';
-      this.imageName = 'man.png';
     } else {
       this.userRoleType = 'USER';
       this.imageName = 'man.png';
@@ -100,7 +97,6 @@ export class HeaderComponent implements OnInit {
     let url = 'users/edit-partner-category/' + this.tempCode;//T00004
     this.router.navigate([url]);
   }
-
   reloadPages() {
     window.location.reload();
   }

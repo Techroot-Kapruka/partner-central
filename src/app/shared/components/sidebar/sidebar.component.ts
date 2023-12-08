@@ -36,11 +36,8 @@ export class SidebarComponent {
     }else  if (this.userRole === 'ROLE_CATEGORY_MANAGER'){
       this.userRoleType = 'CATEGORY MANAGER';
       this.imageName = 'man.png';
-    } else if (this.userRole === 'ROLE_STORES_MANAGER') {
+    } else if (this.userRole === 'ROLE_STORES_MANAGER'){
       this.userRoleType = 'STORES_MANAGER';
-      this.imageName = 'man.png';
-    }else if (this.userRole === 'ROLE_SUPER_ADMIN'){
-      this.userRoleType = 'SUPER ADMIN';
       this.imageName = 'man.png';
     }else {
       this.userRoleType = 'USER';
