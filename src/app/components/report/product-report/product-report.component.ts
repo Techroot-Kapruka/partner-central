@@ -7,118 +7,35 @@ import * as excel from 'xlsx';
   templateUrl: './product-report.component.html',
   styleUrls: ['./product-report.component.scss']
 })
+
 export class ProductReportComponent implements OnInit {
+
   public productDetailsArr: any = [];
-
-  // Nimesha --- 25-08-2023  ---  Load ProductCode to Selected List ------------------------------------
-  public productCode = '';
-  public productDetailsArr2: any = [];
+  public filteredProducts: any = [];
   public partnerArray = [];
-  public categoryUID = "";
-  searchData: any[] = [];
-  searchText = '';
-  selectedOption = '-- Select Vendor --';
-  showDropdown = false;
-  selectedData: any = null;
-  @ViewChild('searchInput') searchInput!: ElementRef;
-  @ViewChild('listElement') listElement: ElementRef;
-
-  // ---------------------------------------------------------------------------------------------------
+  public isLoading = false;
+  public noRecords = false;
+  public productSearch = '';
+  public productCode = '';
+  public partnerId = '';
+  public searchText = '';
+  public selectedOption = '-- All Vendors --';
+  totalPages = 0;
+  countForPage = 20;
+  page = 1;
+  currentPage = 0;
+  startIndex = 0;
+  pageIndexes: Array<any> = [];
 
   constructor(private productService: ProductService) {
-    this.getAllProducts();
-    this.getAllProductstoS();
+
+    this.isLoading = true;
     this.getPartner();
-    this.loadData();
+    this.getAllProducts(this.page - 1, this.partnerId);
   }
 
   ngOnInit(): void {
   }
-
-  getAllProducts() {
-    this.productService.getAllProducts().subscribe(
-      data => this.LoadAllProduct(data),
-    );
-  }
-
-  getAllProductstoS() {
-    this.productService.getAllProducts().subscribe(res => {
-      this.productDetailsArr2 = res.data;
-    });
-  }
-
-  exportToExcel(): void {
-    const element = document.getElementById('product-excel');
-    const ws: excel.WorkSheet = excel.utils.table_to_sheet(element);
-
-
-    // Set the width cols
-    ws['!cols'] = [
-      {width: 15},
-      {width: 15},
-      {width: 63},
-      {width: 10},
-      {width: 15},
-      {width: 15},
-    ];
-    const wb: excel.WorkBook = excel.utils.book_new();
-    excel.utils.book_append_sheet(wb, ws, 'product-Report');
-
-    excel.writeFile(wb, 'product-report.xlsx');
-  }
-
-  // Nimesha --- 25-08-2023  ---  Load ProductCode to Selected List ------------------------------------
-  selectProduct() {
-    const ProID = (document.getElementById('select_proc') as HTMLInputElement).value;
-    this.getPaginateOrderList(ProID);
-  }
-
-  // Load Product Details According to selected product code
-  getPaginateOrderList(ProID) {
-    const payloard = {
-      product_code: ProID
-    };
-    this.productService.getSelecedProductByEdit(payloard).subscribe(
-      data => this.manageLimitedProduct(data, ProID),
-    );
-  }
-
-  manageLimitedProduct(data, ProID) {
-
-    this.productDetailsArr = [];
-    if (data.data.product) {
-      const or = {
-        product_code: data.data.product.product_code,
-        category_code: data.data.product.category_code,
-        title: data.data.product.title,
-        brand: data.data.product.brand,
-        manufacture: data.data.product.manufacture,
-        vendor: data.data.product.vendor,
-        in_stock: data.data.product.in_stock,
-        seling_price: data.data.product.productVariation[0].selling_price,
-      };
-      this.productDetailsArr.push(or);
-    }
-  }
-
-  LoadAllProduct(data) {
-    this.productDetailsArr = [];
-    for (let i = 0; i < data.data.length; i++) {
-      const payData = {
-        product_code: data.data[i].product_code,
-        category_code: data.data[i].category_code,
-        title: data.data[i].title,
-        brand: data.data[i].brand,
-        manufacture: data.data[i].manufacture,
-        vendor: data.data[i].vendor,
-        in_stock: data.data[i].in_stock,
-        seling_price: data.data[i].productVariation[0].selling_price,
-      };
-      this.productDetailsArr.push(payData);
-    }
-  }
-
-  // ** END ** - Nimesha --- 25-08-2023  ---  Load ProductCode to Selected List -------------------------
 
   getPartner(): void {
     this.productService.getPartnerAll().subscribe(res => {
@@ -128,64 +45,88 @@ export class ProductReportComponent implements OnInit {
 
   getSelectedPartnerProduct() {
     this.searchText = '';
-    const name = (document.getElementById('select_vendor') as HTMLInputElement).value;
-    this.productService.getAllActiveProductList(name,this.categoryUID).subscribe(
-      data => this.getSelectedProductManage(data),
+    this.isLoading = true;
+    const partnerID = (document.getElementById('select_vendor') as HTMLInputElement).value;
+    this.getAllProducts(0, partnerID);
+  }
+
+  getAllProducts(page, partnerID) {
+    this.productService.getAllProducts(page, partnerID, this.countForPage).subscribe(
+      data => this.LoadAllProduct(data),
     );
   }
 
-  getSelectedProductManage(data) {
+  LoadAllProduct(data) {
+    this.isLoading = false;
     this.productDetailsArr = [];
-
-    if (data.data == null) {
-    } else {
-      const lengthRes = data.data.length;
-      for (let i = 0; i < lengthRes; i++) {
-        const or = {
-          product_code: data.data[i].product_code,
-          category_code: data.data[i].category_code,
-          title: data.data[i].title,
-          brand: data.data[i].brand,
-          manufacture: data.data[i].manufacture,
-          vendor: data.data[i].vendor,
-          in_stock: data.data[i].in_stock,
-          seling_price: data.data[i].selling_price,
+    this.filteredProducts = [];
+    if (Object.keys(data.data).length !== 0) {
+      this.noRecords = false;
+      for (let i = 0; i < data.data.content.length; i++) {
+        const payData = {
+          product_code: data.data.content[i].product_code,
+          category_code: data.data.content[i].category_code,
+          title: data.data.content[i].title,
+          brand: data.data.content[i].brand,
+          manufacture: data.data.content[i].manufacture,
+          vendor: data.data.content[i].vendor,
+          in_stock: data.data.content[i].in_stock,
+          seling_price: data.data.content[i].productVariation[0].selling_price,
+          cost_price: data.data.content[i].productVariation[0].cost_price,
         };
-        this.productDetailsArr.push(or);
+        this.productDetailsArr.push(payData);
       }
+      this.filteredProducts = this.productDetailsArr;
+    } else {
+      this.noRecords = true;
+    }
+
+    this.totalPages = Math.ceil(data.data.totalElements / this.countForPage);
+    this.currentPage = this.page;
+  }
+
+  ActiveProductFilter(searchTerm: any) {
+    this.filteredProducts = this.productDetailsArr.filter(product =>
+      product.product_code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.vendor.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    if (this.filteredProducts.length === 0) {
+      this.noRecords = true;
+    } else {
+      this.noRecords = false;
     }
   }
 
-  loadData(): void {
-    this.productService.getAllProducts().subscribe(res => {
-      this.searchData = res.data;
-    });
+  getSelectedRow(page: number) {
+    this.currentPage = page;
+    this.page = page;
+
+    this.isLoading = true;
+    const partnerID = (document.getElementById('select_vendor') as HTMLInputElement).value;
+    this.getAllProducts(page - 1, partnerID);
   }
 
-  filterData(): any[] {
-    return this.searchData.filter(item =>
-      item.product_code.toLowerCase().includes(this.searchText.toLowerCase())
+  exportToExcel(): void {
+    let filterProducts = [];
+    const AllData = [];
+    filterProducts = this.filteredProducts.filter(product =>
+      product.product_code.toLowerCase().includes(this.productSearch.toLowerCase()) ||
+      product.vendor.toLowerCase().includes(this.productSearch.toLowerCase())
     );
-  }
 
-  showSuggestionBox() {
-    this.showDropdown = true;
-  }
+    filterProducts.forEach(product => {
+      AllData.push([product.product_code, product.category_code, product.title, product.vendor, product.in_stock, product.seling_price, product.cost_price]);
+    });
 
-  selectItem(item: any) {
-    this.selectedOption = '-- Select Vendor --';
-    this.selectedData = item;
-    this.searchText = item.product_code; // Set selected item's name to the textbox
-    this.showDropdown = false; // Hide the dropdown after selection
-    this.getPaginateOrderList(item.product_code);
-  }
+    // Create a worksheet
+    const ws: excel.WorkSheet = excel.utils.aoa_to_sheet([['Product Code', 'Category Code', 'Title', 'Vendor', 'Stock Quantity', 'Selling Price', 'Cost Price'], ...AllData]);
 
-  selectAllText() {
-    this.searchInput.nativeElement.select();
-  }
+    // Create a workbook with the worksheet
+    const wb: excel.WorkBook = excel.utils.book_new();
+    excel.utils.book_append_sheet(wb, ws, 'Product-Report');
 
-  @HostListener('document:click', ['$event'])
-  onClick(event: MouseEvent) {
-    this.showDropdown = false;
+    // Save the workbook as an Excel file
+    excel.writeFile(wb, 'Shipment-report.xlsx');
   }
 }

@@ -5,8 +5,8 @@ import {zip} from 'rxjs';
 import {colorSets} from '@swimlane/ngx-charts';
 import {ChartOptions} from 'chart.js';
 import Swal from 'sweetalert2';
-import {AnalyticsProductService} from "../../shared/service/analytics-product.service";
-import {ProductService} from "../../shared/service/product.service";
+import {AnalyticsProductService} from '../../shared/service/analytics-product.service';
+import {ProductService} from '../../shared/service/product.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit {
   public isColumnChart = false;
   showViewShopButton = false;
 
-  constructor(private productService: ProductService ,private dashboardService: DashboardService, private router: Router, private _Activatedroute: ActivatedRoute,
+  constructor(private productService: ProductService, private dashboardService: DashboardService, private router: Router, private _Activatedroute: ActivatedRoute,
               private analyticsService: AnalyticsProductService) {
     this._Activatedroute.paramMap.subscribe(params => {
       this.partnerId = params.get('partnerId');
@@ -176,29 +176,29 @@ export class DashboardComponent implements OnInit {
   ];
 
   /* End Doughnut Chart */
-  getCount(){
+  getCount() {
     const busName = sessionStorage.getItem('businessName');
     const userRole = sessionStorage.getItem('userRole');
     const categoryID = sessionStorage.getItem('userId');
 
-    this.productService.getAllActiveProductList(busName, categoryID).subscribe(
+    this.productService.getAllActiveProductCount(busName, categoryID).subscribe(
       data => this.activeProductCount(data),
     );
 
-    this.productService.getnonActiveProduct(busName, categoryID).subscribe(
+    this.productService.getnonActiveProductCount(busName, categoryID).subscribe(
       data => this.pendingProductCount(data),
     );
   }
 
-  pendingProductCount(data){
-    this.pendingCount = data.data.length
+  pendingProductCount(data) {
+    this.pendingCount = data;
   }
 
-  activeProductCount(data){
-    this.activeCount = data.data.length
+  activeProductCount(data) {
+    this.activeCount = data;
   }
+
   showElerments() {
-
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       this.isLoginUser = true;
       this.showLoginButton();
@@ -379,9 +379,11 @@ export class DashboardComponent implements OnInit {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
-    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN'){
+
+    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN' || sessionStorage.getItem('userRole') !== 'ROLE_SUPER_ADMIN') {
+
       this.analyticsService.getSumProductViewTotal(object).subscribe(
-          data => this.manageGetSumProductViewTotal(data)
+        data => this.manageGetSumProductViewTotal(data)
       );
     }
   }
@@ -390,9 +392,11 @@ export class DashboardComponent implements OnInit {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
-    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN'){
+
+    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN' || sessionStorage.getItem('userRole') !== 'ROLE_SUPER_ADMIN') {
+
       this.analyticsService.getSumProductAddToCart(object).subscribe(
-          data => this.manageGetSumProductAddToCart(data)
+        data => this.manageGetSumProductAddToCart(data)
       );
     }
   }
@@ -401,9 +405,11 @@ export class DashboardComponent implements OnInit {
     const object = {
       vendor_code: sessionStorage.getItem('partnerId')
     };
-    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN'){
+
+    if (sessionStorage.getItem('userRole') !== 'ROLE_ADMIN' || sessionStorage.getItem('userRole') !== 'ROLE_SUPER_ADMIN') {
+
       this.analyticsService.getSumProductOrderTotal(object).subscribe(
-          data => this.manageGetSumProductOrderTotal(data)
+        data => this.manageGetSumProductOrderTotal(data)
       );
     }
   }
@@ -482,7 +488,9 @@ export class DashboardComponent implements OnInit {
 
   latestProducts() {
     const userRole = sessionStorage.getItem('userRole');
-    if (userRole === 'ROLE_ADMIN') {
+
+    if (userRole === 'ROLE_ADMIN' || userRole === 'ROLE_SUPER_ADMIN') {
+
       this.dashboardService.latestProductsAdmin().subscribe(
         data => this.manageLatestProducts(data)
       );
@@ -513,9 +521,9 @@ export class DashboardComponent implements OnInit {
           lastSync: data.data[i].lastSync
         };
         if (data.data[i].is_active == 1) {
-          this.productStatus = 'Active'
+          this.productStatus = 'Active';
         } else {
-          this.productStatus = 'Pending'
+          this.productStatus = 'Pending';
         }
         this.latestSync = arr.lastSync;
         this.latestProduct.push(arr);
@@ -684,15 +692,17 @@ export class DashboardComponent implements OnInit {
   }
 
   setReceivedShipmentCount() {
-    this.dashboardService.getReceivedShipmentCount().subscribe(
+    const busName = sessionStorage.getItem('businessName');
+    const userRole = sessionStorage.getItem('userRole');
+    const categoryID = sessionStorage.getItem('userId');
+    this.dashboardService.getReceivedShipmentCount(busName, categoryID).subscribe(
       data => this.manageReceivedShipmentCount(data)
     );
   }
 
   private manageReceivedShipmentCount(data) {
-    if (data.data != null) {
-      this.receivedShipment = data.data.shipment_count;
-    }
+    console.log(data);
+    this.receivedShipment = data;
   }
 
   setPendingShipmentCount() {

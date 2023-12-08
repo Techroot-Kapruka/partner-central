@@ -9,6 +9,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { ProductReportComponent } from './product-report/product-report.component';
 import { VendorReportComponent } from './vendor-report/vendor-report.component';
 import { ItemwiseShipmentReportComponent } from './itemwise-shipment-report/itemwise-shipment-report.component';
+import {ProductsModule} from "../products/products.module";
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { ItemwiseShipmentReportComponent } from './itemwise-shipment-report/item
     ReactiveFormsModule,
     FormsModule,
     NgbModule,
+    ProductsModule,
   ]
 })
 export class ReportModule { }

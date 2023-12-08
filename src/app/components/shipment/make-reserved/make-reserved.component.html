@@ -64,13 +64,13 @@
                   <td>{{tableDatas['amount']}}</td>
                   <td style="display:flex; justify-content: center; text-align: center">
                     <input class="form-control col-8" id="txtRejectedQty{{i}}" (keyup)="keypressEvent($event , i)"
-                           (change)="validation(i)" value="{{tableDatas['rejected_qty']}}"
-                           type="text" required="">
+                           (change)="validation(i)" value="{{tableDatas['rejected_qty']}}" #reject_Qty (click)="selectAllText(reject_Qty)"
+                           type="number" required="">
                   </td>
 
                   <td>
                     <input class="form-control col-8" id="txtApprovedQty{{i}}" value="{{tableDatas['approve_qty']}}"
-                           type="text" required="" disabled>
+                           type="number" required="" disabled>
                   </td>
 
                   <!--                    <button class="btn btn-success btn-sm" style="margin-right: 10%" (click)="viewerSelected_ReceivedShipment(i)">reject items</button>-->

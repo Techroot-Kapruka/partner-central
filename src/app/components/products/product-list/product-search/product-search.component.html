@@ -57,7 +57,11 @@
         </div>
 
         <p class="blockstitle">{{elementProductCode}} - {{elementTitle}}</p>
-        <p class="mt-2" *ngIf="!editOption"><a href="javascript:void(0);"  (click)="onEditClick(elementProductCode)">Edit Product</a></p>
+        <p class="mt-2">
+          <a *ngIf="!editOption" href="javascript:void(0);"  (click)="onEditClick(elementProductCode)">Edit Product</a>
+          <a *ngIf="!deleteOption" href="javascript:void(0);" style="margin-left: 20px;" (click)="onDeleteClick(elementProductCode)">Delete Product</a>
+          <a *ngIf="!stockOutOption" href="javascript:void(0);" style="margin-left: 20px;" (click)="onStockOutClick(elementProductCode)">Out of Stock</a>
+        </p>
         <img src="{{imagePathURI + elementImage}}" alt="Image" class="img-fluid" (error)="onImageError($event)" style="width: 200px;height: 200px">
         <p class="blockSV">{{elementVendorCode}} - {{elementVendor}}</p>
 

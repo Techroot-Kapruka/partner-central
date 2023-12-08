@@ -57,6 +57,9 @@ export class AddShipmentComponent implements OnInit {
   public qtys = 0;
   private allQty = 0;
 
+  callingCount = 0;
+
+
   public isClothes = false;
   public isOnDemandShipment = false;
   public isBtnAddDisabled = false;
@@ -82,7 +85,9 @@ export class AddShipmentComponent implements OnInit {
   changeSellingPrice: any;
   modalRef: any;
   shipmentID: any;
+
   changeChangingRate: any;
+
 
   @ViewChild('changePricePopup') changePricePopup: ElementRef;
   @ViewChild(DropdownComponent, {static: false}) dropdownComponent: DropdownComponent;
@@ -103,8 +108,8 @@ export class AddShipmentComponent implements OnInit {
       this.sharedData = data;
     });
 
-    console.log('sharedData!!!!!!!!!!!')
-    console.log(this.sharedData)
+
+
     this.pendingStockShare.dataArray$.subscribe(data => {
       this.productDetails = data;
     });
@@ -115,16 +120,21 @@ export class AddShipmentComponent implements OnInit {
       this.processOnDemandShipment();
     }
 
+
     if (this.dropdownComponent) {
       this.dropdownComponent.setDefaultValue();
     }
   }
 
   processOnDemandShipment() {
+
+    console.log(this.sharedData)
     for (const item of this.sharedData) {
+      console.log(item)
       const selectedProductObj = this.partnerProductArray.find(product => product.product_code === item.productCode);
       this.orderRef = item.orderRef;
       if (selectedProductObj) {
+        console.log(selectedProductObj)
         this.selectedProduct(selectedProductObj);
         this.isClothes = true;
       }
@@ -135,7 +145,9 @@ export class AddShipmentComponent implements OnInit {
     let productValueIndex: number;
     let proValueIndex = '';
     if (this.isOnDemandShipment) {
-      proValueIndex = '';
+      productValueIndex = 0;
+      proValueIndex = '0'
+
     } else {
       // productValueIndex = (document.getElementById('SelectedProduct') as HTMLInputElement).value;
       productValueIndex = this.partnerProductArray.findIndex(item => item.product_code === selectedValue);
@@ -179,7 +191,10 @@ export class AddShipmentComponent implements OnInit {
       txtGrossAmount: new FormControl(''),
       txtTotalSellerIncome: new FormControl(''),
       txtChangingAmount: new FormControl(''),
-      txtChangingRate: new FormControl('')
+
+      txtChangingRate: new FormControl(''),
+      txtIsPriceChange: new FormControl('')
+
     });
   }
 
@@ -224,6 +239,7 @@ export class AddShipmentComponent implements OnInit {
           this.manageSaveShipment(data);
         },
       );
+
     }
   }
 
@@ -246,19 +262,12 @@ export class AddShipmentComponent implements OnInit {
         },
       );
     }
-    Swal.fire({
-      title: 'Shipment Added...!',
-      text: 'Click to Download your Shipment QR Code.',
-      icon: 'success',
-      showCancelButton: false,
-      showConfirmButton: true,
-      confirmButtonText: 'Download',
-      allowOutsideClick: false,
-    }).then((result) => {
-      this.isBtnSaveDisabled = false;
-      const payLoard = {
-        shipment_id: data.data.shipment_id
-      };
+
+    }
+  }
+
+
+      this.shipmentID = data.data.shipment_id;
 
       this.shipmentNewService.generateQRCode(payLoard).subscribe(
         data => {
@@ -318,9 +327,11 @@ export class AddShipmentComponent implements OnInit {
     productSelect.value = '';*/
   }
 
+
   manageIsPriceUpdateError(error){
     console.log(error);
   }
+
   manageSaveQr(data) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -447,6 +458,7 @@ export class AddShipmentComponent implements OnInit {
       }
       this.productVariationArrayForClothes.push(gr);
     }
+    console.log(this.productVariationArrayForClothes)
 
     let grossAmount = 0.0;
     let allQuantity = 0;
@@ -486,11 +498,15 @@ export class AddShipmentComponent implements OnInit {
     this.changeVendor = sessionStorage.getItem('partnerId');
     this.changeCostPrice = code.cost_price;
     this.changeSellingPrice = code.selling_price;
+
     this.changeChangingRate = code.product_variations[0].changing_rate;
     this.changeRate = code.product_variations[0].changing_rate;
 
     if (this.isOnDemandShipment) {
-      this.addToTable();
+      this.callingCount += 1
+      if (this.callingCount === this.sharedData.length){
+        this.addToTable();
+      }
     }
   }
 
@@ -650,11 +666,13 @@ export class AddShipmentComponent implements OnInit {
           const insertTabelData = {
             product_code: this.sharedData[i].productId,
             product_name: tempProductName,
-            cost_price: dataForm.txtCostPrice,
+
+            cost_price: this.sharedData[i].costPrice,
             quantity: this.sharedData[i].size,
             changing_amount: dataForm.txtChangingAmount,
-            changing_rate: dataForm.txtChangingRate,
-            selling_price: dataForm.txtSellingPrice,
+            changing_rate: this.sharedData[i].changingRate,
+            selling_price: this.sharedData[i].sellingPrice,
+
             seller_income: sellerIncome.toString(),
             amount: grossAmount.toString(),
             color: this.productVariationArrayForClothes[0].color,
@@ -662,8 +680,10 @@ export class AddShipmentComponent implements OnInit {
             variationCode: this.productVariationArrayForClothes[0].variationCode
           };
           this.tableData.push(insertTabelData);
+
           this.quantityMap.set(i, '0');
         }
+
       } else {
         for (let i = 0; i < this.productVariationArrayForClothes.length; i++) {
           this.allQty += parseInt(this.quantityMap.get(i));
@@ -708,6 +728,7 @@ export class AddShipmentComponent implements OnInit {
                     productCode: this.passChangePriceToAddTable.productCode,
                     oldChangingRate: this.passChangePriceToAddTable.oldChangingRate,
                     newChangingRate: this.passChangePriceToAddTable.newChangingRate
+
                   };
                   this.changeFeids.push(or);
                 }
