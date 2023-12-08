@@ -154,6 +154,19 @@
                           <input class="form-control" id="newSellingPrice" type="text"/>
                         </div>
                       </div>
+                      <div class="row mt-2">
+                        <div class="col-md-6">
+                          <label for="oldPrice">Old Changing Rate</label>
+                          <input class="form-control" id="oldChange" disabled type="text"
+                                 value="{{changeChangingRate}}"/>
+                        </div>
+                        <div class="col-md-6">
+                          <label for="newSellingPrice">New Changing Rate</label>
+<!--                          <input class="form-control" id="newChange" type="text"/>-->
+                          <input (change)=updateChangingRate() class="form-control" id="initialRate" step="0.50"
+                                 type="number" required >
+                        </div>
+                      </div>
                       <br>
                       <button type="submit" class="btn btn-primary" style="float: right" (click)="submit(1)">
                         Submit
