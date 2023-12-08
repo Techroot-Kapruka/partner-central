@@ -88,6 +88,11 @@ export class ShipmentNewService {
     return this.httpClient.post<any>(this.SERVER + 'shipment/generateQRCode', data, {headers});
   }
 
+  updateShipmentItemsIsPriceChange(data: any){
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'shipment/updateIsPriceChange', data, {headers});
+  }
+
   getShipmentDetails(fromDate, toDate){
     const formData: FormData = new FormData();
     formData.append('fromDate', fromDate);
