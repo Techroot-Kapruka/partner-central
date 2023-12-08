@@ -25,4 +25,8 @@ export class PaymentService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'payment/getVendorWisePaymentList', obj, { headers });
   }
+  saveVendorWithdrawalDetails(payloard: any) {
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'payment/saveVendorWithdrawalDetails', payloard, {headers});
+  }
 }

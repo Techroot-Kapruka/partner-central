@@ -1,16 +1,7 @@
-<style>
-  #innerTable tbody tr {
-    height: 50px; /* Adjust the height as needed */
-  }
-  td{
-    border-right: 1px;
-  }
-</style>
 <div class="container-fluid">
   <div class="card">
-    <div class="card-body">
+    <div *ngIf="isSuccess; else emptyContent" class="card-body withdrawalContent">
       <div class="container mt-4">
-
       <table  style="font-size: 10px; border: 1px solid black">
         <thead style="border: 1px solid black">
         <tr style="text-align: center;vertical-align: middle;" >
@@ -31,7 +22,7 @@
             </div>
         </tr>
         </thead>
-        <tbody *ngFor="let childrenItem of recordList;index as i" style="border: 1px solid black" >
+        <tbody *ngFor="let childrenItem of recordList; index as i" style="border: 1px solid black" >
           <tr style="text-align: center;vertical-align: middle;">
             <td style="text-align: center; vertical-align: middle;" id="vnCode{{childrenItem.index}}">
               {{childrenItem.referenceId}}
@@ -53,7 +44,7 @@
             <td style="text-align: center; vertical-align: middle;width: 20%">
                 <div class="form-check" style="margin-bottom: 30%">
                   <input class="form-check-input checkBoxSet" type="checkbox" id="checkbox{{childrenItem.index}}"
-                         [checked]="checkedUnchecked['checkbox' + childrenItem.index]" (click)="checkedFunction(childrenItem.index,childrenItem.totalCostPrice)">
+                         (click)="checkedFunction(childrenItem.index,childrenItem.totalCostPrice)">
                 </div>
             </td>
           </tr>
@@ -89,5 +80,10 @@
       </table>
       <button style="margin-left: 3%" class="btn btn-secondary" (click)="withdrawal()">Withdraw</button>
     </div>
+    <ng-template #emptyContent>
+      <div style="text-align: center;">
+        <h5 style="color: #898997;font-weight: bold;">You are unable to make Withdrawals yet.</h5>
+      </div>
+    </ng-template>
   </div>
 </div>
