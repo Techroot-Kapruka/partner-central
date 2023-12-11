@@ -11,17 +11,15 @@ import * as excel from 'xlsx';
 export class ProductReportComponent implements OnInit {
 
   public productDetailsArr: any = [];
-  public filteredProducts: any = [];
   public partnerArray = [];
   public isLoading = false;
   public noRecords = false;
-  public productSearch = '';
   public productCode = '';
   public partnerId = '';
   public searchText = '';
   public selectedOption = '-- All Vendors --';
   totalPages = 0;
-  countForPage = 20;
+  countForPage = 100;
   page = 1;
   currentPage = 0;
   startIndex = 0;
@@ -59,7 +57,6 @@ export class ProductReportComponent implements OnInit {
   LoadAllProduct(data) {
     this.isLoading = false;
     this.productDetailsArr = [];
-    this.filteredProducts = [];
     if (Object.keys(data.data).length !== 0) {
       this.noRecords = false;
       for (let i = 0; i < data.data.content.length; i++) {
@@ -76,26 +73,12 @@ export class ProductReportComponent implements OnInit {
         };
         this.productDetailsArr.push(payData);
       }
-      this.filteredProducts = this.productDetailsArr;
     } else {
       this.noRecords = true;
     }
 
     this.totalPages = Math.ceil(data.data.totalElements / this.countForPage);
     this.currentPage = this.page;
-  }
-
-  ActiveProductFilter(searchTerm: any) {
-    this.filteredProducts = this.productDetailsArr.filter(product =>
-      product.product_code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.vendor.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-
-    if (this.filteredProducts.length === 0) {
-      this.noRecords = true;
-    } else {
-      this.noRecords = false;
-    }
   }
 
   getSelectedRow(page: number) {
@@ -108,14 +91,8 @@ export class ProductReportComponent implements OnInit {
   }
 
   exportToExcel(): void {
-    let filterProducts = [];
     const AllData = [];
-    filterProducts = this.filteredProducts.filter(product =>
-      product.product_code.toLowerCase().includes(this.productSearch.toLowerCase()) ||
-      product.vendor.toLowerCase().includes(this.productSearch.toLowerCase())
-    );
-
-    filterProducts.forEach(product => {
+    this.productDetailsArr.forEach(product => {
       AllData.push([product.product_code, product.category_code, product.title, product.vendor, product.in_stock, product.seling_price, product.cost_price]);
     });
 

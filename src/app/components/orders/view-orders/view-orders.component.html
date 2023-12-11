@@ -248,7 +248,7 @@
                       <th scope="col">Name</th>
                       <th scope="col">Product ID</th>
                       <th scope="col" style="text-align: center">Quantity</th>
-
+                      <th *ngIf="odProduct" scope="col" style="text-align: center">Print QR</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -281,7 +281,7 @@
 
                       </td>
                       <td style="text-align: center">{{cartsnapshotArrs['size']}}</td>
-
+                      <td *ngIf="odProduct" style="text-align: center" (click)="PrintQR(cartsnapshotArrs['productId'])"><i class="fas fa-download"></i></td>
 
                     </tr>
 
