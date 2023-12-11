@@ -199,7 +199,6 @@ export class DashboardComponent implements OnInit {
   }
 
   showElerments() {
-
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       this.isLoginUser = true;
       this.showLoginButton();
@@ -685,15 +684,26 @@ export class DashboardComponent implements OnInit {
   }
 
   setReceivedShipmentCount() {
-    this.dashboardService.getReceivedShipmentCount().subscribe(
+
+
+    const busName = sessionStorage.getItem('businessName');
+    const userRole = sessionStorage.getItem('userRole');
+    const categoryID = sessionStorage.getItem('userId');
+    //
+    // this.productService.getAllActiveProductCount(busName, categoryID).subscribe(
+    //   data => this.activeProductCount(data),
+    // );
+
+    this.dashboardService.getReceivedShipmentCount(busName, categoryID).subscribe(
       data => this.manageReceivedShipmentCount(data)
     );
+
   }
 
   private manageReceivedShipmentCount(data) {
-    if (data.data != null) {
-      this.receivedShipment = data.data.shipment_count;
-    }
+
+    this.receivedShipment = data;
+
   }
 
   setPendingShipmentCount() {

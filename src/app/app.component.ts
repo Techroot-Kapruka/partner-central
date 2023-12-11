@@ -1,9 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {TokenStorageService} from './shared/auth/token-storage.service';
 import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from "@angular/router";
-import {CanDeactivateGuard} from "./can-deactivate.guard";
-import {FileComponent} from "./components/file/file.component";
-import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-root',

@@ -453,7 +453,7 @@
                       <div class="col-md-6 hiddenFields">
                         <div class="form-group row">
                           <label class="col-xl-4 col-md-4">Sub Sub Category</label>
-                          <select class="custom-select col-xl-8 col-md-7 catInput" (input)="onCategoryChange($event,'sub-sub-sub')" formControlName="subSubCatCode3" id="subSubCatSelect">
+                          <select class="custom-select col-xl-8 col-md-7 catInput" formControlName="subSubCatCode3" id="subSubCatSelect" (input)="onCategoryChange($event,'sub-sub-sub')">
                             <option value="">-- Select Sub Sub Category --</option>
                             <option *ngFor="let productSubSubCategory of productSubSubCategoryArray"
                                     value="{{productSubSubCategory['code']}}">{{productSubSubCategory['name']}}

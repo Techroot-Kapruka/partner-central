@@ -40,6 +40,14 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'product/getAllActiveProductList', formData, {headers});
   }
 
+  getAllActiveProductCount(businessName, UserID) {
+    const formData: FormData = new FormData();
+    formData.append('businessName', businessName);
+    formData.append('categoryUID ', UserID);
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'product/getAllActiveProductCount', formData, {headers});
+  }
+
   getPendingStockAllocationList(businessName, UserID) {
     const formData: FormData = new FormData();
     formData.append('businessName', businessName);
@@ -115,6 +123,15 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'product/nonActiveProducts', formData, {headers});
   }
 
+  getnonActiveProductCount(businessName, UserID) {
+    console.log(businessName);
+    const formData: FormData = new FormData();
+    formData.append('businessName', businessName);
+    formData.append('categoryUID ', UserID);
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'product/getAllNonActiveProductCount', formData, {headers});
+  }
+
   // getAllActiveProductList(businessName, UserID) {
   //   const formData: FormData = new FormData();
   //   formData.append('businessName', businessName);
@@ -171,11 +188,6 @@ export class ProductService {
   getEditedImageForEdit(payloard) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'fieldEdit/getProductImage', payloard, {headers});
-  }
-
-  UpdatetProduct(payloard) {
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.post<any>(this.SERVER + 'product/editProduct', payloard, {headers});
   }
 
   nonActiveProductsByCompanyName(payloard) {
@@ -289,9 +301,13 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'product/getNonActiveProductsCategoryWise', payLoard, {headers});
   }
 
-  getAllProducts() {
+  getAllProducts(pageNo, partnerID, pageSize: any) {
+    const formData: FormData = new FormData();
+    formData.append('pageNo', pageNo);
+    formData.append('partner_u_id ', partnerID);
+    formData.append('pageSize ', pageSize);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.get<any>(this.SERVER + 'product/getAllActiveProducts', {headers});
+    return this.httpClient.post<any>(this.SERVER + 'product/getAllActiveProducts', formData, {headers});
   }
 
   // getAllProductsByCatManager(payLoard) {

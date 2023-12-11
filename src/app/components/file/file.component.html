@@ -13,7 +13,7 @@
                (selected)="changeBulkTemplateOnCategory($event)"></ng-select>
     <div *ngIf="bulkTemplateCatSelected" class="download_url">
       <!--<a [href]="bulkTemplateHref"><i class="fa fa-download">&nbsp; Download the Sample Document-->
-        <!--Template for Bulk Upload {{selectedCategoryForTemplate}}</i></a>-->
+      <!--Template for Bulk Upload {{selectedCategoryForTemplate}}</i></a>-->
       <button (click)="downloadTemplate()" class="button-66" role="button"> <i class="fa fa-cloud-download" aria-hidden="true"></i> &nbsp; Download the Sample Document {{selectedCategoryForTemplate}}</button>
     </div>
   </div>
@@ -98,15 +98,15 @@
 
 
         </td>
-<!--        <td *ngFor="let header of headers"-->
-<!--            style="position: relative; padding-bottom: 50px;"-->
-<!--            [id]="removeSpacesFromString(header)+'_'+i"-->
-<!--            (dblclick)="popUpEditActive(i+1, header, tbleArray[header])"-->
-<!--        >-->
-<!--          {{ tbleArray[header] }}-->
-<!--          <i class="fa fa-edit edit-icon" [hidden]="checkEditRestrictFeild(header)"-->
-<!--             (click)="popUpEditActive(i+1, header, tbleArray[header])"></i>-->
-<!--        </td>-->
+        <!--        <td *ngFor="let header of headers"-->
+        <!--            style="position: relative; padding-bottom: 50px;"-->
+        <!--            [id]="removeSpacesFromString(header)+'_'+i"-->
+        <!--            (dblclick)="popUpEditActive(i+1, header, tbleArray[header])"-->
+        <!--        >-->
+        <!--          {{ tbleArray[header] }}-->
+        <!--          <i class="fa fa-edit edit-icon" [hidden]="checkEditRestrictFeild(header)"-->
+        <!--             (click)="popUpEditActive(i+1, header, tbleArray[header])"></i>-->
+        <!--        </td>-->
         <td *ngFor="let header of headers"
             style="position: relative; padding-bottom: 50px;"
             [id]="removeSpacesFromString(header)+'_'+i"
@@ -233,10 +233,10 @@
 </div>
 
 <div class="upload-btn" *ngIf="excelUploaded">
-        <!--<button class="btn btn-primary" *ngIf="!uploaded && showAllElements" [disabled]="clicked"-->
-              <!--(click)="bulkProductSave($event)" style="width: 306px;">Add Images-->
+  <!--<button class="btn btn-primary" *ngIf="!uploaded && showAllElements" [disabled]="clicked"-->
+  <!--(click)="bulkProductSave($event)" style="width: 306px;">Add Images-->
 
-    <!--</button>-->
+  <!--</button>-->
   <button [id]="'btn_status'" type="button" class="button-37" *ngIf="!uploaded && needVerification"
           (click)="syncWrapper(verifyDetails())" style="width: 306px;">
     <span>
