@@ -31,7 +31,7 @@ export class PrivilegesUsersComponent implements OnInit {
 
   getPartner(): void {
     const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN') {
+    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
       this.productService.getPartnerAll().subscribe(
         data => this.manageBussinessPartner(data),
       );
