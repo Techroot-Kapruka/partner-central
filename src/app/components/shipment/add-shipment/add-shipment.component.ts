@@ -131,8 +131,15 @@ export class AddShipmentComponent implements OnInit {
     console.log(this.sharedData)
     for (const item of this.sharedData) {
       console.log(item)
+      console.log(this.partnerProductArray)
+      console.log(this.partnerProductArray.find(product => product.product_code === item.productCode))
+      let proCode = item.productId
+      if (proCode.includes('_TC')){
+        proCode = proCode.split('_TC')[0]
+      }
       const selectedProductObj = this.partnerProductArray.find(product => product.product_code === item.productCode);
       this.orderRef = item.orderRef;
+      console.log(selectedProductObj)
       if (selectedProductObj) {
         console.log(selectedProductObj)
         this.selectedProduct(selectedProductObj);
@@ -155,6 +162,9 @@ export class AddShipmentComponent implements OnInit {
     }
 
     const selectedProductObj = this.partnerProductArray[productValueIndex];
+    console.log(selectedProductObj)
+    console.log(this.partnerProductArray)
+    console.log(this.partnerProductArray[productValueIndex])
     if (proValueIndex !== '') {
       if (selectedProductObj.item_group.toUpperCase() === 'CLOATHING' || selectedProductObj.item_group.toUpperCase() === 'CLOTHING') {
         this.isClothes = true;
@@ -372,7 +382,16 @@ export class AddShipmentComponent implements OnInit {
     );
   }
 
+  splitFromTC(productCode:string){
+    if (productCode.includes('_TC')){
+      return productCode.split('_TC')[0]
+    } else {
+      return productCode;
+    }
+  }
+
   ManageSearchProductGet(data) {
+    console.log(data)
     this.partnerProductArray = [];
     if (data.data == null) {
       Swal.fire(
@@ -384,8 +403,13 @@ export class AddShipmentComponent implements OnInit {
       this.createFormConteolerForShipment();
     } else {
       if (this.isOnDemandShipment) {
+        console.log(this.isOnDemandShipment)
+        console.log(this.sharedData)
         for (let i = 0; i < data.data.length; i++) {
-          if (this.sharedData.some(item => item.productId === data.data[i].product_code)) {
+          let prodCode = data.data[i].product_code
+          if (this.sharedData.some(item => this.splitFromTC(item.productId) === prodCode)) {
+            console.log(data.data[i].product_code)
+            console.log()
             const od = {
               product_code: data.data[i].product_code,
               name: data.data[i].title,
@@ -429,6 +453,7 @@ export class AddShipmentComponent implements OnInit {
   }
 
   selectedProduct(code) {
+    console.log(this.sharedData)
     if (code.product_code.includes("POD")) {
       this.showPriceChange = false;
     } else {
@@ -511,7 +536,7 @@ export class AddShipmentComponent implements OnInit {
 
     if (this.isOnDemandShipment) {
       this.callingCount += 1
-      if (this.callingCount === this.sharedData.length){
+      if (this.callingCount <= this.sharedData.length){
         this.addToTable();
       }
     }
@@ -687,6 +712,7 @@ export class AddShipmentComponent implements OnInit {
             variationCode: this.productVariationArrayForClothes[0].variationCode
           };
           this.tableData.push(insertTabelData);
+          console.log(insertTabelData)
 
           this.quantityMap.set(i, '0');
         }
