@@ -190,11 +190,6 @@ export class ProductService {
     return this.httpClient.post<any>(this.SERVER + 'fieldEdit/getProductImage', payloard, {headers});
   }
 
-  UpdatetProduct(payloard) {
-    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
-    return this.httpClient.post<any>(this.SERVER + 'product/editProduct', payloard, {headers});
-  }
-
   nonActiveProductsByCompanyName(payloard) {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/nonActiveProductsByCompanyName', payloard, {headers});

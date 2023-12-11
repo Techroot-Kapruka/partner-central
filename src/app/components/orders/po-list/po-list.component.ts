@@ -45,7 +45,7 @@ export class PoListComponent implements OnInit {
     let resArr = {};
     const productPrefix = [];
     const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
+    if (sessionUser === 'ROLE_ADMIN') {
       const productPrefix01 = JSON.parse(sessionStorage.getItem('productPrefix'));
       const preLength = productPrefix01.length;
       for (let i = 0; i < preLength; i++) {
@@ -112,7 +112,7 @@ export class PoListComponent implements OnInit {
 
   getPartner(): void {
     const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
+    if (sessionUser === 'ROLE_ADMIN') {
       this.orderService.getPartnerAll().subscribe(
         data => this.setPartner(data),
       );
@@ -169,7 +169,7 @@ export class PoListComponent implements OnInit {
 
   hideElement(): void {
     const role = sessionStorage.getItem('userRole');
-    if (role === 'ROLE_ADMIN' || role === 'ROLE_SUPER_ADMIN') {
+    if (role === 'ROLE_ADMIN') {
       this.isAdmin = true;
     } else {
       this.isAdmin = false;
@@ -195,7 +195,7 @@ export class PoListComponent implements OnInit {
   getPaginateOrderList(page) {
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       this.businessName = sessionStorage.getItem('partnerId');
-    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
       let id = (document.getElementById('select_od') as HTMLInputElement).value;
 
       this.businessName = id;

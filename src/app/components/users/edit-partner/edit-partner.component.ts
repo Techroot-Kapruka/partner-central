@@ -237,7 +237,7 @@ export class EditPartnerComponent implements OnInit {
 
       } else {
         let userRole = '';
-        if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
+        if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
           userRole = 'admin';
         } else if (sessionStorage.getItem('userRole') === 'ROLE_USER') {
           userRole = 'user';

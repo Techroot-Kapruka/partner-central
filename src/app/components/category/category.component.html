@@ -98,7 +98,7 @@
                       <div class="col-md-6 hiddenFields" >
                         <div class="form-group row">
                           <label class="col-xl-4 col-md-4" >Category</label>
-                          <select class="custom-select col-xl-8 col-md-7 catInput" id="select01" formControlName="catCode" (input)="onCategoryChange($event,'sub')">
+                          <select class="custom-select col-xl-8 col-md-7 catInput" id="select01" formControlName="catCode">
                             <option value="">-- Select Category --</option>
                             <option *ngFor="let productCategor of productCategoryArray"
                                     ngValue="{{productCategor['code']}}">
@@ -153,7 +153,7 @@
                           <label for="txt_sub_price_rate" class="col-xl-4 col-md-4">Price Rate</label>
                           <input class="form-control col-xl-7 col-md-7 catInput inputTxt" formControlName="subPricerate"
                                  id="txt_sub_price_rate"
-                                 type="text" required="" [value]="marginRate">
+                                 type="text" required="">
                           <label for="txt_sub_price_rate" class="col-xl-1 col-md-1"
                                  style="font-weight: bold; position: relative;margin-left: -5%;"> %</label>
                           <div class="col" style="margin-left: 30%">
@@ -227,7 +227,7 @@
                         <div class="form-group row">
                           <label class="col-xl-4 col-md-4">Category</label>
                           <select class="custom-select col-xl-8 col-md-7 catInput" id="category_ids"
-                                  formControlName="mainCategoryMain" (change)="getSubcategory()" (input)="onCategoryChange($event,'sub-sub')">
+                                  formControlName="mainCategoryMain" (change)="getSubcategory()">
                             <option value="">-- Select Category --</option>
                             <option *ngFor="let productCategor of productCategoryArray"
                                     value="{{productCategor['code']}}">
@@ -259,7 +259,7 @@
                       <div class="col-md-6 hiddenFields">
                         <div class="form-group row">
                           <label class="col-xl-4 col-md-4">Sub Category</label>
-                          <select class="custom-select col-xl-8 col-md-7 catInput" formControlName="subCategorynameCt" id="subCategorySelect" (input)="onCategoryChange($event,'sub-sub')">
+                          <select class="custom-select col-xl-8 col-md-7 catInput" formControlName="subCategorynameCt" id="subCategorySelect">
                             <option value="">-- Select Sub Category --</option>
                             <option *ngFor="let productSubCategory of productSubCategoryArray"
                                     value="{{productSubCategory['code']}}">{{productSubCategory['name']}}
@@ -329,7 +329,7 @@
                           <label for="txt_subs_price_rate" class="col-xl-4 col-md-4">Price Rate</label>
                           <input class="form-control col-xl-7 col-md-7 catInput inputTxt" formControlName="subsubPricerate"
                                  id="txt_subs_price_rate"
-                                 type="text" required="" value="{{marginRate}}">
+                                 type="text" required="">
                           <label for="txt_subs_price_rate" class="col-xl-1 col-md-1"
                                  style="font-weight: bold; position: relative;margin-left: -5%;"> %</label>
                           <div class="col" style="margin-left: 30%">
@@ -395,7 +395,7 @@
                         <div class="form-group row">
                           <label class="col-xl-4 col-md-4">Category</label>
                           <select class="custom-select col-xl-8 col-md-7 catInput" id="category_id_sub_sub"
-                                  formControlName="catCode3" (change)="getSubcategoryForSubSubSub()" (input)="onCategoryChange($event,'sub-sub-sub')">
+                                  formControlName="catCode3" (change)="getSubcategoryForSubSubSub()">
                             <option value="">-- Select Category --</option>
                             <option *ngFor="let productCategor of productCategoryArray"
                                     value="{{productCategor['code']}}">
@@ -425,7 +425,7 @@
                         <div class="form-group row">
                           <label class="col-xl-4 col-md-4">Sub Category</label>
                           <select class="custom-select col-xl-8 col-md-7 catInput" id="subCategoryIdInSubSubSub"
-                                  formControlName="SubCatCode3" (change)="getSubSubcategory()" (input)="onCategoryChange($event,'sub-sub-sub')">
+                                  formControlName="SubCatCode3" (change)="getSubSubcategory()">
                             <option value="">-- Select Sub Category --</option>
                             <option *ngFor="let productSubCategory of productSubCategoryArray"
                                     value="{{productSubCategory['code']}}">{{productSubCategory['name']}}
@@ -453,7 +453,7 @@
                       <div class="col-md-6 hiddenFields">
                         <div class="form-group row">
                           <label class="col-xl-4 col-md-4">Sub Sub Category</label>
-                          <select class="custom-select col-xl-8 col-md-7 catInput" (input)="onCategoryChange($event,'sub-sub-sub')" formControlName="subSubCatCode3" id="subSubCatSelect">
+                          <select class="custom-select col-xl-8 col-md-7 catInput" formControlName="subSubCatCode3" id="subSubCatSelect">
                             <option value="">-- Select Sub Sub Category --</option>
                             <option *ngFor="let productSubSubCategory of productSubSubCategoryArray"
                                     value="{{productSubSubCategory['code']}}">{{productSubSubCategory['name']}}
@@ -507,7 +507,7 @@
                           <label for="txt_subsub_price_rate" class="col-xl-4 col-md-4">Price Rate</label>
                           <input class="form-control col-xl-7 col-md-8 catInput inputTxt" formControlName="subsubsubPricerate"
                                  id="txt_subsub_price_rate"
-                                 type="text" required="" [value]="marginRate">
+                                 type="text" required="">
                           <label for="txt_subsub_price_rate" class="col-xl-1 col-md-0"
                                  style="font-weight: bold; position: relative;margin-left: -5%;"> %</label>
                           <div class="col" style="margin-left: 30%">
