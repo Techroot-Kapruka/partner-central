@@ -89,6 +89,7 @@ export class EditProductsComponent implements OnInit {
   public old_txt_listning_price = '';
   public old_txt_price_rate = '';
   public productCode = '';
+  public imagedefaultPathURI = '';
 
   public editPrice = false;
   public btnUpdatePrice = false;
@@ -739,24 +740,38 @@ export class EditProductsComponent implements OnInit {
       imageURI01Output = imageURI01.split('/product');
     }
 
-    if (data['data'][1] != null) {
+    if (data['data'][1] != "none") {
       var imageURI02 = data['data'][1];
       imageURI02Output = imageURI02.split('/product');
+    }else {
+      this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
+      imageURI02Output[1] = this.imagedefaultPathURI + '/1.jpg';
     }
-    if (data['data'][2] != null) {
+
+    if (data['data'][2] != "none") {
       var imageURI03 = data['data'][2];
       imageURI03Output = imageURI03.split('/product');
+    }else {
+      this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
+      imageURI03Output[1] = this.imagedefaultPathURI + '/1.jpg';
     }
 
-    if (data['data'][3] != null) {
+    if (data['data'][3] != "none") {
       var imageURI04 = data['data'][3];
       imageURI04Output = imageURI04.split('/product');
+    }else {
+      this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
+      imageURI04Output[1] = this.imagedefaultPathURI + '/1.jpg';
     }
 
-    if (data['data'][4] != null) {
+    if (data['data'][4] != "none") {
       var imageURI05 = data['data'][4];
       imageURI05Output = imageURI05.split('/product');
+    }else {
+      this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
+      imageURI05Output[1] = this.imagedefaultPathURI + '/1.jpg';
     }
+
     this.imageOne = imageURI01Output[1];
     this.imageOne2 = imageURI02Output[1];
     this.imageOne3 = imageURI03Output[1];

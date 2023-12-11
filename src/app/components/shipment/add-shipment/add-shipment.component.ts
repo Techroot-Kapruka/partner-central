@@ -254,10 +254,6 @@ export class AddShipmentComponent implements OnInit {
   }
 
   manageSaveShipment(data) {
-    // console.log('shipment Add!!!!!!!!!')
-    // console.log(data)
-    // console.log('chnageFields!!!!!!!!!')
-    // console.log(this.changeFeids)
     this.shipmentID = data.data.shipment_id;
     for (let x = 0; x < this.changeFeids.length; x++ ){
       const or= {
