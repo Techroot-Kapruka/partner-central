@@ -34,7 +34,7 @@ export class AnalyticsProductViewComponent implements OnInit {
     this.getListProductView();
     this.getPartner();
     const sessionUser = sessionStorage.getItem('userRole');
-    if(sessionUser === 'ROLE_ADMIN'){
+    if(sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN'){
       this.showHighestViewsForAdmin();
     }
 
@@ -45,7 +45,7 @@ export class AnalyticsProductViewComponent implements OnInit {
 
   getPartner(): void {
     const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER') {
+    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN' || sessionUser === 'ROLE_STORES_MANAGER') {
       this.isAdmin = true;
       this.productService.getPartnerAll().subscribe(
         data => this.managePartners(data),
@@ -145,12 +145,12 @@ export class AnalyticsProductViewComponent implements OnInit {
   }
 
   loadPage(index: number) {
-      window.open('https://www.kapruka.com/buyonline/' + this.analyticsProductClickList[this.startIndex + index].productName.replace(/\s+/g, '-').toLowerCase() + '/kid/' + 'ef_pc_' + this.analyticsProductClickList[this.startIndex + index].productId, '_blank');
+    window.open('https://www.kapruka.com/buyonline/' + this.analyticsProductClickList[this.startIndex + index].productName.replace(/\s+/g, '-').toLowerCase() + '/kid/' + 'ef_pc_' + this.analyticsProductClickList[this.startIndex + index].productId, '_blank');
   }
 
   popUpImageActive(index: number) {
-      this.imageUrl = this.imagePathURI + this.analyticsProductClickList[this.startIndex + index].productImage;
-      this.modalRef = this.modal.open(this.imagePopup, {centered: true});
+    this.imageUrl = this.imagePathURI + this.analyticsProductClickList[this.startIndex + index].productImage;
+    this.modalRef = this.modal.open(this.imagePopup, {centered: true});
   }
 
   closePopup() {

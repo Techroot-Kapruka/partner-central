@@ -99,7 +99,7 @@ export class EditProductsComponent implements OnInit {
   public oldSellingPrice = '';
 
   descriptionContent;
-
+  titleValue;
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: false,
@@ -129,7 +129,7 @@ export class EditProductsComponent implements OnInit {
   };
   @ViewChild('imagePopup') imagePopup: ElementRef;
 
-  constructor(private categoryService: CategoryService,private router: Router, private _Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService, private imageService: ImageService) {
+  constructor(private categoryService: CategoryService, private router: Router, private _Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService, private imageService: ImageService) {
     this.ids = '';
     this.getAllCategory();
     this._Activatedroute.paramMap.subscribe(params => {
@@ -139,9 +139,9 @@ export class EditProductsComponent implements OnInit {
       const sessionUserRole = sessionStorage.getItem('userRole');
       const pattern = /0V\d+POD/;
       const isMatch = pattern.test(this.ids);// check ondemand id
-      if (isMatch && sessionUserRole === 'ROLE_PARTNER' ) {
+      if (isMatch && sessionUserRole === 'ROLE_PARTNER') {
         this.editPrice = true;
-      }else {
+      } else {
         this.editPrice = false;
       }
 
@@ -157,7 +157,7 @@ export class EditProductsComponent implements OnInit {
   hideElement(): void {
     const role = sessionStorage.getItem('userRole');
 
-    if (role === 'ROLE_ADMIN' || role === 'ROLE_CATEGORY_MANAGER' || role === 'ROLE_STORES_MANAGER') {
+    if (role === 'ROLE_ADMIN' || role === 'ROLE_SUPER_ADMIN' || role === 'ROLE_CATEGORY_MANAGER' || role === 'ROLE_STORES_MANAGER') {
       this.isAdmin = true;
     } else {
       this.isAdmin = false;
@@ -382,45 +382,45 @@ export class EditProductsComponent implements OnInit {
     }
   }
 
-  changeTab(event: any){
+  changeTab(event: any) {
     if (event.nextId == '3') {
       this.imageControlMethord();
     }
   }
 
-  async imageAssign(event, imgID, index){
-    const result = await this.imageService.validateImage(event,imgID,"edit");
-    switch(index){
+  async imageAssign(event, imgID, index) {
+    const result = await this.imageService.validateImage(event, imgID, "edit");
+    switch (index) {
       case 1:
-        if(result){
+        if (result) {
           this.imageCliant.patchValue({
             fileSource: result
           });
         }
         break;
       case 2:
-        if(result){
+        if (result) {
           this.imageCliant.patchValue({
             fileSource2: result
           });
         }
         break;
       case 3:
-        if(result){
+        if (result) {
           this.imageCliant.patchValue({
             fileSource3: result
           });
         }
         break;
       case 4:
-        if(result){
+        if (result) {
           this.imageCliant.patchValue({
             fileSource4: result
           });
         }
         break;
       case 5:
-        if(result){
+        if (result) {
           this.imageCliant.patchValue({
             fileSource5: result
           });
@@ -697,7 +697,7 @@ export class EditProductsComponent implements OnInit {
       }
 
       // ++++++++++++++++ondemand price set values++++++++++++++++++++++++
-      if (this.editPrice){
+      if (this.editPrice) {
         this.oldSellingPrice = this.productGroupTabel[0].selling_price;
         this.oldChangingRate = this.productGroupTabel[0].changing_rate;
         this.oldCostPrice = this.productGroupTabel[0].cost_price;
@@ -877,13 +877,13 @@ export class EditProductsComponent implements OnInit {
 
   private manageEditField(data) {
 
-    if (data.message_status === 'Error'){
+    if (data.message_status === 'Error') {
       Swal.fire(
         'error...!',
         data.message,
         'error'
       );
-    }else if(data.message_status === 'Success'){
+    } else if (data.message_status === 'Success') {
       Swal.fire(
         'well done...!',
         data.message,
@@ -966,6 +966,7 @@ export class EditProductsComponent implements OnInit {
       );
     }
   }
+
   saveEditedImage() {
     let one = this.imageCliant.get('fileSource').value;
     let one2 = this.imageCliant.get('fileSource2').value;
@@ -973,7 +974,7 @@ export class EditProductsComponent implements OnInit {
     let one4 = this.imageCliant.get('fileSource4').value;
     let one5 = this.imageCliant.get('fileSource5').value;
     const pricecc = new File([''], '');
-    if(one=== '' && one2 === '' && one3 === '' && one4 === '' && one5 === ''){
+    if (one === '' && one2 === '' && one3 === '' && one4 === '' && one5 === '') {
       Swal.fire(
         "You haven't made any changes",
         '',
@@ -1027,7 +1028,7 @@ export class EditProductsComponent implements OnInit {
   protected readonly Event = Event;
 
 
-  calcSellerIncomeBySellingPrice(){
+  calcSellerIncomeBySellingPrice() {
     if ((document.getElementById('onDemandSellingPriceID') as HTMLInputElement).value === '' || (document.getElementById('onDemandMarginID') as HTMLInputElement).value === '') {
       // Swal.fire(
       //   'Error',
@@ -1042,12 +1043,12 @@ export class EditProductsComponent implements OnInit {
       const margin = parseFloat((document.getElementById('onDemandMarginID') as HTMLInputElement).value.trim());
 
       const oldMargin = parseFloat(this.oldChangingRate);
-      if (sellingPrice > 0 && margin > 0){
+      if (sellingPrice > 0 && margin > 0) {
 
-        if (oldMargin <= margin){
+        if (oldMargin <= margin) {
           const newCostPrice = sellingPrice - (margin * sellingPrice / 100);
           (document.getElementById('onDemandCostPriceID') as HTMLInputElement).value = newCostPrice.toString();
-        }else {
+        } else {
           Swal.fire(
             'Error',
             'Margin must be greater than ' + oldMargin,
@@ -1055,7 +1056,7 @@ export class EditProductsComponent implements OnInit {
           );
           (document.getElementById('onDemandMarginID') as HTMLInputElement).value = this.oldChangingRate;
         }
-      }else {
+      } else {
         Swal.fire(
           'Error',
           'Values must be greater than 0',
@@ -1067,6 +1068,7 @@ export class EditProductsComponent implements OnInit {
 
     }
   }
+
   updatePrice() {
 
     const productId = this.ids;
@@ -1104,16 +1106,51 @@ export class EditProductsComponent implements OnInit {
     };
 
 
-    if (productId === ''){
+    if (productId === '') {
       Swal.fire(
         'Error',
         'Error',
         'warning'
       );
-    }else {
+    } else {
       this.productService.editField(payload).subscribe(
         data => this.manageEditField(data),
       );
     }
   }
+
+  updateTitle() {
+    if (this.isAdmin) {
+
+      if (this.oldTitle === this.titleValue) {
+        Swal.fire(
+          'No Changes Found!',
+          '',
+          'info'
+        );
+      } else {
+        const payload = {
+          column: 'title',
+          tblname: 'product_basic_info',
+          value: this.titleValue,
+          whereClause: 'product_code',
+          whereValue: this.ids
+        }
+        this.productService.editAdminSave(payload).subscribe(
+          data => {
+            Swal.fire(
+              'Updated!',
+              '',
+              'success'
+            ).then((result) => {
+              if (result.isConfirmed) {
+                this.titleValue === this.oldTitle;
+              }
+            });
+          }
+        );
+      }
+    }
+  }
+
 }
