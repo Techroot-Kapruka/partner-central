@@ -109,7 +109,6 @@ export class AddShipmentComponent implements OnInit {
     });
 
 
-
     this.pendingStockShare.dataArray$.subscribe(data => {
       this.productDetails = data;
     });
@@ -134,7 +133,7 @@ export class AddShipmentComponent implements OnInit {
       console.log(this.partnerProductArray)
       console.log(this.partnerProductArray.find(product => product.product_code === item.productCode))
       let proCode = item.productId
-      if (proCode.includes('_TC')){
+      if (proCode.includes('_TC')) {
         proCode = proCode.split('_TC')[0]
       }
       const selectedProductObj = this.partnerProductArray.find(product => product.product_code === item.productCode);
@@ -254,13 +253,9 @@ export class AddShipmentComponent implements OnInit {
   }
 
   manageSaveShipment(data) {
-    // console.log('shipment Add!!!!!!!!!')
-    // console.log(data)
-    // console.log('chnageFields!!!!!!!!!')
-    // console.log(this.changeFeids)
     this.shipmentID = data.data.shipment_id;
-    for (let x = 0; x < this.changeFeids.length; x++ ){
-      const or= {
+    for (let x = 0; x < this.changeFeids.length; x++) {
+      const or = {
         shipment_id: this.shipmentID,
         product_code: this.changeFeids[x].productCode,
         isPriceChange: 1
@@ -345,7 +340,7 @@ export class AddShipmentComponent implements OnInit {
   }
 
 
-  manageIsPriceUpdateError(error){
+  manageIsPriceUpdateError(error) {
     console.log(error);
   }
 
@@ -382,8 +377,8 @@ export class AddShipmentComponent implements OnInit {
     );
   }
 
-  splitFromTC(productCode:string){
-    if (productCode.includes('_TC')){
+  splitFromTC(productCode: string) {
+    if (productCode.includes('_TC')) {
       return productCode.split('_TC')[0]
     } else {
       return productCode;
@@ -432,21 +427,23 @@ export class AddShipmentComponent implements OnInit {
         }
       } else {
         for (let i = 0; i < data.data.length; i++) {
-          const or = {
-            product_code: data.data[i].product_code,
-            name: data.data[i].title,
-            value: data.data[i].product_code,
-            label: data.data[i].product_code + ' - ' + data.data[i].title,
-            qty: data.data[i].qty,
-            cost_price: data.data[i].cost_price,
-            selling_price: data.data[i].selling_price,
-            amount: data.data[i].amount,
-            changingAmount: data.data[i].changing_amount,
-            changingRate: data.data[i].changing_rate,
-            product_variations: data.data[i].productVariation,
-            item_group: data.data[i].item_group,
-          };
-          this.partnerProductArray.push(or);
+          if (!data.data[i].product_code.includes('POD')) {
+            const or = {
+              product_code: data.data[i].product_code,
+              name: data.data[i].title,
+              value: data.data[i].product_code,
+              label: data.data[i].product_code + ' - ' + data.data[i].title,
+              qty: data.data[i].qty,
+              cost_price: data.data[i].cost_price,
+              selling_price: data.data[i].selling_price,
+              amount: data.data[i].amount,
+              changingAmount: data.data[i].changing_amount,
+              changingRate: data.data[i].changing_rate,
+              product_variations: data.data[i].productVariation,
+              item_group: data.data[i].item_group,
+            };
+            this.partnerProductArray.push(or);
+          }
         }
       }
     }
@@ -536,7 +533,7 @@ export class AddShipmentComponent implements OnInit {
 
     if (this.isOnDemandShipment) {
       this.callingCount += 1
-      if (this.callingCount <= this.sharedData.length){
+      if (this.callingCount >= this.sharedData.length) {
         this.addToTable();
       }
     }
@@ -550,16 +547,16 @@ export class AddShipmentComponent implements OnInit {
       let changingRate = (document.getElementById('initialRate') as HTMLInputElement).value;
 
 
-      if (sellingPrice === '' && changingRate === this.changeChangingRate.toString()){
-          Swal.fire(
-            'No Changes to Submit!',
-            '',
-            'info'
-          );
-          return;
+      if (sellingPrice === '' && changingRate === this.changeChangingRate.toString()) {
+        Swal.fire(
+          'No Changes to Submit!',
+          '',
+          'info'
+        );
+        return;
       }
 
-      if (sellingPrice === ''){
+      if (sellingPrice === '') {
         sellingPrice = this.changeSellingPrice;
       }
 
@@ -632,10 +629,10 @@ export class AddShipmentComponent implements OnInit {
     }
   }
 
-  updateChangingRate(){
+  updateChangingRate() {
     const inputElement = (document.getElementById('initialRate') as HTMLInputElement);
 
-    if (this.changeChangingRate > parseFloat(inputElement.value)){
+    if (this.changeChangingRate > parseFloat(inputElement.value)) {
       Swal.fire(
         'You are Not Allowed to Degrade the Changing Rate.',
         'Only Increasing is Allowed',
@@ -645,6 +642,7 @@ export class AddShipmentComponent implements OnInit {
       return;
     }
   }
+
   popup() {
     this.modalRef = this.modal.open(this.changePricePopup, {centered: true});
     (document.getElementById('initialRate') as HTMLInputElement).value = this.changeChangingRate;
