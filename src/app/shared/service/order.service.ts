@@ -72,4 +72,12 @@ export class OrderService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'shipment/getODShipmentStatus', payload, {headers});
   }
+
+  generateQRCode(productCode, pnRefNo: any){
+    const formData: FormData = new FormData();
+    formData.append('productCode', productCode);
+    formData.append('pnRefNo', pnRefNo);
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'orders/generateProQRCode', formData, {headers});
+  }
 }
