@@ -45,7 +45,7 @@ export class ListPaymentComponent implements OnInit {
 
   hideElement(): void {
     let role = sessionStorage.getItem('userRole');
-    if (role === 'ROLE_ADMIN') {
+    if (role === 'ROLE_ADMIN' || role === 'ROLE_SUPER_ADMIN') {
       this.isAdmin = true;
     } else {
       this.isAdmin = false;
@@ -92,7 +92,7 @@ export class ListPaymentComponent implements OnInit {
 
   getPartner(): void {
     let sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN') {
+    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
       this.orderService.getPartnerAll().subscribe(
         data => this.setPartner(data),
       );
@@ -119,7 +119,7 @@ export class ListPaymentComponent implements OnInit {
     };
 
     let sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN') {
+    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
       this.paymentService.getPaymentByBussiness(bussiness).subscribe(
         data => this.managePaymentDetails(data),
       );

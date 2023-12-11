@@ -115,7 +115,7 @@ export class ListShipmentComponent implements OnInit {
     const userRole = sessionStorage.getItem('userRole');
     this.isPartner = userRole === 'ROLE_PARTNER';
 
-    this.isAdmin = userRole === 'ROLE_ADMIN';
+    this.isAdmin = userRole === 'ROLE_ADMIN' || userRole === 'ROLE_SUPER_ADMIN';
   }
 
   takeReceivedShipmentByVendor() {
