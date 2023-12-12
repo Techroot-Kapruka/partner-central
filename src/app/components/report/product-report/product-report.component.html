@@ -4,12 +4,6 @@
       <div class="card">
         <div class="card-header">
           <div class="row">
-            <div class="col-md-9">
-              <h5 style="padding-left: 15px">Product Details </h5>
-            </div>
-            <div class="col-md-3">
-              <button class="btn btn-success float-right" (click)="exportToExcel()">Export to Excel</button>
-            </div>
           </div>
           <div class="row">
             <div class="col-md-4" style="margin-top: 10px">
@@ -20,9 +14,9 @@
                         value="{{partnerArrays['partner_u_id']}}">{{partnerArrays['businessName']}}</option>
               </select>
             </div>
-            <div class="col-md-4" style="margin-top: 10px">
-              <input class="form-control" type="text" [(ngModel)]="productSearch" (input)="ActiveProductFilter($event.target.value)"
-                     placeholder="Search By Product">
+            <div class="col-md-5" style="margin-top: 10px"></div>
+            <div class="col-md-3" style="margin-top: 10px">
+              <button class="btn btn-success float-right" (click)="exportToExcel()"> Export to Excel</button>
             </div>
           </div>
         </div>
@@ -34,7 +28,7 @@
               </div>
               <div *ngIf="!isLoading">
                 <div class="row table-responsive"
-                     style="margin-top: 1%;max-height:50vh; overflow-y: auto; width: 135%;">
+                     style="margin-top: 1%; max-height:70vh; overflow-y: auto; width: 135%;">
                   <table class="table table-sm table-bordered">
                     <thead class="table-primary">
                     <tr>
@@ -50,7 +44,7 @@
                     <tr *ngIf="noRecords" style="background-color: #5DADE2">
                       <td colspan="7">Records not found</td>
                     </tr>
-                    <tr *ngFor="let productDetail of filteredProducts; let i = index">
+                    <tr *ngFor="let productDetail of productDetailsArr; let i = index">
                       <td>
                         {{ productDetail.product_code }}
                         <p style="margin: 0px; font-size: 14px; color: #6f6f6f;">{{ productDetail.category_code }}</p>

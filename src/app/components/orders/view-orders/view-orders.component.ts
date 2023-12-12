@@ -5,7 +5,8 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {environment} from '../../../../environments/environment.prod';
 import {ProductService} from '../../../shared/service/product.service';
 import {OrderShareService} from '../../../shared/service/order-share.service';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {NgbCollapseModule, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {error} from 'protractor';
 
 @Component({
   selector: 'app-view-orders',
@@ -24,7 +25,6 @@ export class ViewOrdersComponent implements OnInit {
   public resp = {
     costPrice: 0,
     sellingPrice: 0
-
   };
   public isCollapsed = true;
   variationTheme = '';
@@ -35,6 +35,17 @@ export class ViewOrdersComponent implements OnInit {
   imageUrl: string;
   modalRef: any;
   @ViewChild('imagePopup') imagePopup: any;
+
+  public deliveryDate = '';
+  public purchaseApprovalID = '';
+  public orderRefNo = '';
+  public orderDescription = '';
+  public city = '';
+  public productCode = '';
+  public proCode = '';
+  public productName = '';
+  public image = '';
+  public vendorName = '';
 
   constructor(private _Activatedroute: ActivatedRoute, private orderService: OrderService, private router: Router, private productService: ProductService, private order: OrderShareService, private modal: NgbModal) {
     this._Activatedroute.paramMap.subscribe(params => {
@@ -71,6 +82,17 @@ export class ViewOrdersComponent implements OnInit {
 
   async manageSingleOrder(data) {
     this.cartsnapshotArr = [];
+
+    this.vendorName = data.data.vendorName;
+    this.deliveryDate = data.data.delivery_date;
+    this.purchaseApprovalID = data.data.purchase_approval_id.split('-')[1];
+    this.orderRefNo = data.data.orderRefNo;
+    this.orderDescription = data.data.description.toUpperCase();
+    const inputString = this.orderDescription;
+    const cityRegex = /\(City\s*-\s*([^\s<)]+)/i;
+    const match = inputString.match(cityRegex);
+    this.city = match ? match[1] : 'NA';
+
     this.orderControle.get('txtorderId').setValue(data.data.id);
     this.orderControle.get('txtStatus').setValue(data.data.status);
     this.orderControle.get('txtPnref').setValue(data.data.pnref);
@@ -98,11 +120,10 @@ export class ViewOrdersComponent implements OnInit {
         const image = this.imagePathURI + this.images;
         this.size = data.data.cartsnapshot[i].size;
         if (this.cartsnapshotArr.some(product => product.productId === data.data.cartsnapshot[i].productID)){
-          const existingIndex = this.cartsnapshotArr.findIndex(product => product.productId === data.data.cartsnapshot[i].productID)
-          const existingQty = this.cartsnapshotArr[existingIndex].size
-          this.cartsnapshotArr[existingIndex].size = existingQty + data.data.cartsnapshot[i].size
-          console.log('k')
-          continue
+          const existingIndex = this.cartsnapshotArr.findIndex(product => product.productId === data.data.cartsnapshot[i].productID);
+          const existingQty = this.cartsnapshotArr[existingIndex].size;
+          this.cartsnapshotArr[existingIndex].size = existingQty + data.data.cartsnapshot[i].size;
+          continue;
         }
         const or = {
           image: image,
@@ -121,7 +142,6 @@ export class ViewOrdersComponent implements OnInit {
     if (imgProductCode.includes('_TC')) {
       imgProductCode = imgProductCode.split('_TC')[0];
     }
-    console.log(imgProductCode);
     const payload = {
       product_code: imgProductCode
     };
@@ -153,7 +173,6 @@ export class ViewOrdersComponent implements OnInit {
     let dataa = [];
     const promises = [];
     this.cartsnapshotArr.forEach((item, i) => {
-      console.log(item)
 
       let productCode = item.productId.toLowerCase();
       if (productCode.toLowerCase().includes('ef_pc_')) {
@@ -169,7 +188,7 @@ export class ViewOrdersComponent implements OnInit {
       const promise = new Promise<void>((resolve, reject) => {
         this.productService.getProductPrices(payload).subscribe(
           datas => {
-            this.manageData(datas, i)
+            this.manageData(datas, i);
 
             resolve();
           },
@@ -179,7 +198,7 @@ export class ViewOrdersComponent implements OnInit {
         );
       });
       promises.push(promise);
-    })
+    });
 
     // Wait for all promises to resolve before proceeding
     Promise.all(promises)
@@ -206,7 +225,6 @@ export class ViewOrdersComponent implements OnInit {
         // };
         //
         // shipmentArr.push(orr2);
-        console.log(this.resp)
         for (const item of this.cartsnapshotArr) {
           let productCode = item.productId.toLowerCase();
           if (productCode.toLowerCase().includes('ef_pc_')) {
@@ -225,7 +243,6 @@ export class ViewOrdersComponent implements OnInit {
             changingRate: item.changingRate,
             orderRef: item.orderRef
           };
-          console.log(orr)
           shipmentArr.push(orr);
         }
         this.order.setDataArray(shipmentArr);
@@ -238,10 +255,9 @@ export class ViewOrdersComponent implements OnInit {
   }
 
   manageData(data, i) {
-    console.log(data)
-    this.cartsnapshotArr[i].sellingPrice = data.data.SellingPrice
-    this.cartsnapshotArr[i].costPrice = data.data.costPrice
-    this.cartsnapshotArr[i].changingRate = data.data.changingRate
+    this.cartsnapshotArr[i].sellingPrice = data.data.SellingPrice;
+    this.cartsnapshotArr[i].costPrice = data.data.costPrice;
+    this.cartsnapshotArr[i].changingRate = data.data.changingRate;
   }
 
   popupImage(url: string) {
@@ -270,7 +286,6 @@ export class ViewOrdersComponent implements OnInit {
       variationCode = variationCode.replace('ef_hs_', '');
     }
     const newVariationCode = variationCode.toUpperCase();
-    console.log(newVariationCode);
     const payload = {
       variation_code: newVariationCode
     };
@@ -289,5 +304,72 @@ export class ViewOrdersComponent implements OnInit {
     );
   }
 
-
+  PrintQR(productCode) {
+    if (this.cartsnapshotArr != null) {
+      for (let i = 0; i < this.cartsnapshotArr.length; i++) {
+        if (productCode === this.cartsnapshotArr[i].productId) {
+          this.productName = this.cartsnapshotArr[i].name;
+          // tslint:disable-next-line:no-shadowed-variable
+          const productCode = this.cartsnapshotArr[i].productId;
+          this.proCode = productCode.toUpperCase();
+        }
+      }
+    }
+    this.orderService.generateQRCode(this.proCode, this.orderRefNo).subscribe(
+      data => {
+        this.manageSaveQr(data);
+      },
+    );
+  }
+  manageSaveQr(data) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.onload = () => {
+      canvas.width = img.width;
+      canvas.height = img.height;
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+      const dataUrl = canvas.toDataURL('image/png');
+    };
+    img.src = 'data:image/png;base64,' + data.data;
+    this.image = img.src;
+    this.PrintQRCode();
+  }
+  private PrintQRCode() {
+    const popupWin = window.open('', '_blank');
+    popupWin.document.open();
+    popupWin.document.write(`
+      <html>
+        <head><title>Order Details</title></head>
+        <body onload="window.print();window.onafterprint=function(){window.close()}">
+          <table style="padding-right: 100px; padding-left:100px;">
+            <tr>
+              <td style="text-align: center;">
+                <table style="border-collapse: collapse; width: 100%;">
+                  <tr>
+                    <td colspan="2" style="padding: 10px; padding-left: 20px; text-align: right; font-size: 20px">( ${this.vendorName} ) Delivery Date : ${this.deliveryDate}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="padding: 10px; padding-left: 20px; text-align: center; font-size: 40px">${this.purchaseApprovalID}</td>
+                  </tr>
+                  <tr>
+                    <td style="border: 1px solid #ddd; padding: 10px; padding-left: 20px; text-align: left; font-size: 30px">${this.orderRefNo}</td>
+                    <td style="border: 1px solid #ddd; padding: 10px; padding-left: 20px; text-align: left;  font-size: 30px">${this.city}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding-left: 10px; padding-top: 10px; text-align: left; font-size: 20px">${this.proCode}</td>
+                    <td style="padding-left: 10px; padding-top: 10px; text-align: left; font-size: 20px">${this.productName}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="2" style="margin-top: 20px; text-align: center;"><img src="${this.image}" style="width: 30%; height: 30%;" alt="QR Code"></td>
+                  </tr>
+                </table>
+                </td>
+              </tr>
+          </table>
+        </body>
+      </html>`
+    );
+    popupWin.document.close();
+  }
 }
