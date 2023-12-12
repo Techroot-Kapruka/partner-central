@@ -693,6 +693,12 @@ export class AddShipmentComponent implements OnInit {
           const sellerIncome = this.sharedData[i].costPrice * this.sharedData[i].size;
           const grossAmount = this.sharedData[i].sellingPrice * this.sharedData[i].size;
           const tempProductName = this.sharedData[i].name.toString().concat(' - Unknownnone');
+
+          const variation = this.productVariationArrayForClothes.find(variation => variation.variationCode === this.sharedData[i].productId);
+          const color = variation?.color;
+          const size = variation?.size;
+          const variationCode = variation?.variationCode
+
           const insertTabelData = {
             product_code: this.sharedData[i].productId,
             product_name: tempProductName,
@@ -705,9 +711,9 @@ export class AddShipmentComponent implements OnInit {
 
             seller_income: sellerIncome.toString(),
             amount: grossAmount.toString(),
-            color: this.productVariationArrayForClothes[0].color,
-            size: this.productVariationArrayForClothes[0].size,
-            variationCode: this.productVariationArrayForClothes[0].variationCode
+            color,
+            size,
+            variationCode
           };
           this.tableData.push(insertTabelData);
           console.log(insertTabelData)
