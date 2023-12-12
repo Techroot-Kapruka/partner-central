@@ -693,22 +693,51 @@ export class AddShipmentComponent implements OnInit {
           const sellerIncome = this.sharedData[i].costPrice * this.sharedData[i].size;
           const grossAmount = this.sharedData[i].sellingPrice * this.sharedData[i].size;
           const tempProductName = this.sharedData[i].name.toString().concat(' - Unknownnone');
-          const insertTabelData = {
-            product_code: this.sharedData[i].productId,
-            product_name: tempProductName,
+          let insertTabelData
 
-            cost_price: this.sharedData[i].costPrice,
-            quantity: this.sharedData[i].size,
-            changing_amount: dataForm.txtChangingAmount,
-            changing_rate: this.sharedData[i].changingRate,
-            selling_price: this.sharedData[i].sellingPrice,
 
-            seller_income: sellerIncome.toString(),
-            amount: grossAmount.toString(),
-            color: this.productVariationArrayForClothes[0].color,
-            size: this.productVariationArrayForClothes[0].size,
-            variationCode: this.productVariationArrayForClothes[0].variationCode
-          };
+          if (this.sharedData[i].productId.includes('_TC')){
+            const variation = this.productVariationArrayForClothes.find(variation => variation.variationCode === this.sharedData[i].productId);
+            const color = variation?.color;
+            const size = variation?.size;
+            const variationCode = variation?.variationCode
+
+            insertTabelData = {
+              product_code: this.sharedData[i].productId,
+              product_name: tempProductName,
+
+              cost_price: this.sharedData[i].costPrice,
+              quantity: this.sharedData[i].size,
+              changing_amount: dataForm.txtChangingAmount,
+              changing_rate: this.sharedData[i].changingRate,
+              selling_price: this.sharedData[i].sellingPrice,
+
+              seller_income: sellerIncome.toString(),
+              amount: grossAmount.toString(),
+              color,
+              size,
+              variationCode
+            };
+          } else {
+            insertTabelData = {
+              product_code: this.sharedData[i].productId,
+              product_name: tempProductName,
+
+              cost_price: this.sharedData[i].costPrice,
+              quantity: this.sharedData[i].size,
+              changing_amount: dataForm.txtChangingAmount,
+              changing_rate: this.sharedData[i].changingRate,
+              selling_price: this.sharedData[i].sellingPrice,
+
+              seller_income: sellerIncome.toString(),
+              amount: grossAmount.toString(),
+              color: this.productVariationArrayForClothes[0].color,
+              size: this.productVariationArrayForClothes[0].size,
+              variationCode: this.productVariationArrayForClothes[0].variationCode,
+            };
+          }
+
+
           this.tableData.push(insertTabelData);
           console.log(insertTabelData)
 
