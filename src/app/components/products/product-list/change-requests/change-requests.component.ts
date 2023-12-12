@@ -114,6 +114,8 @@ export class ChangeRequestsComponent implements OnInit {
         requestedDate: data.data[i].requestedDate,
         title: data.data[i].title,
         categoryPath: data.data[i].catePath,
+        type: data.data[i].editId,
+        requestedId: data.data[i].requestedBy,
         action: '',
         image: data.data[i].image1.split('/product')[1],
 
@@ -219,20 +221,12 @@ export class ChangeRequestsComponent implements OnInit {
   }
 
   ApproveEditImageProduct(event) {
-      /*const url = 'products/digital/edited-image-approve-product/' + event.productCode;
-      this.router.navigate([url], {
-        queryParams: {
-          product_code: event.productCode,
-          unique_code: event.editId,
-          requested_by: event.requestBy
-        }
-      });*/
-
     const url = '#/products/digital/edited-image-approve-product/' + event.productCode;
     const queryParams = {
       product_code: event.productCode,
       unique_code: event.editId,
-      requested_by: event.requestBy
+      requested_by: event.requestBy,
+      requestedId: event.requestedId
     };
 
     // Convert the queryParams object to a query string
