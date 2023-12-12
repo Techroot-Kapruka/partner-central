@@ -86,8 +86,7 @@ export class TableTemplateComponent implements OnInit {
         if (editType.startsWith('E')) {
           this.badge[i] = 'badge-success';
           this.elementStatus[i] = 'Edit Request';
-        } else {
-          console.log('here!!!!!!')
+        } else if (editType.startsWith('R')) {
           this.badge[i] = 'badge-danger';
           this.elementStatus[i] = 'Remove Request';
         }
