@@ -102,8 +102,9 @@
                                     (error)="onImageError($event)"></td>
             <td><p
                     style="margin: 0px; font-size: 16px; color: #000; cursor: pointer">
-                {{ productDetail.title}}</p>
-                <p style="margin: 0px;font-size: 16px; color: #000">{{
+                {{ productDetail.title}} <span class="badge {{badge[i]}}" style="float: right">{{elementStatus[i]}}</span></p>
+
+              <p style="margin: 0px;font-size: 16px; color: #000">{{
                     productDetail.productCode }}</p>
                 <p style="margin: 0px; font-size: 14px; color: #6f6f6f;"> &nbsp;
                     &nbsp;{{productDetail.categoryPath}}</p>

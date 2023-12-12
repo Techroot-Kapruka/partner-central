@@ -99,6 +99,8 @@ export class EditProductsComponent implements OnInit {
   public oldChangingRate = '';
   public oldSellingPrice = '';
 
+  public type = '';
+
   descriptionContent;
   titleValue;
   editorConfig: AngularEditorConfig = {
@@ -280,6 +282,10 @@ export class EditProductsComponent implements OnInit {
       imageOne3: new FormControl(''),
       imageOne4: new FormControl(''),
       imageOne5: new FormControl(''),
+      type2: new FormControl(''),
+      type3: new FormControl(''),
+      type4: new FormControl(''),
+      type5: new FormControl(''),
       fileSource: new FormControl(''),
       fileSource2: new FormControl(''),
       fileSource3: new FormControl(''),
@@ -314,42 +320,40 @@ export class EditProductsComponent implements OnInit {
   }
 
   removeimg(x: number) {
+    console.log(x)
+    this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
     switch (x) {
-      case 1:
-
-        this.imageCliant.patchValue({
-          fileSource: '',
-          imageOne: '',
-        });
-        (document.getElementById('imageOneO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
-        break;
       case 2:
         this.imageCliant.patchValue({
           fileSource2: '',
           imageOne2: '',
+          type2: 'remove'
         });
-        (document.getElementById('imageTwoO') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        this.imageOne2 = this.imagedefaultPathURI + '/1.jpg';
         break;
       case 3:
         this.imageCliant.patchValue({
           fileSource3: '',
           imageOne3: '',
+          type3: 'remove'
         });
-        (document.getElementById('imageTreeE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        this.imageOne3 = this.imagedefaultPathURI + '/1.jpg';
         break;
       case 4:
         this.imageCliant.patchValue({
           fileSource4: '',
           imageOne4: '',
+          type4: 'remove'
         });
-        (document.getElementById('imageFourR') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        this.imageOne4 = this.imagedefaultPathURI + '/1.jpg';
         break;
       case 5:
         this.imageCliant.patchValue({
           fileSource5: '',
           imageOne5: '',
+          type5: 'remove'
         });
-        (document.getElementById('imageFiveE') as HTMLImageElement).src = 'assets/images/dashboard/icons8-plus.gif';
+        this.imageOne5 = this.imagedefaultPathURI + '/1.jpg';
         break;
     }
   }
@@ -402,28 +406,35 @@ export class EditProductsComponent implements OnInit {
       case 2:
         if (result) {
           this.imageCliant.patchValue({
-            fileSource2: result
+            fileSource2: result,
+            type2: 'edit'
           });
         }
         break;
       case 3:
         if (result) {
+          this.type = 'edit';
           this.imageCliant.patchValue({
-            fileSource3: result
+            fileSource3: result,
+            type3: 'edit'
           });
         }
         break;
       case 4:
         if (result) {
+          this.type = 'edit';
           this.imageCliant.patchValue({
-            fileSource4: result
+            fileSource4: result,
+            type4: 'edit'
           });
         }
         break;
       case 5:
         if (result) {
+          this.type = 'edit';
           this.imageCliant.patchValue({
-            fileSource5: result
+            fileSource5: result,
+            type5: 'edit'
           });
         }
         break;
@@ -988,8 +999,17 @@ export class EditProductsComponent implements OnInit {
     let one3 = this.imageCliant.get('fileSource3').value;
     let one4 = this.imageCliant.get('fileSource4').value;
     let one5 = this.imageCliant.get('fileSource5').value;
+
+    let type2 = this.imageCliant.get('type2').value;
+    let type3 = this.imageCliant.get('type3').value;
+    let type4 = this.imageCliant.get('type4').value;
+    let type5 = this.imageCliant.get('type5').value;
     const pricecc = new File([''], '');
-    if (one === '' && one2 === '' && one3 === '' && one4 === '' && one5 === '') {
+
+
+    // *************************************************************
+
+    if (one === '' && one2 === '' && one3 === '' && one4 === '' && one5 === '' && type2 === '' && type3 === '' && type4 === '' && type5 === '') {
       Swal.fire(
         "You haven't made any changes",
         '',
@@ -997,6 +1017,7 @@ export class EditProductsComponent implements OnInit {
       );
       return;
     }
+
     if (one === '') {
       one = pricecc;
     }
@@ -1017,10 +1038,13 @@ export class EditProductsComponent implements OnInit {
       one5 = pricecc;
     }
 
-    this.productService.editFieldImageSave(one, one2, one3, one4, one5, this.ids).subscribe(
+
+    this.productService.editFieldImageSave(one, one2, one3, one4, one5, this.ids, type2, type3, type4, type5).subscribe(
       data => this.successAlert(data),
       error => this.mnageErrorProduct(error)
     );
+
+    // *************************************************************
   }
 
   mnageErrorProduct(error) {
