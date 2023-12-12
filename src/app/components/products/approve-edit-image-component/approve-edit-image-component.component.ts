@@ -77,7 +77,7 @@ export class ApproveEditImageComponentComponent implements OnInit {
           this.edit = false;
           removePathURI = data.data.image[i].split('/');
           const lastPart = removePathURI[removePathURI.length - 1];
-          imagePath[1] = '/' + this.requestedId.toLowerCase() + '/' + this.productCode_.toLowerCase() + '/' + lastPart;
+          imagePath[1] = '/' + this.requestedId.toLowerCase() + '/' + this.productCode_.replace("OD", "").toLowerCase() + '/' + lastPart;
         }
 
         this.imageData.push(imagePath[1] + '?' + new Date().getTime());
