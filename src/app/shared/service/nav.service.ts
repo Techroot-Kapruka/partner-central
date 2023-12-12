@@ -399,9 +399,9 @@ export class NavService {
     this.items.value[2].children[2].type = '';
 
 
-    this.items.value[4].path = '';
-    this.items.value[4].title = '';
-    this.items.value[4].type = '';
+    // this.items.value[4].path = '';
+    // this.items.value[4].title = '';
+    // this.items.value[4].type = '';
 
     this.items.value[5].children[2].path = '';
     this.items.value[5].children[2].title = '';

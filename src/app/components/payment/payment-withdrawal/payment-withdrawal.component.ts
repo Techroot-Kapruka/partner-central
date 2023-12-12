@@ -1,5 +1,6 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {PaymentService} from '../../../shared/service/payment.service';
+import {ProductService} from '../../../shared/service/product.service';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -10,30 +11,74 @@ import Swal from 'sweetalert2';
 })
 export class PaymentWithdrawalComponent implements OnInit {
   public isAdmin = true;
+  public isPartnerSelected = false;
   public recordList;
   public checkedCostPriceCount = 0;
   public totalPriceCounter = 0;
 
-  checkedUnchecked = [];
+  checkBoxStatusMap = [];
   vnCodeList = "";
   public isSuccess = false;
+  public partnerArray = [];
+  partnerID ="";
+  attemptNumber = 0;
 
-  constructor(private paymentService: PaymentService) {
-    this.getPaymentList();
+  constructor(private productService: ProductService, private paymentService: PaymentService) {
+    this.getPartnerList();
   }
 
-  getPaymentList() {
-    let sendObject = {};
-    sendObject = {
-      vendor_code: sessionStorage.getItem('partnerId')
-    };
-    this.paymentService.getVendorWisePaymentList(sendObject).subscribe(
+  getPartnerList(): void {
+    const sessionUser = sessionStorage.getItem('userRole');
+    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
+      this.isAdmin=true;
+      this.productService.getPartnerAll().subscribe(
+        data => this.managePartnerDropDownList(data),
+      );
+    }else{
+      let partnerId = sessionStorage.getItem('partnerId');
+      this.isAdmin=false;
+      this.getPaymentList(partnerId);
+    }
+  }
+  managePartnerDropDownList(data) {
+    this.partnerArray = [];
+    const partnerCount = data.data.length;
+    const partnerValue = data.data;
+    for (let i = 0; i < partnerCount; i++) {
+      const pr = {
+        name: partnerValue[i].businessName,
+        partner_name: partnerValue[i].partner_name,
+        partner_u_id: partnerValue[i].partner_u_id
+      };
+      this.partnerArray.push(pr);
+    }
+  }
+
+  getPaymentList(partnerId) {
+
+    this.partnerID = partnerId;
+    this.isPartnerSelected=true;
+
+    let payload = {
+        vendor_code: this.partnerID
+      };
+    this.paymentService.getVendorWisePaymentList(payload).subscribe(
       data => this.managePaymentList(data),
+      error => this.paymentListManagementError(error)
     );
   }
-
+  paymentListManagementError(error){
+    Swal.fire(
+      'Error',
+      error,
+      'error'
+    );
+  }
   managePaymentList(response) {
+
+    this.totalPriceCounter=0;
     if(response.message==="Success"){
+
       this.isSuccess = true;
       this.recordList=[];
 
@@ -50,9 +95,14 @@ export class PaymentWithdrawalComponent implements OnInit {
         })),
         totalCostPrice:data['totalCostPrice']
       }));
-      for(var i = 0;i<this.recordList.length;i++){
+      for(let i = 0;i<this.recordList.length;i++){
         this.totalPriceCounter+=this.recordList[i].totalCostPrice;
       }
+      if(this.attemptNumber>0){
+        let withdrawalBtn = document.getElementById('withdrawalBtn') as HTMLInputElement;
+        withdrawalBtn.disabled=false;
+      }
+      this.attemptNumber++;
     }else{
       this.isSuccess = false;
     }
@@ -61,59 +111,59 @@ export class PaymentWithdrawalComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  selectAll(){
-    var mainCheckBox = document.getElementById('mainCheckbox') as HTMLInputElement;
-    var checkboxes = document.getElementsByClassName('checkBoxSet');
+  selectAllCheckBoxes(){
+    let mainCheckBox = document.getElementById('mainCheckbox') as HTMLInputElement;
+    let checkboxes = document.getElementsByClassName('checkBoxSet');
 
     if(mainCheckBox.checked){
-      for(var i =0;i<checkboxes.length;i++){
-        var checkbox = checkboxes[i] as HTMLInputElement;
+      for(let i =0;i<checkboxes.length;i++){
+        let checkbox = checkboxes[i] as HTMLInputElement;
         checkbox.checked=true;
       }
-      for(var i =0;i<this.recordList.length;i++){
-        var checkboxId = "checkbox"+i;
-        var checkedValObj = {}
-        const existingObj = this.checkedUnchecked.some(obj => checkboxId in obj);
-        if(!existingObj){
-          checkedValObj[checkboxId]=true;
-          this.checkedUnchecked.push(checkedValObj);
-        }else{
-          this.checkedUnchecked.forEach(obj => {
+      for(let i =0;i<this.recordList.length;i++){
+        let checkboxId = "checkbox"+i;
+        let checkedValObj = {}
+        const existingObj = this.checkBoxStatusMap.some(obj => checkboxId in obj);
+        if(existingObj){
+          this.checkBoxStatusMap.forEach(obj => {
             if (checkboxId in obj) {
               obj[checkboxId] = true;
             }
           });
+        }else{
+          checkedValObj[checkboxId]=true;
+          this.checkBoxStatusMap.push(checkedValObj);
         }
       }
       this.checkedCostPriceCount= this.totalPriceCounter;
     }else{
-      for(var i =0;i<checkboxes.length;i++){
-        var checkbox = checkboxes[i] as HTMLInputElement;
+      for(let i =0;i<checkboxes.length;i++){
+        let checkbox = checkboxes[i] as HTMLInputElement;
         checkbox.checked=false;
       }
-      this.checkedUnchecked=[];
+      this.checkBoxStatusMap=[];
       this.checkedCostPriceCount=0;
     }
   }
-  checkedFunction(index, price) {
-    var mainCheckBox = document.getElementById('mainCheckbox') as HTMLInputElement;
+   checkBoxCheck(index, price) {
+    let mainCheckBox = document.getElementById('mainCheckbox') as HTMLInputElement;
     mainCheckBox.checked=false;
 
-    var checkboxId = "checkbox" + index;
-    var checkbox = document.getElementById(checkboxId) as HTMLInputElement;
-    var checkedValObj = {}
-    const existingObj = this.checkedUnchecked.some(obj => checkboxId in obj);
+    let checkboxId = "checkbox" + index;
+    let checkbox = document.getElementById(checkboxId) as HTMLInputElement;
+    let checkedValObj = {}
+    const existingObj = this.checkBoxStatusMap.some(obj => checkboxId in obj);
     if (existingObj) {
       if (checkbox.checked) {
         this.checkedCostPriceCount += price;
-        this.checkedUnchecked.forEach(obj => {
+        this.checkBoxStatusMap.forEach(obj => {
           if (checkboxId in obj) {
             obj[checkboxId] = true;
           }
         });
       } else {
         this.checkedCostPriceCount -= price;
-        this.checkedUnchecked.forEach(obj => {
+        this.checkBoxStatusMap.forEach(obj => {
           if (checkboxId in obj) {
             obj[checkboxId] = false;
           }
@@ -123,29 +173,31 @@ export class PaymentWithdrawalComponent implements OnInit {
       if (checkbox.checked) {
         checkedValObj[checkboxId] = true;
         this.checkedCostPriceCount += price;
-        this.checkedUnchecked.push(checkedValObj);
+        this.checkBoxStatusMap.push(checkedValObj);
       }
     }
   }
 
   withdrawal(){
+    let withdrawalBtn = document.getElementById('withdrawalBtn') as HTMLInputElement;
+    withdrawalBtn.disabled = true;
     this.vnCodeList="";
 
-    for (const obj of this.checkedUnchecked) {
+    for (const obj of this.checkBoxStatusMap) {
       for (const key in obj) {
         if (obj[key] === true) {
-          const lastCharacter = key.charAt(key.length - 1);
-          var vnCodeId = "vnCode"+lastCharacter;
+          const lastIndex = key.charAt(key.length - 1);
+          let vnCodeId = "vnCode"+lastIndex;
 
-          var vnCode = document.getElementById(vnCodeId);
+          let vnCode = document.getElementById(vnCodeId);
           this.vnCodeList+=","+vnCode.textContent;
         }
       }
     }
     if(this.vnCodeList!=""){
-      var userId = sessionStorage.getItem('userId');
-      var partnerId = sessionStorage.getItem('partnerId');
-      var selectedTotalPrice = this.checkedCostPriceCount;
+      let userId = sessionStorage.getItem('userId');
+      let partnerId = sessionStorage.getItem('partnerId');
+      let selectedTotalPrice = this.checkedCostPriceCount;
       this.vnCodeList = this.vnCodeList.replace(/\s/g, '').replace(',', '');
 
       const payload = {
@@ -158,12 +210,15 @@ export class PaymentWithdrawalComponent implements OnInit {
         data => this.manageVendorWithdrawals(data),
         error => this.errorFunction()
       );
+      this.totalPriceCounter=0;
+      this.checkedCostPriceCount=0;
     }else{
       Swal.fire(
         'Error',
         'Please make a Selection(s)',
         'warning'
       );
+      withdrawalBtn.disabled = false;
     }
   }
   manageVendorWithdrawals(data){
@@ -180,9 +235,11 @@ export class PaymentWithdrawalComponent implements OnInit {
         'success'
       );
     }
-    this.getPaymentList();
+    this.getPaymentList(this.partnerID);
   }
   errorFunction(){
+    let withdrawalBtn = document.getElementById('withdrawalBtn') as HTMLInputElement;
+    withdrawalBtn.disabled = false;
     Swal.fire(
       'Error!',
       "Something went wrong",
