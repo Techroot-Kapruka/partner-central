@@ -108,8 +108,9 @@ export class TableTemplateComponent implements OnInit {
   }
 
   addStock(data){
-    this.onAddStock.emit(data)
+    this.onAddStock.emit(data);
   }
+
   editSus(data){
     this.onEdit.emit(data)
   }
