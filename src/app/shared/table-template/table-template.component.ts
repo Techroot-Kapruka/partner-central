@@ -50,20 +50,6 @@ export class TableTemplateComponent implements OnInit {
     this.stillLoading = false;
   }
   showElerments() {
-    // if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
-    //   this.qaTables = true;
-    //   this.EnablePriceEdit = true;
-    //   this.EnableStockEdit = true;
-    // } else if (sessionStorage.getItem('userRole') === 'ROLE_QA') {
-    //   this.qaTables = false;
-    // } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
-    //   this.qaTables = true;
-    //   this.EnableStockEdit = true;
-    // } else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER') {
-    //   this.qaTables = true;
-    // } else if (sessionStorage.getItem('userRole') === 'ROLE_STORES_MANAGER') {
-    //   this.qaTables = true;
-    // }
     const Admin= sessionStorage.getItem('userRole') === 'ROLE_ADMIN'
     if (Admin){
       setTimeout(() => {
