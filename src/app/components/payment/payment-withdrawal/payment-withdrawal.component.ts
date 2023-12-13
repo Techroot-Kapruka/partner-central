@@ -67,7 +67,6 @@ export class PaymentWithdrawalComponent implements OnInit {
   }
 
   getPaymentList(partnerId) {
-    console.log("-----------getPaymentList-----------");
     this.isLoading=true;
     this.partnerID = partnerId;
     this.isPartnerSelected=true;
@@ -89,7 +88,6 @@ export class PaymentWithdrawalComponent implements OnInit {
     );
   }
   managePaymentList(response) {
-    console.log("-----------managePaymentList start-----------");
 
     this.totalPriceCounter=0;
     if(response.message==="Success"){
@@ -125,8 +123,6 @@ export class PaymentWithdrawalComponent implements OnInit {
       this.isSuccess = false;
     }
 
-    console.log("-----------managePaymentList end-----------");
-    console.log(this.isLoading);
   }
 
   ngOnInit(): void {
@@ -203,14 +199,15 @@ export class PaymentWithdrawalComponent implements OnInit {
     let withdrawalBtn = document.getElementById('withdrawalBtn') as HTMLInputElement;
     withdrawalBtn.disabled = true;
     this.vnCodeList="";
-
     for (const obj of this.checkBoxStatusMap) {
       for (const key in obj) {
         if (obj[key] === true) {
-          const lastIndex = key.charAt(key.length - 1);
+          const match = key.match(/\d+$/);
+          const lastIndex = match[0];
           let vnCodeId = "vnCode"+lastIndex;
 
           let vnCode = document.getElementById(vnCodeId);
+          vnCode.style.backgroundColor='red';
           this.vnCodeList+=","+vnCode.textContent;
         }
       }
