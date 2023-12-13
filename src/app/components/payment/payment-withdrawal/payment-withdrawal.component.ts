@@ -15,6 +15,7 @@ export class PaymentWithdrawalComponent implements OnInit {
   public recordList;
   public checkedCostPriceCount = 0;
   public totalPriceCounter = 0;
+  public partnerBusinessName ="";
 
   checkBoxStatusMap = [];
   vnCodeList = "";
@@ -65,6 +66,11 @@ export class PaymentWithdrawalComponent implements OnInit {
   }
 
   getPaymentList(partnerId) {
+    if(this.isAdmin){
+      var partnerName = document.getElementById('selectPartnersDropDown') as HTMLSelectElement;
+      this.partnerBusinessName = partnerName.options[partnerName.selectedIndex].text;
+    }
+
     this.isLoading=true;
     this.partnerID = partnerId;
     this.isPartnerSelected=true;
