@@ -15,6 +15,7 @@ export class PaymentWithdrawalComponent implements OnInit {
   public recordList;
   public checkedCostPriceCount = 0;
   public totalPriceCounter = 0;
+  public partnerBusinessName ="";
 
   checkBoxStatusMap = [];
   vnCodeList = "";
@@ -29,7 +30,7 @@ export class PaymentWithdrawalComponent implements OnInit {
   }
 
   getPartnerList(): void {
-    this.isLoading=true;
+
     const sessionUser = sessionStorage.getItem('userRole');
     if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
       this.isAdmin=true;
@@ -44,7 +45,6 @@ export class PaymentWithdrawalComponent implements OnInit {
     }
   }
   partnerListError(error){
-    this.isLoading=false;
     Swal.fire(
       'Error',
       error.error.message_status,
@@ -63,10 +63,14 @@ export class PaymentWithdrawalComponent implements OnInit {
       };
       this.partnerArray.push(pr);
     }
-  this.isLoading=false;
   }
 
   getPaymentList(partnerId) {
+    if(this.isAdmin){
+      var partnerName = document.getElementById('selectPartnersDropDown') as HTMLSelectElement;
+      this.partnerBusinessName = partnerName.options[partnerName.selectedIndex].text;
+    }
+
     this.isLoading=true;
     this.partnerID = partnerId;
     this.isPartnerSelected=true;
@@ -88,7 +92,7 @@ export class PaymentWithdrawalComponent implements OnInit {
     );
   }
   managePaymentList(response) {
-
+    this.isLoading=false;
     this.totalPriceCounter=0;
     if(response.message==="Success"){
 
@@ -117,9 +121,7 @@ export class PaymentWithdrawalComponent implements OnInit {
         withdrawalBtn.disabled=false;
       }
       this.attemptNumber++;
-      this.isLoading=false;
     }else{
-      this.isLoading=false;
       this.isSuccess = false;
     }
 
@@ -207,7 +209,6 @@ export class PaymentWithdrawalComponent implements OnInit {
           let vnCodeId = "vnCode"+lastIndex;
 
           let vnCode = document.getElementById(vnCodeId);
-          vnCode.style.backgroundColor='red';
           this.vnCodeList+=","+vnCode.textContent;
         }
       }
