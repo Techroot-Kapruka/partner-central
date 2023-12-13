@@ -648,7 +648,7 @@ export class DigitalListComponent implements OnInit {
                   : data.data[i].onDemand_products.isActive === 1
                     ? 'Active'
                     : '',
-            showButton: data.data[i].onDemand_products.isActive === -101 || data.data[i].onDemand_products.isActive === -102 ? true : '',
+            showButton: data.data[i].onDemand_products.isActive === -101 || data.data[i].onDemand_products.isActive === -102 || data.data[i].onDemand_products.isActive === -5 ? true : '',
             categoryPath: data.data[i].category_path,
             image: data.data[i].product_img.split('/product')[1],
             Action: ''
@@ -665,6 +665,7 @@ export class DigitalListComponent implements OnInit {
         ];
         this.totalPagesOnDemand = Math.ceil(this.consignmentProducts.length / this.list_pages2);
         this.onPageChange(1, 'PendingOnDemand');
+        console.log('')
       }
     }
   }
