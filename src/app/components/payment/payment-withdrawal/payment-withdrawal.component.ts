@@ -22,23 +22,34 @@ export class PaymentWithdrawalComponent implements OnInit {
   public partnerArray = [];
   partnerID ="";
   attemptNumber = 0;
+  isLoading:boolean;
 
   constructor(private productService: ProductService, private paymentService: PaymentService) {
     this.getPartnerList();
   }
 
   getPartnerList(): void {
+    this.isLoading=true;
     const sessionUser = sessionStorage.getItem('userRole');
     if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
       this.isAdmin=true;
       this.productService.getPartnerAll().subscribe(
         data => this.managePartnerDropDownList(data),
+        error => this.partnerListError(error)
       );
     }else{
       let partnerId = sessionStorage.getItem('partnerId');
       this.isAdmin=false;
       this.getPaymentList(partnerId);
     }
+  }
+  partnerListError(error){
+    this.isLoading=false;
+    Swal.fire(
+      'Error',
+      error.error.message_status,
+      'error'
+    );
   }
   managePartnerDropDownList(data) {
     this.partnerArray = [];
@@ -52,29 +63,33 @@ export class PaymentWithdrawalComponent implements OnInit {
       };
       this.partnerArray.push(pr);
     }
+  this.isLoading=false;
   }
 
   getPaymentList(partnerId) {
-
+    console.log("-----------getPaymentList-----------");
+    this.isLoading=true;
     this.partnerID = partnerId;
     this.isPartnerSelected=true;
 
     let payload = {
         vendor_code: this.partnerID
-      };
+    };
     this.paymentService.getVendorWisePaymentList(payload).subscribe(
       data => this.managePaymentList(data),
       error => this.paymentListManagementError(error)
     );
   }
   paymentListManagementError(error){
+    this.isLoading=false;
     Swal.fire(
       'Error',
-      error,
+      error.error.message_status,
       'error'
     );
   }
   managePaymentList(response) {
+    console.log("-----------managePaymentList start-----------");
 
     this.totalPriceCounter=0;
     if(response.message==="Success"){
@@ -93,19 +108,25 @@ export class PaymentWithdrawalComponent implements OnInit {
           itemQuantity: Math.abs(detail.itemQTY),
           status: detail.itemQTY < 0 ? 'Delivered' : 'Returned'
         })),
-        totalCostPrice:data['totalCostPrice']
+        totalCostPrice:data['totalCostPrice'],
+        kpDeliveryDate : data['kpDeliveryDate']
       }));
       for(let i = 0;i<this.recordList.length;i++){
         this.totalPriceCounter+=this.recordList[i].totalCostPrice;
       }
-      if(this.attemptNumber>0){
+      if(this.attemptNumber>0 && !this.isAdmin){
         let withdrawalBtn = document.getElementById('withdrawalBtn') as HTMLInputElement;
         withdrawalBtn.disabled=false;
       }
       this.attemptNumber++;
+      this.isLoading=false;
     }else{
+      this.isLoading=false;
       this.isSuccess = false;
     }
+
+    console.log("-----------managePaymentList end-----------");
+    console.log(this.isLoading);
   }
 
   ngOnInit(): void {

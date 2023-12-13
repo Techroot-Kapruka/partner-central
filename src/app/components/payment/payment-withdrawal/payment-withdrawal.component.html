@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="card">
     <div class="btn-popup pull-right">
-      <div style="margin-top: 3%;margin-left: 2%">
+      <div *ngIf="!isLoading;" style="margin-top: 3%;margin-left: 2%">
         <select style="width: 40%" *ngIf="isAdmin" id="select_pro" class="form-control" (change)="getPaymentList($event.target.value)">
           <option value="0" selected>-- Select Vendor --</option>
           <option *ngFor="let partnerArrays of partnerArray" [value]="partnerArrays['partner_u_id']">
@@ -10,7 +10,12 @@
         </select>
       </div>
     </div>
-    <div *ngIf="isSuccess;" class="card-body withdrawalContent">
+    <div *ngIf="isLoading;">
+      <div class="loading">
+        <div id="preloader"></div>
+      </div>
+    </div>
+    <div *ngIf="isSuccess && !isLoading;" class="card-body withdrawalContent">
       <div class="container mt-4">
       <table  style="font-size: 10px; border: 1px solid black">
         <thead style="border: 1px solid black">
@@ -18,9 +23,10 @@
           <th scope="col" style="width: 13%" >Reference Code</th>
           <th scope="col" style="width: 15%">Item Code</th>
           <th scope="col" style="width: 15%">Cost Price</th>
-          <th scope="col" style="width: 18%">Date Created</th>
+<!--          <th scope="col" style="width: 18%">Date Created</th>-->
           <th scope="col" style="width: 10%">Status</th>
           <th scope="col" style="width: 11%">Quantity</th>
+          <th scope="col" style="width: 13%">Delivery Date</th>
           <th scope="col" style="width: 13%">Price</th>
           <th *ngIf="!isAdmin" scope="col" style="width: 25%">Action
             <div class="form-check" style="padding-left: 0.25rem;">
@@ -44,13 +50,15 @@
                   <tr *ngFor="let subContent of childrenItem.description;" style="height:15px;border: 1px solid black;border-bottom: none;border-top: none">
                     <td style="width: 30%; text-align: left;"><span style="margin-left: 10px"> {{subContent['itemCode']}}</span></td>
                     <td style="width: 22%; text-align: left;font-weight: bold;">{{subContent['costPrice']| number:'1.2-2'}}</td>
-                    <td style="width: 21%; text-align: left;">{{subContent['createDate']}}</td>
+<!--                    <td style="width: 21%; text-align: left;">{{subContent['createDate']}}</td>-->
                     <td style="width: 17%; text-align: left;" [ngStyle]="{'width': '17%', 'text-align': 'left', 'color': subContent['status'] === 'Returned' ? 'red' : 'green'}">{{subContent['status']}}</td>
                     <td style="width: 15%; text-align: left;">{{subContent['itemQuantity']}}</td>
                   </tr>
                 </table>
               </div>
             </td>
+            <td style="text-align: center; vertical-align: middle;font-weight: bold">{{childrenItem.kpDeliveryDate}}</td>
+
             <td style="text-align: center; vertical-align: middle;font-weight: bold">{{childrenItem.totalCostPrice | number:'1.2-2'}}</td>
             <td *ngIf="!isAdmin" style="text-align: center; vertical-align: middle;width: 20%;">
               <div class="form-check" style="padding-bottom: 50%">
@@ -92,11 +100,11 @@
       <button id="withdrawalBtn" style="margin-left: 3%;background-color: #5932EA !important;" class="btn btn-secondary" (click)="withdrawal()" *ngIf="!isAdmin">Withdraw</button>
     </div>
 
-      <div style="text-align: center;" *ngIf="!isSuccess && !isAdmin">
+      <div style="text-align: center;" *ngIf="!isSuccess && !isAdmin && !isLoading;">
         <h5 style="color: #898997;font-weight: bold;">
           You are unable to make Withdrawals yet.</h5>
       </div>
-      <div style="text-align: center;" *ngIf="!isSuccess && isAdmin && isPartnerSelected">
+      <div style="text-align: center;" *ngIf="!isSuccess && isAdmin && isPartnerSelected && !isLoading;">
         <h5 style="color: #898997;font-weight: bold;">
           The partner has no Content</h5>
       </div>
