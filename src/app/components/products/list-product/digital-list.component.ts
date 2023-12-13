@@ -665,6 +665,7 @@ export class DigitalListComponent implements OnInit {
         ];
         this.totalPagesOnDemand = Math.ceil(this.consignmentProducts.length / this.list_pages2);
         this.onPageChange(1, 'PendingOnDemand');
+        console.log('')
       }
     }
   }
