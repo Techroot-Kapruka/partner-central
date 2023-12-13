@@ -3,6 +3,7 @@ import {OrderService} from '../../../shared/service/order.service';
 import {Router} from '@angular/router';
 import {DashboardService} from '../../../shared/service/dashboard.service';
 import Swal from 'sweetalert2';
+import {OrderMethods} from '../order-methods';
 
 @Component({
   selector: 'app-list-orders',
@@ -29,7 +30,7 @@ export class ListOrdersComponent implements OnInit {
   ODProducts = false;
   public loading;
 
-  constructor(private orderService: OrderService, private router: Router, private partnerService: DashboardService) {
+  constructor(private orderService: OrderService, private router: Router, private partnerService: DashboardService, private orderMethods: OrderMethods) {
     this.getAllOrders();
     this.getPartner();
     this.hideElement();
@@ -262,8 +263,12 @@ export class ListOrdersComponent implements OnInit {
         let statusStyleOne = false;
         let statusStyleTwo = false;
         let statusStyleThree = false;
+        let displayStatus = '';
+
+        displayStatus = data.data.content[z].status;
         if (data.data.content[z].status === 'IN PROCESS') {
           statusStyleOne = true;
+          displayStatus = this.orderMethods.findRealStatus(data.data.content[z].shipmentStatus, data.data.content[z].status, data.data.content[z].purchase_approval_id);
         } else {
           statusStyleOne = false;
         }
@@ -281,7 +286,7 @@ export class ListOrdersComponent implements OnInit {
         }
         // const proCode = data.data.content[z].cartsnapshot[0].productID;
         let isOnDemand = false;
-        if(data.data.content[z].is_od === 1){
+        if (data.data.content[z].is_od === 1) {
           isOnDemand = true;
           this.ODProducts = true;
         }
@@ -293,7 +298,7 @@ export class ListOrdersComponent implements OnInit {
         this.getStatus(data.data.content[z].pnref);
         const or = {
           id: data.data.content[z].id,
-          status: data.data.content[z].status,
+          status: displayStatus,
           orderRef: data.data.content[z].pnref,
           orderDate: data.data.content[z].order_date,
           statusStyleOne,
@@ -312,7 +317,7 @@ export class ListOrdersComponent implements OnInit {
       this.pageIndexes = Array(this.totalPages).fill(0).map((x, i) => i);
       this.currentSelectedPage = data.data.number;
 
-    }else{
+    } else {
       this.paginateData = [];
     }
   }
