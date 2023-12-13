@@ -631,6 +631,24 @@ export class DigitalListComponent implements OnInit {
             categoryColor: data.data[i].onDemand_products.color,
             categorySizes: data.data[i].onDemand_products.sizes,
             update_date_time: data.data[i].onDemand_products.update_date_time.slice(0, -2),
+            isActive: data.data[i].onDemand_products.isActive,
+            badge:
+              data.data[i].onDemand_products.isActive === -5
+                ? 'badge-warning'
+                : data.data[i].onDemand_products.isActive === -101 || data.data[i].onDemand_products.isActive === -102
+                  ? 'badge-danger'
+                  : data.data[i].onDemand_products.isActive === 1
+                    ? 'badge-primary'
+                    : '',
+            elementStatus:
+              data.data[i].onDemand_products.isActive === -5
+                ? 'Manual Out'
+                : data.data[i].onDemand_products.isActive === -101 || data.data[i].onDemand_products.isActive === -102
+                  ? 'Suspend'
+                  : data.data[i].onDemand_products.isActive === 1
+                    ? 'Active'
+                    : '',
+            showButton: data.data[i].onDemand_products.isActive === -101 || data.data[i].onDemand_products.isActive === -102 ? true : '',
             categoryPath: data.data[i].category_path,
             image: data.data[i].product_img.split('/product')[1],
             Action: ''
@@ -1145,8 +1163,6 @@ export class DigitalListComponent implements OnInit {
   }
 
   onVstockChange(row) {
-    console.log('here');
-    console.log(row);
     if (this.filteredOnDemandProduct.length > 0) {
       if ( this.filteredOnDemandProduct[this.startIndex + row].in_stock < 0) {
         Swal.fire({
