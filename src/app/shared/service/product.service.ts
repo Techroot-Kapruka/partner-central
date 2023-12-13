@@ -246,7 +246,7 @@ export class ProductService {
   }
 
 
-  editFieldImageSave(image1: any, image2: any, image3: any, image4: any, image5: any, id: any) {
+  editFieldImageSave(image1: any, image2: any, image3: any, image4: any, image5: any, id: any, type2: any, type3: any, type4: any, type5: any) {
     const formData: FormData = new FormData();
     formData.append('image1', image1);
     formData.append('image2', image2);
@@ -254,6 +254,10 @@ export class ProductService {
     formData.append('image3', image3);
     formData.append('image4', image4);
     formData.append('image5', image5);
+    formData.append('type2', type2);
+    formData.append('type3', type3);
+    formData.append('type4', type4);
+    formData.append('type5', type5);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'fieldEdit/editImages', formData, {headers});
   }

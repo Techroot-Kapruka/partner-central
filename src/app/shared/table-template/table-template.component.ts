@@ -9,6 +9,8 @@ import {environment} from "../../../environments/environment.prod";
 export class TableTemplateComponent implements OnInit {
   public imagePathURI = environment.imageURIENV;
   public imagedefaultPathURI = '';
+  public badge = [];
+  public elementStatus = [];
   // public qaTables = false;
   // public EnablePriceEdit = false;
   // public EnableStockEdit = false;
@@ -75,6 +77,20 @@ export class TableTemplateComponent implements OnInit {
         }else if (this.pendingStockPartner){
           this.stopLoading();
         }
+    }
+
+    if (this.editTab) {
+      for (let i = 0; i < this.DataArray.length; i++) {
+        let editType: any;
+        editType = this.DataArray[i].type;
+        if (editType.startsWith('E')) {
+          this.badge[i] = 'badge-success';
+          this.elementStatus[i] = 'Edit Request';
+        } else if (editType.startsWith('R')) {
+          this.badge[i] = 'badge-danger';
+          this.elementStatus[i] = 'Remove Request';
+        }
+      }
     }
   }
 

@@ -19,6 +19,8 @@ export class ApproveEditImageComponentComponent implements OnInit {
   public productCode_ = '';
   public uniqueCode_ = '';
   public requestedBy = '';
+  public requestedId = '';
+  public edit: boolean = false;
 
   public image1 = '';
   public image2 = '';
@@ -27,6 +29,8 @@ export class ApproveEditImageComponentComponent implements OnInit {
   public image5 = '';
   public imageData = [];
   public imagePathURI = environment.imageURIENVTemp;
+  public imagePathURI2 = environment.imageURIENV;
+
   constructor(private router: Router, private Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService) {
     this.ids = '';
     this.Activatedroute.paramMap.subscribe(params => {
@@ -37,6 +41,7 @@ export class ApproveEditImageComponentComponent implements OnInit {
       this.productCode_ = params['product_code'];
       this.uniqueCode_ = params['unique_code'];
       this.requestedBy = params['requested_by']
+      this.requestedId = params['requestedId']
 
     });
     this.getAllData();
@@ -62,11 +67,22 @@ export class ApproveEditImageComponentComponent implements OnInit {
 
   manageImageForEdit(data) {
     var imagePath = [];
+    var removePathURI = '';
 
-    for (let i = 0; i < data.data.image.length ; i++){
-      imagePath = data.data.image[i].split('/editimagetemp');
-      this.imageData.push(imagePath[1]+ '?'+new Date().getTime());
-    }
+      for (let i = 0; i < data.data.image.length ; i++){
+        if (this.uniqueCode_.startsWith('E')){
+          this.edit = true;
+          imagePath = data.data.image[i].split('/editimagetemp');
+        }else if (this.uniqueCode_.startsWith('R')){
+          this.edit = false;
+          removePathURI = data.data.image[i].split('/');
+          const lastPart = removePathURI[removePathURI.length - 1];
+          imagePath[1] = '/' + this.requestedId.toLowerCase() + '/' + this.productCode_.replace("OD", "").toLowerCase() + '/' + lastPart;
+        }
+
+        this.imageData.push(imagePath[1] + '?' + new Date().getTime());
+      }
+
   }
 
   private manageGetEditImageFieldsDataAllForApproval(data) {
@@ -82,7 +98,6 @@ export class ApproveEditImageComponentComponent implements OnInit {
   approvedProductsImages() {
     let payloads = {
       productCode: this.productCode_,
-      // productCode: 'ELEC0V18P00009',
       isApproved: 1,
       approvedUser: sessionStorage.getItem('userId'),
       editId : this.uniqueCode_
