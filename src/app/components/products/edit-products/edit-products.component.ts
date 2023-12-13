@@ -70,6 +70,12 @@ export class EditProductsComponent implements OnInit {
   public amountBefor = '';
   showmsg = false;
   showmsg1 = false;
+
+  hideRemove2 = false;
+  hideRemove3 = false;
+  hideRemove4 = false;
+  hideRemove5 = false;
+
   public activeUpdate = false;
   imageUrl: any;
   filteredSubCategory = [];
@@ -754,33 +760,41 @@ export class EditProductsComponent implements OnInit {
     if (data['data'][1] != "none") {
       var imageURI02 = data['data'][1];
       imageURI02Output = imageURI02.split('/product');
+      this.hideRemove2 = false;
     }else {
       this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
       imageURI02Output[1] = this.imagedefaultPathURI + '/1.jpg';
+      this.hideRemove2 = true;
     }
 
     if (data['data'][2] != "none") {
       var imageURI03 = data['data'][2];
       imageURI03Output = imageURI03.split('/product');
+      this.hideRemove3 = false;
     }else {
       this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
       imageURI03Output[1] = this.imagedefaultPathURI + '/1.jpg';
+      this.hideRemove3 = true;
     }
 
     if (data['data'][3] != "none") {
       var imageURI04 = data['data'][3];
       imageURI04Output = imageURI04.split('/product');
+      this.hideRemove4 = false;
     }else {
       this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
       imageURI04Output[1] = this.imagedefaultPathURI + '/1.jpg';
+      this.hideRemove4 = true;
     }
 
     if (data['data'][4] != "none") {
       var imageURI05 = data['data'][4];
       imageURI05Output = imageURI05.split('/product');
+      this.hideRemove5 = false;
     }else {
       this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
       imageURI05Output[1] = this.imagedefaultPathURI + '/1.jpg';
+      this.hideRemove5 = true;
     }
 
     this.imageOne = imageURI01Output[1];

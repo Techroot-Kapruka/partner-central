@@ -57,10 +57,10 @@ export class DigitalListComponent implements OnInit {
   public emptyTableSus = false;
   public emptyTableOnDemand = false;
   public startIndex;
-  public filterClickActive: number = 0;
-  public filterClickOutOfStock: number = 0;
-  public filterClickSuspend: number = 0;
-  public filterClickOnDemand: number = 0;
+  public filterClickActive = 0;
+  public filterClickOutOfStock = 0;
+  public filterClickSuspend = 0;
+  public filterClickOnDemand = 0;
   public addStockAmount: number;
 
   public product_code = '';
@@ -97,11 +97,11 @@ export class DigitalListComponent implements OnInit {
   totalPagesEditProApproval = 0; // Total number of pages
   totalPagesEditImgApproval = 0; // Total number of pages
 
-  active: boolean = false;
-  suspend: boolean = false;
-  onDemand: boolean = false;
-  outOfStock: boolean = false;
-  nonActivePartner: boolean = false;
+  active = false;
+  suspend = false;
+  onDemand = false;
+  outOfStock = false;
+  nonActivePartner = false;
 
   protected readonly print = print;
 
@@ -250,7 +250,7 @@ export class DigitalListComponent implements OnInit {
 
   getSuspendedPro() {
     const count = this.list_suspend.length;
-    this.suspend = true
+    this.suspend = true;
     return `Suspended (${count})`;
   }
 
@@ -296,12 +296,12 @@ export class DigitalListComponent implements OnInit {
         this.list_pages.push(or);
       }
       this.headActive = [
-        {'Head': 'Image', 'FieldName': 'image'},
-        {'Head': 'Title', 'FieldName': 'title'},
-        {'Head': 'Selling Price', 'FieldName': 'price'},
-        {'Head': 'Stock In Hand', 'FieldName': 'in_stock'},
-        {'Head': 'Create Date', 'FieldName': 'createDate'},
-        {'Head': 'Action', 'FieldName': ''},
+        {Head: 'Image', FieldName: 'image'},
+        {Head: 'Title', FieldName: 'title'},
+        {Head: 'Selling Price', FieldName: 'price'},
+        {Head: 'Stock In Hand', FieldName: 'in_stock'},
+        {Head: 'Create Date', FieldName: 'createDate'},
+        {Head: 'Action', FieldName: ''},
       ];
 
       this.totalPages = Math.ceil(this.list_pages.length / this.list_pages2);
@@ -310,7 +310,7 @@ export class DigitalListComponent implements OnInit {
   }
 
   clickSusEditProduct(event: any) {
-    console.log('suspend Edit clicked!!!!!!!!')
+    console.log('suspend Edit clicked!!!!!!!!');
   }
 
   async clickProduct(event: any) {
@@ -337,7 +337,7 @@ export class DigitalListComponent implements OnInit {
         this.router.navigate(['declined-product/' + pro_Code]);
         break;
       default:
-        console.log("Invalid");
+        console.log('Invalid');
         break;
     }
   }
@@ -573,9 +573,9 @@ export class DigitalListComponent implements OnInit {
     this.onPageChange(1, 'Suspend');
 
     if (this.filteredSuspendProduct.length == 0) {
-      this.emptyTableSus = true
+      this.emptyTableSus = true;
     } else {
-      this.emptyTableSus = false
+      this.emptyTableSus = false;
     }
   }
 
@@ -597,9 +597,9 @@ export class DigitalListComponent implements OnInit {
     this.onPageChange(1, 'PendingOnDemand');
 
     if (this.filteredOnDemandProduct.length == 0) {
-      this.emptyTableOnDemand = true
+      this.emptyTableOnDemand = true;
     } else {
-      this.emptyTableOnDemand = false
+      this.emptyTableOnDemand = false;
     }
   }
 
@@ -639,11 +639,11 @@ export class DigitalListComponent implements OnInit {
         }
         this.headOnDemand = [
           // 'Image', 'Title', 'Create Date', 'In Stock', 'Add Stock',
-          {'Head': 'Image', 'FieldName': 'image'},
-          {'Head': 'Title', 'FieldName': 'title'},
-          {'Head': 'In Stock', 'FieldName': 'in_stock'},
-          {'Head': 'Create Date', 'FieldName': 'price'},
-          {'Head': 'Action', 'FieldName': ''},
+          {Head: 'Image', FieldName: 'image'},
+          {Head: 'Title', FieldName: 'title'},
+          {Head: 'In Stock', FieldName: 'in_stock'},
+          {Head: 'Create Date', FieldName: 'price'},
+          {Head: 'Action', FieldName: ''},
         ];
         this.totalPagesOnDemand = Math.ceil(this.consignmentProducts.length / this.list_pages2);
         this.onPageChange(1, 'PendingOnDemand');
@@ -663,7 +663,36 @@ export class DigitalListComponent implements OnInit {
   //       }
   // }
 
-  // asitha
+  UpdateManualOutStocks(event){
+    const pro_Code = event.productCode;
+    Swal.fire({
+      title: 'Are You Sure?',
+      text: 'This action will make your product Active in Kapruka Website.',
+      icon: 'info',
+      showCancelButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Yes',
+      allowOutsideClick: false,
+    }).then((result) => {
+      if (result.isConfirmed) {
+     const payLoad = {
+          product_code: pro_Code,
+          updatedBy: sessionStorage.getItem('userId')
+        };
+     this.productService.updateProductStock(payLoad).subscribe(
+         data => {
+           Swal.fire({
+             title: 'Success',
+             text: '',
+             icon: 'success',
+           });
+           this.getOutOfStock();
+         }
+        );
+      }
+    });
+  }
+
   UpdateVirtualStocks(event) {
     Swal.fire({
       title: 'Add Stock',
@@ -702,27 +731,6 @@ export class DigitalListComponent implements OnInit {
         );
       }
     });
-    // if (this.vstock[this.startIndex + row] === null || this.vstock[this.startIndex + row] === undefined || isNaN(this.vstock[this.startIndex + row]) || this.stockUpdate) {
-    //     Swal.fire(
-    //         'error!',
-    //         'Invalid stock value. Please enter a valid number.',
-    //         'error'
-    //     );
-    //     this.vstock[this.startIndex + row] = null;
-    //     return;
-    // }
-    //
-    // const payloard = {
-    //     productCode: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].productCode : this.consignmentProducts[this.startIndex + row].productCode,
-    //     vendor: sessionStorage.getItem('partnerId'),
-    //     quantity: this.vstock[this.startIndex + row],
-    //     variationTheme: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].variationTheme : this.consignmentProducts[this.startIndex + row].variationTheme,
-    //     variationId: this.filteredOnDemandProduct.length > 0 ? this.filteredOnDemandProduct[this.startIndex + row].variationId : this.consignmentProducts[this.startIndex + row].variationId
-    // };
-    // this.productService.updateStock(payloard).subscribe(
-    //     data => this.manageUpdateStock(data),
-    // );
-
   }
 
   manageUpdateStock(data) {
@@ -737,7 +745,6 @@ export class DigitalListComponent implements OnInit {
   }
 
   manageUpdateError(data){
-    console.log(data)
     Swal.fire(
       'error!',
       data.error.message,
@@ -1015,18 +1022,21 @@ export class DigitalListComponent implements OnInit {
           categoryPath: data.data[i].categoryPath,
           update_date_time: data.data[i].update_date_time.slice(0, -2),
           vendor: data.data[i].vendor,
+          is_active: data.data[i].is_active,
+          inStockButton: data.data[i].is_active === 1 ? '' : 'true',
           action: ''
         };
         this.list_outof_stock.push(or);
       }
       this.headOut = [
-        {'Head': 'Image', 'FieldName': 'image'},
-        {'Head': 'Title', 'FieldName': 'title'},
-        {'Head': 'Selling Price', 'FieldName': 'price'},
-        {'Head': 'Stock In Hand', 'FieldName': 'in_stock'},
-        {'Head': 'Create Date', 'FieldName': 'createDate'},
+        {Head: 'Image', FieldName: 'image'},
+        {Head: 'Title', FieldName: 'title'},
+        {Head: 'Selling Price', FieldName: 'price'},
+        {Head: 'Stock In Hand', FieldName: 'in_stock'},
+        {Head: 'Create Date', FieldName: 'createDate'},
+        {Head: 'Action', FieldName: 'Action'},
       ];
-      this.outOfStock=true;
+      this.outOfStock = true;
       this.totalPagesOS = Math.ceil(this.list_outof_stock.length / this.list_pages2);
       this.onPageChange(1, 'OutofStock');
     }
@@ -1135,8 +1145,8 @@ export class DigitalListComponent implements OnInit {
   }
 
   onVstockChange(row) {
-    console.log('here')
-    console.log(row)
+    console.log('here');
+    console.log(row);
     if (this.filteredOnDemandProduct.length > 0) {
       if ( this.filteredOnDemandProduct[this.startIndex + row].in_stock < 0) {
         Swal.fire({
