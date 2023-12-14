@@ -9,6 +9,8 @@ import {environment} from "../../../environments/environment.prod";
 export class TableTemplateComponent implements OnInit {
   public imagePathURI = environment.imageURIENV;
   public imagedefaultPathURI = '';
+  public badge = [];
+  public elementStatus = [];
   // public qaTables = false;
   // public EnablePriceEdit = false;
   // public EnableStockEdit = false;
@@ -48,20 +50,6 @@ export class TableTemplateComponent implements OnInit {
     this.stillLoading = false;
   }
   showElerments() {
-    // if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
-    //   this.qaTables = true;
-    //   this.EnablePriceEdit = true;
-    //   this.EnableStockEdit = true;
-    // } else if (sessionStorage.getItem('userRole') === 'ROLE_QA') {
-    //   this.qaTables = false;
-    // } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN') {
-    //   this.qaTables = true;
-    //   this.EnableStockEdit = true;
-    // } else if (sessionStorage.getItem('userRole') === 'ROLE_CATEGORY_MANAGER') {
-    //   this.qaTables = true;
-    // } else if (sessionStorage.getItem('userRole') === 'ROLE_STORES_MANAGER') {
-    //   this.qaTables = true;
-    // }
     const Admin= sessionStorage.getItem('userRole') === 'ROLE_ADMIN'
     if (Admin){
       setTimeout(() => {
@@ -75,6 +63,20 @@ export class TableTemplateComponent implements OnInit {
         }else if (this.pendingStockPartner){
           this.stopLoading();
         }
+    }
+
+    if (this.editTab) {
+      for (let i = 0; i < this.DataArray.length; i++) {
+        let editType: any;
+        editType = this.DataArray[i].type;
+        if (editType.startsWith('E')) {
+          this.badge[i] = 'badge-success';
+          this.elementStatus[i] = 'Edit Request';
+        } else if (editType.startsWith('R')) {
+          this.badge[i] = 'badge-danger';
+          this.elementStatus[i] = 'Remove Request';
+        }
+      }
     }
   }
 
@@ -92,8 +94,9 @@ export class TableTemplateComponent implements OnInit {
   }
 
   addStock(data){
-    this.onAddStock.emit(data)
+    this.onAddStock.emit(data);
   }
+
   editSus(data){
     this.onEdit.emit(data)
   }

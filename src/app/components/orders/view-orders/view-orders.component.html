@@ -143,88 +143,72 @@
   }
 
   /*=================================================*/
-
 </style>
 <form [formGroup]="orderControle">
   <div class="container-fluid">
     <div class="row product-adding">
-
       <div class="col-md-12">
         <div class="card">
           <div class="card-body">
             <div class="row" style="float: right;">
               <div class="form-group">
-                <button type="button" (click)="backToLIst()" class="btn btn-sm btn-primary"
-                        data-toggle="tooltip"
-                        data-placement="top" title="Back to Shipment List"><i
-                  class="fa fa-arrow-circle-left"
-                  aria-hidden="true"></i> Back
+                <button type="button" (click)="backToLIst()" class="btn btn-sm btn-primary" data-toggle="tooltip"
+                        data-placement="top" title="Back to Shipment List"><i class="fa fa-arrow-circle-left"
+                                                                              aria-hidden="true"></i> Back
                 </button>
               </div>
             </div>
             <br><br>
-
             <div class="digital-add needs-validation">
               <div class="row">
-                <div class="col-sm-4">
+                <div class="col-sm-3" style="display: none">
                   <div class="form-group">
                     <label for="txtorderId" class="col-form-label">Order Id</label>
-                    <input class="form-control" disabled id="txtorderId"
-                           formControlName="txtorderId" type="text"
+                    <input class="form-control" disabled id="txtorderId" formControlName="txtorderId" type="text"
                            required="">
                   </div>
                 </div>
-                <div class="col-sm-4">
-                  <div class="form-group">
-                    <label for="txtStatus" class="col-form-label">Order Status</label>
-                    <input class="form-control" disabled id="txtStatus" formControlName="txtStatus"
-                           type="text"
-                           required="">
-                  </div>
-                </div>
-
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                   <div class="form-group">
                     <label for="txtPnref" class="col-form-label"> Order Ref</label>
-                    <input class="form-control" disabled id="txtPnref" formControlName="txtPnref"
-                           type="text"
+                    <input class="form-control" disabled id="txtPnref" formControlName="txtPnref" type="text"
                            required="">
                   </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="txtStatus" class="col-form-label">Order Status</label>
+                    <input class="form-control" disabled id="txtStatus" formControlName="txtStatus" type="text"
+                           required="">
+                  </div>
+                </div>
+                <div class="col-sm-4" style="display: none">
                   <div class="form-group">
                     <label for="txtCountry" class="col-form-label">Country</label>
-                    <input class="form-control" disabled type="text" id="txtCountry"
-                           formControlName="txtCountry"
+                    <input class="form-control" disabled type="text" id="txtCountry" formControlName="txtCountry"
                            required="">
                   </div>
                 </div>
-
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                   <div class="form-group">
                     <label for="txtOrderDate" class="col-form-label">Order date</label>
                     <input class="form-control" disabled type="text" required="" id="txtOrderDate"
                            formControlName="txtOrderDate">
                   </div>
                 </div>
-
-                <div class="col-sm-4">
+                <div class="col-sm-3">
                   <div class="form-group">
                     <label for="txtDeliveryDate" class="col-form-label">Order Delivery Date</label>
                     <input class="form-control" disabled type="text" id="txtDeliveryDate"
-                           formControlName="txtDeliveryDate"
-                           required="">
+                           formControlName="txtDeliveryDate" required="">
                   </div>
                 </div>
-
                 <!--<div class="col-sm-4">-->
                 <!--<div class="form-group">-->
                 <!--<label for="txtShipTim" class="col-form-label">Ship Time</label>-->
                 <!--<input class="form-control" disabled id="txtShipTim" required="" formControlName="txtShipTim">-->
                 <!--</div>-->
                 <!--</div>-->
-
-
                 <!--<div class="col-sm-4">-->
                 <!--<div class="form-group">-->
                 <!--<label for="txtChangingRate" class="col-form-label">Changing Rate</label>-->
@@ -232,12 +216,8 @@
                 <!--required="">-->
                 <!--</div>-->
                 <!--</div>-->
-
               </div>
-
-              <br>
-              <br>
-
+              <br><br>
               <div class="row">
                 <div class="col-2"></div>
                 <div class="col-8">
@@ -248,7 +228,7 @@
                       <th scope="col">Name</th>
                       <th scope="col">Product ID</th>
                       <th scope="col" style="text-align: center">Quantity</th>
-                      <th *ngIf="odProduct" scope="col" style="text-align: center">Print QR</th>
+                      <th *ngIf="(odProduct && isPartner && isReadytoShip) || (isInProcess && odProduct)" scope="col" style="text-align: center">Print QR</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -273,29 +253,35 @@
                           style="background-color: white; padding: 6px; margin-top: 5px; border-radius: 5px; font-size: 11px"
                           #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" id="variation-collapse">
                           Variation Theme : {{variationTheme}} <br>
-                          {{variationSize !== null ? 'Variation Size : '+ variationSize : ''}} <br>
+                          {{variationSize !== null ? 'Variation Size : ' + variationSize : ''}} <br>
                           {{variationTheme === 'color' ? 'Variation Color : ' : ''}}
                           <div *ngIf="variationTheme === 'color'"
                                style="border: 1px solid {{variationColor}}; width: 40px; height: 10px; background-color: {{variationColor}}; margin-top: 5px;"></div>
                         </div>
-
                       </td>
                       <td style="text-align: center">{{cartsnapshotArrs['size']}}</td>
-                      <td *ngIf="odProduct" style="text-align: center" (click)="PrintQR(cartsnapshotArrs['productId'])"><i class="fas fa-download"></i></td>
-
+                      <td *ngIf="(odProduct && isPartner && isReadytoShip) || (isInProcess && odProduct)" style="text-align: center">
+                        <button class="btn" [disabled]="isInProcess" (click)="PrintQR(cartsnapshotArrs['productId'])">
+                          <i class="fas fa-download"></i>
+                        </button>
+                      </td>
                     </tr>
-
                     </tbody>
                   </table>
-
                 </div>
-                <div *ngIf="odProduct && isPartner" class="col-2" style="text-align: center">
-                  <button class="btn btn-primary" (click)="readyToShip()">
+              </div>
+              <div class="row">
+                <div class="col-8"></div>
+                <div *ngIf="(odProduct && isPartner && isReadytoShip) || (isInProcess && odProduct)" class="col-2" style="text-align: center">
+                  <button class="btn btn-primary" [disabled]="isInProcess" (click)="readyToShip()">
                     Ready To Ship
                   </button>
                 </div>
+                <div class="col-10 pull-right" *ngIf="(odProduct && isPartner && isInProcess)" style="margin-left:30px; margin-top:15px; color: #f80000; font-weight: bold">
+                  <input type="text" style="border: none;"/>
+                  This order is currently being reviewed for approval. It has not been approved for shipment yet.
+                </div>
               </div>
-
               <!-- Modal -->
               <ng-template #imagePopup let-modal>
                 <div class="modal-content">
@@ -310,8 +296,6 @@
                   </div>
                 </div>
               </ng-template>
-
-
             </div>
           </div>
         </div>

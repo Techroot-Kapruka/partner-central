@@ -299,7 +299,7 @@
                       </div>
                       <label id="lbl_Prefix" class="col-xl-3 col-md-3"></label>
                       <div class="row">
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-6">
                           <label for="category_ids" style="font-weight: bold">Category</label><br><br>
                           <label for="category_ids" style="font-size: smaller">Requested Categories</label><br><br>
                           <div class="row" >
@@ -307,6 +307,26 @@
                                  *ngFor="let partnerSpecificCategoryArrs of partnerSpecificCategoryArr">
                               <span style="height: 30px; padding-top: 8.8px; background-color: #000080 !important;"
                                     class="badge badge-secondary">{{partnerSpecificCategoryArrs['cat_parth']}}</span><br>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-6" *ngIf="value==1">
+                          <div class="row mb-3">
+                            <label for="Title" class="col-md-3 col-form-label" style="font-weight: bold">Title</label>
+                            <div class="col-md-8">
+                              <input class="form-control" formControlName="title" id="Title" type="text">
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <label for="description" class="col-md-3 col-form-label" style="font-weight: bold">Description</label>
+                            <div class="col-md-8">
+                              <textarea class="form-control" formControlName="description"></textarea>
+<!--                              <input class="form-control" formControlName="" id="description" type="text" disabled>-->
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-8 offset-md-3">
+                              <button class="btn btn-success" (click)="save()">Save</button>
                             </div>
                           </div>
                         </div>

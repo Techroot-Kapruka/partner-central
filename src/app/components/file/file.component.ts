@@ -7,12 +7,12 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {HttpClientService} from '../../shared/service/http-client.service';
 import {ProductService} from '../../shared/service/product.service';
 import {HttpClient} from '@angular/common/http';
-import {CanComponentDeactivate} from "../../can-deactivate.guard";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {catchError, concatMap, finalize, switchMap, takeWhile, tap, toArray} from "rxjs/operators";
-import {from, Observable, of} from "rxjs";
-import {ImageService} from "../../shared/service/image.service";
-import {map} from "rxjs/internal/operators";
+import {CanComponentDeactivate} from '../../can-deactivate.guard';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import {catchError, concatMap, finalize, switchMap, takeWhile, tap, toArray} from 'rxjs/operators';
+import {from, Observable, of} from 'rxjs';
+import {ImageService} from '../../shared/service/image.service';
+import {map} from 'rxjs/internal/operators';
 
 @Component({
   selector: 'app-file',
@@ -40,8 +40,8 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
   image5: any;
   modalRef: any;
   fieldPopRef: any;
-  productNameModal = "";
-  editFieldName = "";
+  productNameModal = '';
+  editFieldName = '';
   modalIndex = 0;
   // public imageCliant: FormGroup;
   formDataMap: Map<string, FormData> = new Map();
@@ -54,14 +54,14 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
   uploaded = false;
   clicked = false;
   bulkTemplateHref = 'assets/excel/BulkUpload.xlsx';
-  selectedCategoryForTemplate = ''
+  selectedCategoryForTemplate = '';
   bulkTemplateCatSelected = false;
   verificationClicked = false;
   editInputType = 'text';
   editInputValue: any;
   inputValue: any;
   selectedMainCategory: string = '';
-  excelUploaded = false
+  excelUploaded = false;
   headers: string[] = [];
   needVerification = true;
   verifying = false;
@@ -146,7 +146,7 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
   popUpEditClose() {
     this.editInputType = 'text';
     this.editInputValue = '';
-    this.modalIndex = 0
+    this.modalIndex = 0;
     this.fieldPopRef.close();
   }
 
@@ -156,13 +156,13 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
       return;
     }
     //save data to table
-    this.tableArray[index][this.editFieldName] = this.inputValue
+    this.tableArray[index][this.editFieldName] = this.inputValue;
     this.needVerification = true;
 
     this.editInputValue = '';
     this.inputValue = '';
     this.editInputType = 'text';
-    this.modalIndex = 0
+    this.modalIndex = 0;
     this.fieldPopRef.close();
   }
 
@@ -173,7 +173,7 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
   popUpImageSave(index: number) {
     // Filter out null and empty values
     let arr = this.selectedImages;
-    const nonNullNonEmptyArray = arr[index].filter(value => value !== null && value !== "");
+    const nonNullNonEmptyArray = arr[index].filter(value => value !== null && value !== '');
 
     let addedImageCount = nonNullNonEmptyArray.length;
     if (addedImageCount >= 1) {
@@ -181,14 +181,14 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
       document.getElementById('addImageButton_' + index).className = 'btn btn-success btn-sm';
     }
     this.needVerification = true;
-    this.productNameModal = "";
-    this.modalIndex = 0
+    this.productNameModal = '';
+    this.modalIndex = 0;
     this.modalRef.close();
   }
 
   popUpImageClose() {
-    this.productNameModal = "";
-    this.modalIndex = 0
+    this.productNameModal = '';
+    this.modalIndex = 0;
     this.modalRef.close();
   }
 
@@ -227,10 +227,10 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
   changeValue(event) {
     if (this.showAddImagesElement === true) {
       Swal.fire(
-        "Oops!",
-        "Please Complete Previous Bulk First",
-        "error"
-      )
+        'Oops!',
+        'Please Complete Previous Bulk First',
+        'error'
+      );
       return;
     }
     this.tableArray = [];
@@ -314,7 +314,7 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
       payload['index'] = index;
       this.tableArray.push(payload);
     }
-    this.excelUploaded = true
+    this.excelUploaded = true;
     this.uploaded = false;
   }
 
@@ -530,7 +530,7 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
   }
 
   parseValues(value: string): string[] {
-    return value.split(",");
+    return value.split(',');
   }
 
   capitalizeFirstLetter(input: string): string {
@@ -542,7 +542,7 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
       const pairs = input.split('|')
         .map(pair => pair.trim())  // Trim each pair
         .filter(pair => pair !== '' && pair !== ':');
-      console.log(pairs)
+      console.log(pairs);
       const variationsByColor = {};
 
       pairs.forEach(pair => {
@@ -564,12 +564,12 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
       let variationColors;
       this.productService.getAllColorsForVariation().subscribe(
         data => {
-          console.log(data.data)
+          console.log(data.data);
           variationColors = data.data;
           resolve(variationColors);
         }
       );
-      console.log(variationColors)
+      console.log(variationColors);
 
     });
   }
@@ -609,13 +609,13 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
           sanitizedCategory,
           sanitizedSubCategory,
           sanitizedSubSubCategory
-        )
+        );
 
         const categoryCode = await this.returnCatCodeFromPath(categoryPath);
         //calculate cost price
         let costPrice = 0;
-        costPrice = this.calculateSellerIncome(this.findCaseInsensitiveFromObj(table, 'Selling price'), (this.findCaseInsensitiveFromObj(table, 'Margin')))
-        const attributeFieldsIndexes = this.searchArrayIndices(table, '_Attribute')
+        costPrice = this.calculateSellerIncome(this.findCaseInsensitiveFromObj(table, 'Selling price'), (this.findCaseInsensitiveFromObj(table, 'Margin')));
+        const attributeFieldsIndexes = this.searchArrayIndices(table, '_Attribute');
         const productVariation = [];
 
         if (this.removeSpacesFromString(this.selectedMainCategory) === this.removeSpacesFromString('CLOTHING') || this.removeSpacesFromString(this.selectedMainCategory) === this.removeSpacesFromString('ELECTRONICS')) {
@@ -625,10 +625,10 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
           attributeFieldsIndexes.forEach((value) => {
             if (table[value] !== 'NA') {
               const key = this.capitalizeFirstLetter(value.replace('_Attribute', ''));
-              const attribute = {[key]: table[value]}
-              this.attributeArray.push(attribute)
+              const attribute = {[key]: table[value]};
+              this.attributeArray.push(attribute);
             }
-          })
+          });
 
         }
         if (
@@ -636,15 +636,15 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
           this.removeSpacesFromString(this.findCaseInsensitiveFromObj(table, 'Variations')) !== this.removeSpacesFromString('NA')
         ) {
 
-          const variationColors: any = await this.getAllVariationColors()
+          const variationColors: any = await this.getAllVariationColors();
 
 
           // const variationData = await this.extractVariations(this.findCaseInsensitiveFromObj(table, 'Variations'))
-          const variationsByColor = await this.extractVariations(this.findCaseInsensitiveFromObj(table, 'Variations'))
+          const variationsByColor = await this.extractVariations(this.findCaseInsensitiveFromObj(table, 'Variations'));
           // const productVariation = [];
 
           for (let color in variationsByColor) {
-            let colorValue = color
+            let colorValue = color;
             for (let colorNames of variationColors) {
               if (colorNames.colorName === color) {
                 colorValue = colorNames.colorCode;
@@ -687,7 +687,7 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
             variation: 'None',
             variation_theme: 'None',
             variations: [],
-          }
+          };
           productVariation.push(pp);
         }
         if (this.categoryMatched === true) {
@@ -724,29 +724,29 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
               keywords: keywords
             },
             productAttributes: this.attributeArray
-          }
+          };
           const emptyFile = new File([''], '');
           //get images
-          let image1 = emptyFile
-          let image2 = emptyFile
-          let image3 = emptyFile
-          let image4 = emptyFile
-          let image5 = emptyFile
+          let image1 = emptyFile;
+          let image2 = emptyFile;
+          let image3 = emptyFile;
+          let image4 = emptyFile;
+          let image5 = emptyFile;
 
           if (table.image1 !== 'image1') {
-            image1 = table.image1
+            image1 = table.image1;
           }
           if (table.image2 !== 'image2') {
-            image2 = table.image2
+            image2 = table.image2;
           }
           if (table.image3 !== 'image3') {
-            image3 = table.image3
+            image3 = table.image3;
           }
           if (table.image4 !== 'image4') {
-            image4 = table.image4
+            image4 = table.image4;
           }
           if (table.image5 !== 'image5') {
-            image5 = table.image5
+            image5 = table.image5;
           }
 
           // Create an observable for each product
@@ -789,7 +789,7 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
                   this.showSavedElements = false;
                   document.getElementById(`index_${result.index}`).style.color = 'green';
                   document.getElementById(`index_${result.index}`).classList.add('disabled-row');
-                  document.getElementById(`status_${result.index}`).setAttribute('colspan', '2')
+                  document.getElementById(`status_${result.index}`).setAttribute('colspan', '2');
 
                   document.getElementById(`status_${result.index}`).innerHTML =
                     '<i class="fa fa-check-circle-o" style="color: #5cb85c" aria-hidden="true"></i><p style="color: black">' + result.message + '</p>';
@@ -801,7 +801,7 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
                   // Update the row color for failure
                   document.getElementById(`index_${result.index}`).style.color = 'red';
                   document.getElementById(`index_${result.index}`).classList.add('disabled-row');
-                  document.getElementById(`status_${result.index}`).setAttribute('colspan', '2')
+                  document.getElementById(`status_${result.index}`).setAttribute('colspan', '2');
                   document.getElementById(`status_${result.index}`).innerHTML =
                     '<i class="fa fa-times-circle-o" style="color: #d9534f " aria-hidden="true"></i>' +
                     '<p style="color: black">' + result.message + '</p>';
@@ -1043,7 +1043,7 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
       }
       default: {
         this.bulkTemplateHref = 'assets/excel/BulkUpload.xlsx';
-        this.selectedCategoryForTemplate = '';
+        this.selectedCategoryForTemplate = ' - Other';
         break;
       }
     }
@@ -1069,7 +1069,7 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
     for (const table of this.tableArray) {
       let verified = true;
       let allVerified: boolean;
-      let errorMessages = []
+      let errorMessages = [];
       const addImageBtnTable = document.getElementById('addImageBtn_' + index);
       const addImageBtn = document.getElementById('addImageButton_' + index);
       const sellingPrice = document.getElementById('sellingprice_' + index);
@@ -1112,11 +1112,11 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
         if (table.image1 === 'image1') {
           addImageBtnTable.className = 'table-danger';
           addImageBtn.style.backgroundColor = 'red';
-          errorMessages.push("Main Image is Empty!");
+          errorMessages.push('Main Image is Empty!');
           verified = false;
         }
 
-        const categoryChecked = await this.catChecked(table)
+        const categoryChecked = await this.catChecked(table);
         //check if category has sub cats
         let mainCatHasSub = categoryChecked.mainCatHasSub;
         let subCatHasSubs = categoryChecked.subCatHasSubs;
@@ -1124,112 +1124,116 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
         //set cat path
         let isSubCat = false;
         let isSubSubCat = false;
-        let categoryPath = this.findCaseInsensitiveFromObj(table, 'Category')
+        let categoryPath = this.findCaseInsensitiveFromObj(table, 'Category');
         if (this.findCaseInsensitiveFromObj(table, 'Sub Category') !== this.removeSpacesFromString('NA')) {
           if (this.findCaseInsensitiveFromObj(table, 'Sub Sub Category') === this.removeSpacesFromString('NA')) {
             if (subCatHasSubs) {
-              subSubCategory.className = 'table-danger'
-              errorMessages.push("Please Select Sub Sub Category");
+              subSubCategory.className = 'table-danger';
+              errorMessages.push('Please Select Sub Sub Category');
               verified = false;
             }
-            isSubCat = true
+            isSubCat = true;
             categoryPath = categoryPath + ' > ' + this.findCaseInsensitiveFromObj(table, 'Sub Category');
           } else {
             if (subCatHasSubs) {
-              isSubCat = true
-              isSubSubCat = true
+              isSubCat = true;
+              isSubSubCat = true;
               categoryPath = categoryPath + ' > ' + this.findCaseInsensitiveFromObj(table, 'Sub Category') + ' > ' + this.findCaseInsensitiveFromObj(table, 'Sub Sub Category');
             } else {
-              categoryPath = categoryPath + ' > ' + this.findCaseInsensitiveFromObj(table, 'Sub Category')
+              categoryPath = categoryPath + ' > ' + this.findCaseInsensitiveFromObj(table, 'Sub Category');
             }
           }
         } else if (mainCatHasSub) {
-          subCategory.className = 'table-danger'
-          errorMessages.push("Please Select Sub");
+          subCategory.className = 'table-danger';
+          errorMessages.push('Please Select Sub');
           verified = false;
         }
 
-        console.log(categoryPath)
+        console.log(categoryPath);
         // Check if margin rate is 0
         const marginValue = this.findCaseInsensitiveFromObj(table, 'Margin');
         if (marginValue !== undefined) {
           if (marginValue === '0' || marginValue === null) {
             marginRate.className = 'table-danger';
-            errorMessages.push("Invalid Margin Rate!");
+            errorMessages.push('Invalid Margin Rate!');
             verified = false;
           }
         } else {
-          errorMessages.push("No Margin Rate Field!");
-          verified = false
+          errorMessages.push('No Margin Rate Field!');
+          verified = false;
         }
-        console.log(marginValue)
+        console.log(marginValue);
 
         //check if category path exist
-        let payload = {keyword: categoryPath}
+        let payload = {keyword: categoryPath};
         const data = await this.categoryService.searchByPath(payload).toPromise();
-        console.log(data)
+        console.log(data);
         if (data.data.pathList[0] === undefined || data.data.pathList[0] === null) {
-          verified = false
+          verified = false;
           marginRateDb = 0;
           if (isSubSubCat) {
             //check from sub cat
-            let lastIndex = categoryPath.lastIndexOf(">");
+            let lastIndex = categoryPath.lastIndexOf('>');
             if (lastIndex !== -1) {
               categoryPath = categoryPath.substring(0, lastIndex).trim();
-              const payload2 = {keyword: categoryPath}
+              const payload2 = {keyword: categoryPath};
               const subData = await this.categoryService.searchByPath(payload2).toPromise();
 
               if (subData.data.pathList[0] === undefined || subData.data.pathList[0] === null) {
-                subCategory.className = 'table-danger'
-                errorMessages.push("Invalid Sub Category");
+                subCategory.className = 'table-danger';
+                errorMessages.push('Invalid Sub Category');
               } else if (subData.data.pathList.length > 1) {
-                subSubCategory.className = 'table-danger'
-                subCategory.className = 'table-danger'
-                errorMessages.push("Invalid Category Path");
+                subSubCategory.className = 'table-danger';
+                subCategory.className = 'table-danger';
+                errorMessages.push('Invalid Category Path');
               } else {
-                subCategory.className = 'table-danger'
-                subCategory.className = 'table-danger'
-                errorMessages.push("Invalid Category Path");
+                subCategory.className = 'table-danger';
+                subCategory.className = 'table-danger';
+                errorMessages.push('Invalid Category Path');
               }
             }
           } else {
-            subCategory.className = 'table-danger'
-            errorMessages.push("Invalid Sub Category");
+            subCategory.className = 'table-danger';
+            errorMessages.push('Invalid Sub Category');
           }
         } else if (data.data.pathList[0].path !== categoryPath.trim()) {
-          subSubCategory.className = 'table-danger'
-          errorMessages.push("Invalid Sub Sub Category Path");
-          verified = false
+          subSubCategory.className = 'table-danger';
+          errorMessages.push('Invalid Sub Sub Category Path');
+          verified = false;
         } else {
           marginRateDb = data.data.pathList[0].rate;
           //check if margin rate equal to db margin rate
           if (marginRateDb != 0) {
-            if (marginValue !== marginRateDb.toString()) {
+            const marginValueNumeric = parseFloat(marginValue);
+            const marginRateDbNumeric = parseFloat(marginRateDb.toString());
+            if (marginValueNumeric >= marginRateDbNumeric) {
+              verified = true;
+            } else {
               marginRate.className = 'table-danger';
-              errorMessages.push("Cannot Change Margin Rate");
+              errorMessages.push('Cannot Change Margin Rate');
               verified = false;
             }
           } else {
             marginRate.className = 'table-danger';
-            errorMessages.push("Cannot Change Margin Rate");
+            errorMessages.push('Cannot Change Margin Rate');
             verified = false;
           }
         }
 
 
-        await this.delay(400)
+        await this.delay(400);
 
         // Check if listing price contains negative values
         const sellingPriceValue = this.findCaseInsensitiveFromObj(table, 'Selling price');
         if (sellingPriceValue !== undefined) {
           if (sellingPriceValue <= 0 || sellingPriceValue === null) {
             sellingPrice.className = 'table-danger';
-            errorMessages.push("Invalid Selling Price!");
+            errorMessages.push('Invalid Selling Price!');
             verified = false;
           }
         } else {
-          errorMessages.push("No Selling Price Field!");
-          verified = false
+          errorMessages.push('No Selling Price Field!');
+          verified = false;
         }
 
         //check description
@@ -1237,11 +1241,11 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
         if (descriptionValue !== undefined) {
           if (descriptionValue === '' || descriptionValue === null) {
             description.className = 'table-danger';
-            errorMessages.push("Empty Description!");
+            errorMessages.push('Empty Description!');
             verified = false;
           }
         } else {
-          verified = false
+          verified = false;
         }
 
         //check category
@@ -1249,20 +1253,20 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
         if (categoryValue !== undefined) {
           if (categoryValue === '' || categoryValue === null) {
             category.className = 'table-danger';
-            errorMessages.push("Empty Category Name!");
+            errorMessages.push('Empty Category Name!');
             verified = false;
           } else {
             if (this.removeSpacesFromString(categoryValue) !== this.removeSpacesFromString(this.selectedMainCategory)) {
               category.className = 'table-danger';
-              errorMessages.push("Invalid Category!");
+              errorMessages.push('Invalid Category!');
               verified = false;
             } else {
               this.categoryMatched = true;
             }
           }
         } else {
-          verified = false
-          errorMessages.push("No Category Field!");
+          verified = false;
+          errorMessages.push('No Category Field!');
         }
 
 
@@ -1271,12 +1275,12 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
         if (skuValue !== undefined) {
           if (skuValue === '' || skuValue === null) {
             sku.className = 'table-danger';
-            errorMessages.push("Empty Seller SKU!");
+            errorMessages.push('Empty Seller SKU!');
             verified = false;
           }
         } else {
-          errorMessages.push("No Seller SKU Field!");
-          verified = false
+          errorMessages.push('No Seller SKU Field!');
+          verified = false;
         }
 
         //check product name
@@ -1284,12 +1288,12 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
         if (productNameValue !== undefined) {
           if (table['Product Name'] === '' || table['Product Name'] === null) {
             productName.className = 'table-danger';
-            errorMessages.push("Empty Product Name!");
+            errorMessages.push('Empty Product Name!');
             verified = false;
           }
         } else {
-          errorMessages.push("No Product Name Field");
-          verified = false
+          errorMessages.push('No Product Name Field');
+          verified = false;
         }
 
 
@@ -1316,10 +1320,10 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
     }
     setTimeout(() => {
       if (allDetailsOk) {
-        this.needVerification = false
+        this.needVerification = false;
       }
       this.verifying = false;
-    }, 3000)
+    }, 3000);
   }
 
   async catChecked(table) {
@@ -1411,9 +1415,9 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
     if (subCat === null) {
       return mainCat;
     } else if (subSubCat === null) {
-      return mainCat + ' > ' + subCat
+      return mainCat + ' > ' + subCat;
     } else {
-      return mainCat + ' > ' + subCat + ' > ' + subSubCat
+      return mainCat + ' > ' + subCat + ' > ' + subSubCat;
     }
   }
 
