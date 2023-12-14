@@ -1,110 +1,114 @@
 <div class="container-fluid">
   <div class="card">
-    <div class="btn-popup pull-right">
-      <div *ngIf="!isLoading;" style="margin-top: 3%;margin-left: 2%;display: flex; align-items: center;">
-        <select style="width: 40%" *ngIf="isAdmin" id="selectPartnersDropDown" class="form-control" (change)="getPaymentList($event.target.value)">
-          <option value="0" selected>-- Select Vendor --</option>
-          <option *ngFor="let partnerArrays of partnerArray" [value]="partnerArrays['partner_u_id']">
-            {{partnerArrays['name']}}
-          </option>
-        </select>
-        <h5 style="margin-left: 2%;font-weight: bold;color: #676363">{{partnerBusinessName}}</h5>
-
-      </div>
-    </div>
     <div *ngIf="isLoading;">
       <div class="loading">
         <div id="preloader"></div>
       </div>
     </div>
-    <div *ngIf="isSuccess && !isLoading;" class="card-body withdrawalContent">
-      <div class="container mt-4" style="margin-top: 0rem!important;">
-      <table  style="font-size: 10px; border: 1px solid black;width: 100%">
-        <thead style="border: 1px solid black">
-        <tr style="text-align: center;vertical-align: middle;" >
-          <th scope="col" style="width: 15%" >Reference Code</th>
-          <th scope="col" style="width: 17%">Item Code</th>
-          <th scope="col" style="width: 17%">Cost Price</th>
-          <th scope="col" style="width: 10%">Status</th>
-          <th scope="col" style="width: 10%">Quantity</th>
-          <th scope="col" style="width: 11%">Delivery Date</th>
-          <th scope="col" style="width: 13%">Price</th>
-          <th *ngIf="!isAdmin" scope="col" style="width: 25%">Action
-            <div class="form-check" style="padding-left: 0rem;margin-top: 0rem">
-              <input style="margin-bottom: 50%" class="form-check-input" type="checkbox" id="mainCheckbox"
-                     (click)="selectAllCheckBoxes()">
-              <label style="all: initial;font-size: 12px;width: 100%" class="form-check-label" for="mainCheckbox">
-                Select all
-              </label>
-            </div>
-          </th>
-        </tr>
-        </thead>
-        <tbody *ngFor="let childrenItem of recordList; index as i" style="border: 1px solid black" >
-          <tr style="text-align: center;height:0px">
-            <td style="text-align: center; vertical-align: middle;width: 15%" id="vnCode{{childrenItem.index}}">
-              {{childrenItem.referenceId}}
-            </td>
-            <td class="scrollable-cell"  colspan="4">
+    <div *ngIf="!isLoading;" class="card-body ">
+        <div *ngIf="!isLoading;" style="margin-top: 3%;margin-left: 2%;display: flex; align-items: center;">
+          <select style="width: 40%" *ngIf="isAdmin" id="selectPartnersDropDown" class="form-control" (change)="getPaymentList($event.target.value)">
+            <option value="0" selected>-- Select Vendor --</option>
+            <option *ngFor="let partnerArrays of partnerArray" [value]="partnerArrays['partner_u_id']">
+              {{partnerArrays['name']}}
+            </option>
+          </select>
+          <h5 style="margin-left: 2%;font-weight: bold;color: #676363">{{partnerBusinessName}}</h5>
+
+        </div>
+      <br *ngIf="isAdmin;">
+      <div *ngIf="isSuccess && !isLoading;" class="withdrawalContent">
+        <div class="container mt-4" style="margin-top: 0rem!important;">
+          <table  style="font-size: 10px; border: 1px solid black;width: 100%">
+            <thead style="border: 1px solid black">
+            <tr style="text-align: center;vertical-align: middle;" >
+              <th scope="col" style="width: 15%" >Reference Code</th>
+              <th scope="col" style="width: 15%">Item Code</th>
+              <th scope="col" style="width: 15%">Cost Price</th>
+              <th scope="col" style="width: 10%">Order Status</th>
+              <th scope="col" style="width: 10%">Quantity</th>
+              <th scope="col" style="width: 11%">Delivery Date</th>
+              <th scope="col" style="width: 13%">Total Amount</th>
+              <th *ngIf="!isAdmin" scope="col" style="width: 25%">Action
+                <div class="form-check" style="padding-left: 0rem;margin-top: 0rem">
+                  <input style="margin-bottom: 50%;margin-top: 0rem" class="form-check-input" type="checkbox" id="mainCheckbox"
+                         (click)="selectAllCheckBoxes()">
+                  <label style="all: initial;font-size: 12px;width: 100%" class="form-check-label" for="mainCheckbox">
+                    Select all
+                  </label>
+                </div>
+              </th>
+            </tr>
+            </thead>
+            <tbody *ngFor="let childrenItem of recordList; index as i" style="border: 1px solid black" >
+            <tr style="text-align: center;height:0px">
+              <td style="text-align: center; vertical-align: middle;width: 15%" id="vnCode{{childrenItem.index}}">
+                {{childrenItem.referenceId}}
+              </td>
+              <td class="scrollable-cell"  colspan="4">
                 <table id="innerTable" style="width: 100%; height: 100%;border-top: none;">
                   <tr *ngFor="let subContent of childrenItem.description;" style="height:15px;border: 1px solid black;border-bottom: none;border-top: none">
-                    <td style="width: 35%; text-align: left;"><span style="margin-left: 10px"> {{subContent['itemCode']}}</span></td>
-                    <td style="width: 22%; text-align: left;font-weight: bold;">{{subContent['costPrice']| number:'1.2-2'}}</td>
+                    <td style="width: 32%; text-align: left;"><span style="margin-left: 10px"> {{subContent['itemCode']}}</span></td>
+                    <td style="width: 20%; text-align: left;font-weight: bold;">{{subContent['costPrice']| number:'1.2-2'}}</td>
                     <td style="width: 17%; text-align: left;" [ngStyle]="{'width': '17%', 'text-align': 'left', 'color': subContent['status'] === 'Returned' ? 'red' : 'green'}">{{subContent['status']}}</td>
                     <td style="width: 10%; text-align: left;">{{subContent['itemQuantity']}}</td>
                   </tr>
                 </table>
-            </td>
-            <td style="text-align: center; vertical-align: middle;font-weight: bold;width: 10%;">{{childrenItem.kpDeliveryDate}}</td>
-
-            <td style="text-align: center; vertical-align: middle;font-weight: bold">{{childrenItem.totalCostPrice | number:'1.2-2'}}</td>
-            <td *ngIf="!isAdmin" style="text-align: center; vertical-align: middle;width: 20%;">
-              <div class="form-check" style="padding-bottom: 50%">
+              </td>
+              <td style="text-align: center; vertical-align: middle;font-weight: bold;width: 10%;">{{childrenItem.kpDeliveryDate}}</td>
+              <td style="text-align: center; vertical-align: middle;font-weight: bold">{{childrenItem.totalCostPrice | number:'1.2-2'}}</td>
+              <td *ngIf="!isAdmin" style="text-align: center; vertical-align: middle;width: 20%;">
+                <div class="form-check" style="padding-bottom: 25%">
                   <input class="form-check-input checkBoxSet" type="checkbox" id="checkbox{{childrenItem.index}}"
                          (click)="checkBoxCheck(childrenItem.index,childrenItem.totalCostPrice)">
                 </div>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <br>
+        <table style="width: 70%;border-collapse: collapse; margin-left: 3%">
+          <tr >
+            <td>
+              <label for="totalCostPrice">Total Available Amount</label>
+            </td>
+            <td>
+              <input style="width: 100%" id = "totalCostPrice" type="text" disabled [value]="totalPriceCounter | number:'1.2-2'">
+            </td>
+            <td>
+              <button id="withdrawalBtn" style="margin-left: 5%;background-color: #5932EA !important;display: flex; align-items: center;"
+                      class="btn btn-secondary" (click)="withdrawal()" *ngIf="!isAdmin">
+                      <i class="fa fa-money" aria-hidden="true"></i>&nbsp;Withdraw</button>
             </td>
           </tr>
-        </tbody>
-      </table>
+          <tr *ngIf="!isAdmin">
+            <td>
+              <label for="selectedCostPrice">Total Selected Amount</label>
+            </td>
+            <td>
+              <input style="width: 100%;font-weight: bold;" id = "selectedCostPrice" type = "text" disabled [value]="checkedCostPriceCount | number:'1.2-2'">
+            </td>
+          </tr>
+          <tr *ngIf="!isAdmin">
+            <td>
+              <label for="remainder">Remainder</label>
+            </td>
+            <td>
+              <input style="width: 100%" id = "remainder" type = "text" disabled [value]="totalPriceCounter-checkedCostPriceCount | number:'1.2-2'">
+            </td>
+          </tr>
+        </table>
       </div>
-      <br>
-      <table style="width: 60%;border-collapse: collapse; margin-left: 3%">
-        <tr >
-          <td>
-            <label for="totalCostPrice">Total Price</label>
-          </td>
-          <td>
-            <input style="width: 100%" id = "totalCostPrice" type="text" disabled [value]="totalPriceCounter | number:'1.2-2'">
-          </td>
-        </tr>
-        <tr *ngIf="!isAdmin">
-          <td>
-            <label for="selectedCostPrice">Selected Cost Price</label>
-          </td>
-          <td>
-            <input style="width: 100%;font-weight: bold;" id = "selectedCostPrice" type = "text" disabled [value]="checkedCostPriceCount | number:'1.2-2'">
-          </td>
-        </tr>
-        <tr *ngIf="!isAdmin">
-          <td>
-            <label for="remainder">Remainder</label>
-          </td>
-          <td>
-            <input style="width: 100%" id = "remainder" type = "text" disabled [value]="totalPriceCounter-checkedCostPriceCount | number:'1.2-2'">
-          </td>
-        </tr>
-      </table>
-      <button id="withdrawalBtn" style="margin-left: 3%;background-color: #5932EA !important;" class="btn btn-secondary" (click)="withdrawal()" *ngIf="!isAdmin">Withdraw</button>
-    </div>
+      </div>
 
       <div style="text-align: center;" *ngIf="!isSuccess && !isAdmin && !isLoading;">
         <h5 style="color: #898997;font-weight: bold;">
-          You are unable to make Withdrawals yet.</h5>
+          Withdrawal is currently unavailable as there are no realized funds in your account</h5>
       </div>
       <div style="text-align: center;" *ngIf="!isSuccess && isAdmin && isPartnerSelected && !isLoading;">
         <h5 style="color: #898997;font-weight: bold;">
-          The partner has no Content</h5>
+          Withdrawal is currently unavailable for this vendor as there are no realized funds in this account</h5>
       </div>
   </div>
 </div>
