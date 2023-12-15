@@ -42,6 +42,7 @@ export class PaymentWithdrawalComponent implements OnInit {
       let partnerId = sessionStorage.getItem('partnerId');
       this.isAdmin=false;
       this.getPaymentList(partnerId);
+      console.log('b');
     }
   }
   partnerListError(error){
@@ -85,6 +86,7 @@ export class PaymentWithdrawalComponent implements OnInit {
   }
   paymentListManagementError(error){
     this.isLoading=false;
+    this.isSuccess=false;
     Swal.fire(
       'Error',
       error.error.message_status,
