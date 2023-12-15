@@ -95,7 +95,9 @@ export class NavService {
       active: false,
       children: [
         {path: '/payment/list-payment', title: 'Payment List', type: 'link'},
-        {path: '/payment/payment-withdrawal', title: 'Withdrawals', type: 'link'}
+        {path: '/payment/payment-withdrawal', title: 'Withdrawals', type: 'link'},
+        {path: '/payment/payment-request', title: 'Payment Request', type: 'link'}
+
       ]
     },
     {
@@ -497,6 +499,15 @@ export class NavService {
   }
 
   partnerPrivilegeItem(data) {
+    //Hiding withdrawal details from vendor
+    this.items.value[3].children[1].path = '';
+    this.items.value[3].children[1].title = '';
+    this.items.value[3].children[1].type = '';
+
+    this.items.value[3].children[2].path = '';
+    this.items.value[3].children[2].title = '';
+    this.items.value[3].children[2].type = '';
+
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       //hide bulk upload
       if (sessionStorage.getItem('partnerId') !== 'PC00003'){

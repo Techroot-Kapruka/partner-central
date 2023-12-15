@@ -85,6 +85,7 @@ export class PaymentWithdrawalComponent implements OnInit {
   }
   paymentListManagementError(error){
     this.isLoading=false;
+    this.isSuccess=false;
     Swal.fire(
       'Error',
       error.error.message_status,
