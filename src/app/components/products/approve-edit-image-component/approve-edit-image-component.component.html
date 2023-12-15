@@ -32,7 +32,7 @@
               <div class="add-product">
                 <div class="row">
                   <div class="col-xl-3 col-sm-3 col-3" *ngFor="let imageData of imageData">
-                    <img id="mainImages" src="{{imagePathURI+imageData}}" alt="" class="img-fluid image_zoom_1">
+                    <img id="mainImages" [src]="edit ? imagePathURI+imageData : imagePathURI2+imageData" alt="" class="img-fluid image_zoom_1">
                   </div>
                 </div>
               </div>

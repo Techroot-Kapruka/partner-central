@@ -25,6 +25,7 @@ export class ProgressBarComponent implements OnInit {
   isDisplay = false;
   tempCode = sessionStorage.getItem('temp_code');
   bankAdded = false;
+  addProductRouteLink = "dashboard/default"
 
 
   constructor(private userService: HttpClientService, private dashboard: DashboardService) {
@@ -37,6 +38,10 @@ export class ProgressBarComponent implements OnInit {
     await this.checkApproved();
     await this.getBankDetails();
     await this.isBusinessInfoSubmitted();
+
+    if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
+      this.addProductRouteLink = '/products/digital/digital-add-product';
+    }
 
 
     setTimeout(() => {
