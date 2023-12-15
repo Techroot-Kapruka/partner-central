@@ -42,6 +42,7 @@ export class PaymentWithdrawalComponent implements OnInit {
       let partnerId = sessionStorage.getItem('partnerId');
       this.isAdmin=false;
       this.getPaymentList(partnerId);
+      console.log('b');
     }
   }
   partnerListError(error){
