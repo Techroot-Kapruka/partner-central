@@ -7,10 +7,12 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {HttpClientModule} from '@angular/common/http';
 import {PaymentRoutingModule} from './payment-routing.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+import { PaymentWithdrawalComponent } from './payment-withdrawal/payment-withdrawal.component';
+import { PaymentRequestComponent } from './payment-request/payment-request.component';
 
 
 @NgModule({
-  declarations: [ListPaymentComponent],
+  declarations: [ListPaymentComponent, PaymentWithdrawalComponent, PaymentRequestComponent],
   imports: [
     CommonModule,
     FormsModule,
