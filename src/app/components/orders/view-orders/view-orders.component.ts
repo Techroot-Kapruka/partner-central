@@ -50,6 +50,7 @@ export class ViewOrdersComponent implements OnInit {
   public productName = '';
   public image = '';
   public vendorName = '';
+  public btnSaveShipmentColor: string = 'darkblue';
 
   constructor(private _Activatedroute: ActivatedRoute, private orderService: OrderService, private router: Router,
               private productService: ProductService, private order: OrderShareService, private modal: NgbModal, private orderMethods: OrderMethods) {
@@ -111,6 +112,7 @@ export class ViewOrdersComponent implements OnInit {
     }
     if (displayStatus === 'IN PROCESS') {
       this.isInProcess = true;
+      this.btnSaveShipmentColor = '#6f6f6f';
     }
 
     this.orderControle.get('txtorderId').setValue(data.data.id);
@@ -191,7 +193,7 @@ export class ViewOrdersComponent implements OnInit {
       html:
         '<div style="text-align: left;">' +
         '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">1. The package has been wrapped carefully to prevent any damages during transit.</p>' +
-        '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">2. The bar-code has been securely pasted on the package for proper tracking.</p>' +
+        '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">2. The bar-code has been securely pasted on each package separately for proper tracking.</p>' +
         '<p style="font-weight: bold; margin-left: 20px; font-size: 15px;">Have you completed these steps ?</p>' +
         '</div>',
       icon: 'warning',

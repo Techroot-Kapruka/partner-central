@@ -12,6 +12,7 @@ import {DropdownComponent} from '../../../shared/dropdown/dropdown.component';
 import {state} from '@angular/animations';
 import {jsPDF} from 'jspdf';
 import {ProductService} from "../../../shared/service/product.service";
+import {OrderService} from "../../../shared/service/order.service";
 
 function getColorWord(colorValue) {
   const colorToWordMap = new Map([
@@ -63,17 +64,20 @@ export class AddShipmentComponent implements OnInit {
   public isClothes = false;
   public isOnDemandShipment = false;
   public isBtnAddDisabled = false;
-  public isBtnSaveDisabled = false;
+  public isBtnSaveDisabled = true;
   public isProductExist = false;
   public isOnDemandProduct = false;
   public showPriceChange = false;
   public priceChangeClick = false;
+  public isPrintVisible = true;
 
   selectProduct = 'Select Product';
   orderRef = '';
+  qrImage = '';
   public proCode = '';
   public partCode = '';
   public OnDemandPCode = '';
+  public btnSaveShipmentColor: string = '#6f6f6f';
   // isPriceChange = '';
 
   passChangePriceToAddTable: any;
@@ -93,7 +97,8 @@ export class AddShipmentComponent implements OnInit {
   @ViewChild(DropdownComponent, {static: false}) dropdownComponent: DropdownComponent;
 
   constructor(private route: ActivatedRoute, private shipmentNewService: ShipmentNewService, private router: Router, private productService: ProductService,
-              private order: OrderShareService, private pendingStockShare: PendingStockAllocationShareService, private modal: NgbModal, private priceChangeService: PriceChangeService) {
+              private order: OrderShareService, private pendingStockShare: PendingStockAllocationShareService,
+              private modal: NgbModal, private priceChangeService: PriceChangeService, private orderService: OrderService) {
 
     this.createFormConteolerForShipment();
     this.searchProduct();
@@ -122,6 +127,16 @@ export class AddShipmentComponent implements OnInit {
 
     if (this.dropdownComponent) {
       this.dropdownComponent.setDefaultValue();
+    }
+
+    if (this.isOnDemandShipment === true){
+      this.btnSaveShipmentColor = 'darkblue';
+      this.isPrintVisible = false;
+      this.isBtnSaveDisabled = false;
+    }else{
+      this.btnSaveShipmentColor = '#6f6f6f';
+      this.isPrintVisible = true;
+      this.isBtnSaveDisabled = true;
     }
   }
 
@@ -277,6 +292,7 @@ export class AddShipmentComponent implements OnInit {
       allowOutsideClick: false,
     }).then((result) => {
       this.isBtnSaveDisabled = false;
+      this.btnSaveShipmentColor = 'darkblue';
       const payLoard = {
         shipment_id: data.data.shipment_id
       };
@@ -540,12 +556,13 @@ export class AddShipmentComponent implements OnInit {
   }
 
   submit(x) {
+
     let payLoard;
     if (x === 1) {
+
       // change price
       let sellingPrice = (document.getElementById('newSellingPrice') as HTMLInputElement).value;
       let changingRate = (document.getElementById('initialRate') as HTMLInputElement).value;
-
 
       if (sellingPrice === '' && changingRate === this.changeChangingRate.toString()) {
         Swal.fire(
@@ -571,55 +588,79 @@ export class AddShipmentComponent implements OnInit {
         error => this.manageUserError(error)
       );
     } else {
-      // add shipment
-      if (this.isPriceChange == 1) {
 
-        // save data to field edit
-        for (let i = 0; i < this.changeFeids.length; i++) {
-          payLoard = {
-            referenceId: this.changeFeids[i].productCode,
-            type: 'PRODUCT_PRICE',
-            sub_type: 'product_price',
-            comment: 'PRODUCT_PRICE',
-            requestedBy: this.changeVendor,
-            saveType: 'shipment',
-            userId: sessionStorage.getItem('userId'),
-            data: [
-              {
-                column_name: 'cost_price',
-                old_value: this.changeFeids[i].oldCostPrice,
-                new_value: this.changeFeids[i].newCostPrice,
-                call_name: 'cost_price',
-              },
-              {
-                column_name: 'changing_rate',
-                old_value: this.changeFeids[i].oldChangingRate,
-                new_value: this.changeFeids[i].newChangingRate,
-                call_name: 'changing_rate',
-              },
-              {
-                column_name: 'selling_price',
-                old_value: this.changeFeids[i].oldSellingPrice,
-                new_value: this.changeFeids[i].newSellingPrice,
-                call_name: 'selling_price',
-              }
-            ]
-          };
-          this.submitShipmentchangeFeids.push(payLoard);
+      Swal.fire({
+        title: 'Before proceeding, please ensure the following:',
+        html:
+          '<div style="text-align: left;">' +
+          '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">1. The package has been wrapped carefully to prevent any damages during transit.</p>' +
+          '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">2. The bar-code has been securely pasted on each package separately for proper tracking.</p>' +
+          '<p style="font-weight: bold; margin-left: 20px; font-size: 15px;">Have you completed these steps ?</p>' +
+          '</div>',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'Not yet',
+        customClass: {
+          popup: 'swal-popup',
+        },
+      }).then((result) => {
+
+        if (result.isConfirmed) {
+
+          // add shipment
+          if (this.isPriceChange == 1) {
+
+            // save data to field edit
+            for (let i = 0; i < this.changeFeids.length; i++) {
+              payLoard = {
+                referenceId: this.changeFeids[i].productCode,
+                type: 'PRODUCT_PRICE',
+                sub_type: 'product_price',
+                comment: 'PRODUCT_PRICE',
+                requestedBy: this.changeVendor,
+                saveType: 'shipment',
+                userId: sessionStorage.getItem('userId'),
+                data: [
+                  {
+                    column_name: 'cost_price',
+                    old_value: this.changeFeids[i].oldCostPrice,
+                    new_value: this.changeFeids[i].newCostPrice,
+                    call_name: 'cost_price',
+                  },
+                  {
+                    column_name: 'changing_rate',
+                    old_value: this.changeFeids[i].oldChangingRate,
+                    new_value: this.changeFeids[i].newChangingRate,
+                    call_name: 'changing_rate',
+                  },
+                  {
+                    column_name: 'selling_price',
+                    old_value: this.changeFeids[i].oldSellingPrice,
+                    new_value: this.changeFeids[i].newSellingPrice,
+                    call_name: 'selling_price',
+                  }
+                ]
+              };
+              this.submitShipmentchangeFeids.push(payLoard);
+            }
+
+            payLoard = {
+              dataSet: this.submitShipmentchangeFeids
+            };
+
+            this.productService.editShipmentField(payLoard).subscribe(
+              data => this.manageEditField(data),
+              error => this.manageUserError(error)
+            );
+
+          } else {
+            this.hitShipment();
+          }
+        } else {
+
         }
-
-        payLoard = {
-          dataSet: this.submitShipmentchangeFeids
-        };
-
-        this.productService.editShipmentField(payLoard).subscribe(
-          data => this.manageEditField(data),
-          error => this.manageUserError(error)
-        );
-
-      } else {
-        this.hitShipment();
-      }
+      });
     }
   }
 
@@ -1010,5 +1051,94 @@ export class AddShipmentComponent implements OnInit {
     qty = (document.getElementById('txtQtyForClothes' + i) as HTMLInputElement).value;
     const index = i;
     this.quantityMap.set(parseInt(index), qty);
+  }
+
+  printQRCode() {
+    this.isBtnSaveDisabled = false;
+    this.btnSaveShipmentColor = 'darkblue';
+    const printArr = [];
+
+    const generateQRCode = (item, variationCodeP) => {
+      const variationCode = item.variationCode !== variationCodeP ? item.variationCode : '';
+
+      return this.orderService.generateQRCode(variationCode, '').toPromise().then(data => {
+        const qrImage = 'data:image/png;base64,' + data.data;
+        return { vCode: variationCode, quantity: item.quantity, qrImage };
+      });
+    };
+
+    const printPromises = this.tableData.reduce(async (previousPromise, item, index) => {
+      const printData = await previousPromise;
+      const variationCodeP = index > 0 ? this.tableData[index - 1].variationCode : '';
+
+      const qrPrintData = await generateQRCode(item, variationCodeP);
+      printArr.push(qrPrintData);
+
+      return printArr;
+    }, Promise.resolve());
+
+    printPromises.then(() => {
+      this.printQR(printArr);
+    });
+  }
+
+  private printQR(printArr) {
+    const popupWin = window.open('', '_blank');
+    popupWin.document.open();
+    popupWin.document.write(`
+    <html>
+      <head><title>Order Details</title></head>
+      <body onload="window.print(); window.onafterprint=function(){window.close()}">
+        ${this.printPCode(printArr)}
+      </body>
+    </html>`
+    );
+    popupWin.document.close();
+  }
+
+  private printPCode(printArr) {
+    const businessName = sessionStorage.getItem('businessName');
+    const vendorCode = sessionStorage.getItem('partnerId');
+
+    return printArr.map(({ vCode, quantity, qrImage }) => `
+    <table style="text-align: left; padding-top:7px; width:100%; font-size: 20px; font-weight: bold;">
+      <tr>
+        <td style="text-align: center; border: 1px solid #ddd;">${vCode}</td>
+      </tr>
+    </table>
+    <table style="text-align: center;">
+      ${this.generateTableRows(vCode, quantity, qrImage, businessName, vendorCode)}
+    </table>`
+    ).join('');
+  }
+
+  private generateTableRows(variationCode, qty, qrImage, businessName, vendorCode) {
+    const printsPerRow = 4;
+    const rowsQty = Math.ceil(qty / printsPerRow);
+
+    return Array.from({ length: rowsQty }, (_, row) => `
+    <tr>
+      ${Array.from({ length: printsPerRow }, (_, col) => {
+        const count = row * printsPerRow + col + 1;
+        return count <= qty ? `
+          <td style="width: 100px; height: 100px; border: 1px solid #ddd;">
+            <table>
+              <tr>
+                <td colspan="2" style="margin-top: 20px; text-align: center;">
+                  <img src=" ${qrImage} " style="width: 100%; height: 100%;" alt="QR Code">
+                </td>
+              </tr>
+              <tr>
+                <td style="padding-left: 5px; padding-right: 5px; text-align: left; font-size: 13px;"> ${variationCode} </td>
+                <td style="padding-left: 5px; padding-right: 5px; text-align: right; font-size: 13px"> ${vendorCode} </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="padding-left: 5px; padding-right: 5px; text-align: left; font-size: 13px"> ${businessName} </td>
+              </tr>
+            </table>
+          </td>` : '';
+      }).join('')}
+    </tr>`
+    ).join('');
   }
 }
