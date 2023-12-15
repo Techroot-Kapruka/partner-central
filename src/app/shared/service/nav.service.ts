@@ -234,6 +234,8 @@ export class NavService {
       this.managePurchasingUser();
     } else if (sessionStorage.getItem('userRole') === 'ROLE_FINANCE_USER') {
       this.manageFinanceUser();
+    } else if (sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
+      this.manageSuperAdmin();
     }
   }
 

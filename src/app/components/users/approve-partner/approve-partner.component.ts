@@ -89,7 +89,9 @@ export class ApprovePartnerComponent implements OnInit {
       creditCardSave: new FormControl(''),
       PartnerType: new FormControl(''),
       partner_temp_code: new FormControl(''),
-      socialURL: new FormControl('')
+      socialURL: new FormControl(''),
+      title: new FormControl(''),
+      description: new FormControl('')
     });
 
     this.bankData = new FormGroup({
@@ -140,6 +142,8 @@ export class ApprovePartnerComponent implements OnInit {
       creditCardSave: new FormControl(data.data.partnerUser.creditCardSave),
       PartnerType: new FormControl(data.data.partnerUser.type),
       partner_temp_code: new FormControl(data.data.partnerUser.temp_code),
+      title: new FormControl(data.data.partnerUser.title),
+      description: new FormControl(data.data.partnerUser.description),
       socialURL: new FormControl('https://' + data.data.partnerUser.social_url),
     });
 
@@ -507,4 +511,37 @@ this.approveButtonClicked = false;
     this.router.navigate(['/declined-message/' + vendorCode]);
   }
 
+  save(){
+    const or = {
+      column: 'description',
+      tblname: 'partner',
+      value: this.partnerEdit.get('description').value,
+      whereClause: 'temp_code',
+      whereValue: this.TempCode
+    };
+    this.productService.editAdminSave(or).subscribe(
+      data => {
+        this.manageTitleUpdate();
+      }
+    );
+  }
+
+  manageTitleUpdate(){
+    const payload = {
+      column: 'title',
+      tblname: 'partner',
+      value: this.partnerEdit.get('title').value,
+      whereClause: 'temp_code',
+      whereValue: this.TempCode
+    };
+    this.productService.editAdminSave(payload).subscribe(
+      data => {
+        Swal.fire(
+          'Success',
+          '',
+          'success'
+        );
+      }
+    );
+  }
 }

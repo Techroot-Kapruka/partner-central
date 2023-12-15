@@ -64,7 +64,7 @@
                         <div class="row table-responsive"
                              style="margin-top: 1%;max-height:70vh; overflow-y: auto; width: 135%;">
                           <app-table-template [HeadArray]="headOut" [DataArray]="paginatedOutofStock.length > 0 ? paginatedOutofStock : list_outof_stock"
-                                              [outOfStock]="outOfStock" [emptyTable]="emptyTableOutStock" (onPopUpImg)="popUpImage($event)"  (onClick)="clickProduct($event)" > </app-table-template>
+                                              [outOfStock]="outOfStock" [emptyTable]="emptyTableOutStock" (onPopUpImg)="popUpImage($event)"  (onAddStock)="UpdateManualOutStocks($event)" > </app-table-template>
                         </div>
                       </div>
                     </div>
