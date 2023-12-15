@@ -261,9 +261,14 @@
                     </button>
                   </div>-->
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                   <div class="form-group">
-                    <button style="float: right;" [disabled]="isBtnSaveDisabled" type="submit" class="btn btn-lg btn-primary">Shipment Submit</button>
+                    <button style="float: right;" type="button" class="btn btn-lg btn-success" [style.display]="isPrintVisible ? 'block' : 'none'" (click)="printQRCode()">PRINT QR CODE</button>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <button style="float: right; color: #ffffff" [style.backgroundColor]="btnSaveShipmentColor" [disabled]="isBtnSaveDisabled" type="submit" class="btn btn-lg">Shipment Submit</button>
                   </div>
                 </div>
               </div>

@@ -256,34 +256,44 @@ export class ListOrdersComponent implements OnInit {
   }
 
   manageLimitedOrders(data) {
+    this.loading = false;
     this.paginateData = [];
     if (data.data.content != null) {
-      this.loading = false;
       for (let z = 0; z < data.data.content.length; z++) {
         let statusStyleOne = false;
         let statusStyleTwo = false;
         let statusStyleThree = false;
+        let statusStyleFour = false;
+        let statusStyleFive = false;
+        let statusStyleSix = false;
         let displayStatus = '';
 
         displayStatus = data.data.content[z].status;
-        if (data.data.content[z].status === 'IN PROCESS') {
+        if (displayStatus === 'IN PROCESS') {
           statusStyleOne = true;
           displayStatus = this.orderMethods.findRealStatus(data.data.content[z].shipmentStatus, data.data.content[z].status, data.data.content[z].purchase_approval_id);
-        } else {
-          statusStyleOne = false;
+
+          if (displayStatus === 'READY TO SHIP') {
+            statusStyleFour = true;
+            statusStyleOne = false;
+          }
+          if (displayStatus === 'SHIPPED') {
+            statusStyleFive = true;
+            statusStyleOne = false;
+          }
+          if (displayStatus === 'SHIPMENT RECEIVED') {
+            statusStyleSix = true;
+            statusStyleOne = false;
+          }
         }
 
-        if (data.data.content[z].status === 'Delivered') {
+        if (displayStatus === 'Delivered') {
           statusStyleTwo = true;
-        } else {
-          statusStyleTwo = false;
+        }
+        if (displayStatus === 'CANCELED') {
+          statusStyleThree = true;
         }
 
-        if (data.data.content[z].status === 'CANCELED') {
-          statusStyleThree = true;
-        } else {
-          statusStyleThree = false;
-        }
         // const proCode = data.data.content[z].cartsnapshot[0].productID;
         let isOnDemand = false;
         if (data.data.content[z].is_od === 1) {
@@ -304,6 +314,9 @@ export class ListOrdersComponent implements OnInit {
           statusStyleOne,
           statusStyleTwo,
           statusStyleThree,
+          statusStyleFour,
+          statusStyleFive,
+          statusStyleSix,
           cartsnapshot: data.data.content[z].cartsnapshot[0].name,
           shipmentStatus: this.status,
           isOnDemand,
@@ -331,6 +344,7 @@ export class ListOrdersComponent implements OnInit {
   }
 
   getSelectedRow(index) {
+    this.loading = true;
     this.getPaginateOrderList(index - 1);
   }
 

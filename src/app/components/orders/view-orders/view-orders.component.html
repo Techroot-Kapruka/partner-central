@@ -272,8 +272,8 @@
               </div>
               <div class="row">
                 <div class="col-8"></div>
-                <div *ngIf="(odProduct && isPartner && isReadytoShip) || (isInProcess && odProduct)" class="col-2" style="text-align: center">
-                  <button class="btn btn-primary" [disabled]="isInProcess" (click)="readyToShip()">
+                <div *ngIf="(odProduct && isPartner && isReadytoShip) || (isInProcess && odProduct)" class="col-2" style="text-align: center;">
+                  <button class="btn"  style="text-align: center; color: #ffffff" [style.backgroundColor]="btnSaveShipmentColor" [disabled]="isInProcess" (click)="readyToShip()">
                     Ready To Ship
                   </button>
                 </div>
