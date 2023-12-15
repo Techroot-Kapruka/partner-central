@@ -123,7 +123,6 @@ export class AddShipmentComponent implements OnInit {
       this.processOnDemandShipment();
     }
 
-
     if (this.dropdownComponent) {
       this.dropdownComponent.setDefaultValue();
     }
