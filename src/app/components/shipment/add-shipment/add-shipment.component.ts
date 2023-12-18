@@ -69,7 +69,6 @@ export class AddShipmentComponent implements OnInit {
   public isOnDemandProduct = false;
   public showPriceChange = false;
   public priceChangeClick = false;
-  public isPrintVisible = true;
 
   selectProduct = 'Select Product';
   orderRef = '';
@@ -124,19 +123,8 @@ export class AddShipmentComponent implements OnInit {
       this.processOnDemandShipment();
     }
 
-
     if (this.dropdownComponent) {
       this.dropdownComponent.setDefaultValue();
-    }
-
-    if (this.isOnDemandShipment === true){
-      this.btnSaveShipmentColor = 'darkblue';
-      this.isPrintVisible = false;
-      this.isBtnSaveDisabled = false;
-    }else{
-      this.btnSaveShipmentColor = '#6f6f6f';
-      this.isPrintVisible = true;
-      this.isBtnSaveDisabled = true;
     }
   }
 

@@ -380,6 +380,7 @@ export class ViewOrdersComponent implements OnInit {
   }
 
   private PrintQRCode() {
+    const businessName = sessionStorage.getItem('businessName');
     const popupWin = window.open('', '_blank');
     popupWin.document.open();
     popupWin.document.write(`
@@ -391,7 +392,7 @@ export class ViewOrdersComponent implements OnInit {
               <td style="text-align: center;">
                 <table style="border-collapse: collapse; width: 100%;">
                   <tr>
-                    <td colspan="2" style="padding: 10px; padding-left: 20px; text-align: right; font-size: 20px">( ${this.vendorName} ) Delivery Date : ${this.deliveryDate}</td>
+                    <td colspan="2" style="padding: 10px; padding-left: 20px; text-align: right; font-size: 20px">( ${businessName} ) Delivery Date : ${this.deliveryDate}</td>
                   </tr>
                   <tr>
                     <td colspan="2" style="padding: 10px; padding-left: 20px; text-align: center; font-size: 40px">${this.purchaseApprovalID}</td>
