@@ -445,13 +445,17 @@ export class NavService {
   manageSuperAdmin() {
 
     console.log(this.items);
-    this.items.value[2].children[1].path = '';
-    this.items.value[2].children[1].title = '';
-    this.items.value[2].children[1].type = '';
+    // this.items.value[2].children[1].path = '';
+    // this.items.value[2].children[1].title = '';
+    // this.items.value[2].children[1].type = '';
 
     this.items.value[2].children[2].path = '';
     this.items.value[2].children[2].title = '';
     this.items.value[2].children[2].type = '';
+
+    this.items.value[2].children[3].path = '';
+    this.items.value[2].children[3].title = '';
+    this.items.value[2].children[3].type = '';
     this.items.value[4].path = '';
     this.items.value[4].title = '';
     this.items.value[4].type = '';
@@ -510,11 +514,11 @@ export class NavService {
 
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       //hide bulk upload
-      if (sessionStorage.getItem('partnerId') !== 'PC00003'){
-        this.items.value[1].children[3].path = '';
-        this.items.value[1].children[3].title = '';
-        this.items.value[1].children[3].type = '';
-      }
+      // if (sessionStorage.getItem('partnerId') !== 'PC00003'){
+      //   this.items.value[1].children[3].path = '';
+      //   this.items.value[1].children[3].title = '';
+      //   this.items.value[1].children[3].type = '';
+      // }
 
       // hide change Requests
       this.items.value[1].children[5].path = '';
