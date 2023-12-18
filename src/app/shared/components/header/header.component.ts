@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit {
   public userRole = sessionStorage.getItem('userRole');
   public tempCode = sessionStorage.getItem('temp_code');
   public userBool = false;
-  public userName = sessionStorage.getItem('contactPersonName');
+  public userName = sessionStorage.getItem('businessName');
   userRoleType = 'N/A';
   @Output() rightSidebarEvent = new EventEmitter<boolean>();
 
