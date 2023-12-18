@@ -104,6 +104,6 @@ export class ProductReportComponent implements OnInit {
     excel.utils.book_append_sheet(wb, ws, 'Product-Report');
 
     // Save the workbook as an Excel file
-    excel.writeFile(wb, 'Shipment-report.xlsx');
+    excel.writeFile(wb, 'Product-report.xlsx');
   }
 }
