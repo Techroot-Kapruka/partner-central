@@ -17,31 +17,38 @@ export class HeaderComponent implements OnInit {
   public userRole = sessionStorage.getItem('userRole');
   public tempCode = sessionStorage.getItem('temp_code');
   public userBool = false;
-  public userName = sessionStorage.getItem('businessName');
+  public userName ;
   userRoleType = 'N/A';
   @Output() rightSidebarEvent = new EventEmitter<boolean>();
 
   constructor(public navServices: NavService, private authService: AuthService, private router: Router) {
     if (this.userRole === 'ROLE_ADMIN') {
       this.userRoleType = 'ADMIN';
+      this.userName = sessionStorage.getItem('contactPersonName');
       this.imageName = 'man.png';
     } else if (this.userRole === 'ROLE_PARTNER') {
       this.userRoleType = 'PARTNER';
+      this.userName = sessionStorage.getItem('businessName');
       this.getPartnerImage();
     } else if (this.userRole === 'ROLE_QA') {
       this.userRoleType = 'QUALITY ASSURANCE';
+      this.userName = sessionStorage.getItem('contactPersonName');
       this.imageName = 'qa_user.jpeg';
     } else if (this.userRole === 'ROLE_GUEST') {
       this.userRoleType = 'GUEST';
+      this.userName = sessionStorage.getItem('businessName');
       this.imageName = 'man.png';
     } else if (this.userRole === 'ROLE_CATEGORY_MANAGER') {
+      this.userName = sessionStorage.getItem('contactPersonName');
       this.userRoleType = 'CATEGORY MANAGER';
       this.imageName = 'man.png';
     } else if (this.userRole === 'ROLE_STORES_MANAGER') {
+      this.userName = sessionStorage.getItem('contactPersonName');
       this.userRoleType = 'STORES_MANAGER';
       this.imageName = 'man.png';
     } else {
       this.userRoleType = 'USER';
+      this.userName = sessionStorage.getItem('contactPersonName');
       this.imageName = 'man.png';
     }
   }
