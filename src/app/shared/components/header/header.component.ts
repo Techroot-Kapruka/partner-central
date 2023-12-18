@@ -40,6 +40,9 @@ export class HeaderComponent implements OnInit {
     } else if (this.userRole === 'ROLE_STORES_MANAGER') {
       this.userRoleType = 'STORES_MANAGER';
       this.imageName = 'man.png';
+    } else if (this.userRole === 'ROLE_SUPER_ADMIN') {
+      this.userRoleType = 'SUPER ADMIN';
+      this.imageName = 'man.png';
     } else {
       this.userRoleType = 'USER';
       this.imageName = 'man.png';
