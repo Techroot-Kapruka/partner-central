@@ -7,6 +7,7 @@ import {ChartOptions} from 'chart.js';
 import Swal from 'sweetalert2';
 import {AnalyticsProductService} from '../../shared/service/analytics-product.service';
 import {ProductService} from '../../shared/service/product.service';
+import {OrderService} from "../../shared/service/order.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -61,6 +62,12 @@ export class DashboardComponent implements OnInit {
   public isPieChart = false;
   public isColumnChart = false;
   showViewShopButton = false;
+  months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  month = new Date().getMonth();
+  week1Orders = 0;
+  week2Orders = 0;
+  week3Orders = 0;
+  week4Orders = 0;
 
   constructor(private productService: ProductService, private dashboardService: DashboardService, private router: Router, private _Activatedroute: ActivatedRoute,
               private analyticsService: AnalyticsProductService) {
@@ -70,6 +77,8 @@ export class DashboardComponent implements OnInit {
       this.manageAsLoginPartner(this.boolLog, this.partnerId);
       this.showElerments();
     });
+
+
 
     const roleLog = sessionStorage.getItem('userRole');
     if (roleLog === 'ROLE_ADMIN' || roleLog === 'ROLE_SUPER_ADMIN' || roleLog === 'ROLE_CATEGORY_MANAGER') {
@@ -98,49 +107,24 @@ export class DashboardComponent implements OnInit {
       this.getSumProductAddToCart();
       this.getSumProductOrderTotal();
     }
+
   }
-
   /* Start Column Chart */
-  view: [number, number] = [730, 530];
-
-  chartData: any[] = [
-    {
-      name: 'Series 1',
-      value: 100,
-    },
-    {
-      name: 'Series 2',
-      value: 200,
-    },
-    {
-      name: 'Series 3',
-      value: 300,
-    },
-    {
-      name: 'Series 4',
-      value: 400,
-    },
-    {
-      name: 'Series 5',
-      value: 150,
-    },
-    {
-      name: 'Series 6',
-      value: 500,
-    },
-  ];
+  view: [number, number] = [630, 430];
+  chartData: any[] = [];
 
   colorScheme = {
-    domain: ['#5AA454', '#E44D25', '#CFC0BB', '#5AA454', '#E44D25', '#CFC0BB'],
+    domain: ['#5AA454', '#E44D25', '#CFC0BB', '#5AA454'],
   };
+
 
   showXAxis = true;
   showYAxis = true;
   gradient = false;
   showXAxisLabel = true;
-  xAxisLabel = 'X-Axis Label';
+  xAxisLabel = this.months[this.month];
   showYAxisLabel = true;
-  yAxisLabel = 'Y-Axis Label';
+  yAxisLabel = 'Orders';
   /* End Column Chart */
 
   /* Start Pie Chart */
@@ -188,6 +172,36 @@ export class DashboardComponent implements OnInit {
     this.productService.getnonActiveProductCount(busName, categoryID).subscribe(
       data => this.pendingProductCount(data),
     );
+  }
+
+  async setDataForCharts(){
+    await this.dashboardService.getWeeklyOrderCount().toPromise().then(
+      data => {
+        if (data.status_code === 200){
+          if (data.data !== null){
+            const weeklyOrdersArray = data.data.split(',');
+            this.chartData = [
+              {
+                name: 'Week 1',
+                value: parseInt(weeklyOrdersArray[0]) || 0,
+              },
+              {
+                name: 'Week 2',
+                value: parseInt(weeklyOrdersArray[1]) || 0,
+              },
+              {
+                name: 'Week 3',
+                value: parseInt(weeklyOrdersArray[2]) || 0,
+              },
+              {
+                name: 'Week 4',
+                value: parseInt(weeklyOrdersArray[3]) || 0,
+              }
+            ];
+          }
+        }
+      }
+    )
   }
 
   pendingProductCount(data) {
@@ -252,8 +266,9 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.getShopUrl();
+    await this.setDataForCharts()
   }
 
   showLoginButton() {
