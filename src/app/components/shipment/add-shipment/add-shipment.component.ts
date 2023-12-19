@@ -13,6 +13,7 @@ import {state} from '@angular/animations';
 import {jsPDF} from 'jspdf';
 import {ProductService} from "../../../shared/service/product.service";
 import {OrderService} from "../../../shared/service/order.service";
+import {classNames} from "@angular/cdk/schematics";
 
 function getColorWord(colorValue) {
   const colorToWordMap = new Map([
@@ -1075,7 +1076,47 @@ export class AddShipmentComponent implements OnInit {
     popupWin.document.open();
     popupWin.document.write(`
     <html>
-      <head><title>Order Details</title></head>
+      <head>
+      <title>Order Details</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+      td tbody{
+      display: block;
+      }
+      .tdblock{
+      width: 130px !important;
+      }
+      .tdtr{
+        font-size: 0;
+      }
+      
+      .tbl{
+      display: inline-block;
+      vertical-align: top;
+      border: solid 1px #000;
+      margin: 2px;
+      text-align: center;
+      width: 130px;
+      }
+      
+      .tbl tbody{
+      display: block;
+      width: 100%;
+      }
+      
+      @media (min-width:701px) and (max-width:840px) {
+      .tbl{
+      width: 105px !important;
+      }
+      
+      .td{
+      font-size: 10px !important;
+      }
+      
+      }
+      </style>
+   
+      </head>
       <body onload="window.print(); window.onafterprint=function(){window.close()}">
         ${this.printPCode(printArr)}
       </body>
@@ -1087,46 +1128,34 @@ export class AddShipmentComponent implements OnInit {
   private printPCode(printArr) {
     const businessName = sessionStorage.getItem('businessName');
     const vendorCode = sessionStorage.getItem('partnerId');
-
     return printArr.map(({ vCode, quantity, qrImage }) => `
-    <table style="text-align: left; padding-top:7px; width:100%; font-size: 20px; font-weight: bold;">
+    <table style="text-align: center; padding-top:7px; width:100%; font-size: 20px; font-weight: bold;">
       <tr>
-        <td style="text-align: center; border: 1px solid #ddd;">${vCode}</td>
+        <td style="text-align: center;  display:inline-block; vertical-align: top; border: 1px solid #ddd;">${vCode}</td>
       </tr>
     </table>
-    <table style="text-align: center;">
-      ${this.generateTableRows(vCode, quantity, qrImage, businessName, vendorCode)}
-    </table>`
+    ${this.generateTableRows(vCode, quantity, qrImage, businessName, vendorCode)}`
     ).join('');
   }
 
   private generateTableRows(variationCode, qty, qrImage, businessName, vendorCode) {
-    const printsPerRow = 4;
-    const rowsQty = Math.ceil(qty / printsPerRow);
-
-    return Array.from({ length: rowsQty }, (_, row) => `
-    <tr>
-      ${Array.from({ length: printsPerRow }, (_, col) => {
-        const count = row * printsPerRow + col + 1;
+    return Array.from({ length: qty }, (_, col) => {
+        const count = col + 1;
         return count <= qty ? `
-          <td style="width: 100px; height: 100px; border: 1px solid #ddd;">
-            <table>
-              <tr>
-                <td colspan="2" style="margin-top: 20px; text-align: center;">
-                  <img src=" ${qrImage} " style="width: 100%; height: 100%;" alt="QR Code">
-                </td>
-              </tr>
-              <tr>
-                <td style="padding-left: 5px; padding-right: 5px; text-align: left; font-size: 13px;"> ${variationCode} </td>
-                <td style="padding-left: 5px; padding-right: 5px; text-align: right; font-size: 13px"> ${vendorCode} </td>
-              </tr>
-              <tr>
-                <td colspan="2" style="padding-left: 5px; padding-right: 5px; text-align: left; font-size: 13px"> ${businessName} </td>
-              </tr>
-            </table>
-          </td>` : '';
-      }).join('')}
-    </tr>`
-    ).join('');
+          <table class="tbl">
+            <tr style="display: block">
+              <td colspan="" style="margin-top: 20px; text-align: center; display: block; margin: 0 auto">
+                <img src=" ${qrImage} " style="width: 100%; height: auto; max-width: 70px" alt="QR Code">
+              </td>
+            </tr>
+            <tr style="display: block">
+              <td style="padding-left: 5px; padding-right: 5px; text-align: left; font-size: 10px;  display: block; text-align: center; margin-bottom: 5px"> ${variationCode} </td>
+              <td style="padding-left: 5px; padding-right: 5px;  font-size: 10px;  display: block; text-align: center; margin-bottom: 5px"> ${vendorCode} </td>
+            </tr>
+            <tr style="display: block">
+              <td  style="padding-left: 5px; padding-right: 5px;  font-size: 10px; display: block; text-align: center; margin-bottom: 5px"> ${businessName} </td>
+            </tr>
+          </table>` : '';
+      }).join('');
   }
 }
