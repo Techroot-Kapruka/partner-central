@@ -7,7 +7,7 @@ import {FormControl, FormGroup} from '@angular/forms';
 import {Router} from '@angular/router';
 import {CategoryService} from '../../../shared/service/category.service';
 import {AngularEditorConfig} from '@kolkov/angular-editor';
-import { ImageService } from '../../../shared/service/image.service';
+import {ImageService} from '../../../shared/service/image.service';
 
 
 interface Item {
@@ -44,10 +44,11 @@ export class DigitalAddComponent implements OnInit {
   private categoryMarginMain = 0.00;
   public categoryNameForItemGroup = '';
   public categoryCode = '';
-  public variationKeyArray = [];
-  public variationvalueSizeTypeObjArray = [];
-  public variationvalueArrayForNonObject = [];
-  public variationvalueArrayObject = [];
+  public mainvariationKeyArray = [];
+  public mainvariationvalueSizeTypeObjArray = [];
+  public mainvariationvalueArrayForNonObject = [];
+  public mainvariationvalueArrayObject = [];
+  public isAvailableInMain = false;
   public hashmapForVariations = {};
   public hashmapForVariationsObj = {};
   public inputValue = '';
@@ -58,6 +59,11 @@ export class DigitalAddComponent implements OnInit {
   showMoreMode = true;
   isColorVariation = false;
   showImageCropper = false;
+
+  public variationKeyArray = [];
+  public variationvalueSizeTypeObjArray = [];
+  public variationvalueArrayForNonObject = [];
+  public variationvalueArrayObject = [];
 
   public keyArrays = [];
   attributesKeyArr = [];
@@ -954,66 +960,66 @@ export class DigitalAddComponent implements OnInit {
     }
   }
 
-async imageAssign(event, imgID, index){
-  const result = await this.imageService.validateImage(event,imgID,"add");
-    switch(index){
+  async imageAssign(event, imgID, index) {
+    const result = await this.imageService.validateImage(event, imgID, "add");
+    switch (index) {
       case 1:
-        if(result){
+        if (result) {
           this.imageCliant.patchValue({
             fileSource: result
           });
           this.imgUploaded1 = true;
           this.mainImageAdded = true;
-        }else{
+        } else {
           this.imgUploaded1 = false;
         }
         break;
       case 2:
-        if(result){
+        if (result) {
           this.imageCliant.patchValue({
             fileSource2: result
           });
           this.imgUploaded2 = true;
           this.mainImageAdded = true;
-        }else{
+        } else {
           this.imgUploaded2 = false;
         }
         break;
       case 3:
-        if(result){
+        if (result) {
           this.imageCliant.patchValue({
             fileSource3: result
           });
           this.imgUploaded3 = true;
           this.mainImageAdded = true;
-        }else{
+        } else {
           this.imgUploaded3 = false;
         }
         break;
       case 4:
-        if(result){
+        if (result) {
           this.imageCliant.patchValue({
             fileSource4: result
           });
           this.imgUploaded4 = true;
           this.mainImageAdded = true;
-        }else{
+        } else {
           this.imgUploaded4 = false;
         }
         break;
       case 5:
-        if(result){
+        if (result) {
           this.imageCliant.patchValue({
             fileSource5: result
           });
           this.imgUploaded5 = true;
           this.mainImageAdded = true;
-        }else{
+        } else {
           this.imgUploaded5 = false;
         }
         break;
     }
-}
+  }
 
   removeimg(x: number) {
     switch (x) {
@@ -1247,7 +1253,6 @@ async imageAssign(event, imgID, index){
   }
 
 
-
   setSelectedType(SizeType) {
     this.sizeArrayForClothes = [];
     this.sizeString = SizeType;
@@ -1304,7 +1309,7 @@ async imageAssign(event, imgID, index){
         break;
 
       default:
-        if (this.sizeArrayForClothes.length === 0){
+        if (this.sizeArrayForClothes.length === 0) {
           Swal.fire(
             'Oops',
             'Please Select Size',
@@ -1314,7 +1319,7 @@ async imageAssign(event, imgID, index){
         }
     }
 
-    if (!this.selectedType){
+    if (!this.selectedType) {
       Swal.fire(
         'Oops',
         'Please Select Size Type',
@@ -1323,7 +1328,7 @@ async imageAssign(event, imgID, index){
       return;
     }
 
-    if (this.clothesArray.length > 0 && this.clothesArray[0].type_ !== this.selectedType){
+    if (this.clothesArray.length > 0 && this.clothesArray[0].type_ !== this.selectedType) {
       Swal.fire(
         'Oops',
         'Please Select Same Size Type',
@@ -1331,7 +1336,7 @@ async imageAssign(event, imgID, index){
       );
       const size = document.getElementById('clothesSizeUk') as HTMLSelectElement;
       size.value = '';
-      this.sizeArrayForClothes=[]
+      this.sizeArrayForClothes = []
       return;
     }
 
@@ -1407,9 +1412,9 @@ async imageAssign(event, imgID, index){
     }
   }
 
-  selectColor(event){
+  selectColor(event) {
     const selectedVariation = event.target.value;
-    if(selectedVariation){
+    if (selectedVariation) {
       console.log('true')
       this.selectColorErrorStyle = '';
       if (!this.colorArrayForClothes.includes(selectedVariation)) {
@@ -1639,12 +1644,73 @@ async imageAssign(event, imgID, index){
     }
 
     this.attributeArr = this.attributesArray;
+
+  this.mainvariationKeyArray = this.variationKeyArray;
+  this.mainvariationvalueSizeTypeObjArray = this.variationvalueSizeTypeObjArray;
+  this.mainvariationvalueArrayForNonObject = this.variationvalueArrayForNonObject;
+  this.mainvariationvalueArrayObject = this.variationvalueArrayObject;
+  this.isAvailableInMain = this.isAvailableVariation
   }
 
   private manageAttributes(data) {
+    if (data.data === null){
+      this.clearVariation()
+    }
     console.log(data)
     if (data.data.attribute_object != null) {
       this.attributesArray = Object.keys(data.data.attribute_object);
+    }
+
+    //ddddddddddd
+    if (data.data.variation_object != null) {
+      if (data.data.variation_object !== '{}' && data.data.variation_object !== '') {
+        console.log(data.data.variation_object)
+        console.log(Object.keys(data.data.variation_object))
+        this.variationKeyArray = Object.keys(data.data.variation_object);
+
+        this.variationvalueSizeTypeObjArray = [];
+        this.variationvalueArrayObject = [];
+        this.variationvalueArrayForNonObject = [];
+        this.variationvalueSizeTypeObjArray = [];
+
+        for (let i = 0; i < this.variationKeyArray.length; i++) {
+          const key = this.variationKeyArray[i];
+
+          const obj = data.data.variation_object[key];
+          if (Array.isArray(obj)) {
+            this.hashmapForVariations[key] = obj;
+            this.variationvalueArrayForNonObject.push(key);
+
+          } else {
+            this.keyArrays = Object.keys(obj).sort();
+            for (let i = 0; i < this.keyArrays.length; i++) {
+              this.hashmapForVariationsObj[this.keyArrays[i]] = obj[this.keyArrays[i]];
+            }
+            this.variationvalueSizeTypeObjArray.push(obj);
+            this.variationvalueArrayObject.push(key);
+
+            console.log('keyARray')
+            console.log(this.keyArrays)
+          }
+        }
+        // Creating a hash map
+
+// Converting object to hash map
+
+        if (this.variationKeyArray.length != 0) {
+          this.isSelect = true;
+          this.isAvailableVariation = true;
+        } else {
+          this.isAvailableVariation = false;
+        }
+
+        // attributes
+
+      } else {
+        this.clearVariation()
+      }
+    } else {
+      this.clearVariation()
     }
 
 
@@ -1656,15 +1722,15 @@ async imageAssign(event, imgID, index){
     }
 
     // attributes
-    for (let i = 0; i < this.attributesArray.length; i++) {
-      const key = this.attributesArray[i];
-
-      const obj = data.data.variation_object[key];
-      if (Array.isArray(obj)) {
-      } else {
-        this.keyArrays = Object.keys(obj);
-      }
-    }
+    // for (let i = 0; i < this.attributesArray.length; i++) {
+    //   const key = this.attributesArray[i];
+    //
+    //   const obj = data.data.variation_object[key];
+    //   if (Array.isArray(obj)) {
+    //   } else {
+    //     this.keyArrays = Object.keys(obj);
+    //   }
+    // }
     // Creating a hash map
 
 // Converting object to hash map
@@ -1673,6 +1739,14 @@ async imageAssign(event, imgID, index){
     }
 
     this.attributeArr = this.attributesArray;
+  }
+
+  clearVariation() {
+    this.variationKeyArray = this.mainvariationKeyArray;
+    this.variationvalueSizeTypeObjArray = this.mainvariationvalueSizeTypeObjArray;
+    this.variationvalueArrayForNonObject = this.mainvariationvalueArrayForNonObject;
+    this.variationvalueArrayObject = this.mainvariationvalueArrayObject;
+    this.isAvailableVariation = this.isAvailableInMain
   }
 
   formatCurrency(event: any) {
