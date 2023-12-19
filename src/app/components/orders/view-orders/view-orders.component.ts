@@ -28,7 +28,7 @@ export class ViewOrdersComponent implements OnInit {
     costPrice: 0,
     sellingPrice: 0
   };
-  public isCollapsed = true;
+  isCollapsed: boolean[] = [];
   variationTheme = '';
   variationColor = '';
   variationSize = null;
@@ -50,6 +50,8 @@ export class ViewOrdersComponent implements OnInit {
   public productName = '';
   public image = '';
   public vendorName = '';
+  public btnSaveShipmentColor: string = 'darkblue';
+  variationArr = [];
 
   constructor(private _Activatedroute: ActivatedRoute, private orderService: OrderService, private router: Router,
               private productService: ProductService, private order: OrderShareService, private modal: NgbModal, private orderMethods: OrderMethods) {
@@ -64,6 +66,10 @@ export class ViewOrdersComponent implements OnInit {
 
   ngOnInit(): void {
     this.isPartner = sessionStorage.getItem('userRole') === 'ROLE_PARTNER';
+    this.cartsnapshotArr.forEach(() => {
+      this.isCollapsed.push(true)
+
+    });
   }
 
   getSelectedOrder() {
@@ -111,6 +117,7 @@ export class ViewOrdersComponent implements OnInit {
     }
     if (displayStatus === 'IN PROCESS') {
       this.isInProcess = true;
+      this.btnSaveShipmentColor = '#6f6f6f';
     }
 
     this.orderControle.get('txtorderId').setValue(data.data.id);
@@ -138,7 +145,7 @@ export class ViewOrdersComponent implements OnInit {
         await this.getImage(productCode.toUpperCase());
         const image = this.imagePathURI + this.images;
         this.size = data.data.cartsnapshot[i].size;
-        if (this.cartsnapshotArr.some(product => product.productId === data.data.cartsnapshot[i].productID)){
+        if (this.cartsnapshotArr.some(product => product.productId === data.data.cartsnapshot[i].productID)) {
           const existingIndex = this.cartsnapshotArr.findIndex(product => product.productId === data.data.cartsnapshot[i].productID);
           const existingQty = this.cartsnapshotArr[existingIndex].size;
           this.cartsnapshotArr[existingIndex].size = existingQty + data.data.cartsnapshot[i].size;
@@ -153,6 +160,9 @@ export class ViewOrdersComponent implements OnInit {
         };
         this.cartsnapshotArr.push(or);
       }
+      this.cartsnapshotArr.forEach(() => {
+        this.variationArr.push({variationTheme: 'none', variationSize: '', variationColor: ''})
+      });
     }
   }
 
@@ -191,7 +201,7 @@ export class ViewOrdersComponent implements OnInit {
       html:
         '<div style="text-align: left;">' +
         '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">1. The package has been wrapped carefully to prevent any damages during transit.</p>' +
-        '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">2. The bar-code has been securely pasted on the package for proper tracking.</p>' +
+        '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">2. The bar-code has been securely pasted on each package separately for proper tracking.</p>' +
         '<p style="font-weight: bold; margin-left: 20px; font-size: 15px;">Have you completed these steps ?</p>' +
         '</div>',
       icon: 'warning',
@@ -319,7 +329,12 @@ export class ViewOrdersComponent implements OnInit {
     return productCode.includes('_TC');
   }
 
-  getVariationColor(variationCode: string) {
+  toggleAllRows(): void {
+    this.isCollapsed.forEach((value, index) => this.isCollapsed[index] = false);
+  }
+
+  getVariationColor(variationCode: string, id) {
+
     if (variationCode.includes('EF_PC_')) {
       variationCode = variationCode.replace('EF_PC_', '');
     } else if (variationCode.toLowerCase().includes('ef_hs_')) {
@@ -331,17 +346,39 @@ export class ViewOrdersComponent implements OnInit {
     };
     this.productService.getProductVariation(payload).subscribe(
       data => {
-        this.variationTheme = data.data.variation_theme;
-        if (data.data.size !== null || data.data.size !== '') {
+        let variationTheme: any;
+        let variationSize;
+        let variationColor;
+
+        if (data.data === null){
+          variationTheme = 'None'
+          variationSize = null
+          variationColor = null
+
+        } else {
+          variationTheme = data.data.variation_theme;
+          if (data.data.size !== null || data.data.size !== '') {
+            variationSize = data.data.size;
+          }
           this.variationSize = data.data.size;
+
+          if (variationTheme === 'color') {
+            variationColor = data.data.color;
+          }
         }
-        this.variationSize = data.data.size;
-        if (this.variationTheme === 'color') {
-          this.variationColor = data.data.color;
-        }
-        this.isCollapsed = !this.isCollapsed;
+
+
+        this.variationArr[id].variationTheme = variationTheme;
+        this.variationArr[id].variationSize = variationSize;
+        this.variationArr[id].variationColor = variationColor;
+
+        this.toggleCollapse(id)
       }
     );
+  }
+
+  toggleCollapse(index: number): void {
+    this.isCollapsed[index] = !this.isCollapsed[index];
   }
 
   PrintQR(productCode) {
@@ -378,6 +415,7 @@ export class ViewOrdersComponent implements OnInit {
   }
 
   private PrintQRCode() {
+    const businessName = sessionStorage.getItem('businessName');
     const popupWin = window.open('', '_blank');
     popupWin.document.open();
     popupWin.document.write(`
@@ -389,7 +427,7 @@ export class ViewOrdersComponent implements OnInit {
               <td style="text-align: center;">
                 <table style="border-collapse: collapse; width: 100%;">
                   <tr>
-                    <td colspan="2" style="padding: 10px; padding-left: 20px; text-align: right; font-size: 20px">( ${this.vendorName} ) Delivery Date : ${this.deliveryDate}</td>
+                    <td colspan="2" style="padding: 10px; padding-left: 20px; text-align: right; font-size: 20px">( ${businessName} ) Delivery Date : ${this.deliveryDate}</td>
                   </tr>
                   <tr>
                     <td colspan="2" style="padding: 10px; padding-left: 20px; text-align: center; font-size: 40px">${this.purchaseApprovalID}</td>
