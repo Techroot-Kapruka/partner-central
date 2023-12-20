@@ -242,21 +242,21 @@
                         <br>
                         <button style="max-width: 60%; text-align: center; font-size: 9px; margin-top: 5px"
                                 *ngIf="isVariation(cartsnapshotArrs['productId'])"
-                                (click)="getVariationColor(cartsnapshotArrs['productId'])"
+                                (click)="getVariationColor(cartsnapshotArrs['productId'],i)"
                                 class="btn btn-xs btn-success"
-                                [attr.aria-expanded]="!isCollapsed"
+                                [attr.aria-expanded]="isCollapsed[i]"
                                 aria-controls="collapseExample">
                           Variation Details
                         </button>
                         <br>
                         <div
                           style="background-color: white; padding: 6px; margin-top: 5px; border-radius: 5px; font-size: 11px"
-                          #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" id="variation-collapse">
-                          Variation Theme : {{variationTheme}} <br>
-                          {{variationSize !== null ? 'Variation Size : ' + variationSize : ''}} <br>
-                          {{variationTheme === 'color' ? 'Variation Color : ' : ''}}
-                          <div *ngIf="variationTheme === 'color'"
-                               style="border: 1px solid {{variationColor}}; width: 40px; height: 10px; background-color: {{variationColor}}; margin-top: 5px;"></div>
+                          #collapse="ngbCollapse" [(ngbCollapse)]="!isCollapsed[i]" id="variation-collapse">
+                          Variation Theme : {{variationArr[i].variationTheme}} <br>
+                          {{variationArr[i].variationSize !== null ? 'Variation Size : ' + variationArr[i].variationSize : ''}} <br>
+                          {{variationArr[i].variationTheme === 'color' ? 'Variation Color : ' : ''}}
+                          <div *ngIf="variationArr[i].variationTheme === 'color'"
+                               style="border: 1px solid {{variationArr[i].variationColor}}; width: 40px; height: 10px; background-color: {{variationArr[i].variationColor}}; margin-top: 5px;"></div>
                         </div>
                       </td>
                       <td style="text-align: center">{{cartsnapshotArrs['size']}}</td>

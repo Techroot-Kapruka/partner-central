@@ -154,4 +154,8 @@ export class DashboardService {
     return this.httpClient.post<any>(this.SERVER + 'partner/getShopName', payload, {headers});
   }
 
+  getWeeklyOrderCount(){
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.get<any>(this.SERVER + 'orders/getWeeklyOrderCount', {headers});
+  }
 }

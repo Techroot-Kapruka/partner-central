@@ -13,19 +13,81 @@ import {state} from '@angular/animations';
 import {jsPDF} from 'jspdf';
 import {ProductService} from "../../../shared/service/product.service";
 import {OrderService} from "../../../shared/service/order.service";
+import {classNames} from "@angular/cdk/schematics";
 
 function getColorWord(colorValue) {
   const colorToWordMap = new Map([
-    ['#000000', 'Black'],
-    ['#ffffff', 'White'],
-    ['#ff0000', 'Red'],
-    ['#00ff00', 'Green'],
-    ['#0000ff', 'Blue'],
-    ['#FFFF00', 'yellow'],
-    ['#808080', 'gray'],
-    ['#800080', 'purple'],
-    ['#FFA500', 'orange'],
-    ['#800000', 'maroon'],
+    [	'#FF0000',	'Red'	],
+    [	'#008000',	'Green'	],
+    [	'#0000FF',	'Blue'	],
+    [	'#FFFF00',	'Yellow'	],
+    [	'#800080',	'Purple'	],
+    [	'#FFA500',	'Orange'	],
+    [	'#FFC0CB',	'Pink'	],
+    [	'#A52A2A',	'Brown'	],
+    [	'#000000',	'Black'	],
+    [	'#FFFFFF',	'White'	],
+    [	'#808080',	'Gray'	],
+    [	'#F5F5DC',	'Beige'	],
+    [	'#40E0D0',	'Turquoise'	],
+    [	'#00FFFF',	'Cyan'	],
+    [	'#FF00FF',	'Magenta'	],
+    [	'#E6E6FA',	'Lavender'	],
+    [	'#EE82EE',	'Violet'	],
+    [	'#008080',	'Teal'	],
+    [	'#000080',	'Navy'	],
+    [	'#800000',	'Maroon'	],
+    [	'#4B0082',	'Indigo'	],
+    [	'#808000',	'Olive'	],
+    [	'#FFDAB9',	'Peach'	],
+    [	'#98FF98',	'Mint'	],
+    [	'#C0C0C0',	'Silver'	],
+    [	'#FFD700',	'Gold'	],
+    [	'#9B111E',	'Ruby'	],
+    [	'#50C878',	'Emerald'	],
+    [	'#0F52BA',	'Sapphire'	],
+    [	'#FF7F50',	'Coral'	],
+    [	'#8E4585',	'Plum'	],
+    [	'#E0B0FF',	'Mauve'	],
+    [	'#FFFFF0',	'Ivory'	],
+    [	'#FFFDD0',	'Cream'	],
+    [	'#D2B48C',	'Tan'	],
+    [	'#F7E7CE',	'Champagne'	],
+    [	'#C8A2C8',	'Lilac'	],
+    [	'#CCCCFF',	'Periwinkle'	],
+    [	'#FFA07A',	'Tangerine'	],
+    [	'#00FFFF',	'Aqua'	],
+    [	'#FF00FF',	'Fuchsia'	],
+    [	'#708090',	'Slate'	],
+    [	'#36454F',	'Charcoal'	],
+    [	'#FFF700',	'Lemon'	],
+    [	'#800020',	'Burgundy'	],
+    [	'#FFDB58',	'Mustard'	],
+    [	'#5A5A5A',	'Eggplant'	],
+    [	'#DA70D6',	'Orchid'	],
+    [	'#FA8072',	'Salmon'	],
+    [	'#0047AB',	'Cobalt'	],
+    [	'#98FF98',	'Mint Green'	],
+    [	'#DE5D83',	'Blush'	],
+    [	'#87CEEB',	'Sky Blue'	],
+    [	'#C04000',	'Mahogany'	],
+    [	'#CD7F32',	'Bronze'	],
+    [	'#F0E68C',	'Khaki'	],
+    [	'#D2691E',	'Cinnamon'	],
+    [	'#C2B280',	'Sand'	],
+    [	'#965A3E',	'Caramel'	],
+    [	'#585858',	'Graphite'	],
+    [	'#6A5ACD',	'Slate Blue'	],
+    [	'#C0C0C0',	'Silver Grey'	],
+    [	'#F5F5F5',	'Creamy White'	],
+    [	'#71EEB8',	'Seafoam'	],
+    [	'#B0A6A4',	'Pewter'	],
+    [	'#4B3621',	'Cappuccino'	],
+    [	'#1560BD',	'Denim'	],
+    [	'#E2725B',	'Terracotta'	],
+    [	'#556B2F',	'Olive Green'	],
+    [	'#6F2DA8',	'Grape'	],
+    [	'#7B3F00',	'Chocolate'	]
   ]);
   if (colorToWordMap.has(colorValue)) {
     return colorToWordMap.get(colorValue);
@@ -69,7 +131,6 @@ export class AddShipmentComponent implements OnInit {
   public isOnDemandProduct = false;
   public showPriceChange = false;
   public priceChangeClick = false;
-  public isPrintVisible = true;
 
   selectProduct = 'Select Product';
   orderRef = '';
@@ -124,19 +185,8 @@ export class AddShipmentComponent implements OnInit {
       this.processOnDemandShipment();
     }
 
-
     if (this.dropdownComponent) {
       this.dropdownComponent.setDefaultValue();
-    }
-
-    if (this.isOnDemandShipment === true){
-      this.btnSaveShipmentColor = 'darkblue';
-      this.isPrintVisible = false;
-      this.isBtnSaveDisabled = false;
-    }else{
-      this.btnSaveShipmentColor = '#6f6f6f';
-      this.isPrintVisible = true;
-      this.isBtnSaveDisabled = true;
     }
   }
 
@@ -793,6 +843,7 @@ export class AddShipmentComponent implements OnInit {
           const tempProductName = dataForm.txtProductName.concat('-').concat(getColorWord(this.productVariationArrayForClothes[i].color)).concat(this.productVariationArrayForClothes[i].size);
 
           this.isProductExist = false;
+          console.log('AAA : ' + this.tableData)
           for (let j = 0; j < this.tableData.length; j++) {
             if (tempProductName === this.tableData[j].product_name && dataForm.txtProductCode === this.tableData[j].product_code) {
               this.isProductExist = true;
@@ -1087,7 +1138,47 @@ export class AddShipmentComponent implements OnInit {
     popupWin.document.open();
     popupWin.document.write(`
     <html>
-      <head><title>Order Details</title></head>
+      <head>
+      <title>Order Details</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+      td tbody{
+      display: block;
+      }
+      .tdblock{
+      width: 130px !important;
+      }
+      .tdtr{
+        font-size: 0;
+      }
+      
+      .tbl{
+      display: inline-block;
+      vertical-align: top;
+      border: solid 1px #000;
+      margin: 2px;
+      text-align: center;
+      width: 130px;
+      }
+      
+      .tbl tbody{
+      display: block;
+      width: 100%;
+      }
+      
+      @media (min-width:701px) and (max-width:840px) {
+      .tbl{
+      width: 105px !important;
+      }
+      
+      .td{
+      font-size: 10px !important;
+      }
+      
+      }
+      </style>
+   
+      </head>
       <body onload="window.print(); window.onafterprint=function(){window.close()}">
         ${this.printPCode(printArr)}
       </body>
@@ -1099,46 +1190,34 @@ export class AddShipmentComponent implements OnInit {
   private printPCode(printArr) {
     const businessName = sessionStorage.getItem('businessName');
     const vendorCode = sessionStorage.getItem('partnerId');
-
     return printArr.map(({ vCode, quantity, qrImage }) => `
-    <table style="text-align: left; padding-top:7px; width:100%; font-size: 20px; font-weight: bold;">
+    <table style="text-align: center; padding-top:7px; width:100%; font-size: 20px; font-weight: bold;">
       <tr>
-        <td style="text-align: center; border: 1px solid #ddd;">${vCode}</td>
+        <td style="text-align: center;  display:inline-block; vertical-align: top; border: 1px solid #ddd;">${vCode}</td>
       </tr>
     </table>
-    <table style="text-align: center;">
-      ${this.generateTableRows(vCode, quantity, qrImage, businessName, vendorCode)}
-    </table>`
+    ${this.generateTableRows(vCode, quantity, qrImage, businessName, vendorCode)}`
     ).join('');
   }
 
   private generateTableRows(variationCode, qty, qrImage, businessName, vendorCode) {
-    const printsPerRow = 4;
-    const rowsQty = Math.ceil(qty / printsPerRow);
-
-    return Array.from({ length: rowsQty }, (_, row) => `
-    <tr>
-      ${Array.from({ length: printsPerRow }, (_, col) => {
-        const count = row * printsPerRow + col + 1;
+    return Array.from({ length: qty }, (_, col) => {
+        const count = col + 1;
         return count <= qty ? `
-          <td style="width: 100px; height: 100px; border: 1px solid #ddd;">
-            <table>
-              <tr>
-                <td colspan="2" style="margin-top: 20px; text-align: center;">
-                  <img src=" ${qrImage} " style="width: 100%; height: 100%;" alt="QR Code">
-                </td>
-              </tr>
-              <tr>
-                <td style="padding-left: 5px; padding-right: 5px; text-align: left; font-size: 13px;"> ${variationCode} </td>
-                <td style="padding-left: 5px; padding-right: 5px; text-align: right; font-size: 13px"> ${vendorCode} </td>
-              </tr>
-              <tr>
-                <td colspan="2" style="padding-left: 5px; padding-right: 5px; text-align: left; font-size: 13px"> ${businessName} </td>
-              </tr>
-            </table>
-          </td>` : '';
-      }).join('')}
-    </tr>`
-    ).join('');
+          <table class="tbl">
+            <tr style="display: block">
+              <td colspan="" style="margin-top: 20px; text-align: center; display: block; margin: 0 auto">
+                <img src=" ${qrImage} " style="width: 100%; height: auto; max-width: 70px" alt="QR Code">
+              </td>
+            </tr>
+            <tr style="display: block">
+              <td style="padding-left: 5px; padding-right: 5px; text-align: left; font-size: 10px;  display: block; text-align: center; margin-bottom: 5px"> ${variationCode} </td>
+              <td style="padding-left: 5px; padding-right: 5px;  font-size: 10px;  display: block; text-align: center; margin-bottom: 5px"> ${vendorCode} </td>
+            </tr>
+            <tr style="display: block">
+              <td  style="padding-left: 5px; padding-right: 5px;  font-size: 10px; display: block; text-align: center; margin-bottom: 5px"> ${businessName} </td>
+            </tr>
+          </table>` : '';
+      }).join('');
   }
 }

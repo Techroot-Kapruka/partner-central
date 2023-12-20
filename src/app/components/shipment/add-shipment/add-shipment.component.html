@@ -4,29 +4,14 @@
       <div class="col-md-12">
         <div class="card">
           <div class="card-header">
-            <div class="input-group col-md-8" style="margin-left: 14%;">
-              <app-dropdown [dataArray]="partnerProductArray" [isDisabled]="isOnDemandShipment" [defaultValue]="selectProduct" (selected)="changedProduct($event)" ></app-dropdown>
-              <!--<input type="text" class="form-control" id="txtSearchBox" formControlName="txtSearchBox"
-                     placeholder="Search your product here"
-                     aria-label="Recipient's username" aria-describedby="basic-addon2">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" (click)="searchProduct()">Search</button>
-              </div>-->
-              <!--<select (change)="changedProduct()" [disabled]="isOnDemandShipment" class="custom-select"
-                      id="SelectedProduct">
-                <option value="">Select Your Product</option>
-                <option *ngFor="let prodct of partnerProductArray; let i = index" [attr.data-index]="i" value="{{i}}">
-                  {{prodct['name']}}
-                </option>
-              </select>-->
+            <div class="row">
+              <div class="col-md-3">
+                <label><strong>Select Your Product</strong></label>
+              </div>
+              <div class="input-group col-md-9">
+                <app-dropdown [dataArray]="partnerProductArray" [isDisabled]="isOnDemandShipment" [defaultValue]="selectProduct" (selected)="changedProduct($event)" ></app-dropdown>
+              </div>
             </div>
-            <!--<ul style="margin-left: 16%; background-color: #e8f0fe;width: 63%; box-shadow:0 0 3px #979797">
-              <li
-                style="padding: 10px 15px; background:#eee; color: #000080; background:#fff;"
-                *ngFor="let searchProductArrays of partnerProductArray" (click)="selectedProduct(searchProductArrays)">
-                <div style="cursor: pointer;"> {{searchProductArrays['name']}}</div>
-              </li>
-            </ul>-->
 
           </div>
         </div>
@@ -263,7 +248,7 @@
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
-                    <button style="float: right;" type="button" class="btn btn-lg btn-success" [style.display]="isPrintVisible ? 'block' : 'none'" (click)="printQRCode()">PRINT QR CODE</button>
+                    <button style="float: right;" type="button" class="btn btn-lg btn-success" (click)="printQRCode()">PRINT QR CODE</button>
                   </div>
                 </div>
                 <div class="col-sm-4">
