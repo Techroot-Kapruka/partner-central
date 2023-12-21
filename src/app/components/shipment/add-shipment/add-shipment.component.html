@@ -248,7 +248,7 @@
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
-                    <button style="float: right;" type="button" class="btn btn-lg btn-success" (click)="printQRCode()">PRINT QR CODE</button>
+                    <button style="float: right;" type="button" [style.display]="isBtnQRVisible ? 'block' : 'none'" class="btn btn-lg btn-success" (click)="printQRCode()">PRINT QR CODE</button>
                   </div>
                 </div>
                 <div class="col-sm-4">
