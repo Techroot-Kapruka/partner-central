@@ -17,16 +17,77 @@ import {classNames} from "@angular/cdk/schematics";
 
 function getColorWord(colorValue) {
   const colorToWordMap = new Map([
+    ['#FF0000', 'Red'],
+    ['#008000', 'Green'],
+    ['#0000FF', 'Blue'],
+    ['#FFFF00', 'Yellow'],
+    ['#800080', 'Purple'],
+    ['#FFA500', 'Orange'],
+    ['#FFC0CB', 'Pink'],
+    ['#A52A2A', 'Brown'],
     ['#000000', 'Black'],
-    ['#ffffff', 'White'],
-    ['#ff0000', 'Red'],
-    ['#00ff00', 'Green'],
-    ['#0000ff', 'Blue'],
-    ['#FFFF00', 'yellow'],
-    ['#808080', 'gray'],
-    ['#800080', 'purple'],
-    ['#FFA500', 'orange'],
-    ['#800000', 'maroon'],
+    ['#FFFFFF', 'White'],
+    ['#808080', 'Gray'],
+    ['#F5F5DC', 'Beige'],
+    ['#40E0D0', 'Turquoise'],
+    ['#00FFFF', 'Cyan'],
+    ['#FF00FF', 'Magenta'],
+    ['#E6E6FA', 'Lavender'],
+    ['#EE82EE', 'Violet'],
+    ['#008080', 'Teal'],
+    ['#000080', 'Navy'],
+    ['#800000', 'Maroon'],
+    ['#4B0082', 'Indigo'],
+    ['#808000', 'Olive'],
+    ['#FFDAB9', 'Peach'],
+    ['#98FF98', 'Mint'],
+    ['#C0C0C0', 'Silver'],
+    ['#FFD700', 'Gold'],
+    ['#9B111E', 'Ruby'],
+    ['#50C878', 'Emerald'],
+    ['#0F52BA', 'Sapphire'],
+    ['#FF7F50', 'Coral'],
+    ['#8E4585', 'Plum'],
+    ['#E0B0FF', 'Mauve'],
+    ['#FFFFF0', 'Ivory'],
+    ['#FFFDD0', 'Cream'],
+    ['#D2B48C', 'Tan'],
+    ['#F7E7CE', 'Champagne'],
+    ['#C8A2C8', 'Lilac'],
+    ['#CCCCFF', 'Periwinkle'],
+    ['#FFA07A', 'Tangerine'],
+    ['#00FFFF', 'Aqua'],
+    ['#FF00FF', 'Fuchsia'],
+    ['#708090', 'Slate'],
+    ['#36454F', 'Charcoal'],
+    ['#FFF700', 'Lemon'],
+    ['#800020', 'Burgundy'],
+    ['#FFDB58', 'Mustard'],
+    ['#5A5A5A', 'Eggplant'],
+    ['#DA70D6', 'Orchid'],
+    ['#FA8072', 'Salmon'],
+    ['#0047AB', 'Cobalt'],
+    ['#98FF98', 'Mint Green'],
+    ['#DE5D83', 'Blush'],
+    ['#87CEEB', 'Sky Blue'],
+    ['#C04000', 'Mahogany'],
+    ['#CD7F32', 'Bronze'],
+    ['#F0E68C', 'Khaki'],
+    ['#D2691E', 'Cinnamon'],
+    ['#C2B280', 'Sand'],
+    ['#965A3E', 'Caramel'],
+    ['#585858', 'Graphite'],
+    ['#6A5ACD', 'Slate Blue'],
+    ['#C0C0C0', 'Silver Grey'],
+    ['#F5F5F5', 'Creamy White'],
+    ['#71EEB8', 'Seafoam'],
+    ['#B0A6A4', 'Pewter'],
+    ['#4B3621', 'Cappuccino'],
+    ['#1560BD', 'Denim'],
+    ['#E2725B', 'Terracotta'],
+    ['#556B2F', 'Olive Green'],
+    ['#6F2DA8', 'Grape'],
+    ['#7B3F00', 'Chocolate']
   ]);
   if (colorToWordMap.has(colorValue)) {
     return colorToWordMap.get(colorValue);
@@ -70,6 +131,7 @@ export class AddShipmentComponent implements OnInit {
   public isOnDemandProduct = false;
   public showPriceChange = false;
   public priceChangeClick = false;
+  public isBtnQRVisible = true;
 
   selectProduct = 'Select Product';
   orderRef = '';
@@ -126,6 +188,16 @@ export class AddShipmentComponent implements OnInit {
 
     if (this.dropdownComponent) {
       this.dropdownComponent.setDefaultValue();
+    }
+
+    if (this.isOnDemandShipment === true){
+      this.isBtnQRVisible = false;
+      this.isBtnSaveDisabled = false;
+      this.btnSaveShipmentColor = 'darkblue';
+    }else{
+      this.isBtnQRVisible = true;
+      this.isBtnSaveDisabled = true;
+      this.btnSaveShipmentColor = '#6f6f6f';
     }
   }
 
@@ -578,78 +650,86 @@ export class AddShipmentComponent implements OnInit {
       );
     } else {
 
-      Swal.fire({
-        title: 'Before proceeding, please ensure the following:',
-        html:
-          '<div style="text-align: left;">' +
-          '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">1. The package has been wrapped carefully to prevent any damages during transit.</p>' +
-          '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">2. The bar-code has been securely pasted on each package separately for proper tracking.</p>' +
-          '<p style="font-weight: bold; margin-left: 20px; font-size: 15px;">Have you completed these steps ?</p>' +
-          '</div>',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'Not yet',
-        customClass: {
-          popup: 'swal-popup',
-        },
-      }).then((result) => {
+      if (this.isOnDemandShipment === true) {
+        this.submitShipment();
+      }else{
+        Swal.fire({
+          title: 'Before proceeding, please ensure the following:',
+          html:
+            '<div style="text-align: left;">' +
+            '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">1. The package has been wrapped carefully to prevent any damages during transit.</p>' +
+            '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">2. The bar-code has been securely pasted on each package separately for proper tracking.</p>' +
+            '<p style="font-weight: bold; margin-left: 20px; font-size: 15px;">Have you completed these steps ?</p>' +
+            '</div>',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'Not yet',
+          customClass: {
+            popup: 'swal-popup',
+          },
+        }).then((result) => {
 
-        if (result.isConfirmed) {
-
-          // add shipment
-          if (this.isPriceChange == 1) {
-
-            // save data to field edit
-            for (let i = 0; i < this.changeFeids.length; i++) {
-              payLoard = {
-                referenceId: this.changeFeids[i].productCode,
-                type: 'PRODUCT_PRICE',
-                sub_type: 'product_price',
-                comment: 'PRODUCT_PRICE',
-                requestedBy: this.changeVendor,
-                saveType: 'shipment',
-                userId: sessionStorage.getItem('userId'),
-                data: [
-                  {
-                    column_name: 'cost_price',
-                    old_value: this.changeFeids[i].oldCostPrice,
-                    new_value: this.changeFeids[i].newCostPrice,
-                    call_name: 'cost_price',
-                  },
-                  {
-                    column_name: 'changing_rate',
-                    old_value: this.changeFeids[i].oldChangingRate,
-                    new_value: this.changeFeids[i].newChangingRate,
-                    call_name: 'changing_rate',
-                  },
-                  {
-                    column_name: 'selling_price',
-                    old_value: this.changeFeids[i].oldSellingPrice,
-                    new_value: this.changeFeids[i].newSellingPrice,
-                    call_name: 'selling_price',
-                  }
-                ]
-              };
-              this.submitShipmentchangeFeids.push(payLoard);
-            }
-
-            payLoard = {
-              dataSet: this.submitShipmentchangeFeids
-            };
-
-            this.productService.editShipmentField(payLoard).subscribe(
-              data => this.manageEditField(data),
-              error => this.manageUserError(error)
-            );
-
+          if (result.isConfirmed) {
+            this.submitShipment();
           } else {
-            this.hitShipment();
-          }
-        } else {
 
-        }
-      });
+          }
+        });
+      }
+    }
+  }
+
+  submitShipment(){
+    // add shipment
+    let payLoard;
+    if (this.isPriceChange == 1) {
+
+      // save data to field edit
+      for (let i = 0; i < this.changeFeids.length; i++) {
+        payLoard = {
+          referenceId: this.changeFeids[i].productCode,
+          type: 'PRODUCT_PRICE',
+          sub_type: 'product_price',
+          comment: 'PRODUCT_PRICE',
+          requestedBy: this.changeVendor,
+          saveType: 'shipment',
+          userId: sessionStorage.getItem('userId'),
+          data: [
+            {
+              column_name: 'cost_price',
+              old_value: this.changeFeids[i].oldCostPrice,
+              new_value: this.changeFeids[i].newCostPrice,
+              call_name: 'cost_price',
+            },
+            {
+              column_name: 'changing_rate',
+              old_value: this.changeFeids[i].oldChangingRate,
+              new_value: this.changeFeids[i].newChangingRate,
+              call_name: 'changing_rate',
+            },
+            {
+              column_name: 'selling_price',
+              old_value: this.changeFeids[i].oldSellingPrice,
+              new_value: this.changeFeids[i].newSellingPrice,
+              call_name: 'selling_price',
+            }
+          ]
+        };
+        this.submitShipmentchangeFeids.push(payLoard);
+      }
+
+      payLoard = {
+        dataSet: this.submitShipmentchangeFeids
+      };
+
+      this.productService.editShipmentField(payLoard).subscribe(
+        data => this.manageEditField(data),
+        error => this.manageUserError(error)
+      );
+
+    } else {
+      this.hitShipment();
     }
   }
 
@@ -682,7 +762,7 @@ export class AddShipmentComponent implements OnInit {
     this.modalRef.close();
   }
 
-  addToTable() {
+  async addToTable() {
     const dataForm = this.shipmentForm.value;
     if (dataForm.txtProductCode === '') {
       Swal.fire(
@@ -726,32 +806,52 @@ export class AddShipmentComponent implements OnInit {
           let insertTabelData
 
 
-          if (this.sharedData[i].productId.includes('_TC')){
-            const variation = this.productVariationArrayForClothes.find(variation => variation.variationCode === this.sharedData[i].productId);
-            const color = variation?.color;
-            const size = variation?.size;
-            const variationCode = variation?.variationCode
+          if (this.sharedData[i].productId.includes('_TC')) {
+            console.log(this.productVariationArrayForClothes)
+            const payload = {variation_code: this.sharedData[i].productId}
+            let color: string;
+            let size: string;
+            let variationCode: string;
+            await this.productService.getProductVariation(payload).toPromise().then(
+              data => {
+                console.log(data)
+                color = data.data.color;
+                size = data.data.size;
+                variationCode = data.data.variation_code
 
-            insertTabelData = {
-              product_code: this.sharedData[i].productId,
-              product_name: tempProductName,
+                console.log(variationCode)
+                insertTabelData = {
+                  product_code: this.sharedData[i].productId,
+                  product_name: tempProductName,
+                  isVariation : false,
 
-              cost_price: this.sharedData[i].costPrice,
-              quantity: this.sharedData[i].size,
-              changing_amount: dataForm.txtChangingAmount,
-              changing_rate: this.sharedData[i].changingRate,
-              selling_price: this.sharedData[i].sellingPrice,
+                  cost_price: this.sharedData[i].costPrice,
+                  quantity: this.sharedData[i].size,
+                  changing_amount: dataForm.txtChangingAmount,
+                  changing_rate: this.sharedData[i].changingRate,
+                  selling_price: this.sharedData[i].sellingPrice,
 
-              seller_income: sellerIncome.toString(),
-              amount: grossAmount.toString(),
-              color,
-              size,
-              variationCode
-            };
+                  seller_income: sellerIncome.toString(),
+                  amount: grossAmount.toString(),
+                  color,
+                  size,
+                  variationCode
+                };
+              }
+            )
+
+
           } else {
+            const payload = {product_code: this.sharedData[i].productId}
+            let variationCode: string;
+            await this.productService.getSelecedProductByEdit(payload).toPromise().then(
+              data => {
+                variationCode = data.data.product.productVariation[0].variation_code
+              });
             insertTabelData = {
               product_code: this.sharedData[i].productId,
               product_name: tempProductName,
+              isVariation : false,
 
               cost_price: this.sharedData[i].costPrice,
               quantity: this.sharedData[i].size,
@@ -763,7 +863,7 @@ export class AddShipmentComponent implements OnInit {
               amount: grossAmount.toString(),
               color: this.productVariationArrayForClothes[0].color,
               size: this.productVariationArrayForClothes[0].size,
-              variationCode: this.productVariationArrayForClothes[0].variationCode,
+              variationCode,
             };
           }
 
@@ -782,12 +882,17 @@ export class AddShipmentComponent implements OnInit {
           const tempProductName = dataForm.txtProductName.concat('-').concat(getColorWord(this.productVariationArrayForClothes[i].color)).concat(this.productVariationArrayForClothes[i].size);
 
           this.isProductExist = false;
+          console.log('AAA : ' + this.tableData)
           for (let j = 0; j < this.tableData.length; j++) {
             if (tempProductName === this.tableData[j].product_name && dataForm.txtProductCode === this.tableData[j].product_code) {
               this.isProductExist = true;
             }
           }
-
+          let isVariation = false;
+          if (this.productVariationArrayForClothes[i].color.toLowerCase() !== 'none'
+          || this.productVariationArrayForClothes[i].size.toLowerCase() !== 'none'){
+            isVariation = true;
+          }
           if (!this.isProductExist) {
             const insertTabelData = {
               product_code: dataForm.txtProductCode,
@@ -801,7 +906,8 @@ export class AddShipmentComponent implements OnInit {
               amount: grossAmount.toString(),
               color: this.productVariationArrayForClothes[i].color,
               size: this.productVariationArrayForClothes[i].size,
-              variationCode: this.productVariationArrayForClothes[i].variationCode
+              variationCode: this.productVariationArrayForClothes[i].variationCode,
+              isVariation,
             };
             if (Number(this.quantityMap.get(i)) > 0) {
               this.tableData.push(insertTabelData);
@@ -1052,7 +1158,7 @@ export class AddShipmentComponent implements OnInit {
 
       return this.orderService.generateQRCode(variationCode, '').toPromise().then(data => {
         const qrImage = 'data:image/png;base64,' + data.data;
-        return { vCode: variationCode, quantity: item.quantity, qrImage };
+        return {vCode: variationCode, quantity: item.quantity, qrImage};
       });
     };
 
@@ -1089,7 +1195,7 @@ export class AddShipmentComponent implements OnInit {
       .tdtr{
         font-size: 0;
       }
-      
+
       .tbl{
       display: inline-block;
       vertical-align: top;
@@ -1098,24 +1204,24 @@ export class AddShipmentComponent implements OnInit {
       text-align: center;
       width: 130px;
       }
-      
+
       .tbl tbody{
       display: block;
       width: 100%;
       }
-      
+
       @media (min-width:701px) and (max-width:840px) {
       .tbl{
       width: 105px !important;
       }
-      
+
       .td{
       font-size: 10px !important;
       }
-      
+
       }
       </style>
-   
+
       </head>
       <body onload="window.print(); window.onafterprint=function(){window.close()}">
         ${this.printPCode(printArr)}
@@ -1128,7 +1234,7 @@ export class AddShipmentComponent implements OnInit {
   private printPCode(printArr) {
     const businessName = sessionStorage.getItem('businessName');
     const vendorCode = sessionStorage.getItem('partnerId');
-    return printArr.map(({ vCode, quantity, qrImage }) => `
+    return printArr.map(({vCode, quantity, qrImage}) => `
     <table style="text-align: center; padding-top:7px; width:100%; font-size: 20px; font-weight: bold;">
       <tr>
         <td style="text-align: center;  display:inline-block; vertical-align: top; border: 1px solid #ddd;">${vCode}</td>
@@ -1139,9 +1245,9 @@ export class AddShipmentComponent implements OnInit {
   }
 
   private generateTableRows(variationCode, qty, qrImage, businessName, vendorCode) {
-    return Array.from({ length: qty }, (_, col) => {
-        const count = col + 1;
-        return count <= qty ? `
+    return Array.from({length: qty}, (_, col) => {
+      const count = col + 1;
+      return count <= qty ? `
           <table class="tbl">
             <tr style="display: block">
               <td colspan="" style="margin-top: 20px; text-align: center; display: block; margin: 0 auto">
@@ -1156,6 +1262,6 @@ export class AddShipmentComponent implements OnInit {
               <td  style="padding-left: 5px; padding-right: 5px;  font-size: 10px; display: block; text-align: center; margin-bottom: 5px"> ${businessName} </td>
             </tr>
           </table>` : '';
-      }).join('');
+    }).join('');
   }
 }

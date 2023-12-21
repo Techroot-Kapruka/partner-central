@@ -58,7 +58,7 @@ export class UserNotificationsComponent implements OnInit {
     if (date === '' || date === 'yyyy-mm-dd') {
       this.filteredMessageObjArray = this.messageObjArray;
     } else {
-      this.filteredMessageObjArray = this.filteredMessageObjArray.filter(item => item.create_date_time === date);
+      this.filteredMessageObjArray = this.filteredMessageObjArray.filter(item => item.create_date_time.substring(0, 10) === date);
     }
 
   }

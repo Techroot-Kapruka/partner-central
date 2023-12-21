@@ -764,7 +764,8 @@ export class DigitalAddComponent implements OnInit {
                 },
                 {
                   theame: 'size',
-                  theame_value: this.clothesArray[i].size_
+                  theame_value: this.clothesArray[i].size_,
+                  size_type: this.clothesArray[i].type_
                 }
               ]
             };

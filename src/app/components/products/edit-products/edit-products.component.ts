@@ -33,6 +33,8 @@ export class EditProductsComponent implements OnInit {
   public isColor = false;
   public isSize = false;
   public colorsAndSize = false;
+  public showSizeAdd = false;
+  public viewVariationAdd = false;
   public closeResult: string;
   modalRef: any;
   public colorArray = [];
@@ -70,6 +72,12 @@ export class EditProductsComponent implements OnInit {
   public amountBefor = '';
   showmsg = false;
   showmsg1 = false;
+  inputValue: any;
+  variationColors = [];
+  variationOptions = [];
+  public colorArrayForClothes = [];
+  public colorArrayForClothesJob = [];
+  sizeCategory: string = '';
 
   hideRemove2 = false;
   hideRemove3 = false;
@@ -77,9 +85,13 @@ export class EditProductsComponent implements OnInit {
   hideRemove5 = false;
 
   public activeUpdate = false;
+  public showUpdateButton = false;
   imageUrl: any;
   filteredSubCategory = [];
   filteredSubSubCategory = [];
+  newAddedVariations = [];
+
+  productAttributeList: any = [];
 
   public oldTitle = '';
   public oldBrand = '';
@@ -104,7 +116,7 @@ export class EditProductsComponent implements OnInit {
   public oldCostPrice = '';
   public oldChangingRate = '';
   public oldSellingPrice = '';
-
+  tableSize: number;
   public type = '';
 
   descriptionContent;
@@ -141,13 +153,14 @@ export class EditProductsComponent implements OnInit {
   constructor(private categoryService: CategoryService, private router: Router, private _Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService, private imageService: ImageService) {
     this.ids = '';
     this.getAllCategory();
+    this.getVariationColors();
     this._Activatedroute.paramMap.subscribe(params => {
       this.getProductByEdit(params.get('id'));
       this.ids = params.get('id');
 
       const sessionUserRole = sessionStorage.getItem('userRole');
       const pattern = /0V\d+POD/;
-      const isMatch = pattern.test(this.ids);// check ondemand id
+      const isMatch = pattern.test(this.ids); // check ondemand id
       if (isMatch && sessionUserRole === 'ROLE_PARTNER') {
         this.editPrice = true;
       } else {
@@ -326,7 +339,6 @@ export class EditProductsComponent implements OnInit {
   }
 
   removeimg(x: number) {
-    console.log(x)
     this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
     switch (x) {
       case 2:
@@ -608,6 +620,11 @@ export class EditProductsComponent implements OnInit {
   }
 
   managetSelecedProductByEdit(data, proCodeImg) {
+    if(data.data.product.productVariation[0].variations[1].theame_value == 'none'){
+      this.viewVariationAdd = false;
+    }else{
+      this.viewVariationAdd = true;
+    }
     this.getSubcategory(data.data.product.item_group);
     // base info
     this.baseInfo.get('Title').setValue(data.data.product.title);
@@ -696,7 +713,7 @@ export class EditProductsComponent implements OnInit {
         let size_value = '';
         for (let j = 0; j < data.data.product.productVariation[i].variations.length; j++) {
 
-          if (data.data.product.productVariation[i].variations[j].theame == 'Color') {
+          if (data.data.product.productVariation[i].variations[j].theame === 'Color') {
             color_value = data.data.product.productVariation[i].variations[j].theame_value;
           }
           if (data.data.product.productVariation[i].variations[j].theame === 'Size') {
@@ -713,6 +730,18 @@ export class EditProductsComponent implements OnInit {
         }
         this.productGroupTabel.push(payData);
       }
+      this.tableSize = this.productGroupTabel.length;
+
+      const payLoard = {
+        category_code: data.data.product.category_code
+      };
+
+      const size_type = data.data.product.productVariation[0].variations[1].size_type;
+      this.productService.getAttributes(payLoard).subscribe(
+        data => {
+          this.productAttributeList = data.data.variation_object['Select Your size Type'][size_type];
+        }
+      );
 
       // ++++++++++++++++ondemand price set values++++++++++++++++++++++++
       if (this.editPrice) {
@@ -761,7 +790,7 @@ export class EditProductsComponent implements OnInit {
       var imageURI02 = data['data'][1];
       imageURI02Output = imageURI02.split('/product');
       this.hideRemove2 = false;
-    }else {
+    } else {
       this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
       imageURI02Output[1] = this.imagedefaultPathURI + '/1.jpg';
       this.hideRemove2 = true;
@@ -771,7 +800,7 @@ export class EditProductsComponent implements OnInit {
       var imageURI03 = data['data'][2];
       imageURI03Output = imageURI03.split('/product');
       this.hideRemove3 = false;
-    }else {
+    } else {
       this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
       imageURI03Output[1] = this.imagedefaultPathURI + '/1.jpg';
       this.hideRemove3 = true;
@@ -781,7 +810,7 @@ export class EditProductsComponent implements OnInit {
       var imageURI04 = data['data'][3];
       imageURI04Output = imageURI04.split('/product');
       this.hideRemove4 = false;
-    }else {
+    } else {
       this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
       imageURI04Output[1] = this.imagedefaultPathURI + '/1.jpg';
       this.hideRemove4 = true;
@@ -791,7 +820,7 @@ export class EditProductsComponent implements OnInit {
       var imageURI05 = data['data'][4];
       imageURI05Output = imageURI05.split('/product');
       this.hideRemove5 = false;
-    }else {
+    } else {
       this.imagedefaultPathURI = this.imagePathURI.replace('/product', '');
       imageURI05Output[1] = this.imagedefaultPathURI + '/1.jpg';
       this.hideRemove5 = true;
@@ -1206,4 +1235,111 @@ export class EditProductsComponent implements OnInit {
     }
   }
 
+  getVariationColors() {
+    this.productService.getAllColorsForVariation().subscribe(
+      data => {
+        this.variationColors = data.data;
+        for (const color of this.variationColors) {
+          const option = {value: color.colorCode, label: color.colorName};
+          this.variationOptions.push(option);
+        }
+      }
+    );
+  }
+
+  selectColor(event) {
+    const selectedVariation = event.target.value;
+    this.colorArrayForClothes = [];
+    if (selectedVariation) {
+      // this.selectColorErrorStyle = '';
+      if (!this.colorArrayForClothes.includes(selectedVariation)) {
+        this.colorArrayForClothes.push(selectedVariation);
+        this.colorArrayForClothesJob = this.colorArrayForClothes;
+        this.showSizeAdd = true;
+      }
+    }
+
+  }
+
+  removeColorForClothes() {
+    this.colorArrayForClothes = [];
+    const colorSelect = document.getElementById('colorSelect') as HTMLSelectElement;
+    colorSelect.value = '';
+    this.inputValue = null;
+    this.showSizeAdd = false;
+  }
+
+  addNewVariation() {
+    if (!this.inputValue) {
+      Swal.fire(
+        'Oops',
+        'Please Select Size',
+        'warning'
+      );
+      return;
+    }
+
+    const existsAtIndex = this.productGroupTabel.findIndex(item => item.color === this.colorArrayForClothes[0] && item.size === this.inputValue.toString());
+    if (existsAtIndex !== -1) {
+      Swal.fire(
+        'Oops',
+        'Already Added!',
+        'warning'
+      );
+      return;
+    }
+
+    const or = {
+      color: this.colorArrayForClothes[0],
+      size: this.inputValue.toString(),
+      cost_price: this.productGroupTabel[0].cost_price,
+      changing_rate: this.productGroupTabel[0].changing_rate,
+      selling_price: this.productGroupTabel[0].selling_price
+    };
+    this.productGroupTabel.push(or);
+    this.newAddedVariations.push(or);
+    this.showUpdateButton = true;
+    this.removeColorForClothes();
+  }
+
+  removeAddedVariation(i) {
+    this.productGroupTabel.splice(i, 1);
+    this.newAddedVariations.splice(i - this.tableSize, 1);
+
+    if (this.newAddedVariations.length === 0) {
+      this.showUpdateButton = false;
+    }
+  }
+
+  updateVariation() {
+    const exportData = [];
+    for (let i = 0; i < this.newAddedVariations.length; i++) {
+      const data = [
+        {
+          column_name: 'color',
+          new_value: this.newAddedVariations[i].color,
+          old_value: this.newAddedVariations[i].size,
+          call_name: 'color',
+        }
+      ];
+      exportData.push(data);
+    }
+    const payload = {
+      referenceId: this.ids,
+      type: 'PRODUCT',
+      sub_type: 'product_variation',
+      comment: 'product_variation',
+      requestedBy: sessionStorage.getItem('partnerId'),
+      userId: sessionStorage.getItem('userId'),
+      data: this.newAddedVariations
+    };
+    this.productService.editField(payload).subscribe(
+      data => this.manageEditField(data),
+    );
+  }
+
+  addSize() {
+    const newSize = (document.getElementById('clothesSizeUk') as HTMLInputElement).value;
+    this.inputValue = newSize;
+  }
 }

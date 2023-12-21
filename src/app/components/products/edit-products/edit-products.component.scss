@@ -185,3 +185,42 @@ li .box-input-file{
   border-radius: 50%;
   padding: 3px;
 }
+
+.mainDev{
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  margin: 0px -1px 8px 7px;
+}
+.clouseI {
+  position: absolute;
+  right: 3px;
+  top: 13%;
+  transform: translateY(-50%);
+  width: 20px;
+}
+
+.clouseI .fa-close {
+  font-size: 8px;
+  position: absolute;
+  right: 0;
+  top: 3px;
+  padding: 0px;
+  background: #fff;
+  border-radius: 50px;
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
+  text-align: center;
+  color: #d27878;
+  border: 1px solid #fff;
+}
+
+.uk-size-span {
+  font-size: 14px;
+}
+
+.other-size-span {
+  font-size: 16px;
+}
+
