@@ -36,7 +36,7 @@
       </td>
       <td><p
         style="margin: 0px; font-size: 16px; color: #000; cursor: pointer">
-        {{ productDetail.title}}&nbsp;&nbsp;&nbsp;<span *ngIf="onDemand" class="badge {{productDetail.badge}}" style="float: right">{{productDetail.elementStatus}}</span> <a href="javascript:void(0);" (click)="loadPage(productDetail)"
+        {{ productDetail.title}}&nbsp;&nbsp;&nbsp;<span *ngIf="onDemand" class="badge {{productDetail.badge}}" style="float: right">{{productDetail.elementStatus}}</span> <span *ngIf="productDetail.inStockButton ? 'true' : ''" class="badge badge-warning" style="float: right">Manual Out</span> <a href="javascript:void(0);" (click)="loadPage(productDetail)"
                                                      *ngIf="active">view on
         web</a></p>
         <p style="margin: 0px;font-size: 16px; color: #000">{{
