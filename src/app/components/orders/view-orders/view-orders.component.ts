@@ -195,92 +195,115 @@ export class ViewOrdersComponent implements OnInit {
   }
 
   readyToShip() {
-    const data = {
-      productCode: this.prodCode
-    };
-    const shipmentArr = [];
-    const dataa = [];
-    const promises = [];
-    this.cartsnapshotArr.forEach((item, i) => {
 
-      let productCode = item.productId.toLowerCase();
-      if (productCode.toLowerCase().includes('ef_pc_')) {
-        productCode = productCode.replace('ef_pc_', '');
-      } else if (productCode.toLowerCase().includes('ef_hs_')) {
-        productCode = productCode.replace('ef_hs_', '');
-      }
+    Swal.fire({
+      title: 'Before proceeding, please ensure the following:',
+      html:
+        '<div>' +
+        '<p style="text-align: left; margin-bottom: 10px; margin-left: 20px; font-size: 15px;">1. The package has been wrapped carefully to prevent any damages during transit.</p>' +
+        '<p style="text-align: left; margin-bottom: 10px; margin-left: 20px; font-size: 15px;">2. The bar-code has been securely pasted on each package separately for proper tracking.</p>' +
+        '<p style="text-align: center"><img src="../../../assets/images/onDemandQR.png" style="width:50%; height: 30%;"></p>' +
+        '<p style="text-align: left; font-weight: bold; margin-left: 20px; font-size: 15px;">Have you completed these steps ?</p>' +
+        '</div>',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'Not yet',
+      customClass: {
+        popup: 'swal-popup',
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const data = {
+          productCode: this.prodCode
+        };
+        const shipmentArr = [];
+        const dataa = [];
+        const promises = [];
+        this.cartsnapshotArr.forEach((item, i) => {
 
-      const payload = {
-        product_code: productCode.toUpperCase()
-      };
-      // Create a promise for each product
-      const promise = new Promise<void>((resolve, reject) => {
-        this.productService.getProductPrices(payload).subscribe(
-          datas => {
-            this.manageData(datas, i);
-
-            resolve();
-          },
-          error => {
-            reject(error);
-          }
-        );
-      });
-      promises.push(promise);
-    });
-
-    // Wait for all promises to resolve before proceeding
-    Promise.all(promises)
-      .then(() => {
-
-        // const orr = {
-        //   image: 'image',
-        //   name: 'item.name',
-        //   productId: 'CLOT0V149P00010',
-        //   size: 1,
-        //   sellingPrice: 11,
-        //   costPrice: 11
-        // };
-        //
-        // shipmentArr.push(orr);
-        //
-        // const orr2 = {
-        //   image: 'image2',
-        //   name: 'item.name2',
-        //   productId: 'AUTO0V18POD00002',
-        //   size: 2,
-        //   sellingPrice: 22,
-        //   costPrice: 22
-        // };
-        //
-        // shipmentArr.push(orr2);
-        for (const item of this.cartsnapshotArr) {
           let productCode = item.productId.toLowerCase();
           if (productCode.toLowerCase().includes('ef_pc_')) {
             productCode = productCode.replace('ef_pc_', '');
           } else if (productCode.toLowerCase().includes('ef_hs_')) {
             productCode = productCode.replace('ef_hs_', '');
           }
-          productCode = productCode.toUpperCase();
-          const orr = {
-            image: 'image',
-            name: item.name,
-            productId: productCode,
-            size: item.size,
-            sellingPrice: item.sellingPrice,
-            costPrice: item.costPrice,
-            changingRate: item.changingRate,
-            orderRef: item.orderRef
+
+          const payload = {
+            product_code: productCode.toUpperCase()
           };
-          shipmentArr.push(orr);
-        }
-        this.order.setDataArray(shipmentArr);
-        const url = 'shipment/add-shipment';
-        this.router.navigate([url], {queryParams: data});
-      })
-      .catch(error => {
-        // Handle the error here
-      });
+          // Create a promise for each product
+          const promise = new Promise<void>((resolve, reject) => {
+            this.productService.getProductPrices(payload).subscribe(
+              datas => {
+                this.manageData(datas, i);
+
+                resolve();
+              },
+              error => {
+                reject(error);
+              }
+            );
+          });
+          promises.push(promise);
+        });
+
+        // Wait for all promises to resolve before proceeding
+        Promise.all(promises)
+          .then(() => {
+
+            // const orr = {
+            //   image: 'image',
+            //   name: 'item.name',
+            //   productId: 'CLOT0V149P00010',
+            //   size: 1,
+            //   sellingPrice: 11,
+            //   costPrice: 11
+            // };
+            //
+            // shipmentArr.push(orr);
+            //
+            // const orr2 = {
+            //   image: 'image2',
+            //   name: 'item.name2',
+            //   productId: 'AUTO0V18POD00002',
+            //   size: 2,
+            //   sellingPrice: 22,
+            //   costPrice: 22
+            // };
+            //
+            // shipmentArr.push(orr2);
+            for (const item of this.cartsnapshotArr) {
+              let productCode = item.productId.toLowerCase();
+              if (productCode.toLowerCase().includes('ef_pc_')) {
+                productCode = productCode.replace('ef_pc_', '');
+              } else if (productCode.toLowerCase().includes('ef_hs_')) {
+                productCode = productCode.replace('ef_hs_', '');
+              }
+              productCode = productCode.toUpperCase();
+              const orr = {
+                image: 'image',
+                name: item.name,
+                productId: productCode,
+                size: item.size,
+                sellingPrice: item.sellingPrice,
+                costPrice: item.costPrice,
+                changingRate: item.changingRate,
+                orderRef: item.orderRef
+              };
+              shipmentArr.push(orr);
+            }
+            this.order.setDataArray(shipmentArr);
+            const url = 'shipment/add-shipment';
+            this.router.navigate([url], {queryParams: data});
+          })
+          .catch(error => {
+            // Handle the error here
+          });
+      } else {
+
+      }
+    });
   }
 
   manageData(data, i) {
