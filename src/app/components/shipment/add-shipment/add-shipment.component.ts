@@ -804,6 +804,7 @@ export class AddShipmentComponent implements OnInit {
                 insertTabelData = {
                   product_code: this.sharedData[i].productId,
                   product_name: tempProductName,
+                  isVariation : false,
 
                   cost_price: this.sharedData[i].costPrice,
                   quantity: this.sharedData[i].size,
@@ -828,10 +829,10 @@ export class AddShipmentComponent implements OnInit {
               data => {
                 variationCode = data.data.product.productVariation[0].variation_code
               });
-
             insertTabelData = {
               product_code: this.sharedData[i].productId,
               product_name: tempProductName,
+              isVariation : false,
 
               cost_price: this.sharedData[i].costPrice,
               quantity: this.sharedData[i].size,
@@ -868,7 +869,11 @@ export class AddShipmentComponent implements OnInit {
               this.isProductExist = true;
             }
           }
-
+          let isVariation = false;
+          if (this.productVariationArrayForClothes[i].color.toLowerCase() !== 'none'
+          || this.productVariationArrayForClothes[i].size.toLowerCase() !== 'none'){
+            isVariation = true;
+          }
           if (!this.isProductExist) {
             const insertTabelData = {
               product_code: dataForm.txtProductCode,
@@ -882,7 +887,8 @@ export class AddShipmentComponent implements OnInit {
               amount: grossAmount.toString(),
               color: this.productVariationArrayForClothes[i].color,
               size: this.productVariationArrayForClothes[i].size,
-              variationCode: this.productVariationArrayForClothes[i].variationCode
+              variationCode: this.productVariationArrayForClothes[i].variationCode,
+              isVariation,
             };
             if (Number(this.quantityMap.get(i)) > 0) {
               this.tableData.push(insertTabelData);

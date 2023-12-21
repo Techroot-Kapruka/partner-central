@@ -177,7 +177,8 @@
                 <tbody>
                 <!--<tr *ngFor="let tableDatas of tableData ">-->
                 <tr *ngFor="let tableDatas of tableData; let i = index" [attr.data-index]="i">
-                  <td>{{tableDatas['product_code']}}</td>
+                  <td style="display: none">{{tableDatas['product_code']}}</td>
+                  <td>{{tableDatas['isVariation'] === true ? tableDatas['variationCode'] : tableDatas['product_code']}}</td>
                   <td>{{tableDatas['product_name']}}</td>
                   <td *ngIf="isClothes">
                     <div style="margin:5px; padding: 10px; background:{{tableDatas['color']}};"></div>
