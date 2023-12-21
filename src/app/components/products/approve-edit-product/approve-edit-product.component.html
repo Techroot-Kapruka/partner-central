@@ -27,7 +27,7 @@
       <hr>
       <div class="details">
 
-        <div class="col-6 ">
+        <div class="col-6 " *ngIf="subType_!=='product_variation'">
           <div class="card-title"><strong>Old Fields</strong></div>
           <div class="col-12" *ngFor="let oldData of oldInputData">
             <label class="col-form-label" style="font-weight: bold">{{oldData['title']}}</label>
@@ -39,10 +39,24 @@
 
         <div class="col-6">
           <div class="card-title"><strong>New Fields</strong></div>
-          <div class="col-12" *ngFor="let newData of newInputData">
-            <label class="col-form-label" style="font-weight: bold">{{newData['title']}}</label>
-            <input class="form-control" id="txt_selli" type="text" required="" value="{{newData['value']}}" hidden disabled>
-            <div  [innerHtml]="newData['value']"></div>
+          <div class="col-12" *ngIf="subType_!=='product_variation'">
+            <div *ngFor="let newData of newInputData; let i=index;">
+                          <label class="col-form-label" style="font-weight: bold">{{newData['title']}}</label>
+                          <input class="form-control" id="txt_selli" type="text" required="" value="{{newData['value']}}" hidden disabled>
+                          <div  [innerHtml]="newData['value']"></div>
+            </div>
+          </div>
+          <div class="col-12" *ngIf="subType_=='product_variation'">
+            <table>
+              <tr>
+                <th style="width: 70px;">Color</th>
+                <th class="d-flex justify-content-center align-items-center" style="width: 50px;">Size</th>
+              </tr>
+              <tr  *ngFor="let newData of newInputData; let i=index;">
+                <td><div style="margin:5px; padding: 10px; background:{{newData['color']}} ;"></div></td>
+                <td class="d-flex justify-content-center align-items-center">{{newData['size']}}</td>
+              </tr>
+            </table>
           </div>
         </div>
       </div>

@@ -97,24 +97,59 @@
                      style="border: #a4a2a2; border-width: 1px; border-radius: 5px; border-style: solid">
                 <thead>
                 <tr>
-                  <th scope="col">id</th>
-                  <th scope="col">Color</th>
-                  <th scope="col">Size</th>
+                  <th scope="col" style="width: 50px;">id</th>
+                  <th scope="col" style="width: 120px;">Color</th>
+                  <th scope="col" style="width: 50px;">Size</th>
+                  <th scope="col" *ngIf="newAddedVariations.length>0" style="width: 50px;">Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr *ngFor="let tableData of productGroupTabel let i = index" [attr.data-index]="i">
                   <td>{{i+1}}</td>
                   <td>
-                    <div style="margin:5px; padding: 10px; background:{{tableData['color']}};"></div>
+                    <div style="margin:5px; padding: 10px; background: {{tableData['color']}};"></div>
                   </td>
                   <td>{{tableData['size']}}</td>
+                  <td *ngIf="newAddedVariations.length>0"><i class="fa fa-remove" *ngIf="i >= tableSize" (click)="removeAddedVariation(i)"></i></td>
                 </tr>
                 </tbody>
               </table>
+
+              <div class="addVariation" *ngIf="viewVariationAdd">
+                <p><b>Add Variations</b></p>
+                <div class="row">
+                  <div class="col-4">
+                    <p>Add Color</p>
+                    <select class="custom-select" id="colorSelect" (click)="selectColor($event)" style="width: 200px; float: left;">
+                      <option value="">Choose Color</option>
+                      <option *ngFor="let color of variationOptions; let i = index" value="{{color['value']}}">
+                        {{color['label']}}
+                      </option>
+                    </select>
+
+                    <div class="mainDev" style="justify-content: left; align-items: start;" *ngFor="let colorArraysForClothess of colorArrayForClothes; let i = index" [attr.data-index]="i">
+                      <label class="labelAppendSub" style="height: 35px; width: 50px; background:{{colorArraysForClothess}};">
+                        <div class="clouseI" (click)="removeColorForClothes()">
+                          <i class="fa fa-close"></i>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="col-3 size" *ngIf="showSizeAdd">
+                    <p>Select Size</p>
+                    <select class="custom-select" id="clothesSizeUk" (change)="addSize()">
+                      <option value="" disabled selected>Select Size</option>
+                      <option *ngFor="let size of productAttributeList">{{size}}</option>
+                    </select>
+                  </div>
+                  <div class="col-2 size" *ngIf="showSizeAdd">
+                    <button class="btn btn-success mt-4" (click)="addNewVariation()">Add</button>
+                  </div>
+
+                </div>
+                <button class="btn btn-primary mt-3" *ngIf="showUpdateButton" (click)="updateVariation()">Save</button>
+              </div>
             </div>
-
-
           </ng-template>
         </ngb-tab>
 
