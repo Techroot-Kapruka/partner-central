@@ -228,7 +228,7 @@
                       <th scope="col">Name</th>
                       <th scope="col">Product ID</th>
                       <th scope="col" style="text-align: center">Quantity</th>
-                      <th *ngIf="(odProduct && isPartner && isReadytoShip) || (isInProcess && odProduct)" scope="col" style="text-align: center">Print QR</th>
+                      <th *ngIf="(odProduct && isPartner && isReadytoShip) || (isInProcess && odProduct)" scope="col" style="display: none; text-align: center">Print QR</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -260,7 +260,7 @@
                         </div>
                       </td>
                       <td style="text-align: center">{{cartsnapshotArrs['size']}}</td>
-                      <td *ngIf="(odProduct && isPartner && isReadytoShip) || (isInProcess && odProduct)" style="text-align: center">
+                      <td *ngIf="(odProduct && isPartner && isReadytoShip) || (isInProcess && odProduct)" style="display: none; text-align: center">
                         <button class="btn" [disabled]="isInProcess" (click)="PrintQR(cartsnapshotArrs['productId'])">
                           <i class="fas fa-download"></i>
                         </button>
