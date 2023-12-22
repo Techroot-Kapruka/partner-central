@@ -131,6 +131,7 @@ export class AddShipmentComponent implements OnInit {
   public isOnDemandProduct = false;
   public showPriceChange = false;
   public priceChangeClick = false;
+  public isBtnQRVisible = true;
 
   selectProduct = 'Select Product';
   orderRef = '';
@@ -187,6 +188,16 @@ export class AddShipmentComponent implements OnInit {
 
     if (this.dropdownComponent) {
       this.dropdownComponent.setDefaultValue();
+    }
+
+    if (this.isOnDemandShipment === true){
+      this.isBtnQRVisible = false;
+      this.isBtnSaveDisabled = false;
+      this.btnSaveShipmentColor = 'darkblue';
+    }else{
+      this.isBtnQRVisible = true;
+      this.isBtnSaveDisabled = true;
+      this.btnSaveShipmentColor = '#6f6f6f';
     }
   }
 
@@ -639,78 +650,86 @@ export class AddShipmentComponent implements OnInit {
       );
     } else {
 
-      Swal.fire({
-        title: 'Before proceeding, please ensure the following:',
-        html:
-          '<div style="text-align: left;">' +
-          '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">1. The package has been wrapped carefully to prevent any damages during transit.</p>' +
-          '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">2. The bar-code has been securely pasted on each package separately for proper tracking.</p>' +
-          '<p style="font-weight: bold; margin-left: 20px; font-size: 15px;">Have you completed these steps ?</p>' +
-          '</div>',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'Not yet',
-        customClass: {
-          popup: 'swal-popup',
-        },
-      }).then((result) => {
+      if (this.isOnDemandShipment === true) {
+        this.submitShipment();
+      }else{
+        Swal.fire({
+          title: 'Before proceeding, please ensure the following:',
+          html:
+            '<div style="text-align: left;">' +
+            '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">1. The package has been wrapped carefully to prevent any damages during transit.</p>' +
+            '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">2. The bar-code has been securely pasted on each package separately for proper tracking.</p>' +
+            '<p style="font-weight: bold; margin-left: 20px; font-size: 15px;">Have you completed these steps ?</p>' +
+            '</div>',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'Not yet',
+          customClass: {
+            popup: 'swal-popup',
+          },
+        }).then((result) => {
 
-        if (result.isConfirmed) {
-
-          // add shipment
-          if (this.isPriceChange == 1) {
-
-            // save data to field edit
-            for (let i = 0; i < this.changeFeids.length; i++) {
-              payLoard = {
-                referenceId: this.changeFeids[i].productCode,
-                type: 'PRODUCT_PRICE',
-                sub_type: 'product_price',
-                comment: 'PRODUCT_PRICE',
-                requestedBy: this.changeVendor,
-                saveType: 'shipment',
-                userId: sessionStorage.getItem('userId'),
-                data: [
-                  {
-                    column_name: 'cost_price',
-                    old_value: this.changeFeids[i].oldCostPrice,
-                    new_value: this.changeFeids[i].newCostPrice,
-                    call_name: 'cost_price',
-                  },
-                  {
-                    column_name: 'changing_rate',
-                    old_value: this.changeFeids[i].oldChangingRate,
-                    new_value: this.changeFeids[i].newChangingRate,
-                    call_name: 'changing_rate',
-                  },
-                  {
-                    column_name: 'selling_price',
-                    old_value: this.changeFeids[i].oldSellingPrice,
-                    new_value: this.changeFeids[i].newSellingPrice,
-                    call_name: 'selling_price',
-                  }
-                ]
-              };
-              this.submitShipmentchangeFeids.push(payLoard);
-            }
-
-            payLoard = {
-              dataSet: this.submitShipmentchangeFeids
-            };
-
-            this.productService.editShipmentField(payLoard).subscribe(
-              data => this.manageEditField(data),
-              error => this.manageUserError(error)
-            );
-
+          if (result.isConfirmed) {
+            this.submitShipment();
           } else {
-            this.hitShipment();
-          }
-        } else {
 
-        }
-      });
+          }
+        });
+      }
+    }
+  }
+
+  submitShipment(){
+    // add shipment
+    let payLoard;
+    if (this.isPriceChange == 1) {
+
+      // save data to field edit
+      for (let i = 0; i < this.changeFeids.length; i++) {
+        payLoard = {
+          referenceId: this.changeFeids[i].productCode,
+          type: 'PRODUCT_PRICE',
+          sub_type: 'product_price',
+          comment: 'PRODUCT_PRICE',
+          requestedBy: this.changeVendor,
+          saveType: 'shipment',
+          userId: sessionStorage.getItem('userId'),
+          data: [
+            {
+              column_name: 'cost_price',
+              old_value: this.changeFeids[i].oldCostPrice,
+              new_value: this.changeFeids[i].newCostPrice,
+              call_name: 'cost_price',
+            },
+            {
+              column_name: 'changing_rate',
+              old_value: this.changeFeids[i].oldChangingRate,
+              new_value: this.changeFeids[i].newChangingRate,
+              call_name: 'changing_rate',
+            },
+            {
+              column_name: 'selling_price',
+              old_value: this.changeFeids[i].oldSellingPrice,
+              new_value: this.changeFeids[i].newSellingPrice,
+              call_name: 'selling_price',
+            }
+          ]
+        };
+        this.submitShipmentchangeFeids.push(payLoard);
+      }
+
+      payLoard = {
+        dataSet: this.submitShipmentchangeFeids
+      };
+
+      this.productService.editShipmentField(payLoard).subscribe(
+        data => this.manageEditField(data),
+        error => this.manageUserError(error)
+      );
+
+    } else {
+      this.hitShipment();
     }
   }
 
