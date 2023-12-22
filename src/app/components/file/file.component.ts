@@ -53,7 +53,7 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
   catCodeSelected = false;
   uploaded = false;
   clicked = false;
-  bulkTemplateHref = 'assets/excel/BulkUpload_v1.0.xlsx';
+  bulkTemplateHref = 'assets/excel/BulkUpload_v1.1.xlsx';
   selectedCategoryForTemplate = '';
   bulkTemplateCatSelected = false;
   verificationClicked = false;
