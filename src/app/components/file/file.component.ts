@@ -129,10 +129,10 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
         this.editInputType = 'number';
         break;
       }
-      case 'MARGIN': {
-        this.popUpEditClose();
-        break;
-      }
+      // case 'MARGIN': {
+      //   this.popUpEditClose();
+      //   break;
+      // }
       default: {
         this.editInputType = 'text';
         break;
@@ -1207,7 +1207,6 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
             const marginValueNumeric = parseFloat(marginValue);
             const marginRateDbNumeric = parseFloat(marginRateDb.toString());
             if (marginValueNumeric >= marginRateDbNumeric) {
-              verified = true;
             } else {
               marginRate.className = 'table-danger';
               errorMessages.push('Cannot Change Margin Rate');
@@ -1402,7 +1401,16 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
       return true;
     }
     switch (this.removeSpacesFromString(field)) {
-      case 'margin': {
+      // case 'margin': {
+      //   return true;
+      // }
+      case 'category': {
+        return true;
+      }
+      case 'subcategory': {
+        return true;
+      }
+      case 'subsubcategory': {
         return true;
       }
       default: {
