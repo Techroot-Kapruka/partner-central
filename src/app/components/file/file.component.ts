@@ -1032,17 +1032,17 @@ export class FileComponent implements OnInit, CanComponentDeactivate {
     const category = event.value.toUpperCase();
     switch (category) {
       case 'CLOTHING': {
-        this.bulkTemplateHref = 'assets/excel/BulkUpload(clothing)_v1.0.xlsx';
+        this.bulkTemplateHref = 'assets/excel/BulkUpload(clothing)_v1.1.xlsx';
         this.selectedCategoryForTemplate = ' - Clothing';
         break;
       }
       case 'ELECTRONICS': {
-        this.bulkTemplateHref = 'assets/excel/BulkUpload(electronics)_v1.0.xlsx';
+        this.bulkTemplateHref = 'assets/excel/BulkUpload(electronics)_v1.1.xlsx';
         this.selectedCategoryForTemplate = ' - Electronics';
         break;
       }
       default: {
-        this.bulkTemplateHref = 'assets/excel/BulkUpload_v1.0.xlsx';
+        this.bulkTemplateHref = 'assets/excel/BulkUpload_v1.1.xlsx';
         this.selectedCategoryForTemplate = ' - Other';
         break;
       }
