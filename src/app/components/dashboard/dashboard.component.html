@@ -355,15 +355,29 @@
             [xAxisLabel]="xAxisLabel"
             [yAxisLabel]="yAxisLabel"
             style="transform: scale(80%)">
+            <ng-template #tooltipTemplate let-model="model">
+                <p style="color: white">{{model.extra.name}} <br>
+                {{model.extra.value}} Orders</p>
+            </ng-template>
+
+
           </ngx-charts-bar-vertical>
+
+          <ng-template #tooltiptemplate let-model="model">
+            <div class="tooltip">
+              mytooltip:
+              {{model.tool_tip_text}}
+            </div>
+          </ng-template>
           <!-- End Column Chart -->
         </div>
-        <div class="col-md-4 " *ngIf="isPieChart" style="display: grid; margin-left: 100px;">
+                <div class="col-md-4 " *ngIf="isPieChart" style="display: grid; margin-left: 100px;">
           <!-- Start Pie Chart -->
-          <ngx-charts-pie-chart [results]="single"
-                                [view]="[300, 300]"
-                                [scheme]="colorScheme1">
-          </ngx-charts-pie-chart>
+
+<!--          <ngx-charts-pie-chart [results]="single"-->
+<!--                                [view]="[300, 300]"-->
+<!--                                [scheme]="colorScheme1">-->
+<!--          </ngx-charts-pie-chart>-->
           <!-- End Pie Chart -->
         </div>
 
