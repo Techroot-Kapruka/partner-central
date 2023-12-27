@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {DashboardService} from '../../shared/service/dashboard.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {zip} from 'rxjs';
@@ -15,6 +15,9 @@ import {OrderService} from "../../shared/service/order.service";
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  // In your component
+  @ViewChild('tooltipTemplate') tooltipTemplate: TemplateRef<any>;
+
   public prfUserName = 'Ishan';
   public mathsCount = 0;
   public specialGift = 0;
@@ -114,7 +117,8 @@ export class DashboardComponent implements OnInit {
   chartData: any[] = [];
 
   colorScheme = {
-    domain: ['#5AA454', '#E44D25', '#CFC0BB', '#5AA454'],
+    domain: [ '#5F0F40', '#96EFFF', '#5FBDFF', '#7B66FF', '#2D9596', '#756AB6', '#AC87C5'
+    ],
   };
 
 
@@ -128,20 +132,29 @@ export class DashboardComponent implements OnInit {
   /* End Column Chart */
 
   /* Start Pie Chart */
-  single: any[] = [
-    {
-      name: 'Category 1',
-      value: 200,
-    },
-    {
-      name: 'Category 2',
-      value: 300,
-    },
-    {
-      name: 'Category 3',
-      value: 400,
-    },
-  ];
+  // single: any[] = [
+  //   {
+  //     name: 'Category 1',
+  //     value: 200,
+  //   },
+  //   {
+  //     name: 'Category 2',
+  //     value: 300,
+  //   },
+  //   {
+  //     name: 'Category 3',
+  //     value: 400,
+  //   },
+  // ];
+
+  viewLC: [number, number] = [700, 300];
+  animationsLC = true;
+  showGridLinesLC = true;
+  legendLC = true;
+  legendTitleLC = "Countries";
+  roundDomainsLC = true;
+  xAxisLC = true;
+  yAxisLC = true;
 
   // Customize colors
   colorScheme1 = {
@@ -179,25 +192,23 @@ export class DashboardComponent implements OnInit {
       data => {
         if (data.status_code === 200){
           if (data.data !== null){
-            const weeklyOrdersArray = data.data.split(',');
-            this.chartData = [
-              {
-                name: 'Week 1',
-                value: parseInt(weeklyOrdersArray[0]) || 0,
-              },
-              {
-                name: 'Week 2',
-                value: parseInt(weeklyOrdersArray[1]) || 0,
-              },
-              {
-                name: 'Week 3',
-                value: parseInt(weeklyOrdersArray[2]) || 0,
-              },
-              {
-                name: 'Week 4',
-                value: parseInt(weeklyOrdersArray[3]) || 0,
+            const weeklyOrdersArray = data.data;
+            this.chartData = [];
+            console.log(weeklyOrdersArray)
+            for (const key in weeklyOrdersArray) {
+              if (weeklyOrdersArray.hasOwnProperty(key)) {
+                const value = weeklyOrdersArray[key];
+
+                this.chartData.push({
+                  name: key.replace(/\d{4}-\d{2}-(\d{2})/g, "$1"),
+                  value: value || 0,
+                  extra: {
+                    name: key,
+                    value: value || 0,
+                  }
+                });
               }
-            ];
+            }
           }
         }
       }
@@ -730,4 +741,6 @@ export class DashboardComponent implements OnInit {
   private managePendingShipmentCount(data) {
     this.pendingShipmentCount = data.data.shipment_count;
   }
+
+  protected readonly console = console;
 }

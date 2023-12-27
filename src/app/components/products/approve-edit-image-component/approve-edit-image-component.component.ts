@@ -54,7 +54,7 @@ export class ApproveEditImageComponentComponent implements OnInit {
     let paloard = {
       editId: this.uniqueCode_,
       productCode: this.ids,
-      requestedBy: this.requestedBy,
+      requestedBy: this.requestedId,
     };
 
     this.productService.getEditFieldsImageDataAllForApproval(paloard).subscribe(

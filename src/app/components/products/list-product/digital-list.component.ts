@@ -310,7 +310,9 @@ export class DigitalListComponent implements OnInit {
   }
 
   clickSusEditProduct(event: any) {
-    console.log('suspend Edit clicked!!!!!!!!');
+    const productCode = event.productCode;
+    const url2 = 'products/digital/digital-edit-product/' + productCode;
+    this.router.navigate([url2]);
   }
 
   async clickProduct(event: any) {
