@@ -199,10 +199,11 @@ export class ViewOrdersComponent implements OnInit {
     Swal.fire({
       title: 'Before proceeding, please ensure the following:',
       html:
-        '<div style="text-align: left;">' +
-        '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">1. The package has been wrapped carefully to prevent any damages during transit.</p>' +
-        '<p style="margin-bottom: 10px; margin-left: 20px; font-size: 15px;">2. The bar-code has been securely pasted on each package separately for proper tracking.</p>' +
-        '<p style="font-weight: bold; margin-left: 20px; font-size: 15px;">Have you completed these steps ?</p>' +
+        '<div>' +
+        '<p style="text-align: left; margin-bottom: 10px; margin-left: 20px; font-size: 15px;">1. The package has been wrapped carefully to prevent any damages during transit.</p>' +
+        '<p style="text-align: left; margin-bottom: 10px; margin-left: 20px; font-size: 15px;">2. The bar-code has been securely pasted on each package separately for proper tracking.</p>' +
+        '<p style="text-align: center"><img src="../../../assets/images/od_qr.png" style="width:50%; height: 30%;"></p>' +
+        '<p style="text-align: left; font-weight: bold; margin-left: 20px; font-size: 15px;">Have you completed these steps ?</p>' +
         '</div>',
       icon: 'warning',
       showCancelButton: true,
