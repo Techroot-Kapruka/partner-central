@@ -89,6 +89,7 @@ export class PaymentRequestComponent implements OnInit {
   }
 
   manageWithdrawalList(response){
+    
     this.isLoading=false;
     if(response.message==="Success"){
       this.isSuccess = true;
