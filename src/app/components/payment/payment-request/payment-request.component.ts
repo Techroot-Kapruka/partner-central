@@ -25,6 +25,7 @@ export class PaymentRequestComponent implements OnInit {
   @ViewChild(DropdownComponent, { static: false }) dropdownComponent: DropdownComponent;
   constructor(private productService: ProductService, private paymentService: PaymentService) {
     this.getPartnerList();
+    this.getWithdrawalsList("*");
   }
 
   getPartnerList(): void {
@@ -49,6 +50,11 @@ export class PaymentRequestComponent implements OnInit {
     const partnerCount = data.data.length;
     const partnerValue = data.data;
     this.partnerArray = [];
+    let selectAllPartnersOption = {
+      label: "Select All",
+      value: "*"
+    }
+    this.partnerArray.push(selectAllPartnersOption);
     for (let i = 0; i < partnerCount; i++) {
       pr = {
         label: partnerValue[i].businessName,
@@ -57,7 +63,6 @@ export class PaymentRequestComponent implements OnInit {
       this.partnerArray.push(pr);
     }
   }
-
 
 
   partnerListError(error){
@@ -74,7 +79,11 @@ export class PaymentRequestComponent implements OnInit {
       const selectedItem = this.partnerArray.find(item => item.value === partnerId);
       if (selectedItem) {
         const selectedLabel = selectedItem.label;
-        this.partnerBusinessName=selectedLabel;
+        if(selectedItem.value=="*"){
+          this.partnerBusinessName="";
+        }else{
+          this.partnerBusinessName=selectedLabel;
+        }
       }
     }
     this.isLoading=true;
@@ -89,7 +98,6 @@ export class PaymentRequestComponent implements OnInit {
   }
 
   manageWithdrawalList(response){
-    
     this.isLoading=false;
     if(response.message==="Success"){
       this.isSuccess = true;
@@ -108,6 +116,7 @@ export class PaymentRequestComponent implements OnInit {
     if (this.dropdownComponent) {
       this.dropdownComponent.setDefaultValue();
     }
+    this.recordList.sort((a, b) => new Date(b.createDate).getTime() - new Date(a.createDate).getTime());
   }
   withdrawalListManagementError(error){
     this.isLoading=false;
