@@ -42,7 +42,6 @@ export class PaymentWithdrawalComponent implements OnInit {
       let partnerId = sessionStorage.getItem('partnerId');
       this.isAdmin=false;
       this.getPaymentList(partnerId);
-      console.log('b');
     }
   }
   partnerListError(error){
@@ -126,7 +125,11 @@ export class PaymentWithdrawalComponent implements OnInit {
     }else{
       this.isSuccess = false;
     }
-
+    this.recordList.sort((a, b) => {
+      const dateA = new Date(a.kpDeliveryDate);
+      const dateB = new Date(b.kpDeliveryDate);
+      return dateB.getTime() - dateA.getTime();
+    });
   }
 
   ngOnInit(): void {
