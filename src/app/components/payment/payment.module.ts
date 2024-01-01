@@ -9,19 +9,21 @@ import {PaymentRoutingModule} from './payment-routing.module';
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { PaymentWithdrawalComponent } from './payment-withdrawal/payment-withdrawal.component';
 import { PaymentRequestComponent } from './payment-request/payment-request.component';
+import {SharedModule} from "../../shared/shared.module";
 
 
 @NgModule({
   declarations: [ListPaymentComponent, PaymentWithdrawalComponent, PaymentRequestComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    HttpClientModule,
-    NgbModule,
-    Ng2SmartTableModule,
-    ReactiveFormsModule,
-    PaymentRoutingModule,
-    NgxDatatableModule
-  ]
+    imports: [
+        CommonModule,
+        FormsModule,
+        HttpClientModule,
+        NgbModule,
+        Ng2SmartTableModule,
+        ReactiveFormsModule,
+        PaymentRoutingModule,
+        NgxDatatableModule,
+        SharedModule
+    ]
 })
 export class PaymentModule { }
