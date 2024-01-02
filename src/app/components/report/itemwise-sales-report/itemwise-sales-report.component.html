@@ -1,0 +1,93 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card tab2-card">
+        <div class="card-body tab2-card">
+          <div class="custom-datatable">
+            <div class="row">
+              <label for="fromDatePicker" style="margin-top: 0.5%">From Date : </label>
+              <input type="date" autofocus class="form-control" id="fromDatePicker" [(ngModel)]="fromDate" style="width: 25%;margin-left: 2%;margin-right: 2%">
+              <label for="toDatePicker" style="margin-top: 0.5%">To Date : </label>
+              <input type="date" class="form-control" id="toDatePicker" [(ngModel)]="toDate" style="width: 25%;margin-left: 2%">
+              <div class="btn-popup pull-right">
+                <button class="btn btn-success float-right" style="margin-left: 40px" (click)="loadDate()">Search
+                </button>
+              </div>
+              <div class="btn-popup pull-right" style="margin-left: 2%">
+                <button class="btn btn-info float-right" (click)="exportToExcel()">Export to Excel</button>
+              </div>
+            </div>
+            <div *ngIf="isLoading;">
+              <div class="loader"></div>
+            </div>
+
+            <div *ngIf="!isLoading">
+              <div *ngIf="isSearchRecordNotEmpty">
+                <div class="row">
+                  <div class="col-md-9">
+                    <div class="row table-responsive"
+                         style="margin-top: 1%;max-height:50vh; max-height: 60vh; overflow-y: auto; width: 135%;">
+                      <table class="table table-sm table-bordered table-striped">
+                        <thead class="table-primary">
+                        <tr>
+                          <th>Ref No</th>
+                          <th>Title</th>
+                          <th>Vendor</th>
+                          <th>Cost Price</th>
+                          <th>Selling Price</th>
+                          <th>Quantity</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <ng-container
+                          *ngFor="let orderDetails of (filteredProducts.length > 0 ? filteredProducts : orderData); let i = index">
+                          <ng-container *ngIf="i === 0 || orderDetails.vn_no !== orderData[i - 1]?.vn_no">
+                            <tr [attr.rowspan]="getRowCount(orderDetails.vn_no)">
+                              <td>{{ orderDetails.vn_no }} </td>
+                              <td>{{ orderDetails.item_code }}
+                                <p
+                                  style="margin: 0px; font-size: 14px; color: #6f6f6f;">{{ orderDetails.item_name }}</p>
+                                <p
+                                  style="margin: 0px; font-size: 14px; color: #6f6f6f;">{{ orderDetails.category_path }}</p>
+                              </td>
+                              <td>{{ orderDetails.vendor_code }}
+                                <p style="margin: 0px; font-size: 14px; color: #6f6f6f;">{{ orderDetails.vendor }}</p>
+                              </td>
+                              <td>{{ orderDetails.cost_price }} </td>
+                              <td>{{ orderDetails.selling_price }} </td>
+                              <td>{{ orderDetails.qty }} </td>
+                            </tr>
+                          </ng-container>
+                          <ng-container *ngIf="i > 0 && orderDetails.vn_no === orderData[i - 1]?.vn_no">
+                            <tr>
+                              <td></td>
+                              <td>{{ orderDetails.item_code }}
+                                <p
+                                  style="margin: 0px; font-size: 14px; color: #6f6f6f;">{{ orderDetails.item_name }}</p>
+                                <p
+                                  style="margin: 0px; font-size: 14px; color: #6f6f6f;">{{ orderDetails.category_path }}</p>
+                              </td>
+                              <td>{{ orderDetails.vendor_code }}
+                                <p style="margin: 0px; font-size: 14px; color: #6f6f6f;">{{ orderDetails.vendor }}</p>
+                              </td>
+                              <td>{{ orderDetails.cost_price }} </td>
+                              <td>{{ orderDetails.selling_price }} </td>
+                              <td>{{ orderDetails.qty }} </td>
+                            </tr>
+                          </ng-container>
+                        </ng-container>
+                        </tbody>
+                      </table>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
