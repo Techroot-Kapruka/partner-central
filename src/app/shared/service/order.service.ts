@@ -85,4 +85,12 @@ export class OrderService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'orders/generateProQRCode', formData, {headers});
   }
+
+  getOrderDetails(fromDate, toDate){
+    const formData: FormData = new FormData();
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    formData.append('from_date', fromDate);
+    formData.append('to_date', toDate);
+    return this.httpClient.post<any>(this.SERVER + 'report/supplierOrders', formData, {headers});
+  }
 }
