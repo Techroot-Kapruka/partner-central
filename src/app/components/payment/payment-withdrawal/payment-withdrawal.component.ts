@@ -11,6 +11,7 @@ import Swal from 'sweetalert2';
 })
 export class PaymentWithdrawalComponent implements OnInit {
   public isAdmin = true;
+  public btnwithdrawRequired = false;
   public isPartnerSelected = false;
   public recordList;
   public checkedCostPriceCount = 0;
@@ -160,6 +161,7 @@ export class PaymentWithdrawalComponent implements OnInit {
         }
       }
       this.checkedCostPriceCount= this.totalPriceCounter;
+      this.checkTotalSelecteAmount(this.checkedCostPriceCount);
     }else{
       for(let i =0;i<checkboxes.length;i++){
         let checkbox = checkboxes[i] as HTMLInputElement;
@@ -167,6 +169,7 @@ export class PaymentWithdrawalComponent implements OnInit {
       }
       this.checkBoxStatusMap=[];
       this.checkedCostPriceCount=0;
+      this.checkTotalSelecteAmount(this.checkedCostPriceCount);
     }
   }
    checkBoxCheck(index, price) {
@@ -185,6 +188,7 @@ export class PaymentWithdrawalComponent implements OnInit {
             obj[checkboxId] = true;
           }
         });
+        this.checkTotalSelecteAmount(this.checkedCostPriceCount);
       } else {
         this.checkedCostPriceCount -= price;
         this.checkBoxStatusMap.forEach(obj => {
@@ -192,6 +196,7 @@ export class PaymentWithdrawalComponent implements OnInit {
             obj[checkboxId] = false;
           }
         });
+        this.checkTotalSelecteAmount(this.checkedCostPriceCount);
       }
     } else {
       if (checkbox.checked) {
@@ -199,6 +204,7 @@ export class PaymentWithdrawalComponent implements OnInit {
         this.checkedCostPriceCount += price;
         this.checkBoxStatusMap.push(checkedValObj);
       }
+      this.checkTotalSelecteAmount(this.checkedCostPriceCount);
     }
   }
 
@@ -219,8 +225,14 @@ export class PaymentWithdrawalComponent implements OnInit {
       }
     }
     if(this.vnCodeList!=""){
+      const sessionUser = sessionStorage.getItem('userRole');
+      let partnerId = '';
+      if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
+       partnerId = this.partnerID; // selected partnerId
+      }else {
+        partnerId = sessionStorage.getItem('partnerId');
+      }
       let userId = sessionStorage.getItem('userId');
-      let partnerId = sessionStorage.getItem('partnerId');
       let selectedTotalPrice = this.checkedCostPriceCount;
       this.vnCodeList = this.vnCodeList.replace(/\s/g, '').replace(',', '');
 
@@ -228,7 +240,8 @@ export class PaymentWithdrawalComponent implements OnInit {
         user:userId,
         vendorCode:partnerId,
         totalCostPrice:selectedTotalPrice,
-        vnCodes:this.vnCodeList
+        vnCodes:this.vnCodeList,
+        role:sessionUser
       }
       this.paymentService.saveVendorWithdrawalDetails(payload).subscribe(
         data => this.manageVendorWithdrawals(data),
@@ -269,5 +282,16 @@ export class PaymentWithdrawalComponent implements OnInit {
       "Something went wrong",
       'error'
     );
+    this.getPaymentList(this.partnerID);
+  }
+
+  checkTotalSelecteAmount(selectAmount: any){
+    if (selectAmount >= 25000){
+      document.getElementById('selectedCostPrice').style.color = 'green';
+      this.btnwithdrawRequired = true;
+    }else {
+      document.getElementById('selectedCostPrice').style.color = 'rgb(84,84,84)';
+      this.btnwithdrawRequired = false;
+    }
   }
 }
