@@ -3618,6 +3618,20 @@ $warning-color;
   }
 }
 
+@media only screen and (max-width: 769px){
+  .page-wrapper .page-body-wrapper .page-sidebar{
+    width: 100% !important;
+  }
+  .page-wrapper .page-body-wrapper .page-sidebar{
+    display: block;
+    margin-left:  0 !important;
+  }
+  .page-wrapper .page-body-wrapper .page-sidebar.open{
+    display: none ;
+  }
+
+}
+
 // outline buttons//
 @each $btn-name, $btn-color in  (primary, $primary-color),
   (secondary, $secondary-color) ,
