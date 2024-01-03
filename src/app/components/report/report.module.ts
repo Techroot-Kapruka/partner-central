@@ -10,6 +10,7 @@ import { ProductReportComponent } from './product-report/product-report.componen
 import { VendorReportComponent } from './vendor-report/vendor-report.component';
 import { ItemwiseShipmentReportComponent } from './itemwise-shipment-report/itemwise-shipment-report.component';
 import {ProductsModule} from "../products/products.module";
+import { ItemwiseSalesReportComponent } from './itemwise-sales-report/itemwise-sales-report.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import {ProductsModule} from "../products/products.module";
     CategoryReportComponent,
     ProductReportComponent,
     VendorReportComponent,
-    ItemwiseShipmentReportComponent
+    ItemwiseShipmentReportComponent,
+    ItemwiseSalesReportComponent
   ],
   imports: [
     CommonModule,
