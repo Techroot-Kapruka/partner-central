@@ -29,6 +29,8 @@ export class ListOrdersComponent implements OnInit {
   status = '';
   ODProducts = false;
   public loading;
+  public searchDate = null;
+  public dangerStyle = ''
 
   constructor(private orderService: OrderService, private router: Router, private partnerService: DashboardService, private orderMethods: OrderMethods) {
     this.getAllOrders();
@@ -84,7 +86,7 @@ export class ListOrdersComponent implements OnInit {
         // productPrefix
       };
       this.orderService.sendOrders(resArr).subscribe(
-        data =>{
+        data => {
           this.orderArray(data),
             this.loading = false;
         }
@@ -97,8 +99,8 @@ export class ListOrdersComponent implements OnInit {
     var errorMsg = document.getElementById('noOrderMsg');
     var tableContent = document.getElementById('orderDetailsTbl');
     if (arr.data != null) {
-      tableContent.style.display='table';
-      errorMsg.style.display='none';
+      tableContent.style.display = 'table';
+      errorMsg.style.display = 'none';
       const orArrLength = arr.data.length;
       for (let i = 0; i < orArrLength; i++) {
         let statusCode = true;
@@ -131,8 +133,8 @@ export class ListOrdersComponent implements OnInit {
 
       }
     } else {
-      tableContent.style.display='none';
-      errorMsg.style.display='block';
+      tableContent.style.display = 'none';
+      errorMsg.style.display = 'block';
     }
   }
 
@@ -160,6 +162,18 @@ export class ListOrdersComponent implements OnInit {
     }
   }
 
+  filterList($event) {
+    this.dangerStyle = '';
+    $event.preventDefault();
+    if (this.searchDate === null || this.searchDate === '') {
+      this.dangerStyle = 'border-color: red'
+      return;
+    } else {
+      this.getPaginateOrderList(this.page - 1)
+    }
+
+  }
+
   selectPartner() {
     this.part_id = 'non';
     this.mobile = '';
@@ -167,16 +181,17 @@ export class ListOrdersComponent implements OnInit {
     this.part_id = id;
     this.getPaginateOrderList(this.page - 1);
     // this.mobile
-    this.loading=true;
+    this.loading = true;
     if (id !== 'non') {
       const payload = {
         partner_u_id: id
       };
       this.partnerService.getApprovedPartnerAsLogin(payload).subscribe(
-        data =>{
+        data => {
           console.log(data)
           this.mobile = data.data.contactNo,
-            this.loading=false; }
+            this.loading = false;
+        }
       );
     }
 
@@ -241,17 +256,27 @@ export class ListOrdersComponent implements OnInit {
 
       this.businessName = id;
     }
-    this.orderService.getLimitedOrders(page, this.businessName, this.names).subscribe(
+    console.log(this.searchDate)
+    this.orderService.getLimitedOrders(page, this.businessName, this.names, this.searchDate, sessionStorage.getItem('userRole')).subscribe(
       data => this.manageLimitedOrders(data),
       error => this.manageErrorLimitedOrders(error)
     );
     this.currentSelectedPage = page;
 
   }
-  manageErrorLimitedOrders(error){
+
+  manageErrorLimitedOrders(error) {
     console.log(error);
-    if(error.error.status_code === 400){
+    if (error.error.status_code === 400) {
       this.paginateData = [];
+    }
+  }
+
+  dateFilter($event) {
+    if ($event.target.value === '') {
+      this.searchDate = $event.target.value = null
+    } else {
+      this.searchDate = $event.target.value
     }
   }
 

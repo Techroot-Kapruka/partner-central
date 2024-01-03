@@ -25,7 +25,10 @@ export class PaymentRequestComponent implements OnInit {
   @ViewChild(DropdownComponent, { static: false }) dropdownComponent: DropdownComponent;
   constructor(private productService: ProductService, private paymentService: PaymentService) {
     this.getPartnerList();
+    const sessionUser = sessionStorage.getItem('userRole');
+    if (sessionUser === 'ROLE_ADMIN') {
     this.getWithdrawalsList("*");
+    }
   }
 
   getPartnerList(): void {
@@ -116,7 +119,7 @@ export class PaymentRequestComponent implements OnInit {
     if (this.dropdownComponent) {
       this.dropdownComponent.setDefaultValue();
     }
-    this.recordList.sort((a, b) => new Date(b.createDate).getTime() - new Date(a.createDate).getTime());
+    // this.recordList.sort((a, b) => new Date(b.createDate).getTime() - new Date(a.createDate).getTime());
   }
   withdrawalListManagementError(error){
     this.isLoading=false;
