@@ -19,6 +19,7 @@ import {ProductApproveViewComponent} from './product-approve-view/product-approv
 import {AuthGuard} from '../../auth.guard';
 import {ResolveGuard} from '../../services/resolve.guard';
 import {DeclinedProductComponent} from './declined-product/declined-product.component';
+import {AllProductListComponent} from "./product-list/all-product-list/all-product-list.component";
 
 const routes: Routes = [
   {
@@ -26,9 +27,9 @@ const routes: Routes = [
     children: [
       {
         path: 'digital/digital-product-list',
-        component: DigitalListComponent,
+        component: AllProductListComponent,
         data: {
-          title: 'Product List',
+          title: 'All Product List',
           breadcrumb: 'Product List'
         },
         canActivate: [AuthGuard]
@@ -154,7 +155,16 @@ const routes: Routes = [
         component: DeclinedProductComponent,
         resolve: {data: ResolveGuard},
         canActivate: [AuthGuard]
-      }
+      },
+      // {
+      //   path: 'digital/all-product-list',
+      //   component: AllProductListComponent,
+      //   data: {
+      //     title: 'Product List',
+      //     breadcrumb: 'Product List'
+      //   },
+      //   canActivate: [AuthGuard]
+      // }
     ]
   }
 ];

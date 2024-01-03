@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {environment} from '../../../environments/environment.prod';
 
 @Injectable({
@@ -392,4 +392,26 @@ export class ProductService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'product/productSearch/' + context, payLoad, {headers});
   }
+
+
+  getProductList(pageNo, title, status, productCode, businessName, itemGroup, payload) {
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    const requestBody = { 'pageNo': pageNo, 'title': title, 'status': status, 'productCode': productCode, 'businessName': businessName, 'itemGroup': itemGroup, ...payload };
+
+    return this.httpClient.post<any>(
+      this.SERVER + 'product-list/get-product-list?pageNo=' + pageNo + '&title=' + title + '&status=' + status + '&productCode=' + productCode + '&businessName=' + businessName + '&itemGroup=' + itemGroup,
+      requestBody,
+      { headers }
+    );
+  }
+
+  checkIsVariationPresent(productCode) {
+    const formData: FormData = new FormData();
+    formData.append('productCode', productCode);
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'product-list/checkIsVariationProduct', formData, {headers});
+  }
+
 }
+
+
