@@ -22,6 +22,7 @@ export class UserVerficationComponent implements OnInit {
   interval: any;
   showResendButton: boolean = false;
   showVerifyButton: boolean = true;
+  isPartiallyRegistered  = false;
 
   constructor(private _Activatedroute: ActivatedRoute, private httpClientService: HttpClientService, private router: Router) {
     this._Activatedroute.paramMap.subscribe(params => {
@@ -32,7 +33,17 @@ export class UserVerficationComponent implements OnInit {
     }else {
       this.userEmail = sessionStorage.getItem('email');
     }
+    try{
+      this._Activatedroute.queryParams.subscribe(async params => {
+        const receivedData = JSON.parse(params['data']);
+        this.isPartiallyRegistered=receivedData.partiallyRegistered;
 
+        if (this.isPartiallyRegistered) {
+          await this.unverfiedOTPResend();
+        }
+      });
+    }catch(error){
+    }
   }
 
   ngOnInit(): void {
@@ -65,7 +76,7 @@ export class UserVerficationComponent implements OnInit {
 
     let string = txt_1 + txt_2 + txt_3 + txt_4;
     let obj = {
-      user_u_id: this.userUid,
+      user_u_id: this.userUid.replace(/"/g, ''),
       verfication_code: string
     };
     this.httpClientService.otpVerify(obj).subscribe(
@@ -92,7 +103,7 @@ export class UserVerficationComponent implements OnInit {
   }
 
   checkIsResendOtp(): void {
-    (document.getElementById('sendOtp') as HTMLInputElement).disabled = true;
+    // (document.getElementById('sendOtp') as HTMLInputElement).disabled = true;
     let obj = {
       user_u_id: this.userUid
     };
@@ -114,7 +125,7 @@ export class UserVerficationComponent implements OnInit {
       },
       error => {
         (document.getElementById('sendVerfy') as HTMLInputElement).disabled = false;
-        (document.getElementById('sendOtp') as HTMLInputElement).disabled = false;
+        // (document.getElementById('sendOtp') as HTMLInputElement).disabled = false;
         Swal.fire(
           'Whoops...',
           error.error.message,
@@ -127,6 +138,29 @@ export class UserVerficationComponent implements OnInit {
     this.showResendButton = false;
     this.startCountdown(); // Restart the countdown
   }
+
+  async unverfiedOTPResend(): Promise<void> {
+    let obj = {
+      user_u_id: this.userUid.replace(/"/g, '')
+    };
+    try {
+      const data = await this.httpClientService.resendOtp(obj).toPromise();
+      if (!(data.status_code === 200)) {
+        await Swal.fire(
+          'Error',
+          "Something went wrong",
+          'error',
+        );
+      }
+    } catch (error) {
+      await Swal.fire(
+        'Whoops...',
+        error.error.message,
+        'error',
+      );
+    }
+  }
+
 
   onDigitInput(event) {
 
