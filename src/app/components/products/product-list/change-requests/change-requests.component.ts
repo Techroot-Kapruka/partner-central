@@ -58,10 +58,17 @@ export class ChangeRequestsComponent implements OnInit {
   private getFieldEditData() {
     const role = sessionStorage.getItem('userRole');
     const userID = sessionStorage.getItem('userId');
+    const partnerId = sessionStorage.getItem('partnerId');
     if (role === 'ROLE_PARTNER') {
       const payLoard = {
         user_u_id: sessionStorage.getItem('userId')
       };
+      this.productService.getEditFieldsDataAll(role, partnerId).subscribe(
+        data => this.manageFieldEditData(data),
+      );
+      this.productService.getnonActiveImageProduct(role, partnerId).subscribe(
+        data => this.manageFieldImageEditData(data),
+      );
     } else {
       this.productService.getEditFieldsDataAll(role, userID).subscribe(
         data => this.manageFieldEditData(data),

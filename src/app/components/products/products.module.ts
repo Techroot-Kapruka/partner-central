@@ -36,6 +36,7 @@ import { NewAdditionsComponent } from './product-list/new-additions/new-addition
 import { ProductSearchComponent } from './product-list/product-search/product-search.component';
 import {SharedModule} from "../../shared/shared.module";
 import { ProductApproveViewComponent } from './product-approve-view/product-approve-view.component';
+import { AllProductListComponent } from './product-list/all-product-list/all-product-list.component';
 
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   maxFilesize: 50,
@@ -46,7 +47,7 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // declarations: [DigitalListComponent, DigitalAddComponent, EditProductsComponent, ViewProductComponent, ApproveProductComponent, QaApprovalViewComponent, QaNormalViewComponent, DeclinedProductComponent, ProductViewComponent, ApproveEditProductComponent, ApproveEditImageComponentComponent, PaginationComponent, AnalyticsProductViewComponent],
     declarations: [
 
-        DigitalListComponent, DigitalAddComponent, EditProductsComponent, ViewProductComponent, ApproveProductComponent, QaApprovalViewComponent, QaNormalViewComponent, DeclinedProductComponent, ProductViewComponent, ApproveEditProductComponent, ApproveEditImageComponentComponent, PaginationComponent, ChangeRequestsComponent, NewAdditionsComponent, ProductSearchComponent, AnalyticsProductViewComponent, ProductApproveViewComponent],
+        DigitalListComponent, DigitalAddComponent, EditProductsComponent, ViewProductComponent, ApproveProductComponent, QaApprovalViewComponent, QaNormalViewComponent, DeclinedProductComponent, ProductViewComponent, ApproveEditProductComponent, ApproveEditImageComponentComponent, PaginationComponent, ChangeRequestsComponent, NewAdditionsComponent, ProductSearchComponent, AnalyticsProductViewComponent, ProductApproveViewComponent, AllProductListComponent],
 
     imports: [
         CommonModule,

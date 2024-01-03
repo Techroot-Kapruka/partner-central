@@ -12,15 +12,17 @@ import Swal from 'sweetalert2';
 })
 export class DeclinedMessageComponent implements OnInit {
   public declinedMsgBox: FormGroup;
-  public temporyCode: string = '';
-  public updateUserId: string = '';
-  public msgHeaderName: string = '';
-  public sendEmail: string = '';
+  public temporyCode = '';
+  public updateUserId = '';
+  public msgHeaderName = '';
+  public sendEmail = '';
   public msgDescription = [];
   public descType = '';
-  public vendorCode: string = '';
-  public productCode: string = '';
+  public vendorCode = '';
+  public productCode = '';
   private isAvailbleComment = true;
+
+  checkedValues: string[] = [];
 
   constructor(private routeData: ActivatedRoute, private httpProductServiceDeclined: ProductService, private httpClientServiceDeclined: HttpClientService, private router: Router) {
     this.declinedMsgBox = new FormGroup({
@@ -34,7 +36,7 @@ export class DeclinedMessageComponent implements OnInit {
 
       if (this.descType.startsWith('Vendor')) {
         this.vendorCode = this.msgDescription[1];
-        let payLoard = {
+        const payLoard = {
           temp_code: this.vendorCode
         };
         this.httpClientServiceDeclined.getSelectedPartnerById(payLoard).subscribe(
@@ -43,7 +45,7 @@ export class DeclinedMessageComponent implements OnInit {
       } else {
 
         this.productCode = this.msgDescription[1];
-        let payLoard = {
+        const payLoard = {
           product_code: this.productCode
         };
         this.httpProductServiceDeclined.getSelecedProductByEdit(payLoard).subscribe(
@@ -57,7 +59,6 @@ export class DeclinedMessageComponent implements OnInit {
   }
 
   declinedPartnerorProduct() {
-
     // Delete Vendor
     if (this.descType.startsWith('Vendor')) {
       const payLoard = {
@@ -78,21 +79,51 @@ export class DeclinedMessageComponent implements OnInit {
 
       // Delete Product
     } else {
+      const checkboxData = {
+        check1: 'Product Title',
+        check2: 'Product Image',
+        check3: 'Product Description',
+        check4: 'Mismatched - Main Category',
+        check5: 'Mismatched - Sub Category',
+        check6: 'Mismatched - Sub Sub Category',
+        check7: 'Inappropriate Content',
+        check8: 'Copyright Violations',
+        check9: 'Safety Compliance',
+        check10: 'Unapproved Brands',
+        check11: 'Restricted or Prohibited Items',
+        check12: 'Non-compliance with Policies',
+        check13: 'Unreasonable Pricing',
+        check14: 'Shipping Issues',
+        check15: 'Repeated Violations',
+      };
 
+      this.checkedValues = Object.keys(checkboxData).filter((checkboxId) => {
+        const checkbox = document.getElementById(checkboxId) as HTMLInputElement;
+        return checkbox.checked;
+      }).map((checkedId) => checkboxData[checkedId]);
+
+      if (this.checkedValues.length === 0 && this.declinedMsgBox.value.decilinedMessage === ''){
+        this.isAvailbleComment = false;
+        Swal.fire(
+          'Oops',
+          'Please select Reason',
+          'warning'
+        );
+        return;
+      }
+
+      for (let x = 0; x < this.checkedValues.length; x++){
+        this.declinedMsgBox.value.decilinedMessage += this.checkedValues;
+      }
       const payLoard = {
         product_code: this.productCode,
         rejectReason: this.declinedMsgBox.value.decilinedMessage,
         rejecteddBy: this.updateUserId,
       };
 
-      if (this.declinedMsgBox.value.decilinedMessage != '') {
-        this.httpProductServiceDeclined.rejectProduct(payLoard).subscribe(
-          data => this.manageDeclined(data),
-        );
-      } else {
-        this.isAvailbleComment = false;
-        document.getElementById('declinedMessageLBL').style.display = 'block';
-      }
+      this.httpProductServiceDeclined.rejectProduct(payLoard).subscribe(
+        data => this.manageDeclined(data),
+      );
     }
   }
 
