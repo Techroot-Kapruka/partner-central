@@ -1,26 +1,160 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Decline Product</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .modal-header {
+      background-color: #F7F7F7;
+    }
+
+    .checkbox-container {
+      margin-bottom: 10px;
+    }
+
+    .card-content {
+      width: 580px !important;
+    }
+
+    .form-control {
+      margin-top: 30px !important;
+    }
+
+    .form-check {
+      margin-bottom: 5px;
+    }
+
+    .modal-title{
+      font-weight: 600;
+      color: #141478;
+    }
+  </style>
+</head>
 <body>
-<div class="card" style="border-radius: 4%;">
-    <img src='assets/images/dashboard/icons8-dustbin-68.png'/>
-
-    <div class="card-body">
-        <div class="container">
-            <h6 class="card-title" style="font-family: 'Lucida Sans'; font-size: 14px; color: #000000; opacity: 80%;">Submit The Reason For Declining {{ msgHeaderName }} ....!</h6>
-            <!--      <h6 style="margin-bottom: 20px">dj adf ds dfsf fsd fdsfs fdsfds.</h6>-->
-            <form [formGroup]="declinedMsgBox" (submit)="declinedPartnerorProduct()">
-                <div class="row" style="justify-content: center; padding-top: 10px; ">
-          <textarea formControlName="decilinedMessage" id="decilinedMessage" style="width: 80%" type="text" (keyup)="validateHolder()">
-        </textarea>
-                </div>
-                <label style="justify-content: center; color: red; display: none; animation: blink 2s infinite;"
-                       id="declinedMessageLBL">** please enter the reason **</label>
-                <div class="row" style="justify-content: center; padding-top: 10px;">
-                    <button type="submit" class="btn" style="background-color: #142ADE;"><strong style="color: white">Submit</strong>
-                    </button>
-                </div>
-            </form>
-
+<div class="card-content">
+  <!-- Modal Header -->
+  <div class="modal-header">
+    <h3 class="modal-title">Decline Product</h3>
+    <button type="button" class="close" data-dismiss="modal">&times;</button>
+  </div>
+  <!-- Modal Body -->
+  <div class="modal-body">
+    <form [formGroup]="declinedMsgBox" (submit)="declinedPartnerorProduct()">
+      <h6 class="modal-title" style="margin-bottom: 10px; color:gray; font-weight: normal;">Decline/ Suspend
+        Reason*:</h6>
+      <div class="row">
+        <!-- First Section of Checkboxes (Left) -->
+        <div class="col-md-6">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check1">
+            <label class="form-check-label" for="check1">Product Title</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check2">
+            <label class="form-check-label" for="check1">Product Image</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check3">
+            <label class="form-check-label" for="check1">Product Description</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check4">
+            <label class="form-check-label" for="check1">Mismatched - Main Category</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check5">
+            <label class="form-check-label" for="check1">Mismatched - Sub Category</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check6">
+            <label class="form-check-label" for="check1">Mismatched - Sub Sub Category</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check7">
+            <label class="form-check-label" for="check1">Inappropriate Content</label>
+          </div>
         </div>
-    </div>
+        <!-- Second Section of Checkboxes (Right) -->
+        <div class="col-md-6">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check8">
+            <label class="form-check-label" for="check8">Copyright Violations</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check9">
+            <label class="form-check-label" for="check1">Safety Compliance</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check10">
+            <label class="form-check-label" for="check1">Unapproved Brands</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check11">
+            <label class="form-check-label" for="check1">Restricted or Prohibited Items</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check12">
+            <label class="form-check-label" for="check1">Non-compliance with Policies</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check13">
+            <label class="form-check-label" for="check1">Unreasonable Pricing</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check14">
+            <label class="form-check-label" for="check1">Shipping Issues</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="check15">
+            <label class="form-check-label" for="check1">Repeated Violations</label>
+          </div>
+        </div>
+      </div>
+      <!-- Textarea -->
+      <div class="form-group">
+        <textarea formControlName="decilinedMessage" id="decilinedMessage" class="form-control" rows="3" id="comment" placeholder="Your text here..." (keyup)="validateHolder()"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
 </div>
-</body>
 
+<!-- Bootstrap JS and dependencies -->
+<!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>-->
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+<!--<body>-->
+<!--<div class="card" style="border-radius: 4%;">-->
+<!--    <img src='assets/images/dashboard/icons8-dustbin-68.png'/>-->
+
+<!--    <div class="card-body">-->
+<!--        <div class="container">-->
+<!--            <h6 class="card-title" style="font-family: 'Lucida Sans'; font-size: 14px; color: #000000; opacity: 80%;">Submit The Reason For Declining {{ msgHeaderName }} ....!</h6>-->
+<!--            &lt;!&ndash;      <h6 style="margin-bottom: 20px">dj adf ds dfsf fsd fdsfs fdsfds.</h6>&ndash;&gt;-->
+<!--            <form [formGroup]="declinedMsgBox" (submit)="declinedPartnerorProduct()">-->
+<!--                <div class="row" style="justify-content: center; padding-top: 10px; ">-->
+<!--          <textarea formControlName="decilinedMessage" id="decilinedMessage" style="width: 80%" type="text" (keyup)="validateHolder()">-->
+<!--        </textarea>-->
+<!--                </div>-->
+<!--                <label style="justify-content: center; color: red; display: none; animation: blink 2s infinite;"-->
+<!--                       id="declinedMessageLBL">** please enter the reason **</label>-->
+<!--                <div class="row" style="justify-content: center; padding-top: 10px;">-->
+<!--                    <button type="submit" class="btn" style="background-color: #142ADE;"><strong style="color: white">Submit</strong>-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </form>-->
+
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</body>-->

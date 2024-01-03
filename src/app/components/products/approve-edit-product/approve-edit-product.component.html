@@ -62,7 +62,7 @@
       </div>
 
       <br>
-      <div class="col-12 button">
+      <div class="col-12 button" *ngIf="showButtons">
 
         <button class="btn btn-success" type="button" (click)="approvefield()" style="margin-left: 15px;">Approve</button>
         <button class="btn btn-danger" type="button" (click)="rejectfield()" style="margin-left: 15px;">Reject</button>

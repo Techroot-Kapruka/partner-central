@@ -1,2 +1,2 @@
-<ng-select [options]="dataArray" style="width: 500px; float: left; color: #1b252a;" [disabled]="isDisabled"
-           (selected)="onChangeSelect($event)"></ng-select>
+<ng-select class="mb-1" [options]="dataArray" [style.width.px]="!isCategoryList ? 500 : ''" style="float: left; color: #1b252a;" [disabled]="isDisabled"
+           (selected)="onChangeSelect($event)" [placeholder]=defaultValue></ng-select>

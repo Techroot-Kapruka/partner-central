@@ -72,11 +72,6 @@ export class NavService {
         {path: '/products/digital/new-additions', title: 'New Additions', type: 'link'},
         {path: '/products/digital/change-requests', title: 'Change Requests', type: 'link'},
 
-        // {path: '/products/digital/edit-image-approval', title: 'Edit Image Approval', type: 'link'},
-        // {path: '/products/digital/out-of-stock', title: 'Out Of Stock', type: 'link'},
-        // {path: '/products/digital/suspended', title: 'Suspended', type: 'link'},
-        // {path: '/products/digital/on-demand', title: 'On Demand', type: 'link'},
-
       ]
     },
     {
@@ -523,9 +518,9 @@ export class NavService {
       // }
 
       // hide change Requests
-      this.items.value[1].children[5].path = '';
-      this.items.value[1].children[5].title = '';
-      this.items.value[1].children[5].type = '';
+      // this.items.value[1].children[5].path = '';
+      // this.items.value[1].children[5].title = '';
+      // this.items.value[1].children[5].type = '';
 
       if (data.data === null) {
         this.items.value.splice(0, 7);
