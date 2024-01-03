@@ -93,4 +93,9 @@ export class OrderService {
     formData.append('to_date', toDate);
     return this.httpClient.post<any>(this.SERVER + 'report/supplierOrders', formData, {headers});
   }
+
+  getOrderReport(object){
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'orders/orderReport', object, {headers});
+  }
 }

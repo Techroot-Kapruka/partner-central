@@ -11,6 +11,7 @@ import { VendorReportComponent } from './vendor-report/vendor-report.component';
 import { ItemwiseShipmentReportComponent } from './itemwise-shipment-report/itemwise-shipment-report.component';
 import {ProductsModule} from "../products/products.module";
 import { ItemwiseSalesReportComponent } from './itemwise-sales-report/itemwise-sales-report.component';
+import { OrderReportComponent } from './order-report/order-report.component';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { ItemwiseSalesReportComponent } from './itemwise-sales-report/itemwise-s
     ProductReportComponent,
     VendorReportComponent,
     ItemwiseShipmentReportComponent,
-    ItemwiseSalesReportComponent
+    ItemwiseSalesReportComponent,
+    OrderReportComponent
   ],
   imports: [
     CommonModule,

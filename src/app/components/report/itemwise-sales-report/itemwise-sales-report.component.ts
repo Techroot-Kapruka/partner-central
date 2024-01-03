@@ -18,7 +18,6 @@ export class ItemwiseSalesReportComponent implements OnInit {
   public isSearchRecordEmpty = true;
   public orderData = [];
   public filteredProducts: any = [];
-  dateDifference: number = 0;
   public itemCount = 0;
   constructor(private orderService: OrderService) { }
 
@@ -28,22 +27,10 @@ export class ItemwiseSalesReportComponent implements OnInit {
   loadDate() {
     const startDate = new Date(this.fromDate);
     const endDate = new Date(this.toDate);
-
-    const timeDifference = endDate.getTime() - startDate.getTime();
-    this.dateDifference = Math.floor(timeDifference / (1000 * 3600 * 24));
-
     if (startDate > endDate) {
       Swal.fire(
         'Warning!',
         'From date must be less than to date.',
-        'warning'
-      );
-      this.fromDate = this.today;
-      this.toDate = this.today;
-    } else if (this.dateDifference > 35) {
-      Swal.fire(
-        'Warning!',
-        'Please select dates within 35 days.',
         'warning'
       );
       this.fromDate = this.today;
