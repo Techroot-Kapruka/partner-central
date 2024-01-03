@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClientService} from '../../../shared/service/http-client.service';
 import Swal from 'sweetalert2';
-import {Router} from '@angular/router';
+import {Router, NavigationExtras } from '@angular/router';
 
 @Component({
   selector: 'app-guest-user',
@@ -62,7 +62,6 @@ export class GuestUserComponent implements OnInit {
 
 
   manageUser(data) {
-
     if (data.status_code === 200) {
 
       this.alert = true;
@@ -93,7 +92,8 @@ export class GuestUserComponent implements OnInit {
           data.message,
           'error'
         );
-      } else {
+      }
+      else {
 
         (document.getElementById('contactPersonName') as HTMLInputElement).value = '';
         (document.getElementById('contactNumber') as HTMLInputElement).value = '';
@@ -118,6 +118,31 @@ export class GuestUserComponent implements OnInit {
         }
       }
 
+    }else if(data.status_code===400){
+      this.OnetimeClicked = false;
+      Swal.fire({
+        title: 'Alert',
+        text: 'You already have an unverfied account. Do you wish to verfiy it?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'OK'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const dataToSend = {
+            partiallyRegistered: true
+          };
+          const url = '/user-verification/' + data.data.user_u_id;
+          const navigationExtras: NavigationExtras = {
+            queryParams: {
+              data: JSON.stringify(dataToSend)
+            },
+            skipLocationChange: true
+          };
+          this.router.navigate([url], navigationExtras);
+        }
+      });
     } else {
       this.alert = false;
       this.errAlert = true;
