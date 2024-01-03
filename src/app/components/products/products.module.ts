@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 
 import {Ng2SmartTableModule} from 'ng2-smart-table';
 import {CKEditorModule} from 'ngx-ckeditor';
@@ -76,7 +76,8 @@ const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
             provide: DROPZONE_CONFIG,
             useValue: DEFAULT_DROPZONE_CONFIG
         },
-        NgbActiveModal
+        NgbActiveModal,
+      DatePipe
     ]
 
 })
