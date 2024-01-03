@@ -1,8 +1,5 @@
 <!--&lt;!&ndash; Container-fluid starts&ndash;&gt;-->
 <style>
-  #select_od {
-    width: 350px !important;
-  }
 
   /*--------------------------------------------------------*/
   .loading {
@@ -71,19 +68,22 @@
         </div>
         <div class="card-body">
           <!--<div class="custom-datatable">-->
-          <div *ngIf="isAdmin" class="btn-popup">
-            <div style="display: inline-block;vertical-align: top">
 
-                <input style="display: inline-block;vertical-align: top" type="date" class="datepicker input-group-text" (input)="dateFilter($event)" [style]="dangerStyle">
-                <button style="display: inline-block;vertical-align: top" class="btn btn-success" (click)="filterList($event)">Search</button>
-
-              <select style="display: inline-block;vertical-align: top" (change)="selectPartner()" id="select_od" class="form-control  pull-right">
+          <div class="form-row"  *ngIf="isAdmin">
+            <div class="form-group col-md-3">
+              <input type="date" class="datepicker input-group-text" (input)="dateFilter($event)" [style]="dangerStyle" style="width: 100%;text-align: left">
+            </div>
+            <div class="form-group col-md-2">
+              <button class="btn btn-success" (click)="filterList($event)" style="width: 100%">Search</button>
+            </div>
+            <div class="form-group col-md-1"></div>
+            <div class="form-group col-md-6">
+              <select (change)="selectPartner()" id="select_od" class="form-control  pull-right">
                 <option selected disabled>-- Select Vendor --</option>
                 <option *ngFor="let partners of partner" value="{{partners['partner_u_id']}}">{{partners['name']}}
                 </option>
               </select>
             </div>
-
           </div>
 
           <h3 id="noOrderMsg" style="display: none">You have no orders yet.</h3>
