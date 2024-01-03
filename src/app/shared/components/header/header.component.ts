@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
       this.imageName = 'qa_user.jpeg';
     } else if (this.userRole === 'ROLE_GUEST') {
       this.userRoleType = 'GUEST';
-      this.userName = sessionStorage.getItem('businessName');
+      this.userName = sessionStorage.getItem('contactPersonName');
       this.imageName = 'man.png';
     } else if (this.userRole === 'ROLE_CATEGORY_MANAGER') {
       this.userName = sessionStorage.getItem('contactPersonName');
@@ -47,6 +47,7 @@ export class HeaderComponent implements OnInit {
       this.userRoleType = 'STORES_MANAGER';
       this.imageName = 'man.png';
     } else if (this.userRole === 'ROLE_SUPER_ADMIN') {
+      this.userName = sessionStorage.getItem('contactPersonName');
       this.userRoleType = 'SUPER ADMIN';
       this.imageName = 'man.png';
     } else {
