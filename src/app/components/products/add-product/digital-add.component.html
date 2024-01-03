@@ -19,7 +19,7 @@
             </strong></h5>
           </div>
           <div>
-            <span class="span" id="help01">Upload Images 1 to 5</span>
+            <span class="span" id="help01">Image 2 to 5 must indicate they are optional.</span>
           </div>
           <div class="card-body" style="padding-top: 10px;">
             <div class="digital-add needs-validation"
@@ -256,7 +256,7 @@
                    or model number for effective stock tracking and identification.
                  </span>
                 </span>
-                <input class="form-control input" id="Seller_SKU" type="text" required (keyup)="updateSku()" maxlength="20">
+                <input class="form-control input" id="Seller_SKU" type="text" required (keyup)="updateSku()" maxlength="50">
               </div>
 
             </div>
@@ -272,7 +272,7 @@
                     <span class="input-group-text">LKR</span>
                   </div>
                   <input class="form-control" id="price" type="text" required
-                         (input)="setSellingPrice()" maxlength="8" style="width: 200px" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+                         (input)="setSellingPrice()" maxlength="20" style="width: 200px" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
                   <!--(input)="formatCurrency($event)"-->
                 </div>
               </div>
@@ -281,12 +281,15 @@
             <div class="form-input row">
               <div class="col-md-4">
                 <span class="span"
-                      style="display:flex; padding-top:0px; align-items: center; padding-left: 35px;">Margin</span>
+                      style="display:flex; padding-top:0px; align-items: center; padding-left: 35px;">Platform Fee</span>
               </div>
-              <div class="col-md-8">
-                <input (change)=updateInputValue() class="form-control" id="initialMargin" step="0.50"
-                       type="number" required >
-              </div>
+              <div id="plat-fee" class="col-md-12" style="position: relative;">
+              <input (change)="updateInputValue()" class="form-control" id="initialMargin" step="0.50" type="number" required>
+              <span id="per-mark" style="position: absolute;    left: 180px; right: 10px; top: 0; bottom: 0; height: 100%; display: flex; align-items: center; pointer-events: none;">%</span>
+            </div>
+
+
+
             </div>
 
             <div class="form-input row">
@@ -676,7 +679,7 @@
                   <div class="row">
                     <div class="col-6">
                       <input class="form-control no-copy-paste" #txtKeyword id="txt_keyword" type="text" required=""
-                             (keyup)="separateFromComma($event)" maxlength="15">
+                             (keyup)="separateFromComma($event)" maxlength="50">
                       <div class="form-group row" style="margin-left: -1.9%;">
                         <div class="labelBoxappend">
                           <div class="mainDev" style="background-color: #ffffff; color: #00004d;"

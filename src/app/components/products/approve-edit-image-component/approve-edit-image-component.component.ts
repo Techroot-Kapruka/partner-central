@@ -21,7 +21,7 @@ export class ApproveEditImageComponentComponent implements OnInit {
   public requestedBy = '';
   public requestedId = '';
   public edit: boolean = false;
-
+  showButtons: boolean = false;
   public image1 = '';
   public image2 = '';
   public image3 = '';
@@ -48,6 +48,12 @@ export class ApproveEditImageComponentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    if (sessionStorage.getItem('userRole') == 'ROLE_PARTNER'){
+      this.showButtons = false;
+    }else{
+      this.showButtons = true;
+    }
   }
 
   private getAllData() {

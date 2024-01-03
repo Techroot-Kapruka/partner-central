@@ -28,16 +28,29 @@
             <thead style="border: 1px solid black">
             <tr style="text-align: center;vertical-align: middle;" >
               <th scope="col" style="width: 15%;">Vendor</th>
+              <th *ngIf="isAdmin" scope="col" style="width: 15%;">Vendor ID</th>
               <th scope="col" style="width: 15%">Reference Code</th>
               <th scope="col" style="width: 10%;">Order Status</th>
               <th scope="col" style="width: 10%;">Requested Date</th>
               <th scope="col" style="width: 11%;">Total Price</th>
+              <th *ngIf="isAdmin" scope="col" style="width: 11%;">Action
+                <div class="form-check" style="padding-left: 0rem;margin-top: 0rem">
+                  <input style="margin-bottom: 50%;margin-top: 0rem" class="form-check-input" type="checkbox" id="mainCheckbox"
+                         (click)="selectAllCheckBoxes()">
+                  <label style="all: initial;font-size: 12px;width: 100%" class="form-check-label" for="mainCheckbox">
+                    Select all
+                  </label>
+                </div>
+              </th>
             </tr>
             </thead>
             <tbody *ngFor="let childrenItem of recordList; index as i" style="border: 1px solid black" >
             <tr style="text-align: center;height:0px; border:1px solid black">
               <td style="text-align: center; vertical-align: middle;width: 15%;border:1px solid black">
                 {{childrenItem.vendorBusinessName}}
+              </td>
+              <td *ngIf="isAdmin" style="text-align: center; vertical-align: middle;width: 15%;border:1px solid black">
+                {{childrenItem.vendor}}
               </td>
               <td class="scrollable-cell" >
                 <table id="innerTable" style="width: 100%; height: 100%;border: none;">
@@ -49,12 +62,50 @@
               <td style="text-align: center; vertical-align: middle;font-weight: bold;width: 10%;border:1px solid black">{{childrenItem.status}}</td>
               <td style="text-align: center; vertical-align: middle;font-weight: bold;border:1px solid black">{{childrenItem.createDate}}</td>
               <td style="text-align: center; vertical-align: middle;font-weight: bold;border:1px solid black">{{childrenItem.totalCostPrice | number:'1.2-2'}}</td>
+              <td *ngIf="isAdmin" style="text-align: center; vertical-align: middle;font-weight: bold;border:1px solid black">
+                <div class="form-check">
+                  <input class="form-check-input checkboxList" type="checkbox" value="" id="checkbox{{i}}" (click)="checkboxCheck(i)">
+
+                </div>
+              </td>
 
             </tr>
             </tbody>
           </table>
         </div>
       </div>
+      <br>
+      <table style="width: 70%;border-collapse: collapse; margin-left: 3%">
+        <tr >
+          <td>
+            <label for="totalCostPrice">Total Available Amount</label>
+          </td>
+          <td>
+            <input style="width: 100%" id = "totalCostPrice" type="text" disabled [value]="totalPriceCounter | number:'1.2-2'">
+          </td>
+          <td *ngIf="isAdmin">
+            <button id="withdrawalBtn" style="margin-left: 5%;background-color: #5932EA !important;display: flex; align-items: center;"
+                    class="btn btn-secondary" (click)="approve()" >
+              <i class="fa fa-money" aria-hidden="true"></i>&nbsp;Approve</button>
+          </td>
+        </tr>
+        <tr *ngIf="isAdmin">
+          <td>
+            <label for="selectedCostPrice">Total Selected Amount</label>
+          </td>
+          <td>
+            <input style="width: 100%;font-weight: bold;" id = "selectedCostPrice" type = "text" disabled [value]="checkedPriceCount | number:'1.2-2'">
+          </td>
+        </tr>
+        <tr *ngIf="isAdmin">
+          <td>
+            <label for="remainder">Remainder</label>
+          </td>
+          <td>
+            <input style="width: 100%" id = "remainder" type = "text" disabled [value]="totalPriceCounter-checkedPriceCount | number:'1.2-2'">
+          </td>
+        </tr>
+      </table>
     </div>
     <div style="text-align: center;" *ngIf="!isSuccess && !isAdmin && !isLoading;">
       <h5 style="color: #898997;font-weight: bold;">

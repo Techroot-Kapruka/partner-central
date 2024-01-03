@@ -19,6 +19,7 @@ export class ApproveEditProductComponent implements OnInit {
   public newInputData = [];
   public proList = [];
   public requestedBy = '';
+  showButtons: boolean = false;
   constructor(private router: Router, private Activatedroute: ActivatedRoute, private modalService: NgbModal, private productService: ProductService) {
     this.ids = '';
     this.Activatedroute.paramMap.subscribe(params => {
@@ -34,6 +35,11 @@ export class ApproveEditProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (sessionStorage.getItem('userRole') == 'ROLE_PARTNER'){
+      this.showButtons = false;
+    }else{
+      this.showButtons = true;
+    }
   }
 
   private getAllData() {

@@ -35,6 +35,9 @@ th{
 a, td , input, input::placeholder, select, option, label, textarea, div, svg, i, li, button{
   font-size: .8rem !important;
 }
+td button{
+  font-size: 10px !important;
+}
 .media-body span{
   font-size: 1rem !important;
 }
@@ -3613,6 +3616,20 @@ $warning-color;
       box-shadow: none;
     }
   }
+}
+
+@media only screen and (max-width: 769px){
+  .page-wrapper .page-body-wrapper .page-sidebar{
+    width: 100% !important;
+  }
+  .page-wrapper .page-body-wrapper .page-sidebar{
+    display: block;
+    margin-left:  0 !important;
+  }
+  .page-wrapper .page-body-wrapper .page-sidebar.open{
+    display: none ;
+  }
+
 }
 
 // outline buttons//

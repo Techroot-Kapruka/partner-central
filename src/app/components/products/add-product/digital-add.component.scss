@@ -712,6 +712,10 @@ input::placeholder {
     margin-top: -20px;
   }
 
+  #per-mark {
+    left: 320px;
+  }
+
   .btn.btn-primary{
     margin-top: 18px;
   }
@@ -749,6 +753,10 @@ input::placeholder {
   .form-control, .col-md-1, .col-md-2, .col-md-3, .col-md-4,
   .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12{
     width: 100% !important;
+  }
+
+  #plat-fee{
+    width: 50% !important;
   }
   .span{
     padding-left: 0 !important;
