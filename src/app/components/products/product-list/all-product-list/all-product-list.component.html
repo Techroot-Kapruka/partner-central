@@ -40,7 +40,7 @@
             <thead class="table-primary">
 
             <tr>
-<!--              <th>Image</th>-->
+              <th>Image</th>
               <th style="width: 300px;">Title</th>
               <th>Type</th>
               <th>Stock in Hand</th>
@@ -53,7 +53,7 @@
 
             <ng-container >
               <tr *ngFor="let productList of productList; let i = index;">
-<!--                <td><img src="{{ imagePathURI + productList.image1 }}" height="60px" width="60px" (error)="onImageError($event)" (click)="popUpImage(productList)"></td>-->
+                <td><img src="{{ imagePathURI + productList.image1 }}" height="60px" width="60px" (error)="onImageError($event)" (click)="popUpImage(productList)"></td>
                 <td>{{productList.title}} <a href="javascript:void(0);" (click)="loadPage(productList)">view on web</a> <br> {{productList.product_code}} <br><p>{{productList.path}}</p><p *ngIf="userRole != 'ROLE_PARTNER'">{{productList.vendor}} - {{productList.partnerUid}}</p></td>
                 <td>{{productList.productType}} <br> <span class="badge {{productList.badge}} mt-2">{{productList.element}}</span> </td>
                 <td>{{productList.in_stock}}</td>
