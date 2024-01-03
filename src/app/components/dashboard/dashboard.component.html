@@ -5,7 +5,7 @@
   }
 </style>
 
-<button (click)="redirectToShop()" class="absoluteButton" *ngIf="showViewShopButton">View My Shop <img
+<button id="shop-btn" (click)="redirectToShop()" class="absoluteButton" *ngIf="showViewShopButton">View My Shop <img
   src="../../../../assets/images/ico/shop1.png" width="25px"></button>
 <div class="container-fluid test">
   <div class="row">
@@ -61,7 +61,7 @@
                   </div>
                 </div>
                 <div class="media-body col-9" *ngIf="isLoginUser" routerLink="/products/digital/new-additions"
-                     style="cursor: pointer;"><span class="m-0">Pending Approval Product</span>
+                     style="cursor: pointer;"><span class="m-0">Pending Approval Products</span>
                   <h3 class="mb-0"> <span class="counter" [CountTo]="pendingCount" [from]="0"
                                           [duration]="2">{{pendingCount}}</span>
                   </h3>
