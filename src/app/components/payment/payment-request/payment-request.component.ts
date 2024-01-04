@@ -70,7 +70,6 @@ export class PaymentRequestComponent implements OnInit {
     }
   }
 
-
   partnerListError(error){
     Swal.fire(
       'Error',
@@ -82,7 +81,16 @@ export class PaymentRequestComponent implements OnInit {
   getWithdrawalsList(partnerId) {
     this.recordList = [];
     if(this.isAdmin){
-      this.lastSelectedVendor = this.partnerArray.find(item => item.value === partnerId);
+      if(partnerId==="*"){
+        const obj = {
+          label:"Select All",
+          value:"*"
+        }
+        this.lastSelectedVendor=obj;
+      }else{
+        this.lastSelectedVendor = this.partnerArray.find(item => item.value === partnerId);
+      }
+
       if (this.lastSelectedVendor) {
         const selectedLabel = this.lastSelectedVendor.label;
         if(this.lastSelectedVendor.value=="*"){
@@ -104,6 +112,8 @@ export class PaymentRequestComponent implements OnInit {
   }
 
   manageWithdrawalList(response){
+    this.totalPriceCounter=0;
+    this.checkedPriceCount=0;
     this.isLoading=false;
     if(response.message==="Success"){
       this.isSuccess = true;
@@ -168,11 +178,12 @@ export class PaymentRequestComponent implements OnInit {
         checkBox.checked=false;
       }
     }
-
   }
 
   approve(){
     const checkBoxList = document.getElementsByClassName('checkboxList');
+    const approvalButton = document.getElementById('approveBtn') as HTMLInputElement;
+    approvalButton.disabled=true;
     let idWithdrawalList = "";
     let checkedCount = 0;
     for(let i=0;i<checkBoxList.length;i++){
@@ -203,11 +214,13 @@ export class PaymentRequestComponent implements OnInit {
         text: "Please make a selection(s)",
         icon: "warning"
       });
+      approvalButton.disabled=false;
     }
 
   }
 
   manageApprovedWithdrawalRequest(data){
+    const approvalButton = document.getElementById('approveBtn') as HTMLInputElement;
     if(data.message_status=="Success"){
       Swal.fire({
         title: "Successful!",
@@ -217,8 +230,7 @@ export class PaymentRequestComponent implements OnInit {
         if (result.isConfirmed) {
           if (this.sessionUser === 'ROLE_ADMIN' || this.sessionUser === 'ROLE_SUPER_ADMIN'){
             this.getWithdrawalsList(this.lastSelectedVendor.value);
-          }else {
-            this.getWithdrawalsList(this.partnerID);
+            approvalButton.disabled=false;
           }
         }
       });
@@ -228,12 +240,14 @@ export class PaymentRequestComponent implements OnInit {
         text: data.message,
         icon: "error"
       });
+      approvalButton.disabled=false;
     }else{
       Swal.fire({
         title: "Error!",
         text: "Something went wrong",
         icon: "error"
       });
+      approvalButton.disabled=false;
     }
   }
   approvedWithdrawalRequestError(){
@@ -242,6 +256,8 @@ export class PaymentRequestComponent implements OnInit {
       text: "Something went wrong",
       icon: "error"
     });
+    const approvalButton = document.getElementById('approveBtn') as HTMLInputElement;
+    approvalButton.disabled=false;
   }
 
   ngOnInit(): void {
@@ -261,8 +277,6 @@ export class PaymentRequestComponent implements OnInit {
       },
     );
   }
-
-
 
   private GetvendorWithdrawalDetails(data) {
     if (data.data !== null) {
