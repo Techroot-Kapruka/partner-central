@@ -163,6 +163,7 @@ export class NavService {
         {path: '/products/digital/analytics-product-view', title: 'Product Analytics', type: 'link'},
         {path: '/report/itemwise-shipment-report', title: 'Item Wise Shipment', type: 'link'},
         {path: '/report/itemwise-sales-report', title: 'Item Wise Sales', type: 'link'},
+        {path: '/report/order-report', title: 'Order Report', type: 'link'},
       ]
     },
 

@@ -156,15 +156,15 @@ const routes: Routes = [
         resolve: {data: ResolveGuard},
         canActivate: [AuthGuard]
       },
-      // {
-      //   path: 'digital/all-product-list',
-      //   component: AllProductListComponent,
-      //   data: {
-      //     title: 'Product List',
-      //     breadcrumb: 'Product List'
-      //   },
-      //   canActivate: [AuthGuard]
-      // }
+      {
+        path: 'digital/all-product-list',
+        component: AllProductListComponent,
+        data: {
+          title: 'Product List',
+          breadcrumb: 'Product List'
+        },
+        canActivate: [AuthGuard]
+      }
     ]
   }
 ];

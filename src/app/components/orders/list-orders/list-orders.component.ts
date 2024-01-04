@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {DashboardService} from '../../../shared/service/dashboard.service';
 import Swal from 'sweetalert2';
 import {OrderMethods} from '../order-methods';
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-list-orders',
@@ -31,8 +32,9 @@ export class ListOrdersComponent implements OnInit {
   public loading;
   public searchDate = null;
   public dangerStyle = ''
+  today;
 
-  constructor(private orderService: OrderService, private router: Router, private partnerService: DashboardService, private orderMethods: OrderMethods) {
+  constructor(private orderService: OrderService, private router: Router, private partnerService: DashboardService, private orderMethods: OrderMethods, private datePipe: DatePipe) {
     this.getAllOrders();
     this.getPartner();
     this.hideElement();
@@ -55,8 +57,17 @@ export class ListOrdersComponent implements OnInit {
   public getsession = window.sessionStorage.getItem('partnerId');
 
   ngOnInit(): void {
+    // if (sessionStorage.getItem('userRole') === "ROLE_ADMIN" || sessionStorage.getItem('userRole') === "ROLE_SUPER_ADMIN"){
+    //   this.today = this.getCurrentDate();
+    //   this.searchDate = this.today
+    //   this.getPaginateOrderList(this.page)
+    // }
   }
 
+  getCurrentDate(): string {
+    const currentDate = new Date();
+    return this.datePipe.transform(currentDate, 'yyyy-MM-dd');
+  }
   getAllOrders() {
     let resArr = {};
     const productPrefix = [];
@@ -255,8 +266,12 @@ export class ListOrdersComponent implements OnInit {
       let id = (document.getElementById('select_od') as HTMLInputElement).value;
 
       this.businessName = id;
+
+      // if (this.businessName === '-- Select Vendor --' || this.businessName === null || this.businessName == ''){
+      //   this.businessName = null;
+      // }
     }
-    console.log(this.searchDate)
+
     this.orderService.getLimitedOrders(page, this.businessName, this.names, this.searchDate, sessionStorage.getItem('userRole')).subscribe(
       data => this.manageLimitedOrders(data),
       error => this.manageErrorLimitedOrders(error)
@@ -266,6 +281,7 @@ export class ListOrdersComponent implements OnInit {
   }
 
   manageErrorLimitedOrders(error) {
+    this.loading = false;
     console.log(error);
     if (error.error.status_code === 400) {
       this.paginateData = [];
