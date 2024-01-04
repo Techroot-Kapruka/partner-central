@@ -1,8 +1,8 @@
 <!--&lt;!&ndash; Container-fluid starts&ndash;&gt;-->
 <style>
-  #select_od {
-    width: 350px !important;
-  }
+  /*#select_od {*/
+  /*  width: 350px !important;*/
+  /*}*/
 
   /*--------------------------------------------------------*/
   .loading {
@@ -71,7 +71,7 @@
         </div>
         <div class="card-body">
           <!--<div class="custom-datatable">-->
-          <div *ngIf="isAdmin" class="btn-popup pull-right">
+          <div *ngIf="isAdmin" class="btn-popup ">
             <select (change)="selectPartner()" id="select_od" class="form-control">
               <option selected disabled>-- Select Vendor --</option>
               <option *ngFor="let partners of partner" value="{{partners['partner_u_id']}}">{{partners['name']}}
