@@ -261,6 +261,15 @@ export class DigitalAddComponent implements OnInit {
     }
   }
 
+  pasteContent() {
+    navigator.clipboard.readText().then((text) => {
+      if (this.angularEditor) {
+        this.angularEditor.html = this.angularEditor.html + text;
+      }
+    });
+  }
+
+
 
   ngOnInit() {
   }
@@ -1202,6 +1211,9 @@ export class DigitalAddComponent implements OnInit {
   }
 
   getSub_sub_category(subSubSubCatCode, subCatName, index, catMargin) {
+    console.log(catMargin)
+    console.log(this.margin)
+    this.margin = catMargin;
     this.subSubSubCategoryArray = [];
     const idString = 'sub' + index.toString();
     for (let i = 0; i < this.SubCategoryArray.length; i++) {
@@ -1443,6 +1455,7 @@ export class DigitalAddComponent implements OnInit {
   }
 
   getsub_sub_sub_category(subSubSubCatCode, subsubCatName, index, catMargin) {
+    this.margin = catMargin
     const idString = 'subSub' + index.toString();
     for (let i = 0; i < this.subSubCategoryArray.length; i++) {
       if (i == index) {

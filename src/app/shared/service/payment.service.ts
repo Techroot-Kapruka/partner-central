@@ -37,4 +37,8 @@ export class PaymentService {
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.get<any>(this.SERVER + 'payment/getvendorWithdrawalDetails',  { headers });
   }
+  approvedWithdrawalRequest(payloard: any) {
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'payment/approvedWithdrawalRequest', payloard, {headers});
+  }
 }

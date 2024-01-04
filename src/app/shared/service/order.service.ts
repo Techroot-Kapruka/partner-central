@@ -48,11 +48,16 @@ export class OrderService {
     return this.httpClient.post<any>(this.SERVER + 'orders/orderById', formData, {headers});
   }
 
-  getLimitedOrders(pageNo, businessName: any, names) {
+  getLimitedOrders(pageNo, businessName: any, names, searchDate,userRole) {
+    console.log(searchDate)
     const formData: FormData = new FormData();
     let part_id = sessionStorage.getItem('partnerId');
     formData.append('pageNo', pageNo);
     formData.append('partner_u_id ', businessName);
+    if (searchDate !== null){
+      formData.append('searchDate ', searchDate);
+    }
+    formData.append('userRole ', userRole);
     // formData.append('names ', 'pizzahut');
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'orders/ordersByPrefixInPage', formData, {headers});
@@ -79,5 +84,18 @@ export class OrderService {
     formData.append('pnRefNo', pnRefNo);
     const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
     return this.httpClient.post<any>(this.SERVER + 'orders/generateProQRCode', formData, {headers});
+  }
+
+  getOrderDetails(fromDate, toDate){
+    const formData: FormData = new FormData();
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    formData.append('from_date', fromDate);
+    formData.append('to_date', toDate);
+    return this.httpClient.post<any>(this.SERVER + 'report/supplierOrders', formData, {headers});
+  }
+
+  getOrderReport(object){
+    const headers = new HttpHeaders().set('Authorization', 'Bearer ' + sessionStorage.getItem('jwtToken'));
+    return this.httpClient.post<any>(this.SERVER + 'orders/orderReport', object, {headers});
   }
 }

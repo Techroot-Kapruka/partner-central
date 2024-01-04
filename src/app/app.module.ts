@@ -45,7 +45,7 @@ import {AnalyticsProductService} from "./shared/service/analytics-product.servic
     PaginationDirective,
     MessageComponent,
     LoadingComponent,
-    DeclinedMessageComponent,
+    DeclinedMessageComponent
   ],
   imports: [
     BrowserAnimationsModule,

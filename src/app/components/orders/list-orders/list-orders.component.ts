@@ -4,6 +4,7 @@ import {Router} from '@angular/router';
 import {DashboardService} from '../../../shared/service/dashboard.service';
 import Swal from 'sweetalert2';
 import {OrderMethods} from '../order-methods';
+import {DatePipe} from "@angular/common";
 
 @Component({
   selector: 'app-list-orders',
@@ -29,8 +30,11 @@ export class ListOrdersComponent implements OnInit {
   status = '';
   ODProducts = false;
   public loading;
+  public searchDate = null;
+  public dangerStyle = ''
+  today;
 
-  constructor(private orderService: OrderService, private router: Router, private partnerService: DashboardService, private orderMethods: OrderMethods) {
+  constructor(private orderService: OrderService, private router: Router, private partnerService: DashboardService, private orderMethods: OrderMethods, private datePipe: DatePipe) {
     this.getAllOrders();
     this.getPartner();
     this.hideElement();
@@ -53,8 +57,23 @@ export class ListOrdersComponent implements OnInit {
   public getsession = window.sessionStorage.getItem('partnerId');
 
   ngOnInit(): void {
+    if (sessionStorage.getItem('userRole') === "ROLE_ADMIN" || sessionStorage.getItem('userRole') === "ROLE_SUPER_ADMIN"){
+      this.today = this.getCurrentDate();
+      this.searchDate = this.today
+      this.getPaginateOrderList(this.page)
+    }
   }
 
+  refreshList(){
+    this.searchDate = this.today;
+    (document.getElementById('select_od') as HTMLInputElement).value = null
+    this.getPaginateOrderList(this.page - 1)
+  }
+
+  getCurrentDate(): string {
+    const currentDate = new Date();
+    return this.datePipe.transform(currentDate, 'yyyy-MM-dd');
+  }
   getAllOrders() {
     let resArr = {};
     const productPrefix = [];
@@ -84,7 +103,7 @@ export class ListOrdersComponent implements OnInit {
         // productPrefix
       };
       this.orderService.sendOrders(resArr).subscribe(
-        data =>{
+        data => {
           this.orderArray(data),
             this.loading = false;
         }
@@ -97,8 +116,8 @@ export class ListOrdersComponent implements OnInit {
     var errorMsg = document.getElementById('noOrderMsg');
     var tableContent = document.getElementById('orderDetailsTbl');
     if (arr.data != null) {
-      tableContent.style.display='table';
-      errorMsg.style.display='none';
+      tableContent.style.display = 'table';
+      errorMsg.style.display = 'none';
       const orArrLength = arr.data.length;
       for (let i = 0; i < orArrLength; i++) {
         let statusCode = true;
@@ -131,8 +150,8 @@ export class ListOrdersComponent implements OnInit {
 
       }
     } else {
-      tableContent.style.display='none';
-      errorMsg.style.display='block';
+      tableContent.style.display = 'none';
+      errorMsg.style.display = 'block';
     }
   }
 
@@ -160,6 +179,18 @@ export class ListOrdersComponent implements OnInit {
     }
   }
 
+  filterList($event) {
+    this.dangerStyle = '';
+    $event.preventDefault();
+    if (this.searchDate === null || this.searchDate === '') {
+      this.dangerStyle = 'border-color: red'
+      return;
+    } else {
+      this.getPaginateOrderList(this.page - 1)
+    }
+
+  }
+
   selectPartner() {
     this.part_id = 'non';
     this.mobile = '';
@@ -167,16 +198,17 @@ export class ListOrdersComponent implements OnInit {
     this.part_id = id;
     this.getPaginateOrderList(this.page - 1);
     // this.mobile
-    this.loading=true;
+    this.loading = true;
     if (id !== 'non') {
       const payload = {
         partner_u_id: id
       };
       this.partnerService.getApprovedPartnerAsLogin(payload).subscribe(
-        data =>{
+        data => {
           console.log(data)
           this.mobile = data.data.contactNo,
-            this.loading=false; }
+            this.loading = false;
+        }
       );
     }
 
@@ -240,18 +272,33 @@ export class ListOrdersComponent implements OnInit {
       let id = (document.getElementById('select_od') as HTMLInputElement).value;
 
       this.businessName = id;
+
+      if (this.businessName === '-- Select Vendor --' || this.businessName === null || this.businessName == ''){
+        this.businessName = null;
+      }
     }
-    this.orderService.getLimitedOrders(page, this.businessName, this.names).subscribe(
+
+    this.orderService.getLimitedOrders(page, this.businessName, this.names, this.searchDate, sessionStorage.getItem('userRole')).subscribe(
       data => this.manageLimitedOrders(data),
       error => this.manageErrorLimitedOrders(error)
     );
     this.currentSelectedPage = page;
 
   }
-  manageErrorLimitedOrders(error){
+
+  manageErrorLimitedOrders(error) {
+    this.loading = false;
     console.log(error);
-    if(error.error.status_code === 400){
+    if (error.error.status_code === 400) {
       this.paginateData = [];
+    }
+  }
+
+  dateFilter($event) {
+    if ($event.target.value === '') {
+      this.searchDate = $event.target.value = null
+    } else {
+      this.searchDate = $event.target.value
     }
   }
 

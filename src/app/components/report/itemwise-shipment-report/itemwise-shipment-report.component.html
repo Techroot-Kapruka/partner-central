@@ -5,11 +5,10 @@
         <div class="card-body tab2-card">
           <div class="custom-datatable">
             <div class="row">
-              <label for="fromDatePicker" style="width: 7%; margin-right: 20px">From date : </label>
-              <input type="date" autofocus class="form-control" id="fromDatePicker" [(ngModel)]="fromDate"
-                     style="width: 25%;">
-              <label for="toDatePicker" style="width: 7%; margin-left: 40px; margin-right: 20px">To date : </label>
-              <input type="date" class="form-control" id="toDatePicker" [(ngModel)]="toDate" style="width: 25%;">
+              <label for="fromDatePicker" style="margin-top: 0.5%">From date : </label>
+              <input type="date" autofocus class="form-control" id="fromDatePicker" [(ngModel)]="fromDate" style="width: 25%;margin-left: 2%;margin-right: 2%">
+              <label for="toDatePicker" style="margin-top: 0.5%">To date : </label>
+              <input type="date" class="form-control" id="toDatePicker" [(ngModel)]="toDate" style="width: 25%;margin-left: 2%">
               <div class="btn-popup pull-right">
                 <button class="btn btn-success float-right" style="margin-left: 40px" (click)="loadDate()">Search
                 </button>

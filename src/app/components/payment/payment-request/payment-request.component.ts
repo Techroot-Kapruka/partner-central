@@ -12,26 +12,32 @@ import * as excel from 'xlsx';
 })
 export class PaymentRequestComponent implements OnInit {
   public isLoading = false;
-  public isAdmin = true;
+  public isAdmin = false;
   public partnerBusinessName="";
   public partnerID;
   public isPartnerSelected;
   public isSuccess;
   public selectedVendor:any;
+  public totalPriceCounter=0;
+  public checkedPriceCount= 0;
+  sessionUser;
+  lastSelectedVendor;
 
   partnerArray = [];
   recordList = [];
 
   @ViewChild(DropdownComponent, { static: false }) dropdownComponent: DropdownComponent;
   constructor(private productService: ProductService, private paymentService: PaymentService) {
+    this.sessionUser = sessionStorage.getItem('userRole');
     this.getPartnerList();
-    this.getWithdrawalsList("*");
+    if (this.sessionUser === 'ROLE_ADMIN' || this.sessionUser === 'ROLE_SUPER_ADMIN') {
+      this.getWithdrawalsList("*");
+      this.isAdmin=true;
+    }
   }
 
   getPartnerList(): void {
-
-    const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
+    if (this.sessionUser === 'ROLE_ADMIN' || this.sessionUser === 'ROLE_SUPER_ADMIN') {
       this.isAdmin=true;
       this.productService.getPartnerAll().subscribe(
         data => this.managePartnerDropDownList(data),
@@ -64,7 +70,6 @@ export class PaymentRequestComponent implements OnInit {
     }
   }
 
-
   partnerListError(error){
     Swal.fire(
       'Error',
@@ -76,10 +81,19 @@ export class PaymentRequestComponent implements OnInit {
   getWithdrawalsList(partnerId) {
     this.recordList = [];
     if(this.isAdmin){
-      const selectedItem = this.partnerArray.find(item => item.value === partnerId);
-      if (selectedItem) {
-        const selectedLabel = selectedItem.label;
-        if(selectedItem.value=="*"){
+      if(partnerId==="*"){
+        const obj = {
+          label:"Select All",
+          value:"*"
+        }
+        this.lastSelectedVendor=obj;
+      }else{
+        this.lastSelectedVendor = this.partnerArray.find(item => item.value === partnerId);
+      }
+
+      if (this.lastSelectedVendor) {
+        const selectedLabel = this.lastSelectedVendor.label;
+        if(this.lastSelectedVendor.value=="*"){
           this.partnerBusinessName="";
         }else{
           this.partnerBusinessName=selectedLabel;
@@ -98,6 +112,8 @@ export class PaymentRequestComponent implements OnInit {
   }
 
   manageWithdrawalList(response){
+    this.totalPriceCounter=0;
+    this.checkedPriceCount=0;
     this.isLoading=false;
     if(response.message==="Success"){
       this.isSuccess = true;
@@ -109,6 +125,9 @@ export class PaymentRequestComponent implements OnInit {
           pnref: pnrefArray
         };
       });
+      for(let i =0;i<this.recordList.length;i++){
+        this.totalPriceCounter += this.recordList[i].totalCostPrice;
+      }
     }else{
       this.isSuccess = false;
     }
@@ -116,7 +135,7 @@ export class PaymentRequestComponent implements OnInit {
     if (this.dropdownComponent) {
       this.dropdownComponent.setDefaultValue();
     }
-    this.recordList.sort((a, b) => new Date(b.createDate).getTime() - new Date(a.createDate).getTime());
+    // this.recordList.sort((a, b) => new Date(b.createDate).getTime() - new Date(a.createDate).getTime());
   }
   withdrawalListManagementError(error){
     this.isLoading=false;
@@ -125,6 +144,120 @@ export class PaymentRequestComponent implements OnInit {
       error.error.message_status,
       'error'
     );
+  }
+
+  checkboxCheck(index){
+    let text = "checkbox";
+    const id = text+index;
+    const checkBox = document.getElementById(id) as HTMLInputElement;
+    const mainCheckBox = document.getElementById('mainCheckbox') as HTMLInputElement;
+    const isCheckBoxSelected = checkBox.checked;
+
+    mainCheckBox.checked=false;
+
+    if(isCheckBoxSelected){
+      this.checkedPriceCount += this.recordList[index].totalCostPrice;
+    }else{
+      this.checkedPriceCount -= this.recordList[index].totalCostPrice;
+    }
+  }
+
+  selectAllCheckBoxes(){
+    const checkBoxList = document.getElementsByClassName('checkboxList');
+    var checkBox = document.getElementById('mainCheckbox') as HTMLInputElement;
+    if(checkBox.checked){
+      this.checkedPriceCount = this.totalPriceCounter;
+      for(let i=0;i<checkBoxList.length;i++){
+        const checkBox = checkBoxList[i] as HTMLInputElement;
+        checkBox.checked=true;
+      }
+    }else{
+      this.checkedPriceCount = 0;
+      for(let i=0;i<checkBoxList.length;i++){
+        const checkBox = checkBoxList[i] as HTMLInputElement;
+        checkBox.checked=false;
+      }
+    }
+  }
+
+  approve(){
+    const checkBoxList = document.getElementsByClassName('checkboxList');
+    const approvalButton = document.getElementById('approveBtn') as HTMLInputElement;
+    approvalButton.disabled=true;
+    let idWithdrawalList = "";
+    let checkedCount = 0;
+    for(let i=0;i<checkBoxList.length;i++){
+      const checkBox = checkBoxList[i] as HTMLInputElement;
+      if(checkBox.checked){
+        let idWithdrawal = this.recordList[i].idWithdrawal;
+        idWithdrawalList+=idWithdrawal+",";
+        checkedCount++;
+      }
+    }
+    if(checkedCount>0){
+      const lastCommaIndex = idWithdrawalList.lastIndexOf(',');
+      if (lastCommaIndex !== -1) {
+        idWithdrawalList = idWithdrawalList.substring(0, lastCommaIndex) + idWithdrawalList.substring(lastCommaIndex + 1);
+      }
+
+      let payload = {
+        idWithdrawalList: idWithdrawalList,
+        approvedBy:sessionStorage.getItem('userId')
+      };
+      this.paymentService.approvedWithdrawalRequest(payload).subscribe(
+        data => this.manageApprovedWithdrawalRequest(data),
+        error => this.approvedWithdrawalRequestError()
+      );
+    }else{
+      Swal.fire({
+        title: "Warning!",
+        text: "Please make a selection(s)",
+        icon: "warning"
+      });
+      approvalButton.disabled=false;
+    }
+
+  }
+
+  manageApprovedWithdrawalRequest(data){
+    const approvalButton = document.getElementById('approveBtn') as HTMLInputElement;
+    if(data.message_status=="Success"){
+      Swal.fire({
+        title: "Successful!",
+        text: data.message,
+        icon: "success"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          if (this.sessionUser === 'ROLE_ADMIN' || this.sessionUser === 'ROLE_SUPER_ADMIN'){
+            this.getWithdrawalsList(this.lastSelectedVendor.value);
+            approvalButton.disabled=false;
+          }
+        }
+      });
+    }else if(data.message_status=="Error"){
+      Swal.fire({
+        title: "Error!",
+        text: data.message,
+        icon: "error"
+      });
+      approvalButton.disabled=false;
+    }else{
+      Swal.fire({
+        title: "Error!",
+        text: "Something went wrong",
+        icon: "error"
+      });
+      approvalButton.disabled=false;
+    }
+  }
+  approvedWithdrawalRequestError(){
+    Swal.fire({
+      title: "Error!",
+      text: "Something went wrong",
+      icon: "error"
+    });
+    const approvalButton = document.getElementById('approveBtn') as HTMLInputElement;
+    approvalButton.disabled=false;
   }
 
   ngOnInit(): void {

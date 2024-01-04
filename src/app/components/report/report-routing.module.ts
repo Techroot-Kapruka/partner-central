@@ -4,6 +4,8 @@ import {CategoryReportComponent} from './category-report/category-report.compone
 import {ProductReportComponent} from './product-report/product-report.component';
 import {VendorReportComponent} from './vendor-report/vendor-report.component';
 import {ItemwiseShipmentReportComponent} from './itemwise-shipment-report/itemwise-shipment-report.component';
+import {ItemwiseSalesReportComponent} from "./itemwise-sales-report/itemwise-sales-report.component";
+import {OrderReportComponent} from "./order-report/order-report.component";
 
 const routes: Routes = [
   {
@@ -41,6 +43,22 @@ const routes: Routes = [
           breadcrumb: 'Item Wise Shipment'
         }
       },
+      {
+        path: 'itemwise-sales-report',
+        component: ItemwiseSalesReportComponent,
+        data: {
+          title: 'Item Wise Sales',
+          breadcrumb: 'Item Wise Sales'
+        }
+      },
+      {
+        path: 'order-report',
+        component: OrderReportComponent,
+        data: {
+          title: 'Order Report',
+          breadcrumb: 'Order Report'
+        }
+      }
     ]
   }
 ];

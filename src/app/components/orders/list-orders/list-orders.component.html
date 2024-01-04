@@ -1,8 +1,5 @@
 <!--&lt;!&ndash; Container-fluid starts&ndash;&gt;-->
 <style>
-  /*#select_od {*/
-  /*  width: 350px !important;*/
-  /*}*/
 
   /*--------------------------------------------------------*/
   .loading {
@@ -29,16 +26,17 @@
   }
 
 
-  body{
+  body {
     background: rgba(0, 0, 0, 0.1) !important;
     height: 100vh;
   }
+
   #preloader {
     height: 40px;
     width: 40px;
     margin: 40vh auto;
-    border: 5px solid rgba(60,60,180,0.45);
-    border-top: 5px solid rgb(60,60,180);
+    border: 5px solid rgba(60, 60, 180, 0.45);
+    border-top: 5px solid rgb(60, 60, 180);
     border-radius: 50%;
     animation: rotate 1s infinite linear;
   }
@@ -61,26 +59,37 @@
 </div>
 
 
-
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-12">
       <div class="card">
         <div class="card-header">
-          <h5>Order Details</h5>
+            <h5>Order Details</h5>
+            <button *ngIf="isAdmin" class="btn btn-danger" (click)="refreshList()">Refresh</button>
         </div>
         <div class="card-body">
           <!--<div class="custom-datatable">-->
-          <div *ngIf="isAdmin" class="btn-popup ">
-            <select (change)="selectPartner()" id="select_od" class="form-control">
-              <option selected disabled>-- Select Vendor --</option>
-              <option *ngFor="let partners of partner" value="{{partners['partner_u_id']}}">{{partners['name']}}
-              </option>
-            </select>
+
+          <div class="form-row"  *ngIf="isAdmin">
+            <div class="form-group col-md-3">
+              <input type="date" class="datepicker input-group-text" (input)="dateFilter($event)" [value]="today" [style]="dangerStyle" style="width: 100%;text-align: left">
+            </div>
+            <div class="form-group col-md-2">
+              <button class="btn btn-success" (click)="filterList($event)" style="width: 100%">Search</button>
+            </div>
+            <div class="form-group col-md-1"></div>
+            <div class="form-group col-md-6">
+              <select (change)="selectPartner()" id="select_od" class="form-control  pull-right">
+                <option selected disabled>-- Select Vendor --</option>
+                <option *ngFor="let partners of partner" value="{{partners['partner_u_id']}}">{{partners['name']}}
+                </option>
+              </select>
+            </div>
           </div>
 
           <h3 id="noOrderMsg" style="display: none">You have no orders yet.</h3>
-          <table class="table table-striped table-hover table-sm" id="orderDetailsTbl" style="cursor: pointer; font-size: 13px">
+          <table class="table table-striped table-hover table-sm" id="orderDetailsTbl"
+                 style="cursor: pointer; font-size: 13px">
             <thead style="font-size: 15px">
             <tr>
               <th scope="col">Order Ref</th>
@@ -96,26 +105,33 @@
 
             <tr *ngFor="let paginateDatass of paginateData">
 
-              <ngx-skeleton-loader *ngIf="paginateDatass === undefined || paginateDatass === null" count="3" appearance="line"></ngx-skeleton-loader>
+              <ngx-skeleton-loader *ngIf="paginateDatass === undefined || paginateDatass === null" count="3"
+                                   appearance="line"></ngx-skeleton-loader>
 
               <td>
                 <b style="margin-left: 20px"> {{paginateDatass['orderRef']}} </b>
                 <br>
-                <span style="color: green; font-weight: bold" *ngIf="paginateDatass['statusStyleTwo']">&#10003;&nbsp; </span>
-                <span style="color: red; font-weight: bold" *ngIf="paginateDatass['statusStyleOne']">&#x25A0;&nbsp; </span>
-                <span style="color: green; font-weight: bold" *ngIf="paginateDatass['statusStyleFour']">&#x25A0;&nbsp; </span>
-                <span style="color: blue; font-weight: bold" *ngIf="paginateDatass['statusStyleFive']">&#x25A0;&nbsp; </span>
-                <span style="color: orange; font-weight: bold" *ngIf="paginateDatass['statusStyleSix']">&#x25A0;&nbsp; </span>
-                <span style="color: black; font-weight: bold; text-decoration: line-through;" *ngIf="paginateDatass['statusStyleThree']">&#0000;&nbsp; </span>
+                <span style="color: green; font-weight: bold"
+                      *ngIf="paginateDatass['statusStyleTwo']">&#10003;&nbsp; </span>
+                <span style="color: red; font-weight: bold"
+                      *ngIf="paginateDatass['statusStyleOne']">&#x25A0;&nbsp; </span>
+                <span style="color: green; font-weight: bold"
+                      *ngIf="paginateDatass['statusStyleFour']">&#x25A0;&nbsp; </span>
+                <span style="color: blue; font-weight: bold"
+                      *ngIf="paginateDatass['statusStyleFive']">&#x25A0;&nbsp; </span>
+                <span style="color: orange; font-weight: bold"
+                      *ngIf="paginateDatass['statusStyleSix']">&#x25A0;&nbsp; </span>
+                <span style="color: black; font-weight: bold; text-decoration: line-through;"
+                      *ngIf="paginateDatass['statusStyleThree']">&#0000;&nbsp; </span>
                 <span>{{paginateDatass['status']}}</span>
               </td>
               <td>{{paginateDatass['orderDate']}}</td>
               <td>{{paginateDatass['delivery_date']}}</td>
               <td>
                 <!--<ng-container *ngIf="ODProducts; else Consignment">-->
-                  <!--{{getStatus(paginateDatass['orderRef'])}}-->
+                <!--{{getStatus(paginateDatass['orderRef'])}}-->
                 <!--</ng-container>-->
-                <ng-template >
+                <ng-template>
                   N/A
                 </ng-template>
               </td>

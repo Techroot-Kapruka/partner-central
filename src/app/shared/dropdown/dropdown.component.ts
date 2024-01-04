@@ -11,6 +11,7 @@ export class DropdownComponent implements OnChanges {
   @Input() dataArray: any[] = [];
   @Input() isDisabled: boolean = false;
   @Input() defaultValue: any;
+  @Input() isCategoryList: boolean = false;
   @Output() selected = new EventEmitter<any>();
   @ViewChild(SelectComponent, { static: false }) selectComponent: SelectComponent;
 

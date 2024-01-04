@@ -1,0 +1,146 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card tab2-card p-2">
+        <div class="card-header mt-2">
+          <div class="row">
+            <div class="col-3">
+              <input class="form-control" type="text" placeholder="Product Title" [(ngModel)]="title">
+              <input class="form-control mt-1" type="text" placeholder="Product Code" [(ngModel)]="proCode">
+            </div>
+            <div class="col-3">
+              <app-dropdown [dataArray]="productCategoryArray" [isDisabled]="false" [defaultValue]="selectItemGroup" [isCategoryList]="isCategoryList" (selected)="changedProduct($event)"></app-dropdown>
+              <app-dropdown [dataArray]="partnerArray" [isDisabled]="false" [defaultValue]="selectVendor" [isCategoryList]="isCategoryList" (selected)="changedVendor($event)"  *ngIf="userRole != 'ROLE_PARTNER'"></app-dropdown>
+<!--              <input class="form-control mt-1" type="text" placeholder="Vendor" [(ngModel)]="businessName" *ngIf="userRole != 'ROLE_PARTNER'">-->
+            </div>
+            <div class="col-3">
+<!--              <input class="form-control" type="text" placeholder="Brand">-->
+              <select class="form-control" id="statusSelect">
+                <option value="">-- Select Status --</option>
+                <option value="1">Active</option>
+                <option value="-49">Out Of Stock</option>
+                <option value="-5">Manual Out</option>
+                <option value="-102">Suspend</option>
+                <option value="-101">Rejected</option>
+              </select>
+            </div>
+            <div class="col-3 text-center">
+              <button class="btn btn-success" (click)="search()" style="width: 40%;">Search</button><br>
+              <button class="btn btn-primary mt-1" (click)="onPageChange(1,2)" style="width: 40%;">Refresh</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-body tab2-card">
+          <div class="m-3 " style="display: flex; justify-content: space-between; font-weight: 700;">
+            <span style="margin-right: auto;">Item Range: {{itemRange}}</span>
+            <span>Total Items: {{totalItems}}</span>
+          </div>
+          <table class="table table-sm table-bordered">
+            <thead class="table-primary">
+
+            <tr>
+              <th>Image</th>
+              <th style="width: 300px;">Title</th>
+              <th>Type</th>
+              <th>Stock in Hand</th>
+<!--              <th>Status</th>-->
+              <th>Create Date</th>
+              <th style="width: 350px;">Action</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <ng-container >
+              <tr *ngFor="let productList of productList; let i = index;">
+                <td><img src="{{ imagePathURI + productList.image1 }}" height="60px" width="60px" (error)="onImageError($event)" (click)="popUpImage(productList)"></td>
+                <td>{{productList.title}} <a href="javascript:void(0);" (click)="loadPage(productList)">view on web</a> <br> {{productList.product_code}} <br><p>{{productList.path}}</p><p *ngIf="userRole != 'ROLE_PARTNER'">{{productList.vendor}} - {{productList.partnerUid}}</p></td>
+                <td>{{productList.productType}} <br> <span class="badge {{productList.badge}} mt-2">{{productList.element}}</span> </td>
+                <td>{{productList.in_stock}}</td>
+<!--                <td>{{productList.is_active}}</td>-->
+                <td>{{productList.create_date_time}}<br><p>Last Update <br>{{productList.update_date_time}}</p></td>
+                <td>
+
+                  <button class="btn btn-outline-success m-1" *ngIf="productList.view" (click)="clickButton(productList,1)">View</button>
+                  <button class="btn btn-outline-info m-1" *ngIf="productList.edit" (click)="clickButton(productList,2)">EDIT</button>
+                  <button class="btn btn-outline-warning m-1" *ngIf="productList.in" (click)="clickButton(productList,6)">IN STOCK</button>
+                  <button class="btn btn-outline-secondary m-1" *ngIf="productList.out" (click)="clickButton(productList,4)">OUT</button>
+                  <button class="btn btn-outline-primary m-1" *ngIf="productList.activate" (click)="clickButton(productList,5)">ACTIVATE</button>
+                  <button class="btn btn-outline-primary m-1" *ngIf="productList.add_stock && userRole == 'ROLE_PARTNER'" (click)="clickButton(productList,7)">ADD STOCK</button>
+                  <button class="btn btn-outline-danger m-1" *ngIf="productList.delete" (click)="clickButton(productList,3)">DELETE</button>
+                </td>
+              </tr>
+            </ng-container>
+            <ng-container *ngIf="isEmptyProducts">
+              <tr class="alert alert-info" role="alert">
+                <td colspan="6">
+                  No Data Found!
+                </td>
+              </tr>
+            </ng-container>
+            </tbody>
+          </table>
+          <div class="pull-right" style="margin-top: 15px">
+            <app-pagination
+              [currentPage]="currentPage"
+              [totalPages]="totalPages"
+              (pageChange)="onPageChange($event,1)"
+            ></app-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #imagePopup let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">Image Preview</h4>
+      <button type="button" class="close" (click)="closePopup()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <img [src]="imageUrl" alt="Image" class="img-fluid">
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #variationAddStockPopup let-modal>
+  <div class="modal-content">
+    <div class="modal-header">
+<!--      <h4 class="modal-title">Add Stock</h4>-->
+      <h6>{{productTitle}} <br>{{productCode}}</h6>
+<!--      <p>{{productPath}}</p>-->
+      <button type="button" class="close" (click)="closePopup()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+<!--      <div *ngFor="variationProductsList of variationProductsList">-->
+<!--        <p>{{variationProductsList.pro_Code}}</p>-->
+<!--      </div>-->
+
+      <ul class="list-group" *ngFor="let variationProduct of variationProductsList">
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-6">
+              {{ variationProduct.variation_code }} <br>
+              <p class="color-box" style="background-color:{{variationProduct.color}}"></p>
+              <p>{{ variationProduct.size }}</p>
+            </div>
+            <div class="col-2 text-end">
+              Current Stock <br>
+              {{ variationProduct.quantity }}
+            </div>
+            <div class="col-4">
+              <button class="btn btn-outline-primary" (click)="UpdateVirtualStocks(variationProduct,2)">ADD STOCK</button>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+    </div>
+  </div>
+</ng-template>
