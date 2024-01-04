@@ -57,11 +57,17 @@ export class ListOrdersComponent implements OnInit {
   public getsession = window.sessionStorage.getItem('partnerId');
 
   ngOnInit(): void {
-    // if (sessionStorage.getItem('userRole') === "ROLE_ADMIN" || sessionStorage.getItem('userRole') === "ROLE_SUPER_ADMIN"){
-    //   this.today = this.getCurrentDate();
-    //   this.searchDate = this.today
-    //   this.getPaginateOrderList(this.page)
-    // }
+    if (sessionStorage.getItem('userRole') === "ROLE_ADMIN" || sessionStorage.getItem('userRole') === "ROLE_SUPER_ADMIN"){
+      this.today = this.getCurrentDate();
+      this.searchDate = this.today
+      this.getPaginateOrderList(this.page)
+    }
+  }
+
+  refreshList(){
+    this.searchDate = this.today;
+    (document.getElementById('select_od') as HTMLInputElement).value = null
+    this.getPaginateOrderList(this.page - 1)
   }
 
   getCurrentDate(): string {
@@ -267,9 +273,9 @@ export class ListOrdersComponent implements OnInit {
 
       this.businessName = id;
 
-      // if (this.businessName === '-- Select Vendor --' || this.businessName === null || this.businessName == ''){
-      //   this.businessName = null;
-      // }
+      if (this.businessName === '-- Select Vendor --' || this.businessName === null || this.businessName == ''){
+        this.businessName = null;
+      }
     }
 
     this.orderService.getLimitedOrders(page, this.businessName, this.names, this.searchDate, sessionStorage.getItem('userRole')).subscribe(
