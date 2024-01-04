@@ -20,7 +20,7 @@
         <h5 style="margin-left: 2%;font-weight: bold;color: #676363">{{partnerBusinessName}}</h5>
       </div>
       <br *ngIf="isAdmin;">
-    <button class="btn btn-light" style="margin-left: 2%" *ngIf="isAdmin;" (click)="exportToVendorWList()">Download Withdrawal details Sheet</button>
+    <button class="btn btn-light" style="margin-left: 2%" *ngIf="isSuccess && isAdmin" (click)="exportToVendorWList()">Download Withdrawal details Sheet</button>
       <div *ngIf="!isLoading && isSuccess" class="withdrawalContent">
         <br *ngIf="isAdmin;">
         <div class="container mt-4" style="margin-top: 0rem!important;">
@@ -65,17 +65,15 @@
               <td *ngIf="isAdmin" style="text-align: center; vertical-align: middle;font-weight: bold;border:1px solid black">
                 <div class="form-check">
                   <input class="form-check-input checkboxList" type="checkbox" value="" id="checkbox{{i}}" (click)="checkboxCheck(i)">
-
                 </div>
               </td>
-
             </tr>
             </tbody>
           </table>
         </div>
       </div>
       <br>
-      <table style="width: 70%;border-collapse: collapse; margin-left: 3%">
+      <table style="width: 70%;border-collapse: collapse; margin-left: 3%" *ngIf="isSuccess && isAdmin">
         <tr >
           <td>
             <label for="totalCostPrice">Total Available Amount</label>
@@ -84,9 +82,7 @@
             <input style="width: 100%" id = "totalCostPrice" type="text" disabled [value]="totalPriceCounter | number:'1.2-2'">
           </td>
           <td *ngIf="isAdmin">
-            <button id="withdrawalBtn" style="margin-left: 5%;background-color: #5932EA !important;display: flex; align-items: center;"
-                    class="btn btn-secondary" (click)="approve()" >
-              <i class="fa fa-money" aria-hidden="true"></i>&nbsp;Approve</button>
+            <button id="approveBtn" style="margin-left: 5%;background-color: #5932EA !important;display: flex; align-items: center;" class="btn btn-secondary" (click)="approve()" >Approve</button>
           </td>
         </tr>
         <tr *ngIf="isAdmin">
