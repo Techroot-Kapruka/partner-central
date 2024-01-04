@@ -64,16 +64,17 @@
     <div class="col-sm-12">
       <div class="card">
         <div class="card-header">
-          <h5>Order Details</h5>
+            <h5>Order Details</h5>
+            <button *ngIf="isAdmin" class="btn btn-danger" (click)="refreshList()">Refresh</button>
         </div>
         <div class="card-body">
           <!--<div class="custom-datatable">-->
 
           <div class="form-row"  *ngIf="isAdmin">
-            <div *ngIf="false" class="form-group col-md-3">
+            <div class="form-group col-md-3">
               <input type="date" class="datepicker input-group-text" (input)="dateFilter($event)" [value]="today" [style]="dangerStyle" style="width: 100%;text-align: left">
             </div>
-            <div *ngIf="false" class="form-group col-md-2">
+            <div class="form-group col-md-2">
               <button class="btn btn-success" (click)="filterList($event)" style="width: 100%">Search</button>
             </div>
             <div class="form-group col-md-1"></div>

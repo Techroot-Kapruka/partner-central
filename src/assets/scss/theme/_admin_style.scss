@@ -71,6 +71,7 @@ h2 {
   line-height: 1;
   letter-spacing: 0.02em;
 }
+
 h4 {
   font-size: 18px;
   text-transform: capitalize;
@@ -5222,8 +5223,82 @@ $i:1;
       }
     }
   }
+  //amila styles
+  body .page-wrapper .page-main-header .main-header-left .logo-wrapper img{
+    height: 50px ;
+  }
+  body .newAddition{
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+  }
+  body #select_od{
+    width: 100% !important;
+    float: none !important;
+  }
+  .page-wrapper .page-body-wrapper .page-sidebar.open ~ footer{
+    padding: 30px !important;
+    border-top: 1px solid #eee;
+  }
+.mobile-sidebar{
+  position: absolute;
+  right: 0;
+}
+  .mobile-sidebar .media-body{
+    padding: 20px;
+    background: #282778;
+  }
+  .page-wrapper .page-main-header .main-header-right .nav-right > ul{
+    justify-content:center !important;
+  }
+  .onhover-dropdown .media > .rounded-circle{
+    width: 30px !important;
+  }
+  .nav-right .mobile-toggle{
+      top: 10px;
+    right: 80px;
+    position: absolute;
+  }
+  .mobile-sidebar  .switch-sm .switch{
+    margin-top: 0;
+  }
+  .page-main-header .main-header-right svg line, .page-main-header .main-header-right svg polyline{
+    color: #fff;
+  }
+  .nav-menus li:first-child{
+    display: none;
+  }
+  .page-wrapper .page-main-header .main-header-right .nav-right > .mobile-toggle{
+    display: none;
+  }
+  .footer-contact{
+    margin: 30px;
+    padding: 30px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+  }
+  .footer-logo img{
+    max-width: 140px;
+  }
+  #selectPartnersDropDown{
+    width: 100% !important;
+  }
+  .page-wrapper .page-main-header .main-header-right .nav-right > ul {
+    padding: 0 0;
+    justify-content: flex-start;
+    opacity: 1;
+    visibility: visible;
+    z-index: 1;
+    transform: none;
+  }
+  .page-wrapper .page-main-header .main-header-right .nav-right > ul > li{
+    margin: 0 0 5px;
+  }
 }
 @media only screen and (max-width: 767px){
+  .tab2-card{
+    width: 100%;
+    overflow-x: scroll;
+  }
   .report-employee {
     .flot-chart-container {
       &.report-full {
@@ -6030,6 +6105,97 @@ $i:1;
     }
   }
 }
-/*=====================
-  Responsive CSS End
-==========================*/
+table.tdtd {
+  border: 1px solid #ccc;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  table-layout: fixed;
+}
+
+table.tdtd caption {
+  font-size: 1.5em;
+  margin: .5em 0 .75em;
+}
+
+table.tdtd tr {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: .35em;
+}
+
+table.tdtd th,
+table.tdtd td {
+  padding: .625em;
+  text-align: center;
+}
+
+table.tdtd th {
+  font-size: .85em;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 600px) {
+  table.tdtd {
+    border: 0;
+  }
+
+  table.tdtd caption {
+    font-size: 1.3em;
+  }
+
+  table.tdtd thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+
+  table.tdtd tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: .625em;
+  }
+
+  table.tdtd td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: .8em;
+    text-align: right;
+  }
+
+  table.tdtd td::before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  table.tdtd td:last-child {
+    border-bottom: 0;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
