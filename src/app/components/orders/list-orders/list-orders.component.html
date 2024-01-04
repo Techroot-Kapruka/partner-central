@@ -72,7 +72,7 @@
 
           <div class="form-row"  *ngIf="isAdmin">
             <div class="form-group col-md-3">
-              <input type="date" class="datepicker input-group-text" (input)="dateFilter($event)" [value]="today" [style]="dangerStyle" style="width: 100%;text-align: left">
+              <input type="date" class="datepicker input-group-text" id="date_pick" (input)="dateFilter($event)" value="{{today}}" [style]="dangerStyle" style="width: 100%;text-align: left">
             </div>
             <div class="form-group col-md-2">
               <button class="btn btn-success" (click)="filterList($event)" style="width: 100%">Search</button>
