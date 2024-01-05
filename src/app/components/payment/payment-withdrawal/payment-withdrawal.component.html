@@ -7,15 +7,38 @@
     </div>
     <div *ngIf="!isLoading;" class="card-body ">
         <div *ngIf="!isLoading;" style="margin-top: 3%;margin-left: 2%;display: flex; align-items: center;">
-          <select style="width: 40%" *ngIf="isAdmin"  id="selectPartnersDropDown" class="form-control" (change)="getPaymentList($event.target.value)">
-            <option value="0" selected>-- Select Vendor --</option>
-            <option *ngFor="let partnerArrays of partnerArray" [value]="partnerArrays['partner_u_id']">
-              {{partnerArrays['name']}}
-            </option>
-          </select>
-          <h5 style="margin-left: 2%;font-weight: bold;color: #676363">{{partnerBusinessName}}</h5>
+<!--          <select style="width: 40%" *ngIf="isAdmin"  id="selectPartnersDropDown" class="form-control" [(ngModel)]="selectedOption" >-->
+<!--            <option value="*" selected>&#45;&#45; Select All &#45;&#45;</option>-->
+<!--            <option *ngFor="let partnerArrays of partnerArray" [value]="partnerArrays['partner_u_id']">-->
+<!--              {{partnerArrays['name']}}-->
+<!--            </option>-->
+<!--          </select>-->
+          <app-dropdown *ngIf="isAdmin" [dataArray]="partnerArray" [isDisabled]="false" (selected)="partnerIdSelector($event)">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Select an option..."
+              readonly
 
+            />
+          </app-dropdown>
+          <h5 style="margin-left: 2%;font-weight: bold;color: #676363">{{partnerBusinessName}}</h5>
+          <br>
         </div>
+      <div *ngIf="!isLoading && isAdmin" class="col" style="margin-top: 3%; display:flex; align-items: center;">
+        <div style="display:flex;" class="col-5">
+          <label for="fromDate" style="width: 25%;margin-top: 2%">From Date :</label>
+          <input type="date" id="fromDate" class="form-control" style="width: 50%" [(ngModel)]="fromDate"  >
+        </div>
+        <div style="display:flex;" class="col-5">
+          <label for="toDate" style="width: 25%;margin-top: 2%">To Date :</label>
+          <input type="date" id="toDate" class="form-control" style="width: 50%" [(ngModel)]="toDate" >
+        </div>
+        <div class="col">
+          <button class="btn btn-secondary" (click)="getPaymentList2(selectedOption)">Search</button>
+        </div>
+
+      </div>
       <br >
       <div *ngIf="isSuccess && !isLoading;" class="withdrawalContent">
         <div class="container mt-4" style="margin-top: 0rem!important;">

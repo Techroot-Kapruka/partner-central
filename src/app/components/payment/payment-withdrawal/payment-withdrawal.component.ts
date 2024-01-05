@@ -1,7 +1,8 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit, ViewChild, ViewEncapsulation} from '@angular/core';
 import {PaymentService} from '../../../shared/service/payment.service';
 import {ProductService} from '../../../shared/service/product.service';
 import Swal from 'sweetalert2';
+import {DropdownComponent} from "../../../shared/dropdown/dropdown.component";
 
 @Component({
   selector: 'app-payment-withdrawal',
@@ -17,6 +18,9 @@ export class PaymentWithdrawalComponent implements OnInit {
   public checkedCostPriceCount = 0;
   public totalPriceCounter = 0;
   public partnerBusinessName ="";
+  public selectedOption:string="";
+  lastSelectedVendor;
+  sessionUser:string="";
 
   checkBoxStatusMap = [];
   vnCodeList = "";
@@ -25,24 +29,27 @@ export class PaymentWithdrawalComponent implements OnInit {
   partnerID ="";
   attemptNumber = 0;
   isLoading:boolean;
+  fromDate: string = new Date().toISOString().split('T')[0];
+  toDate: string = new Date().toISOString().split('T')[0];
 
+  @ViewChild(DropdownComponent, { static: false }) dropdownComponent: DropdownComponent;
   constructor(private productService: ProductService, private paymentService: PaymentService) {
     this.getPartnerList();
   }
 
   getPartnerList(): void {
 
-    const sessionUser = sessionStorage.getItem('userRole');
-    if (sessionUser === 'ROLE_ADMIN' || sessionUser === 'ROLE_SUPER_ADMIN') {
+    this.sessionUser = sessionStorage.getItem('userRole');
+    if (this.sessionUser === 'ROLE_ADMIN' || this.sessionUser === 'ROLE_SUPER_ADMIN') {
       this.isAdmin=true;
       this.productService.getPartnerAll().subscribe(
-        data => this.managePartnerDropDownList(data),
+        data => this.managePartnerDropDownList2(data),
         error => this.partnerListError(error)
       );
     }else{
       let partnerId = sessionStorage.getItem('partnerId');
       this.isAdmin=false;
-      this.getPaymentList(partnerId);
+      this.getPaymentList2(partnerId);
     }
   }
   partnerListError(error){
@@ -51,6 +58,30 @@ export class PaymentWithdrawalComponent implements OnInit {
       error.error.message_status,
       'error'
     );
+  }
+
+  partnerIdSelector(partnerID){
+    this.selectedOption=partnerID;
+  }
+
+  managePartnerDropDownList2(data) {
+    this.partnerArray = [];
+    let pr = {};
+    const partnerCount = data.data.length;
+    const partnerValue = data.data;
+    this.partnerArray = [];
+    let selectAllPartnersOption = {
+      label: "Select All",
+      value: "*"
+    }
+    this.partnerArray.push(selectAllPartnersOption);
+    for (let i = 0; i < partnerCount; i++) {
+      pr = {
+        label: partnerValue[i].businessName,
+        value: partnerValue[i].partner_u_id
+      };
+      this.partnerArray.push(pr);
+    }
   }
   managePartnerDropDownList(data) {
     this.partnerArray = [];
@@ -66,18 +97,74 @@ export class PaymentWithdrawalComponent implements OnInit {
     }
   }
 
-  getPaymentList(partnerId) {
-    if(this.isAdmin){
-      var partnerName = document.getElementById('selectPartnersDropDown') as HTMLSelectElement;
-      this.partnerBusinessName = partnerName.options[partnerName.selectedIndex].text;
-    }
+  getPaymentList2(partnerId) {
+    let fromDate = "";
+    let toDate = "";
+    this.recordList = [];
 
+    if(this.isAdmin){
+      let DateFrom = document.getElementById('fromDate') as HTMLSelectElement;
+      let DateTo = document.getElementById('toDate') as HTMLSelectElement;;
+
+      fromDate = DateFrom.value;
+      toDate = DateTo.value;
+
+      if(partnerId==="*"){
+        const obj = {
+          label:"Select All",
+          value:"*"
+        }
+        this.lastSelectedVendor=obj;
+      }else{
+        this.lastSelectedVendor = this.partnerArray.find(item => item.value === partnerId);
+      }
+
+      if (this.lastSelectedVendor) {
+        const selectedLabel = this.lastSelectedVendor.label;
+        if(this.lastSelectedVendor.value=="*"){
+          this.partnerBusinessName="";
+        }else{
+          this.partnerBusinessName=selectedLabel;
+        }
+      }
+    }
+    this.isLoading=true;
+    this.isPartnerSelected=true;
+    let payload = {
+      vendorCode: partnerId,
+      role:this.sessionUser,
+      fromDate:fromDate,
+      toDate:toDate
+    };
+    console.log(payload);
+    this.paymentService.getVendorWisePaymentList(payload).subscribe(
+      data => this.managePaymentList(data),
+      error => this.paymentListManagementError(error)
+    );
+  }
+
+  getPaymentList(partnerId) {
+    let fromDate = "";
+    let toDate = "";
+
+    if(this.isAdmin){
+      let partnerName = document.getElementById('selectPartnersDropDown') as HTMLSelectElement;
+      let DateFrom = document.getElementById('fromDate') as HTMLSelectElement;
+      let DateTo = document.getElementById('toDate') as HTMLSelectElement;;
+
+      this.partnerBusinessName = partnerName.options[partnerName.selectedIndex].text;
+      fromDate = DateFrom.value;
+      toDate = DateTo.value;
+    }
     this.isLoading=true;
     this.partnerID = partnerId;
     this.isPartnerSelected=true;
 
     let payload = {
-        vendor_code: this.partnerID
+      vendor_code: this.partnerID,
+      role:this.sessionUser,
+      fromDate:fromDate,
+      toDate:toDate
     };
     this.paymentService.getVendorWisePaymentList(payload).subscribe(
       data => this.managePaymentList(data),
@@ -94,6 +181,7 @@ export class PaymentWithdrawalComponent implements OnInit {
     );
   }
   managePaymentList(response) {
+    console.log(response);
     this.isLoading=false;
     this.totalPriceCounter=0;
     if(response.message==="Success"){
@@ -123,14 +211,18 @@ export class PaymentWithdrawalComponent implements OnInit {
         withdrawalBtn.disabled=false;
       }
       this.attemptNumber++;
+      this.recordList.sort((a, b) => {
+        const dateA = new Date(a.kpDeliveryDate);
+        const dateB = new Date(b.kpDeliveryDate);
+        return dateB.getTime() - dateA.getTime();
+      });
     }else{
       this.isSuccess = false;
     }
-    this.recordList.sort((a, b) => {
-      const dateA = new Date(a.kpDeliveryDate);
-      const dateB = new Date(b.kpDeliveryDate);
-      return dateB.getTime() - dateA.getTime();
-    });
+    if (this.dropdownComponent) {
+      this.dropdownComponent.setDefaultValue();
+    }
+
   }
 
   ngOnInit(): void {
@@ -272,7 +364,7 @@ export class PaymentWithdrawalComponent implements OnInit {
         'success'
       );
     }
-    this.getPaymentList(this.partnerID);
+    this.getPaymentList2(this.partnerID);
   }
   errorFunction(){
     let withdrawalBtn = document.getElementById('withdrawalBtn') as HTMLInputElement;
@@ -282,7 +374,7 @@ export class PaymentWithdrawalComponent implements OnInit {
       "Something went wrong",
       'error'
     );
-    this.getPaymentList(this.partnerID);
+    this.getPaymentList2(this.partnerID);
   }
 
   checkTotalSelecteAmount(selectAmount: any){
