@@ -500,6 +500,7 @@ export class NavService {
   }
 
   partnerPrivilegeItem(data) {
+    console.log(this.items)
     //Hiding withdrawal details from vendor
     this.items.value[3].children[1].path = '';
     this.items.value[3].children[1].title = '';
@@ -621,6 +622,14 @@ export class NavService {
     this.items.value[9].children[4].path = '';
     this.items.value[9].children[4].title = '';
     this.items.value[9].children[4].type = '';
+
+    this.items.value[9].children[5].path = '';
+    this.items.value[9].children[5].title = '';
+    this.items.value[9].children[5].type = '';
+
+    this.items.value[9].children[6].path = '';
+    this.items.value[9].children[6].title = '';
+    this.items.value[9].children[6].type = '';
 
     this.items.value[11].icon = '';
     this.items.value[11].title = '';

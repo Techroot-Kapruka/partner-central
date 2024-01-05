@@ -32,7 +32,7 @@ export class ListOrdersComponent implements OnInit {
   public loading;
   public searchDate = null;
   public dangerStyle = ''
-  today;
+  public today;
 
   constructor(private orderService: OrderService, private router: Router, private partnerService: DashboardService, private orderMethods: OrderMethods, private datePipe: DatePipe) {
     this.getAllOrders();
@@ -40,7 +40,6 @@ export class ListOrdersComponent implements OnInit {
     this.hideElement();
     const page = 0;
     const sessionUser2 = sessionStorage.getItem('userRole');
-    console.log('user : ' + sessionUser2);
     if (sessionUser2 === 'ROLE_PARTNER') {
       // Simulate data loading from an array
       setTimeout(() => {
@@ -66,7 +65,8 @@ export class ListOrdersComponent implements OnInit {
 
   refreshList(){
     this.searchDate = this.today;
-    (document.getElementById('select_od') as HTMLInputElement).value = null
+    (document.getElementById('select_od') as HTMLInputElement).value = null,
+    (document.getElementById('date_pick') as HTMLInputElement).value = this.today
     this.getPaginateOrderList(this.page - 1)
   }
 
@@ -270,11 +270,10 @@ export class ListOrdersComponent implements OnInit {
       this.businessName = sessionStorage.getItem('partnerId');
     } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
       let id = (document.getElementById('select_od') as HTMLInputElement).value;
-
       this.businessName = id;
 
       if (this.businessName === '-- Select Vendor --' || this.businessName === null || this.businessName == ''){
-        this.businessName = null;
+        this.businessName = 'none';
       }
     }
 
