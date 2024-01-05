@@ -41,6 +41,7 @@ export class AllProductListComponent implements OnInit {
   modalRef: any;
   selectItemGroup: any;
   selectVendor: any;
+  loading:boolean =false;
 
   public addStockAmount: number;
 
@@ -60,7 +61,6 @@ export class AllProductListComponent implements OnInit {
   }
 
   getProducts(pageNo) {
-    console.log('aa')
     this.userRole = sessionStorage.getItem('userRole');
     const userId = sessionStorage.getItem('userId');
     const selectElement = document.getElementById('statusSelect') as HTMLSelectElement;
@@ -75,8 +75,10 @@ export class AllProductListComponent implements OnInit {
       userUid: userId,
       role: this.userRole
     };
+    this.loading = true;
     this.productService.getProductList(pageNo, this.title, this.status, this.proCode, this.businessName, this.itemGroup, paylord).subscribe(
       data => this.manageProductListData(data),
+      error => this.errorProductListData(error)
     );
 
   }
@@ -110,6 +112,11 @@ export class AllProductListComponent implements OnInit {
       this.selectItemGroup = 'Item Group';
     }
   }
+
+  errorProductListData(error){
+    this.loading = false;
+  }
+
   private manageProductListData(data) {
     this.productList = [];
     const keyValuePairs = data.message.slice(1, -1).split(',');
@@ -159,7 +166,7 @@ export class AllProductListComponent implements OnInit {
       this.productList.push(payloard);
     }
     // console.log(this.productList);
-
+    this.loading = false;
     if (this.productList.length === 0) {
       this.isEmptyProducts = true;
     } else {
