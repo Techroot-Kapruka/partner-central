@@ -175,9 +175,9 @@ export class CategoryComponent implements OnInit {
         priceError.style.display = "inline";
         errorCount++;
       } else {
-        if (/^\d+$/.test(this.accountForm.value.price_rate)) {
+        if (/^\d+(\.\d+)?$/.test(this.accountForm.value.price_rate)) {
           var priceDigit = parseFloat(this.accountForm.value.price_rate);
-          if (!(!isNaN(priceDigit) && priceDigit > 0 && priceDigit <= 100)) {
+          if (!(!isNaN(priceDigit) && priceDigit >= 0 && priceDigit <= 100)) {
             priceError.innerHTML = "Price must be a number between 0 to 100";
             priceError.style.display = "inline";
             priceInput.style.border = "1px solid red";
@@ -280,9 +280,9 @@ export class CategoryComponent implements OnInit {
         priceError.style.display = "inline";
         errorCount++;
       } else {
-        if (/^\d+$/.test(this.categoryForm.value.subPricerate)) {
+        if (/^\d+(\.\d+)?$/.test(this.categoryForm.value.subPricerate)) {
           var priceDigit = parseFloat(this.categoryForm.value.subPricerate);
-          if (!(!isNaN(priceDigit) && priceDigit > 0 && priceDigit <= 100)) {
+          if (!(!isNaN(priceDigit) && priceDigit >= 0 && priceDigit <= 100)) {
             priceError.innerHTML = "Price must be a number between 0 to 100";
             priceError.style.display = "inline";
             priceInput.style.border = "1px solid red";
@@ -374,9 +374,9 @@ export class CategoryComponent implements OnInit {
         priceError.style.display = "inline";
         errorCount++;
       } else {
-        if (/^\d+$/.test(this.subSubCategory.value.subsubPricerate)) {
+        if (/^\d+(\.\d+)?$/.test(this.subSubCategory.value.subsubPricerate)) {
           var priceDigit = parseFloat(this.subSubCategory.value.subsubPricerate);
-          if (!(!isNaN(priceDigit) && priceDigit > 0 && priceDigit <= 100)) {
+          if (!(!isNaN(priceDigit) && priceDigit >= 0 && priceDigit <= 100)) {
             priceError.innerHTML = "Price Rate must be a number between 0 to 100";
             priceError.style.display = "inline";
             priceInput.style.border = "1px solid red";
@@ -478,9 +478,9 @@ export class CategoryComponent implements OnInit {
         priceError.style.display = "inline";
         errorCount++;
       } else {
-        if (/^\d+$/.test(this.subSubSubCategory.value.subsubsubPricerate)) {
+        if (/^\d+(\.\d+)?$/.test(this.subSubSubCategory.value.subsubsubPricerate)) {
           var priceDigit = parseFloat(this.subSubSubCategory.value.subsubsubPricerate);
-          if (!(!isNaN(priceDigit) && priceDigit > 0 && priceDigit <= 100)) {
+          if (!(!isNaN(priceDigit) && priceDigit >= 0 && priceDigit <= 100)) {
             priceError.innerHTML = "Price Rate must be a number between 0 to 100";
             priceError.style.display = "inline";
             priceInput.style.border = "1px solid red";
