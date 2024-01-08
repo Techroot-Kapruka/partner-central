@@ -48,7 +48,7 @@ export class OrderService {
     return this.httpClient.post<any>(this.SERVER + 'orders/orderById', formData, {headers});
   }
 
-  getLimitedOrders(pageNo, businessName: any, names, searchDate,userRole) {
+  getLimitedOrders(pageNo, businessName: any, names, searchDate, searchDate2,userRole) {
     console.log(searchDate)
     const formData: FormData = new FormData();
     let part_id = sessionStorage.getItem('partnerId');
@@ -56,6 +56,7 @@ export class OrderService {
     formData.append('partner_u_id ', businessName);
     if (searchDate !== null){
       formData.append('searchDate ', searchDate);
+      formData.append('searchDate2 ', searchDate2);
     }
     formData.append('userRole ', userRole);
     // formData.append('names ', 'pizzahut');
