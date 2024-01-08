@@ -65,7 +65,7 @@ export class ListOrdersComponent implements OnInit {
   refreshList(){
     this.searchDate = this.today;
     this.fromDate = this.calendar.getToday();
-    this.toDate = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
+    this.toDate = this.calendar.getToday();
     (document.getElementById('select_od') as HTMLInputElement).value = null,
     this.getPaginateOrderList(this.page - 1)
   }
