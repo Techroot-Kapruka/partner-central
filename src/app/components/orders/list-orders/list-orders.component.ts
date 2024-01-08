@@ -1,10 +1,11 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
 import {OrderService} from '../../../shared/service/order.service';
 import {Router} from '@angular/router';
 import {DashboardService} from '../../../shared/service/dashboard.service';
 import Swal from 'sweetalert2';
 import {OrderMethods} from '../order-methods';
 import {DatePipe} from "@angular/common";
+import {NgbCalendar, NgbDate, NgbDateParserFormatter} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-list-orders',
@@ -34,7 +35,7 @@ export class ListOrdersComponent implements OnInit {
   public dangerStyle = ''
   public today;
 
-  constructor(private orderService: OrderService, private router: Router, private partnerService: DashboardService, private orderMethods: OrderMethods, private datePipe: DatePipe) {
+  constructor(private orderService: OrderService, private router: Router, private partnerService: DashboardService, private orderMethods: OrderMethods, private datePipe: DatePipe, private ngbCalendar:NgbCalendar, private ngbDateParserFormatter:NgbDateParserFormatter) {
     this.getAllOrders();
     this.getPartner();
     this.hideElement();
@@ -56,17 +57,16 @@ export class ListOrdersComponent implements OnInit {
   public getsession = window.sessionStorage.getItem('partnerId');
 
   ngOnInit(): void {
-    if (sessionStorage.getItem('userRole') === "ROLE_ADMIN" || sessionStorage.getItem('userRole') === "ROLE_SUPER_ADMIN"){
       this.today = this.getCurrentDate();
       this.searchDate = this.today
       this.getPaginateOrderList(this.page)
-    }
   }
 
   refreshList(){
     this.searchDate = this.today;
+    this.fromDate = this.calendar.getToday();
+    this.toDate = this.calendar.getToday();
     (document.getElementById('select_od') as HTMLInputElement).value = null,
-    (document.getElementById('date_pick') as HTMLInputElement).value = this.today
     this.getPaginateOrderList(this.page - 1)
   }
 
@@ -266,6 +266,8 @@ export class ListOrdersComponent implements OnInit {
   }
 
   getPaginateOrderList(page) {
+    let fromDate = null;
+    let toDate = null;
     if (sessionStorage.getItem('userRole') === 'ROLE_PARTNER') {
       this.businessName = sessionStorage.getItem('partnerId');
     } else if (sessionStorage.getItem('userRole') === 'ROLE_ADMIN' || sessionStorage.getItem('userRole') === 'ROLE_SUPER_ADMIN') {
@@ -277,7 +279,17 @@ export class ListOrdersComponent implements OnInit {
       }
     }
 
-    this.orderService.getLimitedOrders(page, this.businessName, this.names, this.searchDate, sessionStorage.getItem('userRole')).subscribe(
+    if (this.fromDate !== null && this.fromDate !== undefined){
+      fromDate = this.formatNgbDate(this.fromDate)
+      toDate = this.toDate === null ? fromDate : this.formatNgbDate(this.toDate)
+    }
+
+    console.log(fromDate)
+    console.log(toDate)
+    console.log(this.fromDate)
+    console.log(this.toDate)
+
+    this.orderService.getLimitedOrders(page, this.businessName, this.names, fromDate, toDate, sessionStorage.getItem('userRole')).subscribe(
       data => this.manageLimitedOrders(data),
       error => this.manageErrorLimitedOrders(error)
     );
@@ -294,11 +306,64 @@ export class ListOrdersComponent implements OnInit {
   }
 
   dateFilter($event) {
+    console.log($event)
     if ($event.target.value === '') {
       this.searchDate = $event.target.value = null
     } else {
       this.searchDate = $event.target.value
     }
+  }
+  calendar = this.ngbCalendar
+  formatter = this.ngbDateParserFormatter
+
+  hoveredDate: NgbDate | null = null;
+  fromDate: NgbDate | null = this.calendar.getToday();
+  toDate: NgbDate | null = this.calendar.getNext(this.calendar.getToday(), 'd', 1);
+
+  onDateSelection(date: NgbDate) {
+    if (!this.fromDate && !this.toDate) {
+      this.fromDate = date;
+
+    } else if (this.fromDate && !this.toDate && date && date.after(this.fromDate)) {
+      this.toDate = date;
+    } else {
+      this.toDate = null;
+      this.fromDate = date;
+    }
+
+  }
+
+  formatNgbDate(date: NgbDate): string {
+    return date ? `${date.year}-${this.padNumber(date.month)}-${this.padNumber(date.day)}` : '';
+  }
+
+  private padNumber(value: number): string {
+    return value.toString().padStart(2, '0');
+  }
+
+
+  isHovered(date: NgbDate) {
+    return (
+        this.fromDate && !this.toDate && this.hoveredDate && date.after(this.fromDate) && date.before(this.hoveredDate)
+    );
+  }
+
+  isInside(date: NgbDate) {
+    return this.toDate && date.after(this.fromDate) && date.before(this.toDate);
+  }
+
+  isRange(date: NgbDate) {
+    return (
+        date.equals(this.fromDate) ||
+        (this.toDate && date.equals(this.toDate)) ||
+        this.isInside(date) ||
+        this.isHovered(date)
+    );
+  }
+
+  validateInput(currentValue: NgbDate | null, input: string): NgbDate | null {
+    const parsed = this.formatter.parse(input);
+    return parsed && this.calendar.isValid(NgbDate.from(parsed)) ? NgbDate.from(parsed) : currentValue;
   }
 
   manageLimitedOrders(data) {
